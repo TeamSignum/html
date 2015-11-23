@@ -1,45 +1,27 @@
 /**
  * Learning Universe Class Builder
- * Authors: Daniel Cushing and Dustin Reitstetter
- * Date: 11/21/15 
+ * Authors: Namgi Yoon
+ * Date: 11/22/15 
  */ 
 
-
-// Class Builder Global Variable 
-var CB = {}; 
-
-/*
- * CB Manager Constructor  
- */ 
- CB.Manager = function(){
-
- 	// Init Manger
- 	this.nodes = []; 
- 	this.edges = []; 
- 	this.tools = []; 
-
- }
-
-/* 
- * CB Node constructor. 
- * @param: node - KineticJS circle. 
- */ 
-CB.Node = function(node){
-	this.x           = node.x;  
-	this.y           = node.y; 
-	this.radius      = node.radius; 
-	this.fill        = node.fill;  
-	this.stroke      = node.stroke; 
-	this.strokeWidth = node.strokeWidth; 
-	this.draggable   = node.draggable; 
-}
-
-/* 
- * Add input node to this class builder manager.  
- * @param: _node - KineticJS circle. 
- */ 
- CB.Manager.addNode = function(_node) {
- 	node = new CB.Node(_node); 
- 	this.nodes.push(node);
- 	return node; 
- }
+<%@ page import ="java.sql.*" %>
+<%
+    String user = request.getParameter("uname");    
+    String pwd = request.getParameter("pass");
+    String fname = request.getParameter("fname");
+    String lname = request.getParameter("lname");
+    String email = request.getParameter("email");
+    Class.forName("com.mysql.jdbc.Driver");
+    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/dbname",
+            "root", "dbpass");
+    Statement st = con.createStatement();
+    //ResultSet rs;
+    int i = st.executeUpdate("insert into members(first_name, last_name, email, uname, pass, regdate) values ('" + fname + "','" + lname + "','" + email + "','" + user + "','" + pwd + "', CURDATE())");
+    if (i > 0) {
+        //session.setAttribute("userid", user);
+        response.sendRedirect("welcome.jsp");
+       // out.print("Registration Successfull!"+"<a href='index.jsp'>Go to Login</a>");
+    } else {
+        response.sendRedirect("index.jsp");
+    }
+%>

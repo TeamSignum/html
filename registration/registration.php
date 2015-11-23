@@ -2,55 +2,47 @@
 <html>
 <head> 
   <link rel="import" href="../imports/import.html">
-  <link rel="stylesheet" type="text/css" href="class_builder.css"> 
-  <script src="class_builder.js" type="text/javascript"></script>
-  <title> Class Builder </title>  
+  <link rel="stylesheet" type="text/css" href="Registration.css"> 
+  <script src="Registration.js" type="text/javascript"></script>
+  <title> Registration </title>  
 </head> 
 <body>
-
-<h1>Class Builder<h1>
-
-<div id="container"> 
-	<h2> Learning Map </h2>
-  <canvas id="map" width="500" height="500"></canvas>
-</div>
-
-<script type="text/javascript"> 
-
-	$( document ).ready(function() {
-
-  var canvas = new fabric.Canvas('map');
-  canvas.add(new fabric.Circle({ radius: 30, fill: '#f55', top: 100, left: 100 }));
-  canvas.item(0).hasControls = canvas.item(0).hasBorders = false;
-
-  canvas.on({
-    'mouse:down': function(e) {
-      if (e.target) {
-        e.target.opacity = 0.5;
-        canvas.renderAll();
-        alert("Event!"); 
-      }
-    },
-    'mouse:up': function(e) {
-      if (e.target) {
-        e.target.opacity = 1;
-        canvas.renderAll();
-        alert("Event!"); 
-      }
-    },
-    'object:moved': function(e) {
-      e.target.opacity = 0.5;
-    },
-    'object:modified': function(e) {
-      e.target.opacity = 1;
-    }
-
-  });
-
-  this.__canvases.push(canvas);
-  });
-
-</script> 
-
+	<form method="post" action="registration.jsp">
+            <center>
+            <table border="1" width="30%" cellpadding="5">
+                <thead>
+                    <tr>
+                        <th colspan="2">Enter Information Here</th>
+                    </tr>
+                </thead>
+                <tbody>
+                   
+                    <tr>
+                        <td>Email</td>
+                        <td><input type="text" name="email" value="" /></td>
+                    </tr>
+                    <tr>
+                        <td>User Name</td>
+                        <td><input type="text" name="uname" value="" /></td>
+                    </tr>
+                    <tr>
+                        <td>Password</td>
+                        <td><input type="password" name="pass" value="" /></td>
+                    </tr>
+                    <tr>
+                        <td>Confirmed Password</td>
+                        <td><input type="password" name="cpass" value="" /></td>
+                    </tr>
+                    <tr>
+                        <td><input type="submit" value="Submit" /></td>
+                        <td><input type="reset" value="Reset" /></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Already registered!! <a href="index.jsp">Login Here</a></td>
+                    </tr>
+                </tbody>
+            </table>
+            </center>
+        </form>
 </body>
 </html>
