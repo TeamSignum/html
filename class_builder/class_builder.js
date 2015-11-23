@@ -9,14 +9,18 @@
  	 var fill = node.fill; 
  	 var top = node.top;
  	 var left = node.left; 
- 	 var id = node.id; 
+ 	 var id = node.id;
+	 var stroke = node.stroke;
+	 var strokeWidth = node.strokeWidth;
 
  	 var n = new fabric.Circle({
  	 	radius: radius, 
  	 	fill : fill, 
  	 	top : top, 
- 	 	left : left, 
- 	 	id: id 
+ 	 	left : left,
+		stroke: stroke,
+		strokeWidth: strokeWidth,		
+ 	 	id: id
  	 }); 
 
      n.hasControls = false; 
@@ -57,12 +61,16 @@
 
 $( document ).ready(function() {
 
-	var mngr = new MM.Manager(); 
+	var mngr = new MM.Manager();
+
+	var lineEditor = false;
+	var from;
+	var to;
 
 	var canvas = new fabric.Canvas('map');
-	canvas.add(new fabric.Circle({ radius: 50, fill: '#fff', top: 50,  left: 50, id: 'tb_largeCircle' }));
-	canvas.add(new fabric.Circle({ radius: 40, fill: '#fff', top: 200, left: 55, id: 'tb_mediumCircle' }));
-	canvas.add(new fabric.Circle({ radius: 30, fill: '#fff', top: 320, left: 60, id: 'tb_smallCircle' }));
+	canvas.add(new fabric.Circle({ radius: 50, fill: '#fff', top: 50,  left: 50, stoke: 'white', strokeWidth: 5, id: 'tb_largeCircle' }));
+	canvas.add(new fabric.Circle({ radius: 40, fill: '#fff', top: 200, left: 55, stoke: 'white', strokeWidth: 5, id: 'tb_mediumCircle' }));
+	canvas.add(new fabric.Circle({ radius: 30, fill: '#fff', top: 320, left: 60, stoke: 'white', strokeWidth: 5, id: 'tb_smallCircle' }));
 
 	canvas.add(new fabric.Line([60, 400, 120, 500], { fill: 'red', stroke: 'red', strokeWidth: 3, id: 'tb_lineSolid' }));
 	canvas.add(new fabric.Line([60, 525, 120, 625], { fill: 'red', stroke: 'red', strokeWidth: 3, strokeDashArray: [5, 5], id: 'tb_lineDotted' }));
@@ -75,7 +83,10 @@ $( document ).ready(function() {
 
 	canvas.add(new fabric.Line([180, 0, 180, 1000], { fill: 'black', stroke: 'black', strokeWidth: 4 }));
 	canvas.item(5).lockMovementX = canvas.item(5).lockMovementY = true; 
-	canvas.item(5).selectable = canvas.item(5).hasControls = canvas.item(5).hasBorders = false; 
+	canvas.item(5).selectable = canvas.item(5).hasControls = canvas.item(5).hasBorders = false;
+
+	//canvas.item(4).lockMovementX = canvas.item(4).lockMovementY = true; 
+	//canvas.item(4).selectable = canvas.item(4).hasControls = canvas.item(5).hasBorders = false; 	
 
 	canvas.on({
 
@@ -94,6 +105,15 @@ $( document ).ready(function() {
 		    	e.target.id = "mapEdge"; 
 		      	mngr.addEdge(e.target); 
 		    }
+			
+			//if(e.target.id === "tb_lineDotted")
+			//{
+			//	lineEditor = !lineEditor;
+			//	if(lineEditor === true)
+			//	{
+					
+			//	}
+			//}
 
 	      	canvas.renderAll();
 	    }
@@ -117,6 +137,25 @@ $( document ).ready(function() {
 
 	  'object:modified': function(e) {
 	    e.target.opacity = 1;
+	  },
+	  
+	  'mouse:over': function(e){
+		if(e.target.id === "mapNode")
+		{
+			e.target.setStroke('green');
+			canvas.renderAll();
+		}
+	  },
+	
+	  'mouse:out': function(e){
+		if(e.target.id === "mapNode")
+		{
+			e.target.setStroke('white');
+			canvas.renderAll();
+		}
+	  },
+	
+	  'object:selected' : function(e){
 	  }
 
 	});
