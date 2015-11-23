@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head> 
+  <link rel="import" href="../imports/import.html">
+  <link rel="stylesheet" type="text/css" href="registration.css"> 
+  <script src="registration.js" type="text/javascript"></script>
+  <title> Registration </title>  
+</head> 
+<body>
+
+<div id="navbar:../"></div>
+
+<section class="container">
+  	<div class="registration">
+        <h2>Registartion</h2>
+        <form method="post" action="registration.php">
+          <p>
+            Nick Name: <input name="nickname" type="text" value="" placeholder="Lonie8989">
+          </p>
+          <p>
+            Email: <input name="email" type="text" value="" placeholder="emailaddress@universitydomain.edu">
+          </p>
+          <p>
+            Password: <input name="password" type="password" value="" placeholder="Password">
+          </p>
+          <p>
+            Confirmed Password: <input name="password2" type="password" value="" placeholder="Confimed Passoword">
+          </p>
+          <p>
+            <label>
+              <input type="radio" name="who_are_you" id="student" value="student">Student              
+            </label>
+            <label>
+              <input type="radio" name="who_are_you" id="professor" value="professor">Professor              
+            </label>
+          </p>
+
+          <p class="submit">
+            <input type="submit" name="submit" value="registration">
+          </p>
+
+        </form>
+	</div>
+</form>
+</body>
+</html>
