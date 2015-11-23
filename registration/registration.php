@@ -12,11 +12,14 @@
             <table border="1" width="30%" cellpadding="5">
                 <thead>
                     <tr>
-                        <th colspan="2">Enter Information Here</th>
+                        <th colspan="2">Registration</th>
                     </tr>
                 </thead>
                 <tbody>
-                   
+                    <tr>
+                        <td>Who are you</td>
+                        <td><input type="radio" name="who_are_you" value="student"> Student <input type="radio" name="who_are_you" value="professor"> Professor</td>
+                    </tr>
                     <tr>
                         <td>Email</td>
                         <td><input type="text" name="email" value="" /></td>
@@ -34,12 +37,13 @@
                         <td><input type="password" name="cpass" value="" /></td>
                     </tr>
                     <tr>
-                        <td><input type="submit" value="Submit" /></td>
-                        <td><input type="reset" value="Reset" /></td>
+                        <td></td>
+                        <td><input type="submit" value="Submit" />&emsp;<input type="reset" value="Reset" /></td>
                     </tr>
                     <tr>
-                        <td colspan="2">Already registered!! <a href="index.jsp">Login Here</a></td>
+                        <td colspan="2">Already registered!! <a href="login.jsp">Login Here</a></td>
                     </tr>
+                    
                 </tbody>
             </table>
             </center>
