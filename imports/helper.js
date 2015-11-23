@@ -25,3 +25,23 @@
  function getDivHeight(div_id){
  	return $("#" + div_id).height(); 
  } 
+
+
+/* 
+ * Universal function for all pages. Called when document is ready. 
+ * You must include a div with id="navbar:" + path to html directory. 
+ * For example in login.php, 
+ *            <div id="navbar:../"></div>
+ * Where ../ is the relative path to html directory. (1 step out). 
+ */ 
+ $( document ).ready(function() {
+ 	var $element  = $('*[id^="navbar"]'); 
+ 	var id        = $element[0].id; 
+ 	var path      = id.split(":")[1] + "navbar/navbar.html"; 
+ 	var imagePath = id.split(":")[1] + "navbar/images/LU_Logo_Navbar.png"
+
+ 	$('*[id^="navbar"]').load(path); 
+
+ 	// TODO: change navbar-image src tag. 
+
+ }); 
