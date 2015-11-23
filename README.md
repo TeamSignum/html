@@ -9,5 +9,6 @@ Read me
 
 
 * Note on Using Navbar
-  - include a div with id "navbar:" + relative path to html root. 
+  - Include a div with id "navbar:" + relative path to html root. 
   - For example <div id="navbar:../" if you are one folder down from html. 
+  - See login.html as an example. 
