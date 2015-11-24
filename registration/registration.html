@@ -10,37 +10,47 @@
 
 <div id="navbar:../"></div>
 
-<section class="container">
-  	<div class="registration">
-        <h2>Registration</h2>
-        <form method="post" action="registration.php">
-          <p>
-            Nick Name: <input name="nickname" type="text" value="" placeholder="Lonie8989">
-          </p>
-          <p>
-            Email: <input name="email" type="text" value="" placeholder="emailaddress@universitydomain.edu">
-          </p>
-          <p>
-            Password: <input name="password" type="password" value="" placeholder="Password">
-          </p>
-          <p>
-            Confirmed Password: <input name="password2" type="password" value="" placeholder="Confimed Passoword">
-          </p>
-          <p>
-            <label>
-              <input type="radio" name="who_are_you" id="student" value="student">Student              
-            </label>
-            <label>
-              <input type="radio" name="who_are_you" id="professor" value="professor">Professor              
-            </label>
-          </p>
-
-          <p class="submit">
-            <input type="submit" name="submit" value="registration">
-          </p>
-
-        </form>
+<div class="container">
+  <div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+      <h2 align="center">Registration</h2>
+      <form class = "form-horizontal" method="post" action="registration.php">
+        <div class="form-group">
+          <label for="email">Email address</label>
+          <input type="email" name="email" class="form-control" id="email" placeholder="Email">
+        </div>
+        <div class="form-group">
+          <label for="nickname">Nickname</label>
+          <input type="text" name="nickname" class="form-control" id="nickname" placeholder="Nickname">
+        </div>
+        <div class="form-group">
+          <label for="password1">Password</label>
+          <input type="password" name="password1" class="form-control" id="password1" placeholder="Password">
+        </div>
+         <div class="form-group">
+          <label for="password2">Confirm Password</label>
+          <input type="password" name="password2" class="form-control" id="password2" placeholder="Confirm Password">
+        </div>
+        <div class="form-group">
+            <label for="type">Type</label>
+        <div class="radio">          
+          <label class="radio-inline">
+            <input type="radio" name="usertype" id="student" value="student">Student</input>
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="usertype" id="professor" value="professor">professor</input>
+          </label>
+        </div>
+        </div>
+        <p class="submit">
+          <input type="submit" name="submit" class="btn btn-primary btn-lg btn-block">
+        </p>
+       </form>
+      </div>
+    <div class="col-md-4"></div>
 	</div>
+</div>
 </form>
 </body>
 </html>
