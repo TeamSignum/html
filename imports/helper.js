@@ -35,12 +35,12 @@
  * Where ../ is the relative path to html directory. (1 step out). 
  */ 
  $( document ).ready(function() {
- 	var $element  = $('*[id^="navbar"]'); 
- 	var id        = $element[0].id; 
- 	var path      = id.split(":")[1] + "navbar/navbar.html"; 
- 	var imagePath = id.split(":")[1] + "navbar/images/LU_Logo_Navbar.png"
+ 	//var $element  = $('*[id^="navbar"]'); 
+ 	//var id        = $element[0].id; 
+ 	//var path      = id.split(":")[1] + "navbar/navbar.html"; 
+ 	//var imagePath = id.split(":")[1] + "navbar/images/LU_Logo_Navbar.png"
 
- 	$('*[id^="navbar"]').load(path); 
+ 	//$('*[id^="navbar"]').load(path); 
 
  	// TODO: change navbar-image src tag. 
 
