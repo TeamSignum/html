@@ -25,6 +25,8 @@
 
      n.hasControls = false; 
      n.hasBorders  = false; 
+	 
+	 n.line;
 
      canvas.add(n);  
  }
