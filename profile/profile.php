@@ -34,7 +34,7 @@
 	$userName = "AverageJoe";
 	$firstName = "Joe";
 	$lastName = "Cottongim";
-	$isProfileOwner = true;
+	$isProfileOwner = true; //either create a button or toggle fields as readonly/notreadonly
 ?>	
 	
 <!doctype html>
@@ -61,6 +61,9 @@
           <input type="text" name="username" class="form-control" id="nickname" placeholder="<?php echo $userName?>" readonly="readonly">          
           <label for="firstname">First Name</label>
           <input type="text" name="firstname" class="form-control" id="nickname" placeholder="<?php echo $firstName?>" readonly="readonly">
+          
+          <label for="lastname">Last Name</label>
+          <input type="text" name="lastname" class="form-control" id="nickname" placeholder="<?php echo $firstName?>" readonly="readonly">
                 
       </form>
       </div>
