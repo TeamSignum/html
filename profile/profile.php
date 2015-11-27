@@ -1,10 +1,9 @@
 <?php
 
 	session_start();
-	// TODO: Need to get profile from POST that comes to this page
+	// TODO: Need to get id from POST that comes to this page
 	
 	// Get profile information from the database
-	
 	// Connects to local mongo db
 	$db = new MongoClient('localhost');
 
@@ -34,7 +33,8 @@
 	$userName = "AverageJoe";
 	$firstName = "Joe";
 	$lastName = "Cottongim";
-	$isProfileOwner = true; //either create a button or toggle fields as readonly/notreadonly
+	$isProfileOwner = true;
+	$readonly = "readonly";  //Sets whether a text field can be edited.  Possible values are "readonly" or "".
 ?>	
 	
 <!doctype html>
@@ -55,15 +55,15 @@
       <form id="profileForm" method="post" action="profile.php">
 
           <label for="email">Email address</label>
-          <input type="email" name="email" class="form-control" id="email" placeholder="<?php echo $email?>" readonly="readonly">
+          <input type="email" name="email" class="form-control" id="email" placeholder="<?php echo $email?>" <?php echo $readonly?>>
         
           <label for="username">User Name</label>
-          <input type="text" name="username" class="form-control" id="nickname" placeholder="<?php echo $userName?>" readonly="readonly">          
+          <input type="text" name="username" class="form-control" id="nickname" placeholder="<?php echo $userName?>" <?php echo $readonly?>>          
           <label for="firstname">First Name</label>
-          <input type="text" name="firstname" class="form-control" id="nickname" placeholder="<?php echo $firstName?>" readonly="readonly">
+          <input type="text" name="firstname" class="form-control" id="nickname" placeholder="<?php echo $firstName?>" <?php echo $readonly?>>
           
           <label for="lastname">Last Name</label>
-          <input type="text" name="lastname" class="form-control" id="nickname" placeholder="<?php echo $firstName?>" readonly="readonly">
+          <input type="text" name="lastname" class="form-control" id="nickname" placeholder="<?php echo $lastName?>" <?php echo $readonly?>>
                 
       </form>
       </div>
