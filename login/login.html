@@ -12,40 +12,30 @@
 <div class="container"> 
   <div class="row"> 
 
-  <div id="login_form" class="col-md-12" style="background-color:lavenderblush;">
-    <br/> 
-    <section class="container">
-    
-      <div class="login">
-        <h2>Login to Learning Universe</h2>
-        <form method="post" action="login.php">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+      <h2>Login to Learning Universe</h2>
+      <form method="post" action="login.php">
 
-          <p>
-            <input name="email" type="text" value="" placeholder="Email">
-          </p>
-          <p>
-            <input name="password" type="password" value="" placeholder="Password">
-          </p>
-          <p>
-            <label>
-              <input type="checkbox" name="remember_me" id="remember_me">
-              Remember me on this computer
-            </label>
-          </p>
+        <input class="form-control" name="email" type="text" value="" placeholder="Email">
+        <input class="form-control" name="password" type="password" value="" placeholder="Password">
+        <br/>
+        <input class="form-control" type="submit" name="submit" value="Login">
+        <br/>
+        <label>
+          <input type="checkbox" name="remember_me" id="remember_me">
+          Remember me on this computer
+        </label>
 
-          <p class="submit">
-            <input type="submit" name="submit" value="Login">
-          </p>
-
-        </form>
-      </div>
+      </form>
 
       <div class="login-help">
         <p>Forgot your password? <a href="index.html">Click here to reset it</a>.</p>
       </div>
 
-    </section>
-  </div>
+    </div>
+
+    <div class="col-md-4"></div>
 
 </body>
 </html>
