@@ -20,7 +20,7 @@ if (isset($_POST["submit"])){
 	$query1 = array('email' => $email); 
 
 	// find data
-	$cursor = $collection->find(query1);
+	$cursor = $collection->find($query1);
 
 	// iterate through the results
 	foreach ($cursor as $data) {
