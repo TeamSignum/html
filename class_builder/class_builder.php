@@ -1,27 +1,26 @@
-<!DOCTYPE html>
-<html>
-<head> 
-  <link rel="import" href="../imports/import.html">
-  <link rel="stylesheet" type="text/css" href="class_builder.css"> 
-  <script src="../map_manager/map_manager.js" type="text/javascript"></script>
-  <script src="class_builder.js" type="text/javascript"></script>
-  <title> Class Builder </title>  
-</head> 
-<body>
+<?php
 
-	<div id="navbar:../"></div>
+session_start(); 
 
-  <div class="row"> 
-		<div class="col-md-4"></div>
-		<div class="col-md-4" style="text-align:center;">
-			<h1>Class Builder</h1>
-			<h2> Learning Map </h2>
-		</div>
-	</div>
+$name= $_POST["title"];
+$description= $_POST["description"];
 
-	<div id="container"> 
-	  <canvas id="map" width="1900" height="1000"></canvas>
-	</div>
+echo $name; 
+echo $description; 
 
-</body>
-</html>
+// Connects to local mongo db
+$db = new Mongo();
+
+// Select the DB
+$db = $db->ludb;
+
+// Select a collection
+$collection = $db->nodes;
+
+// Create insert array
+$in = array("title" => $name, "description" => $description); 
+
+// Insert it into collection. 
+$collection->insert($in); 
+
+?>

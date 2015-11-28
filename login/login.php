@@ -31,7 +31,6 @@ if (isset($_POST["submit"])){
 	    	//TODO: Handle error checking. 
 	    }
 	}
-
 } 
 
 ?>

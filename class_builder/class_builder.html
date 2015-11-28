@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head> 
+  <link rel="import" href="../imports/import.html">
+  <link rel="stylesheet" type="text/css" href="class_builder.css"> 
+  <script src="../map_manager/map_manager.js" type="text/javascript"></script>
+  <script src="class_builder.js" type="text/javascript"></script>
+  <title> Class Builder </title>  
+</head> 
+<body>
+
+	<div id="navbar:../"></div>
+
+  <div class="row"> 
+		<div class="col-md-4"></div>
+		<div class="col-md-4" style="text-align:center;">
+			<h1>Class Builder</h1>
+			<h2> Learning Map </h2>
+		</div>
+	</div>
+
+	<div id="canvas"> 
+	  <canvas id="map" width="1900" height="1000"></canvas>
+	  <button onclick="lockCanvas()" class="btn btn-default">Lock</button>
+	</div>
+
+	<div id="popup" style="display: none;"> 
+	  <div class="row"> 
+	    <div class="col-md-4"></div>
+	    <div class="col-md-4">
+	    	<h3>Fill out form details</h3>
+	      <form>
+
+	        <input class="form-control" id="title" name="title" type="text" value="" placeholder="Name">
+	        <input class="form-control" id="description" name="description" type="text" value="" placeholder="Description">
+	        <br/>
+	        <input class="form-control" type="submit" name="submit" value="Save" onclick="savePopup()">
+
+	      </form>
+	    </div>
+	    <div class="col-md-4"></div>
+  	</div>
+	</div>
+
+</body>
+</html>

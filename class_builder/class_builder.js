@@ -4,6 +4,8 @@
  * Date: 11/21/15 
  */ 
 
+ var canvas_lock = false; 
+
  function copyNode(canvas, node){
 	 var radius = node.radius; 
  	 var fill = node.fill; 
@@ -95,6 +97,10 @@ $( document ).ready(function() {
 
 	  'mouse:down': function(e) {
 	    if (e.target) {
+
+	    	if(canvas_lock)
+	    		showPopup(); 
+
 	    	if(lineEditor === false)
 			{
 				e.target.opacity = 0.5;
@@ -227,3 +233,33 @@ $( document ).ready(function() {
 	});
 
 });
+
+function lockCanvas(){
+	if(canvas_lock)
+		canvas_lock = false; 
+	else
+		canvas_lock = true; 
+}
+
+function showPopup(){
+	if(canvas_lock){
+		$("#canvas").hide(); 
+		$("#popup").show(); 
+	}
+}
+
+function savePopup(){
+	var name = $("#title").val();
+	var desc = $("#description").val(); 
+
+	var _data = 'title=' + name + '&description=' + description; 
+
+	$.ajax({
+		type: "POST", 
+		url: "class_builder.php",
+		data: _data, 
+		success: function(result){
+			alert("Good job."); 
+		}
+	}); 
+}
