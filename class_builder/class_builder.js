@@ -316,7 +316,7 @@ function savePopup(){
 
 	$.ajax({
 		async: false, 
-		type: "POST", 
+		type: 'POST', 
 		url: "class_builder.php",
 		data: _data, 
 		success: function(result){
@@ -324,4 +324,6 @@ function savePopup(){
 			$("#canvas").show(); 
 		}
 	}); 
+
+	return false; 
 }
