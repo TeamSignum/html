@@ -28,7 +28,9 @@
      n.hasControls = false; 
      n.hasBorders  = false; 
 	 
-	 n.line;
+	 //n.line;
+	 //var lines = []
+	 //n.line = lines;
 
      canvas.add(n);  
  }
@@ -68,9 +70,12 @@ $( document ).ready(function() {
 	var mngr = new MM.Manager();
 
 	var lineEditor = false;
+	var solid = false;
+	var dotted = false;
 	var from;
 	var to;
 	var nodes = [];
+	var bnodes = [];
 
 	var canvas = new fabric.Canvas('map');
 	canvas.add(new fabric.Circle({ radius: 50, fill: '#fff', top: 50,  left: 50, stoke: 'white', strokeWidth: 5, id: 'tb_largeCircle' }));
@@ -91,7 +96,10 @@ $( document ).ready(function() {
 	canvas.item(5).selectable = canvas.item(5).hasControls = canvas.item(5).hasBorders = false;
 
 	canvas.item(3).lockMovementX = canvas.item(3).lockMovementY = true; 
-	canvas.item(3).selectable = canvas.item(3).hasControls = canvas.item(5).hasBorders = false; 	
+	canvas.item(3).selectable = canvas.item(3).hasControls = canvas.item(3).hasBorders = false;
+
+	canvas.item(4).lockMovementX = canvas.item(4).lockMovementY = true; 
+	canvas.item(4).selectable = canvas.item(4).hasControls = canvas.item(4).hasBorders = false; 	
 
 	canvas.on({
 
@@ -111,6 +119,14 @@ $( document ).ready(function() {
 		      e.target.id = "mapNode";  
 		      mngr.addNode(e.target);
 			  nodes.push(e.target);
+			  var liness = [];
+			  var temp = {
+				node: e.target,
+				lines: liness
+			  };
+			  bnodes.push(temp);
+			  //alert(e.target.top);
+			  //alert(temp.node.top);
 		    }
 
 		    //else if(e.target.id === "tb_lineSolid" || e.target.id === "tb_lineDotted"){
@@ -119,9 +135,17 @@ $( document ).ready(function() {
 		    //  	mngr.addEdge(e.target); 
 		    //}
 			
-			if(e.target.id === "tb_lineSolid")
+			if(e.target.id === "tb_lineSolid" || e.target.id === "tb_lineDotted")
 			{
 				lineEditor = !lineEditor;
+				if(e.target.id === "tb_lineSolid")
+				{
+					solid = !solid;
+				}
+				if(e.target.id === "tb_lineDotted")
+				{
+					dotted = !dotted;
+				}
 				if(lineEditor === true)
 				{
 					for(var i = 0; i < nodes.length; i++)
@@ -155,7 +179,7 @@ $( document ).ready(function() {
 
 	      if(lineEditor === false)
 		  {
-			if(e.target.left < 180 && e.target.id != "tb_lineSolid"){
+			if(e.target.left < 180 && e.target.id != "tb_lineSolid" && e.target.id != "tb_lineDotted"){
 				canvas.remove(e.target); 
 			}
 			e.target.opacity = 1;
@@ -167,14 +191,40 @@ $( document ).ready(function() {
 				{
 				to = e.target;
 				//alert(from.x + " " + from.y + " " + to.x + " " + to.y);
-				var line = new fabric.Line([from.getCenterPoint().x, from.getCenterPoint().y, to.getCenterPoint().x, to.getCenterPoint().y], {
+				var line;
+				if(dotted === true)
+				{
+					line = new fabric.Line([from.getCenterPoint().x, from.getCenterPoint().y, to.getCenterPoint().x, to.getCenterPoint().y], {
+					fill: 'black',
+					stroke: 'black',
+					strokeWidth: 5,
+					strokeDashArray: [5, 5],
+					selectable: false
+				});
+				}
+				if(solid === true)
+				{
+				line = new fabric.Line([from.getCenterPoint().x, from.getCenterPoint().y, to.getCenterPoint().x, to.getCenterPoint().y], {
 					fill: 'black',
 					stroke: 'black',
 					strokeWidth: 5,
 					selectable: false
 				});
+				}
+				for(var i = 0; i < bnodes.length; i++)
+				{
+					if(bnodes[i].node.top === from.top && bnodes[i].node.left === from.left)
+					{
+						bnodes[i].lines.push(line);
+					}
+					if(bnodes[i].node.top === e.target.top && bnodes[i].node.left === e.target.left)
+					{
+						bnodes[i].lines.push(line);
+					}
+					
+				}
 				from.line = line;
-				e.target.line = line;
+				//e.target.line.push(line);
 				canvas.add(to);
 				canvas.add(from);
 				canvas.add(line);
@@ -213,16 +263,26 @@ $( document ).ready(function() {
 	  },
 	  
 	  'object:moving' : function(e) {
-		  if(e.target.line != null)
+		  var p;
+		  for(var i = 0; i < bnodes.length; i++)
+				{
+					if(bnodes[i].node.top === e.target.top && bnodes[i].node.left === e.target.left)
+					{
+						p = bnodes[i];
+					}
+				}
+		  if(p.lines.length != 0)
 		  {
-		  var p = e.target;
-		  if(p.left+2*p.radius > p.line.x1 && p.left < p.line.x1 && p.top+2*p.radius > p.line.y1 && p.top < p.line.y1)
+		  for(var j = 0; j < p.lines.length; j++)
 		  {
-			p.line.set({'x1': p.getCenterPoint().x, 'y1': p.getCenterPoint().y});
+		  if(p.node.left+2*p.node.radius > p.lines[j].x1 && p.node.left < p.lines[j].x1 && p.node.top+2*p.node.radius > p.lines[j].y1 && p.node.top < p.lines[j].y1)
+		  {
+			p.lines[j].set({'x1': p.node.getCenterPoint().x, 'y1': p.node.getCenterPoint().y});
 		  }
-		  if(p.left+2*p.radius > p.line.x2 && p.left < p.line.x2 && p.top+2*p.radius > p.line.y2 && p.top < p.line.y2)
+		  if(p.node.left+2*p.node.radius > p.lines[j].x2 && p.node.left < p.lines[j].x2 && p.node.top+2*p.node.radius > p.lines[j].y2 && p.node.top < p.lines[j].y2)
 		  {
-			p.line.set({'x2': p.getCenterPoint().x, 'y2': p.getCenterPoint().y});  
+			p.lines[j].set({'x2': p.node.getCenterPoint().x, 'y2': p.node.getCenterPoint().y});	
+		  }
 		  }
 		  //p.line.set({'x1': p.getCenterPoint().x, 'y1': p.getCenterPoint().y});
 		  //p.line.set({'x1': p.left, 'y1': p.top });
