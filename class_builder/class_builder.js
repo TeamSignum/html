@@ -249,17 +249,19 @@ function showPopup(){
 }
 
 function savePopup(){
-	var name = $("#title").val();
+	var title = $("#title").val();
 	var desc = $("#description").val(); 
 
-	var _data = 'title=' + name + '&description=' + desc; 
+	var _data = 'title=' + title + '&description=' + desc; 
 
 	$.ajax({
+		async: false, 
 		type: "POST", 
 		url: "class_builder.php",
 		data: _data, 
 		success: function(result){
-			alert("Good job."); 
+			$("#popup").hide(); 
+			$("#canvas").show(); 
 		}
 	}); 
 }

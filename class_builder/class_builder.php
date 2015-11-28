@@ -5,9 +5,6 @@ session_start();
 $name= $_POST["title"];
 $description= $_POST["description"];
 
-echo $name; 
-echo $description; 
-
 // Connects to local mongo db
 $db = new Mongo();
 
