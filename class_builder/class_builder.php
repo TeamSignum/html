@@ -9,12 +9,19 @@
 </head> 
 <body>
 
-<h1>Class Builder<h1>
-<h2> Learning Map </h2>
+	<div id="navbar:../"></div>
 
-<div id="container"> 
-  <canvas id="map" width="1900" height="1000"></canvas>
-</div>
+  <div class="row"> 
+		<div class="col-md-4"></div>
+		<div class="col-md-4" style="text-align:center;">
+			<h1>Class Builder</h1>
+			<h2> Learning Map </h2>
+		</div>
+	</div>
+
+	<div id="container"> 
+	  <canvas id="map" width="1900" height="1000"></canvas>
+	</div>
 
 </body>
 </html>
