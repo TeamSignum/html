@@ -252,7 +252,7 @@ function savePopup(){
 	var name = $("#title").val();
 	var desc = $("#description").val(); 
 
-	var _data = 'title=' + name + '&description=' + description; 
+	var _data = 'title=' + name + '&description=' + desc; 
 
 	$.ajax({
 		type: "POST", 
