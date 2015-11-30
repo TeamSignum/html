@@ -7,7 +7,7 @@
   <title> student_main_page </title>  
 </head> 
 <body>
-
+<div id="navbar:.."/>
 <h1> Student Main Page<h1>
 
 <div id="container"> 
@@ -24,7 +24,7 @@
 	$connection = new MongoClient('localhost');
 
 	//if(connection){
-	//connecting to database
+	//connecting to cidbase
 	$db = $connection->$db_name;
 
 	//connect to specific collection
@@ -33,18 +33,19 @@
 	$query1 = array('email'=>$email);
 	
 	//finding user and search what class he is taking.
-	$cursor1 = $collection1->find($query1);
-
-	
+	$cursor1 = $collection1->findOne($query1);
 
 	if(count($cursor1)) {
-		$document = $cursor1->getNext();
-		$classid = $document['classes'];
-		for ($i=0; $i < sizeof($classid); $i++) { 
+
+		$classid = $cursor1["classes"];
+
+		foreach ($classid as $cid) {
+			# code...
+			$float_cid = (float) $cid;
 			$collection2 = $db->class;
-			$query2 = array('_id'=>$classid[$i]);
-			$cursor2 = $collection2->find($query2);
-			
+			$query2 = array('_id'=>$float_cid);
+			$cursor2 = $collection2->findOne($query2);
+			$classname = $cursor2["classname"];
 		}
 	}
 
@@ -55,7 +56,7 @@
 	//}
 	//}
 	//else{
-	//	die("Databese are not connected");
+	//	die("cidbese are not connected");
 	//}
 //}
  ?>
