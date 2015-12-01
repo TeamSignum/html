@@ -4,7 +4,9 @@
  * Date: 11/21/15 
  */ 
 
- var canvas_lock = false; 
+ var canvas_lock = false;
+ var nodes = [];
+ var mapLines = [];
 
  function copyNode(canvas, node){
 	 var radius = node.radius; 
@@ -70,7 +72,7 @@ $( document ).ready(function() {
 	var dotted = false;
 	var from;
 	var to;
-	var nodes = [];
+	
 	var bnodes = [];
 
 	var canvas = new fabric.Canvas('map');
@@ -237,6 +239,16 @@ $( document ).ready(function() {
 					canvas.sendToBack(line);
 					canvas.renderAll();
 				}
+				mapLines.push(line);
+				from.line = line;
+				//e.target.line.push(line);
+				canvas.add(to);
+				canvas.add(from);
+				canvas.add(line);
+				canvas.sendToBack(line);
+				canvas.renderAll();
+				//saveMap();
+			}
 		  }
 	    }
 	  },
@@ -345,5 +357,47 @@ function savePopup(){
 }
 
 function saveMap(){
-
+	var map = [];
+	var edges = [];
+	for(var i = 0; i < nodes.length; i++)
+	{
+		var temp = {
+			top: nodes[i].top,
+			left: nodes[i].left,
+			radius: nodes[i].radius,
+			fill: nodes[i].fill,
+			stroke: nodes[i].stroke,
+			strokeWidth: nodes[i].strokeWidth,
+			id: nodes[i].id
+		};
+		map.push(temp);
+		//alert(temp.top);
+	}
+	
+	for(var i = 0; i < mapLines.length; i++)
+	{
+		var temp = {
+			x1: mapLines[i].x1,
+			y1: mapLines[i].y1,
+			x2: mapLines[i].x2,
+			y2: mapLines[i].y2,
+			fill: mapLines[i].fill,
+			stroke: mapLines[i].stroke,
+			strokeWidth: mapLines[i].strokeWidth
+		};
+		edges.push(temp);
+	}
+	
+	$.ajax({
+		type: 'POST',
+		url: "mapsave.php",
+		dataType: 'html',
+		data: {map: map, edges: edges},
+		
+		success: function(result){
+			alert(result);
+		}
+	});
+	
+	return false;
 }

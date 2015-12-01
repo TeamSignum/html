@@ -4,20 +4,20 @@
 // Notice I'm connecting to test and selecting restaurants as the collection. 
 
 // Connects to local mongo db
-$db = new Mongo();
+$db = new MongoClient("mongodb://ec2-52-33-118-140.us-west-2.compute.amazonaws.com");
 
 // Select the DB
-$db = $db->test;
+$db = $db->ludb;
+var_dump($db);
 
 // Select a collection
-$collection = $db->restaurants;
-
+$collection = $db->users;
+var_dump($collection);
 // find data
-$cursor = $collection->find();
+$cursor = $collection->findOne(array("email"=>"user1@gmail.com"));
+var_dump($cursor);
+echo $cursor["email"];
 
-// iterate through the results
-foreach ($cursor as $data) {
-    echo $data["address"]["street"] . "\n";
-}
+$db->close();
 
 ?>
