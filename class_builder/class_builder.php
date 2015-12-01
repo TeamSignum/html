@@ -2,11 +2,11 @@
 
 session_start(); 
 
-$name= $_POST["title"];
+$title= $_POST["title"];
 $description= $_POST["description"];
 
 // Connects to local mongo db
-$db = new Mongo();
+$db = new MongoClient("mongodb://http://ec2-52-33-118-140.us-west-2.compute.amazonaws.com");
 
 // Select the DB
 $db = $db->ludb;
@@ -15,7 +15,7 @@ $db = $db->ludb;
 $collection = $db->nodes;
 
 // Create insert array
-$in = array("title" => $name, "description" => $description); 
+$in = array("title" => $title, "description" => $description); 
 
 // Insert it into collection. 
 $collection->insert($in); 

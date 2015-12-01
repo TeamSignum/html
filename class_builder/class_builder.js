@@ -25,14 +25,10 @@
  	 	id: id
  	 }); 
 
-     n.hasControls = false; 
-     n.hasBorders  = false; 
-	 
-	 //n.line;
-	 //var lines = []
-	 //n.line = lines;
-
-     canvas.add(n);  
+   n.hasControls = false; 
+   n.hasBorders  = false; 
+ 
+   canvas.add(n);  
  }
 
  function copyEdge(canvas, edge){
@@ -101,6 +97,22 @@ $( document ).ready(function() {
 	canvas.item(4).lockMovementX = canvas.item(4).lockMovementY = true; 
 	canvas.item(4).selectable = canvas.item(4).hasControls = canvas.item(4).hasBorders = false; 	
 
+	fabric.Image.fromURL('../imports/images/lock.png', function(oImg) {
+		oImg.scale(.2); 
+		oImg.set({left: 30, top: 740, id: 'toolbarLock'}); 
+		oImg.lockMovementX = oImg.lockMovementY = true; 
+		oImg.hasControls = oImg.hasBorders = false; 
+		canvas.add(oImg); 
+	}); 
+
+	fabric.Image.fromURL('../imports/images/upload.png', function(oImg) {
+		oImg.scale(.1); 
+		oImg.set({left: 110, top: 740, id: 'toolbarUpload'}); 
+		oImg.lockMovementX = oImg.lockMovementY = true; 
+		oImg.hasControls = oImg.hasBorders = false; 
+		canvas.add(oImg); 
+	}); 
+
 	canvas.on({
 
 	  'mouse:down': function(e) {
@@ -110,77 +122,73 @@ $( document ).ready(function() {
 	    		showPopup(); 
 
 	    	if(lineEditor === false)
-			{
-				e.target.opacity = 0.5;
-			}
+				{
+					e.target.opacity = 0.5;
+				}
 
 		    if(e.target.id === "tb_largeCircle" || e.target.id === "tb_mediumCircle" || e.target.id === "tb_smallCircle"){
 		      copyNode(canvas, e.target);  
 		      e.target.id = "mapNode";  
 		      mngr.addNode(e.target);
-			  nodes.push(e.target);
-			  var liness = [];
-			  var temp = {
-				node: e.target,
-				lines: liness
-			  };
-			  bnodes.push(temp);
-			  //alert(e.target.top);
-			  //alert(temp.node.top);
+				  nodes.push(e.target);
+				  var liness = [];
+				  var temp = {
+						node: e.target,
+						lines: liness
+				  };
+			  	bnodes.push(temp);
 		    }
-
-		    //else if(e.target.id === "tb_lineSolid" || e.target.id === "tb_lineDotted"){
-		    //	copyEdge(canvas, e.target); 
-		    //	e.target.id = "mapEdge"; 
-		    //  	mngr.addEdge(e.target); 
-		    //}
-			
-			if(e.target.id === "tb_lineSolid" || e.target.id === "tb_lineDotted")
-			{
-				lineEditor = !lineEditor;
-				if(e.target.id === "tb_lineSolid")
+				else if(e.target.id === "tb_lineSolid" || e.target.id === "tb_lineDotted")
 				{
-					solid = !solid;
-				}
-				if(e.target.id === "tb_lineDotted")
-				{
-					dotted = !dotted;
-				}
-				if(lineEditor === true)
-				{
-					for(var i = 0; i < nodes.length; i++)
+					lineEditor = !lineEditor;
+					if(e.target.id === "tb_lineSolid")
 					{
-						nodes[i].lockMovementX = true;
-						nodes[i].lockMovementY = true;
-						nodes[i].selectable = false;
+						solid = !solid;
+					}
+					if(e.target.id === "tb_lineDotted")
+					{
+						dotted = !dotted;
+					}
+					if(lineEditor === true)
+					{
+						for(var i = 0; i < nodes.length; i++)
+						{
+							nodes[i].lockMovementX = true;
+							nodes[i].lockMovementY = true;
+							nodes[i].selectable = false;
+						}
+					}
+					if(lineEditor === false)
+					{
+						for(var i = 0; i < nodes.length; i++)
+						{
+							nodes[i].lockMovementX = false;
+							nodes[i].lockMovementY = false;
+							nodes[i].selectable = true;
+						}
 					}
 				}
-				if(lineEditor === false)
+				else if(e.target.id === "mapNode")
 				{
-					for(var i = 0; i < nodes.length; i++)
-					{
-						nodes[i].lockMovementX = false;
-						nodes[i].lockMovementY = false;
-						nodes[i].selectable = true;
-					}
+					from = e.target;
 				}
-			}
-			if(e.target.id === "mapNode")
-			{
-				from = e.target;
-			}
+				else if(e.target.id === "toolbarLock"){
+					lockCanvas(); 
+				}
 
-	      	canvas.renderAll();
+
+	      canvas.renderAll();
 	    }
 	  },
 
 	  'mouse:up': function(e) {
 	    if (e.target) {
-
 	      if(lineEditor === false)
 		  {
-			if(e.target.left < 180 && e.target.id != "tb_lineSolid" && e.target.id != "tb_lineDotted"){
-				canvas.remove(e.target); 
+			if(e.target.left < 180 && e.target.id != "tb_lineSolid" 
+				&& e.target.id != "tb_lineDotted" && e.target.id != "toolbarLock" 
+				&& e.target.id != "toolbarUpload"){
+					canvas.remove(e.target); 
 			}
 			e.target.opacity = 1;
 			canvas.renderAll();
@@ -189,48 +197,46 @@ $( document ).ready(function() {
 		  {
 			  if(e.target.id === "mapNode")
 				{
-				to = e.target;
-				//alert(from.x + " " + from.y + " " + to.x + " " + to.y);
-				var line;
-				if(dotted === true)
-				{
-					line = new fabric.Line([from.getCenterPoint().x, from.getCenterPoint().y, to.getCenterPoint().x, to.getCenterPoint().y], {
-					fill: 'black',
-					stroke: 'black',
-					strokeWidth: 5,
-					strokeDashArray: [5, 5],
-					selectable: false
-				});
-				}
-				if(solid === true)
-				{
-				line = new fabric.Line([from.getCenterPoint().x, from.getCenterPoint().y, to.getCenterPoint().x, to.getCenterPoint().y], {
-					fill: 'black',
-					stroke: 'black',
-					strokeWidth: 5,
-					selectable: false
-				});
-				}
-				for(var i = 0; i < bnodes.length; i++)
-				{
-					if(bnodes[i].node.top === from.top && bnodes[i].node.left === from.left)
+					to = e.target;
+					var line;
+					if(dotted === true)
 					{
-						bnodes[i].lines.push(line);
+						line = new fabric.Line([from.getCenterPoint().x, from.getCenterPoint().y, to.getCenterPoint().x, to.getCenterPoint().y], {
+							fill: 'black',
+							stroke: 'black',
+							strokeWidth: 5,
+							strokeDashArray: [5, 5],
+							selectable: false
+						});
 					}
-					if(bnodes[i].node.top === e.target.top && bnodes[i].node.left === e.target.left)
+					if(solid === true)
 					{
-						bnodes[i].lines.push(line);
+						line = new fabric.Line([from.getCenterPoint().x, from.getCenterPoint().y, to.getCenterPoint().x, to.getCenterPoint().y], {
+							fill: 'black',
+							stroke: 'black',
+							strokeWidth: 5,
+							selectable: false
+						});
 					}
-					
+					for(var i = 0; i < bnodes.length; i++)
+					{
+						if(bnodes[i].node.top === from.top && bnodes[i].node.left === from.left)
+						{
+							bnodes[i].lines.push(line);
+						}
+						if(bnodes[i].node.top === e.target.top && bnodes[i].node.left === e.target.left)
+						{
+							bnodes[i].lines.push(line);
+						}
+					}
+
+					from.line = line;
+					canvas.add(to);
+					canvas.add(from);
+					canvas.add(line);
+					canvas.sendToBack(line);
+					canvas.renderAll();
 				}
-				from.line = line;
-				//e.target.line.push(line);
-				canvas.add(to);
-				canvas.add(from);
-				canvas.add(line);
-				canvas.sendToBack(line);
-				canvas.renderAll();
-			}
 		  }
 	    }
 	  },
@@ -245,18 +251,18 @@ $( document ).ready(function() {
 	  
 	  'mouse:over': function(e){
 		if(e.target.id === "mapNode")
-		{
-			e.target.setStroke('green');
-			canvas.renderAll();
-		}
+			{
+				e.target.setStroke('green');
+				canvas.renderAll();
+			}
 	  },
 	
 	  'mouse:out': function(e){
-		if(e.target.id === "mapNode")
-		{
-			e.target.setStroke('white');
-			canvas.renderAll();
-		}
+			if(e.target.id === "mapNode")
+			{
+				e.target.setStroke('white');
+				canvas.renderAll();
+			}
 	  },
 	
 	  'object:selected' : function(e){
@@ -273,20 +279,18 @@ $( document ).ready(function() {
 				}
 		  if(p.lines.length != 0)
 		  {
-		  for(var j = 0; j < p.lines.length; j++)
-		  {
-		  if(p.node.left+2*p.node.radius > p.lines[j].x1 && p.node.left < p.lines[j].x1 && p.node.top+2*p.node.radius > p.lines[j].y1 && p.node.top < p.lines[j].y1)
-		  {
-			p.lines[j].set({'x1': p.node.getCenterPoint().x, 'y1': p.node.getCenterPoint().y});
-		  }
-		  if(p.node.left+2*p.node.radius > p.lines[j].x2 && p.node.left < p.lines[j].x2 && p.node.top+2*p.node.radius > p.lines[j].y2 && p.node.top < p.lines[j].y2)
-		  {
-			p.lines[j].set({'x2': p.node.getCenterPoint().x, 'y2': p.node.getCenterPoint().y});	
-		  }
-		  }
-		  //p.line.set({'x1': p.getCenterPoint().x, 'y1': p.getCenterPoint().y});
-		  //p.line.set({'x1': p.left, 'y1': p.top });
-		  canvas.renderAll();
+			  for(var j = 0; j < p.lines.length; j++)
+			  {
+				  if(p.node.left+2*p.node.radius > p.lines[j].x1 && p.node.left < p.lines[j].x1 && p.node.top+2*p.node.radius > p.lines[j].y1 && p.node.top < p.lines[j].y1)
+				  {
+						p.lines[j].set({'x1': p.node.getCenterPoint().x, 'y1': p.node.getCenterPoint().y});
+				  }
+				  if(p.node.left+2*p.node.radius > p.lines[j].x2 && p.node.left < p.lines[j].x2 && p.node.top+2*p.node.radius > p.lines[j].y2 && p.node.top < p.lines[j].y2)
+				  {
+						p.lines[j].set({'x2': p.node.getCenterPoint().x, 'y2': p.node.getCenterPoint().y});	
+				  }
+			  }
+			  canvas.renderAll();
 		  }
 	  }
 
@@ -305,6 +309,18 @@ function showPopup(){
 	if(canvas_lock){
 		$("#canvas").hide(); 
 		$("#popup").show(); 
+
+		$.ajax({
+			async: false, 
+			type: 'POST',
+			url: "load_node.php", 
+			dataType: "json",
+			success: function(result){
+				alert("Hi"); 
+				alert(data.name); 
+				alert(data.description); 
+			}
+		}); 
 	}
 }
 
@@ -326,4 +342,8 @@ function savePopup(){
 	}); 
 
 	return false; 
+}
+
+function saveMap(){
+
 }
