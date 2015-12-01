@@ -29,6 +29,8 @@
 
    n.hasControls = false; 
    n.hasBorders  = false; 
+   
+   n.title;
  
    canvas.add(n);  
  }
@@ -130,7 +132,7 @@ $( document ).ready(function() {
 
 		    if(e.target.id === "tb_largeCircle" || e.target.id === "tb_mediumCircle" || e.target.id === "tb_smallCircle"){
 		      copyNode(canvas, e.target);  
-		      e.target.id = "mapNode";  
+		      e.target.id = "mapNodet";  
 		      mngr.addNode(e.target);
 				  nodes.push(e.target);
 				  var liness = [];
@@ -190,9 +192,37 @@ $( document ).ready(function() {
 			if(e.target.left < 180 && e.target.id != "tb_lineSolid" 
 				&& e.target.id != "tb_lineDotted" && e.target.id != "toolbarLock" 
 				&& e.target.id != "toolbarUpload"){
+					canvas.remove(e.target.title);
 					canvas.remove(e.target); 
 			}
 			e.target.opacity = 1;
+			if(e.target.left > 180 && e.target.id === "mapNodet")
+			{
+				e.target.id = "mapNode";
+				
+				var title = new fabric.IText('Name', {
+					fontFamily: 'arial black',
+					fontSize: 25,
+					left: e.target.left,
+					top: e.target.top - 30,
+					id: "nodeText"
+					});
+					
+				title.node = e.target;
+					
+				var len = title.getWidth()/2;
+				var cenX = e.target.getCenterPoint().x;
+				title.left = cenX - len;
+				
+				title.hasControls = false;
+				title.lockMovementX = true;
+				title.lockMovementY = true;
+				
+				e.target.title = title;
+				
+				canvas.add(title);
+				
+			}
 			canvas.renderAll();
 		  }
 		  if(lineEditor === true)
@@ -231,7 +261,7 @@ $( document ).ready(function() {
 							bnodes[i].lines.push(line);
 						}
 					}
-
+					mapLines.push(line);
 					from.line = line;
 					canvas.add(to);
 					canvas.add(from);
@@ -239,19 +269,18 @@ $( document ).ready(function() {
 					canvas.sendToBack(line);
 					canvas.renderAll();
 				}
-				mapLines.push(line);
-				from.line = line;
+				//mapLines.push(line);
+				//from.line = line;
 				//e.target.line.push(line);
-				canvas.add(to);
-				canvas.add(from);
-				canvas.add(line);
-				canvas.sendToBack(line);
-				canvas.renderAll();
+				//canvas.add(to);
+				//canvas.add(from);
+				//canvas.add(line);
+				//canvas.sendToBack(line);
+				//canvas.renderAll();
 				//saveMap();
 			}
 		  }
-	    }
-	  },
+	    },
 
 	  'object:moved': function(e) {
 	    e.target.opacity = 0.5;
@@ -259,6 +288,14 @@ $( document ).ready(function() {
 
 	  'object:modified': function(e) {
 	    e.target.opacity = 1;
+	  },
+	  
+	  'text:changed': function(e) {
+		if(e.target.id === "nodeText")
+		{
+			e.target.left = e.target.node.getCenterPoint().x - e.target.getWidth()/2;
+			//alert("test");
+		}
 	  },
 	  
 	  'mouse:over': function(e){
@@ -281,28 +318,34 @@ $( document ).ready(function() {
 	  },
 	  
 	  'object:moving' : function(e) {
-		  var p;
-		  for(var i = 0; i < bnodes.length; i++)
+		  if(e.target.id === "mapNode")
+		  {
+			e.target.title.set({'top': e.target.top - 30, 'left': (e.target.getCenterPoint().x - e.target.title.getWidth()/2)});
+			e.target.title.setCoords();
+			
+			var p;
+			for(var i = 0; i < bnodes.length; i++)
 				{
 					if(bnodes[i].node.top === e.target.top && bnodes[i].node.left === e.target.left)
 					{
 						p = bnodes[i];
 					}
 				}
-		  if(p.lines.length != 0)
-		  {
-			  for(var j = 0; j < p.lines.length; j++)
-			  {
-				  if(p.node.left+2*p.node.radius > p.lines[j].x1 && p.node.left < p.lines[j].x1 && p.node.top+2*p.node.radius > p.lines[j].y1 && p.node.top < p.lines[j].y1)
-				  {
+			if(p.lines.length != 0)
+			{
+				for(var j = 0; j < p.lines.length; j++)
+				{
+					if(p.node.left+2*p.node.radius > p.lines[j].x1 && p.node.left < p.lines[j].x1 && p.node.top+2*p.node.radius > p.lines[j].y1 && p.node.top < p.lines[j].y1)
+					{
 						p.lines[j].set({'x1': p.node.getCenterPoint().x, 'y1': p.node.getCenterPoint().y});
-				  }
-				  if(p.node.left+2*p.node.radius > p.lines[j].x2 && p.node.left < p.lines[j].x2 && p.node.top+2*p.node.radius > p.lines[j].y2 && p.node.top < p.lines[j].y2)
-				  {
+					}
+					if(p.node.left+2*p.node.radius > p.lines[j].x2 && p.node.left < p.lines[j].x2 && p.node.top+2*p.node.radius > p.lines[j].y2 && p.node.top < p.lines[j].y2)
+					{
 						p.lines[j].set({'x2': p.node.getCenterPoint().x, 'y2': p.node.getCenterPoint().y});	
-				  }
-			  }
-			  canvas.renderAll();
+					}
+				}
+				canvas.renderAll();
+			}
 		  }
 	  }
 
