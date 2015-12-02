@@ -6,7 +6,7 @@ $title= $_POST["title"];
 $description= $_POST["description"];
 
 // Connects to local mongo db
-$db = new MongoClient("mongodb://http://ec2-52-33-118-140.us-west-2.compute.amazonaws.com");
+$db = new MongoClient("mongodb://ec2-52-33-118-140.us-west-2.compute.amazonaws.com");
 
 // Select the DB
 $db = $db->ludb;
