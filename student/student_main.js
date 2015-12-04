@@ -1,10 +1,26 @@
-var classarray = ['cs1410', 'cs2420', 'cs3100'];
+
+var classarray = [];
 var planet_radius = 100;
 var orbital_radius = 200;
 var class_radius = 60;
 
+function getClassName(){
+	$.ajax({
+		async: false,
+		type: 'POST',
+		url: "student_main.php",
+		datatpye: 'JSON',
+		success: function(result){	
+			var classnamearr = JSON.parse(result); 	
+			for(var x in classnamearr){
+				classarray.push(classnamearr[x]);
+			}
+		}
+	});
+}
 
 function drawclassnode(canvas){
+
 	var node_space = (Math.PI * 2) / classarray.length;
 
 	for (var i = classarray.length - 1; i >= 0; i--) {
@@ -40,6 +56,7 @@ function drawclassnode(canvas){
 $( document ).ready(function() {
 
 	var canvas = new fabric.Canvas('student_main');
+
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
 
@@ -56,14 +73,14 @@ $( document ).ready(function() {
 		radius: planet_radius,
 		fill: 'black',
 		originX: 'center',
-			originY: 'center',
+		originY: 'center',
 		selectable: false
 	});
 
 	var accountName = new fabric.Text('NAMGI', {
 		fill: 'white',
 		originX: 'center',
-			originY: 'center',
+		originY: 'center',
 		selectable: false
 	});
 
@@ -74,7 +91,7 @@ $( document ).ready(function() {
 	});
 
 	canvas.add(outer, profile);
+	getClassName();
 	drawclassnode(canvas);
-	
 
 });
