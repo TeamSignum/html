@@ -4,4 +4,18 @@
 
  body{
 	padding-top: 70px;
+ 	padding: 0;
+    margin: 0;
+    font-family: sans-serif;
+}
+
+/*
+* for Snap.js 
+*/
+.drawers {
+    position: absolute;
+    width: 300px;
+    padding: 15px;
+    color: white;
+    background-color: #3E3E3C;
 }
