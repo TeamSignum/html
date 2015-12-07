@@ -13,11 +13,12 @@ var_dump($db);
 // Select a collection
 $collection = $db->users;
 var_dump($collection);
+
 // find data
 $cursor = $collection->findOne(array("email"=>"user1@gmail.com"));
 var_dump($cursor);
 echo $cursor["email"];
 
-$db->close();
+
 
 ?>

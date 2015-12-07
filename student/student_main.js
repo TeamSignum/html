@@ -1,4 +1,4 @@
-
+// Draws the layout of nodes for the student home page.
 var classarray = [];
 var planet_radius = 100;
 var orbital_radius = 200;
@@ -9,12 +9,13 @@ function getClassName(){
 		async: false,
 		type: 'POST',
 		url: "student_main.php",
-		datatpye: 'JSON',
+		datatpye: "json",
 		success: function(result){	
 			var classnamearr = JSON.parse(result); 	
 			for(var x in classnamearr){
 				classarray.push(classnamearr[x]);
 			}
+			//alert(result);
 		}
 	});
 }
@@ -32,8 +33,21 @@ function drawclassnode(canvas){
 			radius: class_radius,
 			originX: 'center',
 			originY: 'center',
-			fill: 'black'
+			fill: '#B80000 '
 		});
+		
+		classCircle.setGradient('fill', {
+		  x1: -classCircle.width / 2,
+		  y1: -classCircle.width / 2,
+		  x2: classCircle.width / 2,
+		  y2: classCircle.width / 2,
+		  colorStops: {
+			0: "white",
+			1: "#B80000"
+		  }
+		});
+		
+		classCircle.set('stroke', '#A00000').set('strokeWidth', 5);
 
 		//draw the text
 		var className = new fabric.Text(classarray[i],{
@@ -62,8 +76,9 @@ $( document ).ready(function() {
 
 	var outer = new fabric.Circle({
 		radius: orbital_radius,
-		fill: '#99ffff',
-		stroke: "black",
+		fill: '#F0F0F0',
+		strokeWidth: 5,
+		stroke: "#A00000",
 		left: (canvas.width/2) - orbital_radius ,
 		top: (canvas.height/2) - orbital_radius,
 		selectable: false
@@ -71,11 +86,26 @@ $( document ).ready(function() {
 
 	var inner= new fabric.Circle({
 		radius: planet_radius,
-		fill: 'black',
+		fill: '#B80000',
 		originX: 'center',
 		originY: 'center',
-		selectable: false
+		//selectable: true
 	});
+	
+	inner.setGradient('fill', {
+	  x1: -inner.width / 2,
+	  y1: -inner.width / 2,
+	  x2: inner.width / 2,
+	  y2: inner.width / 2,
+	  colorStops: {
+	    0.1: "white",
+	    1: "#B80000"
+	  }
+	});
+	
+	inner.set('stroke', '#A00000').set('strokeWidth', 5);
+			
+	
 
 	var accountName = new fabric.Text('NAMGI', {
 		fill: 'white',
@@ -87,7 +117,11 @@ $( document ).ready(function() {
 	var profile = new fabric.Group([inner,accountName], {
 		left: (canvas.width/2) - planet_radius ,
 		top: (canvas.height/2) - planet_radius,
-		selectable: false
+		selectable: true
+	});
+	
+	profile.on('selected', function() {
+  		alert("Clicked");
 	});
 
 	canvas.add(outer, profile);

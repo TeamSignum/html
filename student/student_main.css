@@ -2,5 +2,9 @@
 	width: 100%; 
 	height: 100%;
 	text-align: center; 
-	background-color: #99ffff; 
+}
+
+body {
+	background-color: #F0F0F0;
+	;
 }

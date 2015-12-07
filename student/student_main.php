@@ -1,10 +1,10 @@
 <?php
 
 	$db_name = 'ludb';
-	$email = "test2@gmail.com";
-	//$email = $_POST["email"];
+	$email = "user1@gmail.com";
+	//$email = $_POST["email"]; Nothing
 
-	$connection = new MongoClient('localhost');
+	$connection = new MongoClient('mongodb://ec2-52-33-118-140.us-west-2.compute.amazonaws.com');
 
 	//connecting to cidbase
 	$db = $connection->$db_name;
@@ -19,15 +19,18 @@
 
 	if(count($cursor1)) {
 
-		$classid = $cursor1["classes"];
+		$classid = $cursor1["classid"];
+		//var_dump($classid);
 		$classname = array();
 
 		foreach ($classid as $cid) {
-			$floatId = (float) $cid;
-			$collection2 = $db->class;
-			$query2 = array('_id'=>$floatId);
+			//$floatId = (float) $cid;
+			$collection2 = $db->classes;
+			//$query2 = array('_id'=>$floatId);
+			$query2 = array('_id'=>$cid);
 			$cursor2 = $collection2->findOne($query2);
 			array_push($classname, $cursor2["classname"]);	
+			//var_dump($classname);
 		}
 	}
 
