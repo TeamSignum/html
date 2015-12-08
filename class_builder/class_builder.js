@@ -133,9 +133,13 @@ $( document ).ready(function() {
 	    		showPopup(); 
 
 	    	if(lineEditor === false)
-				{
-					e.target.opacity = 0.5;
-				}
+			{
+				e.target.opacity = 0.5;
+			}
+
+			if(e.target.id === "toolbarUpload"){
+				saveMap(); 
+			}
 
 		    if(e.target.id === "tb_largeCircle" || e.target.id === "tb_mediumCircle" || e.target.id === "tb_smallCircle"){
 		      copyNode(canvas, e.target);  
@@ -378,7 +382,7 @@ function lockCanvas(){
 
 function showPopup(){
 	if(canvas_lock){
-		$("#canvas").hide(); 
+		//$("#canvas").hide(); 
 		$("#popup").show(); 
 
 		$.ajax({
@@ -387,9 +391,6 @@ function showPopup(){
 			url: "load_node.php", 
 			dataType: "json",
 			success: function(result){
-				alert("Hi"); 
-				alert(data.name); 
-				alert(data.description); 
 			}
 		}); 
 	}
