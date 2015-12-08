@@ -7,6 +7,9 @@
  var canvas_lock = false;
  var nodes = [];
  var mapLines = [];
+ var nodeID;
+ var edgeID;
+ var bnodes = [];
 
  function copyNode(canvas, node){
 	 var radius = node.radius; 
@@ -67,6 +70,8 @@
 
 $( document ).ready(function() {
 
+	loadIDs();
+
 	var mngr = new MM.Manager();
 
 	var lineEditor = false;
@@ -74,8 +79,6 @@ $( document ).ready(function() {
 	var dotted = false;
 	var from;
 	var to;
-	
-	var bnodes = [];
 
 	var canvas = new fabric.Canvas('map');
 	canvas.add(new fabric.Circle({ radius: 50, fill: '#fff', top: 50,  left: 50, stoke: 'white', strokeWidth: 5, id: 'tb_largeCircle' }));
@@ -142,8 +145,10 @@ $( document ).ready(function() {
 				  var liness = [];
 				  var temp = {
 						node: e.target,
+						id: nodeID,
 						lines: liness
 				  };
+				  nodeID++;
 			  	bnodes.push(temp);
 		    }
 				else if(e.target.id === "tb_lineSolid" || e.target.id === "tb_lineDotted")
@@ -267,7 +272,12 @@ $( document ).ready(function() {
 							bnodes[i].lines.push(line);
 						}
 					}
-					mapLines.push(line);
+					var temp = {
+						line: line,
+						id: edgeID
+						};
+					edgeID++;
+					mapLines.push(temp);
 					from.line = line;
 					canvas.add(to);
 					canvas.add(from);
@@ -307,7 +317,7 @@ $( document ).ready(function() {
 	  'mouse:over': function(e){
 		if(e.target.id === "mapNode")
 			{
-				e.target.setStroke('green');
+				e.target.setStroke('yellow');
 				canvas.renderAll();
 			}
 	  },
@@ -408,32 +418,36 @@ function savePopup(){
 function saveMap(){
 	var map = [];
 	var edges = [];
-	for(var i = 0; i < nodes.length; i++)
+	for(var i = 0; i < bnodes.length; i++)
 	{
+		var t = bnodes[i].node.title.getText();
 		var temp = {
-			top: nodes[i].top,
-			left: nodes[i].left,
-			radius: nodes[i].radius,
-			fill: nodes[i].fill,
-			stroke: nodes[i].stroke,
-			strokeWidth: nodes[i].strokeWidth,
-			id: nodes[i].id
+			top: bnodes[i].node.top,
+			left: bnodes[i].node.left,
+			radius: bnodes[i].node.radius,
+			fill: bnodes[i].node.fill,
+			stroke: bnodes[i].node.stroke,
+			strokeWidth: bnodes[i].node.strokeWidth,
+			id: bnodes[i].id,
+			type: bnodes[i].node.id,
+			title: t
 		};
 		map.push(temp);
-		//alert(temp.top);
+		//alert(bnodes[i].node.title.getText());
 	}
 	
 	for(var i = 0; i < mapLines.length; i++)
 	{
 		var temp = {
-			x1: mapLines[i].x1,
-			y1: mapLines[i].y1,
-			x2: mapLines[i].x2,
-			y2: mapLines[i].y2,
-			fill: mapLines[i].fill,
-			stroke: mapLines[i].stroke,
-			strokeWidth: mapLines[i].strokeWidth,
-			type: mapLines[i].id
+			x1: mapLines[i].line.x1,
+			y1: mapLines[i].line.y1,
+			x2: mapLines[i].line.x2,
+			y2: mapLines[i].line.y2,
+			fill: mapLines[i].line.fill,
+			stroke: mapLines[i].line.stroke,
+			strokeWidth: mapLines[i].line.strokeWidth,
+			type: mapLines[i].line.id,
+			id: mapLines[i].id
 		};
 		edges.push(temp);
 	}
@@ -446,6 +460,27 @@ function saveMap(){
 		
 		success: function(result){
 			alert("Saved");
+		}
+	});
+	
+	return false;
+}
+
+function loadIDs()
+{
+	$.ajax({
+		type: 'POST',
+		url: "mapsave.php",
+		dataType: 'json',
+		data: {id: 1},
+		
+		success: function(result){
+			nodeID = parseInt(result["mnid"]);
+			edgeID = parseInt(result["meid"]);
+			nodeID++;
+			edgeID++;
+			//alert(nodeID);
+			//alert(edgeID);
 		}
 	});
 	
