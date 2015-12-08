@@ -121,6 +121,10 @@ $( document ).ready(function() {
 
 	  'mouse:down': function(e) {
 	    if (e.target) {
+			if(e.target.id === "toolbarUpload")
+			{
+				saveMap();
+			}
 
 	    	if(canvas_lock)
 	    		showPopup(); 
@@ -238,7 +242,8 @@ $( document ).ready(function() {
 							stroke: 'black',
 							strokeWidth: 5,
 							strokeDashArray: [5, 5],
-							selectable: false
+							selectable: false,
+							id: "dotted"
 						});
 					}
 					if(solid === true)
@@ -247,7 +252,8 @@ $( document ).ready(function() {
 							fill: 'black',
 							stroke: 'black',
 							strokeWidth: 5,
-							selectable: false
+							selectable: false,
+							id: "solid"
 						});
 					}
 					for(var i = 0; i < bnodes.length; i++)
@@ -426,7 +432,8 @@ function saveMap(){
 			y2: mapLines[i].y2,
 			fill: mapLines[i].fill,
 			stroke: mapLines[i].stroke,
-			strokeWidth: mapLines[i].strokeWidth
+			strokeWidth: mapLines[i].strokeWidth,
+			type: mapLines[i].id
 		};
 		edges.push(temp);
 	}
@@ -438,7 +445,7 @@ function saveMap(){
 		data: {map: map, edges: edges},
 		
 		success: function(result){
-			alert(result);
+			alert("Saved");
 		}
 	});
 	
