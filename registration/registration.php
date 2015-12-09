@@ -1,7 +1,7 @@
 
 <?php
 
-session_start();
+//session_start();
 
 if (isset($_POST["submit"])){
 	
@@ -30,8 +30,7 @@ if (isset($_POST["submit"])){
     	$error[] = "Password and Confirm password are not matching";
     }
     
-    if(!isset($_SESSION['id'])) // change to isset when everything is figured out.
-    {
+    if(count($error) == 0){
         // Set up the database connection
         try{           
             $DB = new PDO('mysql:host=ec2-52-33-118-140.us-west-2.compute.amazonaws.com;dbname=LU', 'Signum', 'signumDB4');
@@ -42,33 +41,29 @@ if (isset($_POST["submit"])){
         }
 
         // check existed email of not
-        $stmt = $DB->prepare("SELECT email FROM LU.users WHERE email = '$email'");
-        $result = $stmt->execute();
-        $rows = $result->fetch
-        //print_r($stmt->fetchAll(PDO::FETCH_ASSOC));
-        
-        if($result->num_rows() != 0){
+        $stmt = $DB->prepare("SELECT count(*) FROM LU.users WHERE email = '$email'");
+        $stmt->execute();
+        $result = $stmt->fetch();
+
+        if($result['count(*)'] == 1){
             echo "already";
         }else{
             echo "new";
+            $query = "INSERT INTO LU.users (email, password, uid) values ('$email', '$password1', '$uid')";
+            $stmt = $DB->prepare($query);
+
+            try{
+                // Execute the database query
+                $stmt->execute();
+                header("location: ../index.html");
+            }catch  (PDOException $e){
+                echo $e->getMessage();
+            }
         }
-
-        // // Set and prepare the database query
-        // $query = "INSERT INTO LU.users (email, password, uid) 
-        //             values ('$email', '$password1', '$uid')";
-        // $statement = $DB->prepare($query2);
-
-        // try{
-        // // Execute the database query
-        //     $statement->execute();
-        //     $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-        //     header("location: ../index.html");
-        //     //echo json_encode($result);
-        // }catch  (PDOException $e){
-        //     echo $e->getMessage();
-        // }
-           
-
+    }else{ 
+        foreach ($error as $err) {
+            echo $err. '</br>';
+        }
     }
 } 
 
