@@ -170,11 +170,25 @@ function loadNodePopup(node){
 		type: 'POST', 
 		url: "load_node_popup.php",
 		data: _data, 
-		dataType: "json",
+		dataType: "json", 
 		success: function(result){
-			alert(result); 
+			fillPopup(result["title"], result["description"], result["duedate"], result["notes"]); 
 		}
 	}); 
 
 	return false; 
+}
+
+
+function fillPopup(title, description, duedate, notes){
+	$("#popup").show(); 
+	$("#title").html(title); 
+	$("#description").html(description); 
+	var _duedate = $("#duedate").html(); 
+	$("#duedate").html(_duedate + duedate); 
+	$("#notes").html(notes); 
+}
+
+function hidePopup(){
+	$("#popup").hide(); 
 }
