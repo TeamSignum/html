@@ -3,7 +3,7 @@ var _email;
 var _firstName;
 var _lastName;
 var _description;
-var _uid;
+var _userid;
 
 
 $( document ).ready(function() 
@@ -20,7 +20,7 @@ function getProfileData(){
 		success: function(result){
 			var parsedResult = JSON.parse(result);
 			//alert(parsedResult);
-			_uid = parsedResult[0].uid;
+			_userid = parsedResult[0].uid;
 			_email = parsedResult[0].email;
 			_firstName = parsedResult[0].firstname;
 			_lastName = parsedResult[0].lastname;
@@ -34,9 +34,9 @@ function getProfileData(){
 
 function buildPage(){
 	$('#email').val(_email);
-	$('#uid').val(_uid);
-	$('#firstName').val(_firstName);
-	$('#lastName').val(_lastName);
+	$('#userid').val(_userid);
+	$('#firstname').val(_firstName);
+	$('#lastname').val(_lastName);
 }
 
 function editProfile(){

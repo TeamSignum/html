@@ -18,22 +18,33 @@
       <form id="profileForm" method="post" action="profile.php">
 
           <label for="email">Email address</label>
-          <input type="email" name="email" class="form-control" id="email" readonly>
+          <input type="email" name="email" class="form-control" id="email" >
         
           <label for="userid">User ID</label>
-          <input type="text" name="userid" class="form-control" id="uid" readonly>
+          <input type="text" name="userid" class="form-control" id="userid" >
 		  
           <label for="firstname">First Name</label>
-          <input type="text" name="firstname" class="form-control" id="firstName" readonly>
+          <input type="text" name="firstname" class="form-control" id="firstname" >
           
           <label for="lastname">Last Name</label>
-          <input type="text" name="lastname" class="form-control" id="lastName" readonly>
+          <input type="text" name="lastname" class="form-control" id="lastname" >
           <br>
 		  <p id="buttonRegion">
-          		<button onclick="editProfile()" class="btn btn-primary btn-lg btn-block">Edit</button>
+          		<button onclick="editProfile()" class="btn btn-primary btn-lg btn-block">Submit</button>
           </p>
                 
       </form>
+      
+      <script>
+	  	document.profileForm.onsubmit=function()
+			{
+				if(document.profileForm.email.value == '')
+				{
+					alert("Please enter an email address");
+					return false;
+				}
+			}
+			
       </div>
       <div class="col-md-4"></div>
     </div>
