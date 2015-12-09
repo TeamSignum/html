@@ -1,39 +1,43 @@
-/**
+/*
  * Learning Universe Class Builder
  * Authors: Daniel Cushing and Dustin Reitstetter
  * Date: 11/21/15 
  */ 
 
- var canvas_lock = false;
- var nodes = [];
- var mapLines = [];
+var canvas_lock = false;
+var nodes = [];
+var mapLines = [];
+var nodeID;
+var edgeID;
+var bnodes = [];
+var current_node; 
 
- function copyNode(canvas, node){
-	 var radius = node.radius; 
- 	 var fill = node.fill; 
- 	 var top = node.top;
- 	 var left = node.left; 
- 	 var id = node.id;
-	 var stroke = node.stroke;
-	 var strokeWidth = node.strokeWidth;
+function copyNode(canvas, node){
+	var radius = node.radius; 
+	var fill = node.fill; 
+	var top = node.top;
+	var left = node.left; 
+	var id = node.id;
+	var stroke = node.stroke;
+	var strokeWidth = node.strokeWidth;
 
- 	 var n = new fabric.Circle({
- 	 	radius: radius, 
- 	 	fill : fill, 
- 	 	top : top, 
- 	 	left : left,
+	var n = new fabric.Circle({
+		radius: radius, 
+		fill : fill, 
+		top : top, 
+		left : left,
 		stroke: stroke,
 		strokeWidth: strokeWidth,		
- 	 	id: id
- 	 }); 
+		id: id
+	}); 
 
-   n.hasControls = false; 
-   n.hasBorders  = false; 
-   
-   n.title;
- 
-   canvas.add(n);  
- }
+	n.hasControls = false; 
+	n.hasBorders  = false; 
+
+	n.title;
+
+	canvas.add(n);  
+}
 
  function copyEdge(canvas, edge){
  	var x1 = edge.x1; 
@@ -67,6 +71,8 @@
 
 $( document ).ready(function() {
 
+	loadIDs();
+
 	var mngr = new MM.Manager();
 
 	var lineEditor = false;
@@ -74,8 +80,6 @@ $( document ).ready(function() {
 	var dotted = false;
 	var from;
 	var to;
-	
-	var bnodes = [];
 
 	var canvas = new fabric.Canvas('map');
 	canvas.add(new fabric.Circle({ radius: 50, fill: '#fff', top: 50,  left: 50, stoke: 'white', strokeWidth: 5, id: 'tb_largeCircle' }));
@@ -122,19 +126,20 @@ $( document ).ready(function() {
 	  'mouse:down': function(e) {
 	    if (e.target) {
 			if(e.target.id === "toolbarUpload")
-			{
 				saveMap();
-			}
 
-	    	if(canvas_lock)
+	    	if(canvas_lock){
 	    		showPopup(); 
+	    		current_node = e.target; 
+	    	}
 
 	    	if(lineEditor === false)
-				{
-					e.target.opacity = 0.5;
-				}
+			{
+				e.target.opacity = 0.5;
+			}
 
-		    if(e.target.id === "tb_largeCircle" || e.target.id === "tb_mediumCircle" || e.target.id === "tb_smallCircle"){
+		    if(e.target.id === "tb_largeCircle" || e.target.id === "tb_mediumCircle" || e.target.id === "tb_smallCircle")
+		    {
 		      copyNode(canvas, e.target);  
 		      e.target.id = "mapNodet";  
 		      mngr.addNode(e.target);
@@ -142,48 +147,49 @@ $( document ).ready(function() {
 				  var liness = [];
 				  var temp = {
 						node: e.target,
+						id: nodeID,
 						lines: liness
 				  };
+				  nodeID++;
 			  	bnodes.push(temp);
 		    }
-				else if(e.target.id === "tb_lineSolid" || e.target.id === "tb_lineDotted")
+			else if(e.target.id === "tb_lineSolid" || e.target.id === "tb_lineDotted")
+			{
+				lineEditor = !lineEditor;
+				if(e.target.id === "tb_lineSolid")
 				{
-					lineEditor = !lineEditor;
-					if(e.target.id === "tb_lineSolid")
-					{
-						solid = !solid;
-					}
-					if(e.target.id === "tb_lineDotted")
-					{
-						dotted = !dotted;
-					}
-					if(lineEditor === true)
-					{
-						for(var i = 0; i < nodes.length; i++)
-						{
-							nodes[i].lockMovementX = true;
-							nodes[i].lockMovementY = true;
-							nodes[i].selectable = false;
-						}
-					}
-					if(lineEditor === false)
-					{
-						for(var i = 0; i < nodes.length; i++)
-						{
-							nodes[i].lockMovementX = false;
-							nodes[i].lockMovementY = false;
-							nodes[i].selectable = true;
-						}
-					}
+					solid = !solid;
 				}
-				else if(e.target.id === "mapNode")
+				if(e.target.id === "tb_lineDotted")
 				{
-					from = e.target;
+					dotted = !dotted;
 				}
-				else if(e.target.id === "toolbarLock"){
-					lockCanvas(); 
+				if(lineEditor === true)
+				{
+					for(var i = 0; i < nodes.length; i++)
+					{
+						nodes[i].lockMovementX = true;
+						nodes[i].lockMovementY = true;
+						nodes[i].selectable = false;
+					}
 				}
-
+				if(lineEditor === false)
+				{
+					for(var i = 0; i < nodes.length; i++)
+					{
+						nodes[i].lockMovementX = false;
+						nodes[i].lockMovementY = false;
+						nodes[i].selectable = true;
+					}
+				}
+			}
+			else if(e.target.id === "mapNode")
+			{
+				from = e.target;
+			}
+			else if(e.target.id === "toolbarLock"){
+				lockCanvas(); 
+			}
 
 	      canvas.renderAll();
 	    }
@@ -192,101 +198,109 @@ $( document ).ready(function() {
 	  'mouse:up': function(e) {
 	    if (e.target) {
 	      if(lineEditor === false)
-		  {
-			if(e.target.left < 180 && e.target.id != "tb_lineSolid" 
-				&& e.target.id != "tb_lineDotted" && e.target.id != "toolbarLock" 
-				&& e.target.id != "toolbarUpload"){
-					canvas.remove(e.target.title);
-					canvas.remove(e.target); 
-			}
-			e.target.opacity = 1;
-			if(e.target.left > 180 && e.target.id === "mapNodet")
-			{
-				e.target.id = "mapNode";
-				
-				var title = new fabric.IText('Name', {
-					fontFamily: 'arial black',
-					fontSize: 25,
-					left: e.target.left,
-					top: e.target.top - 30,
-					id: "nodeText"
-					});
-					
-				title.node = e.target;
-					
-				var len = title.getWidth()/2;
-				var cenX = e.target.getCenterPoint().x;
-				title.left = cenX - len;
-				
-				title.hasControls = false;
-				title.lockMovementX = true;
-				title.lockMovementY = true;
-				
-				e.target.title = title;
-				
-				canvas.add(title);
-				
-			}
-			canvas.renderAll();
-		  }
-		  if(lineEditor === true)
-		  {
-			  if(e.target.id === "mapNode")
-				{
-					to = e.target;
-					var line;
-					if(dotted === true)
+			  {
+					if(e.target.left < 180 && e.target.id != "tb_lineSolid" 
+						&& e.target.id != "tb_lineDotted" && e.target.id != "toolbarLock" 
+						&& e.target.id != "toolbarUpload"){
+							canvas.remove(e.target.title);
+							canvas.remove(e.target); 
+					}
+
+					e.target.opacity = 1;
+					if(e.target.left > 180 && e.target.id === "mapNodet")
 					{
-						line = new fabric.Line([from.getCenterPoint().x, from.getCenterPoint().y, to.getCenterPoint().x, to.getCenterPoint().y], {
-							fill: 'black',
-							stroke: 'black',
-							strokeWidth: 5,
-							strokeDashArray: [5, 5],
-							selectable: false,
-							id: "dotted"
+						e.target.id = "mapNode";
+				
+						var title = new fabric.IText('Name', {
+							fontFamily: 'arial black',
+							fontSize: 25,
+							left: e.target.left,
+							top: e.target.top - 30,
+							id: "nodeText"
 						});
+					
+						title.node = e.target;
+					
+						var len = title.getWidth()/2;
+						var cenX = e.target.getCenterPoint().x;
+						title.left = cenX - len;
+						
+						title.hasControls = false;
+						title.lockMovementX = true;
+						title.lockMovementY = true;
+						
+						e.target.title = title;
+						
+						canvas.add(title);
 					}
-					if(solid === true)
-					{
-						line = new fabric.Line([from.getCenterPoint().x, from.getCenterPoint().y, to.getCenterPoint().x, to.getCenterPoint().y], {
-							fill: 'black',
-							stroke: 'black',
-							strokeWidth: 5,
-							selectable: false,
-							id: "solid"
-						});
-					}
-					for(var i = 0; i < bnodes.length; i++)
-					{
-						if(bnodes[i].node.top === from.top && bnodes[i].node.left === from.left)
-						{
-							bnodes[i].lines.push(line);
-						}
-						if(bnodes[i].node.top === e.target.top && bnodes[i].node.left === e.target.left)
-						{
-							bnodes[i].lines.push(line);
-						}
-					}
-					mapLines.push(line);
-					from.line = line;
-					canvas.add(to);
-					canvas.add(from);
-					canvas.add(line);
-					canvas.sendToBack(line);
+
 					canvas.renderAll();
+		  	}
+		 		if(lineEditor === true)
+			  {
+				  if(e.target.id === "mapNode")
+					{
+						to = e.target;
+						var line;
+						if(dotted === true)
+						{
+							line = new fabric.Line([from.getCenterPoint().x, from.getCenterPoint().y, to.getCenterPoint().x, to.getCenterPoint().y], {
+								fill: 'black',
+								stroke: 'black',
+								strokeWidth: 5,
+								strokeDashArray: [5, 5],
+								selectable: false,
+								id: "dotted"
+							});
+						}
+						if(solid === true)
+						{
+							line = new fabric.Line([from.getCenterPoint().x, from.getCenterPoint().y, to.getCenterPoint().x, to.getCenterPoint().y], {
+								fill: 'black',
+								stroke: 'black',
+								strokeWidth: 5,
+								selectable: false,
+								id: "solid"
+							});
+						}
+						for(var i = 0; i < bnodes.length; i++)
+						{
+							if(bnodes[i].node.top === from.top && bnodes[i].node.left === from.left)
+							{
+								bnodes[i].lines.push(line);
+							}
+							if(bnodes[i].node.top === e.target.top && bnodes[i].node.left === e.target.left)
+							{
+								bnodes[i].lines.push(line);
+							}
+						}
+						var temp = {
+							line: line,
+							id: edgeID
+						};
+
+						edgeID++;
+						mapLines.push(temp);
+						from.line = line;
+						canvas.add(to);
+						canvas.add(from);
+						canvas.add(line);
+						canvas.sendToBack(line);
+						canvas.renderAll();
+					}
+
+					//mapLines.push(line);
+					//from.line = line;
+					//e.target.line.push(line);
+					//canvas.add(to);
+					//canvas.add(from);
+					//canvas.add(line);
+					//canvas.sendToBack(line);
+					//canvas.renderAll();
+					//saveMap();
 				}
-				//mapLines.push(line);
-				//from.line = line;
-				//e.target.line.push(line);
-				//canvas.add(to);
-				//canvas.add(from);
-				//canvas.add(line);
-				//canvas.sendToBack(line);
-				//canvas.renderAll();
-				//saveMap();
-			}
 		  }
-	    },
+	  },
 
 	  'object:moved': function(e) {
 	    e.target.opacity = 0.5;
@@ -297,17 +311,16 @@ $( document ).ready(function() {
 	  },
 	  
 	  'text:changed': function(e) {
-		if(e.target.id === "nodeText")
-		{
-			e.target.left = e.target.node.getCenterPoint().x - e.target.getWidth()/2;
-			//alert("test");
-		}
+			if(e.target.id === "nodeText")
+			{
+				e.target.left = e.target.node.getCenterPoint().x - e.target.getWidth()/2;
+			}
 	  },
 	  
 	  'mouse:over': function(e){
-		if(e.target.id === "mapNode")
+			if(e.target.id === "mapNode")
 			{
-				e.target.setStroke('green');
+				e.target.setStroke('yellow');
 				canvas.renderAll();
 			}
 	  },
@@ -326,39 +339,41 @@ $( document ).ready(function() {
 	  'object:moving' : function(e) {
 		  if(e.target.id === "mapNode")
 		  {
-			e.target.title.set({'top': e.target.top - 30, 'left': (e.target.getCenterPoint().x - e.target.title.getWidth()/2)});
-			e.target.title.setCoords();
+				e.target.title.set({'top': e.target.top - 30, 'left': (e.target.getCenterPoint().x - e.target.title.getWidth()/2)});
+				e.target.title.setCoords();
 			
-			var p;
-			for(var i = 0; i < bnodes.length; i++)
+				var p;
+				for(var i = 0; i < bnodes.length; i++)
 				{
 					if(bnodes[i].node.top === e.target.top && bnodes[i].node.left === e.target.left)
 					{
 						p = bnodes[i];
 					}
 				}
-			if(p.lines.length != 0)
-			{
-				for(var j = 0; j < p.lines.length; j++)
+				if(p.lines.length != 0)
 				{
-					if(p.node.left+2*p.node.radius > p.lines[j].x1 && p.node.left < p.lines[j].x1 && p.node.top+2*p.node.radius > p.lines[j].y1 && p.node.top < p.lines[j].y1)
+					for(var j = 0; j < p.lines.length; j++)
 					{
-						p.lines[j].set({'x1': p.node.getCenterPoint().x, 'y1': p.node.getCenterPoint().y});
+						if(p.node.left+2*p.node.radius > p.lines[j].x1 && p.node.left < p.lines[j].x1 && p.node.top+2*p.node.radius > p.lines[j].y1 && p.node.top < p.lines[j].y1)
+						{
+							p.lines[j].set({'x1': p.node.getCenterPoint().x, 'y1': p.node.getCenterPoint().y});
+						}
+						if(p.node.left+2*p.node.radius > p.lines[j].x2 && p.node.left < p.lines[j].x2 && p.node.top+2*p.node.radius > p.lines[j].y2 && p.node.top < p.lines[j].y2)
+						{
+							p.lines[j].set({'x2': p.node.getCenterPoint().x, 'y2': p.node.getCenterPoint().y});	
+						}
 					}
-					if(p.node.left+2*p.node.radius > p.lines[j].x2 && p.node.left < p.lines[j].x2 && p.node.top+2*p.node.radius > p.lines[j].y2 && p.node.top < p.lines[j].y2)
-					{
-						p.lines[j].set({'x2': p.node.getCenterPoint().x, 'y2': p.node.getCenterPoint().y});	
-					}
+					canvas.renderAll();
 				}
-				canvas.renderAll();
-			}
 		  }
-	  }
+	 	}
 
 	});
-
 });
 
+/*
+ * Locks the canvas. Any time you click on a node it will bring up the popup editor if the canvas has been locked. 
+ */ 
 function lockCanvas(){
 	if(canvas_lock)
 		canvas_lock = false; 
@@ -366,35 +381,51 @@ function lockCanvas(){
 		canvas_lock = true; 
 }
 
-function showPopup(){
+/*
+ * Displays popups for nodes. 
+ */ 
+function showPopup() {
 	if(canvas_lock){
-		$("#canvas").hide(); 
 		$("#popup").show(); 
-
 		$.ajax({
 			async: false, 
 			type: 'POST',
 			url: "load_node.php", 
 			dataType: "json",
 			success: function(result){
-				alert("Hi"); 
-				alert(data.name); 
-				alert(data.description); 
 			}
 		}); 
 	}
 }
 
+/*
+ * Hides node popup
+ */
+ function hidePopup() {
+ 	$("#popup").hide(); 
+ }
+
+/*
+ * Saves the popup node details to the db. 
+ */
 function savePopup(){
+	var nid; 
 	var title = $("#title").val();
 	var desc = $("#description").val(); 
+	var duedate = $("#due_date").val(); 
 
-	var _data = 'title=' + title + '&description=' + desc; 
+	for(var i = 0; i < bnodes.length; i++){
+		if(bnodes[i].node.top == current_node.top && bnodes[i].node.left == current_node.left){
+			nid = bnodes[i].id; 
+		}
+	}
+
+	var _data = 'nid=' + nid + '&title=' + title + '&description=' + desc + '&duedate=' + duedate; 
 
 	$.ajax({
 		async: false, 
 		type: 'POST', 
-		url: "class_builder.php",
+		url: "save_node_popup.php",
 		data: _data, 
 		success: function(result){
 			$("#popup").hide(); 
@@ -408,37 +439,42 @@ function savePopup(){
 function saveMap(){
 	var map = [];
 	var edges = [];
-	for(var i = 0; i < nodes.length; i++)
+	for(var i = 0; i < bnodes.length; i++)
 	{
+		var t = bnodes[i].node.title.getText();
 		var temp = {
-			top: nodes[i].top,
-			left: nodes[i].left,
-			radius: nodes[i].radius,
-			fill: nodes[i].fill,
-			stroke: nodes[i].stroke,
-			strokeWidth: nodes[i].strokeWidth,
-			id: nodes[i].id
+			top: bnodes[i].node.top,
+			left: bnodes[i].node.left,
+			radius: bnodes[i].node.radius,
+			fill: bnodes[i].node.fill,
+			stroke: bnodes[i].node.stroke,
+			strokeWidth: bnodes[i].node.strokeWidth,
+			id: bnodes[i].id,
+			type: bnodes[i].node.id,
+			title: t
 		};
 		map.push(temp);
-		//alert(temp.top);
+		//alert(bnodes[i].node.title.getText());
 	}
 	
 	for(var i = 0; i < mapLines.length; i++)
 	{
 		var temp = {
-			x1: mapLines[i].x1,
-			y1: mapLines[i].y1,
-			x2: mapLines[i].x2,
-			y2: mapLines[i].y2,
-			fill: mapLines[i].fill,
-			stroke: mapLines[i].stroke,
-			strokeWidth: mapLines[i].strokeWidth,
-			type: mapLines[i].id
+			x1: mapLines[i].line.x1,
+			y1: mapLines[i].line.y1,
+			x2: mapLines[i].line.x2,
+			y2: mapLines[i].line.y2,
+			fill: mapLines[i].line.fill,
+			stroke: mapLines[i].line.stroke,
+			strokeWidth: mapLines[i].line.strokeWidth,
+			type: mapLines[i].line.id,
+			id: mapLines[i].id
 		};
 		edges.push(temp);
 	}
 	
 	$.ajax({
+		async: false, 
 		type: 'POST',
 		url: "mapsave.php",
 		dataType: 'html',
@@ -446,6 +482,27 @@ function saveMap(){
 		
 		success: function(result){
 			alert("Saved");
+		}
+	});
+	
+	return false;
+}
+
+function loadIDs()
+{
+	$.ajax({
+		type: 'POST',
+		url: "mapsave.php",
+		dataType: 'json',
+		data: {id: 1},
+		
+		success: function(result){
+			nodeID = parseInt(result["mnid"]);
+			edgeID = parseInt(result["meid"]);
+			nodeID++;
+			edgeID++;
+			//alert(nodeID);
+			//alert(edgeID);
 		}
 	});
 	

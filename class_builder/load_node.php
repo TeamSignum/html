@@ -20,21 +20,6 @@ $query1 = array('name' => $name);
 $cursor = $collection->findOne($query1);
 
 echo $cursor; 
-echo $cursor; 
-echo $cursor; 
-echo $cursor; 
-echo $cursor; 
-echo $cursor; 
-echo $cursor; 
-echo $cursor; 
-echo $cursor; 
-echo $cursor; 
-echo $cursor; 
-echo $cursor; 
-echo $cursor; 
-echo $cursor; 
-echo $cursor; 
-echo $cursor; 
 
 $data = array(
 	'name'	      => $cursor["name"]; 

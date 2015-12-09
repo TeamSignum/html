@@ -6,6 +6,26 @@ $( document ).ready(function() {
 
 	loadNodes();
 	loadEdges();
+	
+	canvas.on({
+	
+		'mouse:over': function(e){
+		if(e.target.id === "mapNode")
+			{
+				e.target.setStroke('yellow');
+				canvas.renderAll();
+			}
+		},
+	
+		'mouse:out': function(e){
+			if(e.target.id === "mapNode")
+			{
+				e.target.setStroke('white');
+				canvas.renderAll();
+			}
+		}
+	  
+	});
 
 });
 
@@ -21,7 +41,7 @@ function loadNodes(){
 			for(var i = 0; i < result.length; i++)
 			{
 				//alert(result[i]["top"] +1);
-				drawNode(parseFloat(result[i]["top"]), parseFloat(result[i]["left"]), parseFloat(result[i]["radius"]));
+				drawNode(parseFloat(result[i]["top"]), parseFloat(result[i]["left"]), parseFloat(result[i]["radius"]), result[i]["type"], result[i]["title"]);
 			}
 			//canvas.renderAll();
 		}
@@ -51,13 +71,15 @@ function loadEdges(){
 	return false;
 }
 
-function drawNode(top, left, radius){
+function drawNode(top, left, radius, type, title){
 	var c = new fabric.Circle({
 			top: top,
 			left: left,
 			radius: radius,
 			fill: '#fff',
-			stroke: 'white'
+			stroke: 'white',
+			strokeWidth: 5,
+			id: type
 			});
 			
 	c.hasControls = false;
@@ -66,6 +88,25 @@ function drawNode(top, left, radius){
 	c.lockMovementY = true;
 	
 	canvas.add(c);
+			
+	var t = new fabric.Text(title, {
+			fontFamily: 'arial black',
+			fontSize: 25,
+			left: left,
+			top: top - 30,
+			id: "nodeText"
+			});
+			
+	var len = t.getWidth()/2;
+	var cenX = c.getCenterPoint().x;
+	t.left = cenX - len;
+				
+	t.hasControls = false;
+	t.hasBorders = false;
+	t.lockMovementX = true;
+	t.lockMovementY = true;
+			
+	canvas.add(t);
 }
 
 function drawEdge(x1, y1, x2, y2, type){

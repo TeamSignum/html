@@ -11,34 +11,47 @@
 
 	<div id="navbar:../"></div>
 
-  <div class="row"> 
+  <div class="row" style="text-align:center;background-color: #000; color: #fff;"> 
 		<div class="col-md-4"></div>
-		<div class="col-md-4" style="text-align:center;">
-			<h1>Class Builder</h1>
-			<h2> Learning Map </h2>
+		<div class="col-md-4">
+			<h1 style="font-weight: bold;">Class Builder</h1>
 		</div>
+		<div class="col-md-4"></div>
 	</div>
 
-	<div id="canvas"> 
-	  <canvas id="map" width="1900" height="800"></canvas>
-	</div>
+	<div class="row">
+		<div id="canvas"> 
+		  <canvas id="map" width="1900" height="800"></canvas>
+		</div>
 
-	<div id="popup" style="display: none;"> 
-	  <div class="row"> 
-	    <div class="col-md-4"></div>
-	    <div class="col-md-4">
-	    	<h3>Fill out node details</h3>
-	      <form>
+		<div id="popup" style="display: none;"> 
+		  <div class="row"> 
+		    <div class="col-md-2"></div>
+		    <div class="col-md-8">
+		    	<h3 style="font-weight: bold;">Please fill in node popup details</h3>
+		      <form>
 
-	        <input class="form-control" id="title" name="title" type="text" value="" placeholder="Name">
-	        <input class="form-control" id="description" name="description" type="text" value="" placeholder="Description">
-	        <br/>
-					<button type="button" class="btn btn-primary" onclick="savePopup();">Save</button>
+		      	<br/>
+		        <input class="form-control" id="title" name="title" type="text" value="" placeholder="Title">
+		        <br/>
+		        <input class="form-control" id="description" name="description" type="text" value="" placeholder="Description">
+		        <br/>
+		        <input class="form-control" id="due_date" name="due_date" type="text" value="" placeholder="Due date (optional)">
 
-	      </form>
-	    </div>
-	    <div class="col-md-4"></div>
-  	</div>
+		        <br/>
+		        <button style="float:left; font-size:12pt;" type="button" class="btn btn-default btn-md">
+				  		<span class="glyphicon glyphicon-upload" aria-hidden="true"></span> Upload lecture notes
+						</button>
+
+						<br/>
+						<button type="button" class="btn btn-primary" onclick="savePopup();" style="margin:25px 0 0 25px; float: right;">Save</button>
+						<button type="button" class="btn btn-primary" onclick="hidePopup()" style="margin-top:25px; float: right;">Cancel</button>
+
+		      </form>
+		    </div>
+		    <div class="col-md-2"></div>
+	  	</div>
+		</div>
 	</div>
 
 </body>

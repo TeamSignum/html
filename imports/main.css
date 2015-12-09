@@ -3,7 +3,11 @@
  */ 
 
  body{
+<<<<<<< HEAD
 	margin: 70px auto;
+=======
+    margin: 70px 0 0 0;
+>>>>>>> origin/master
     font-family: sans-serif;
 }
 

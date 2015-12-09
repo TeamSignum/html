@@ -27,7 +27,9 @@ if(isset($_POST["map"]))
 				$top = $row['top'];
 				$left = $row['left'];
 				$radius = $row['radius'];
-				$nodes[] = array('top' => $top, 'left' => $left, 'radius' => $radius);
+				$type = $row['type'];
+				$title = $row['title'];
+				$nodes[] = array('top' => $top, 'left' => $left, 'radius' => $radius, 'type' => $type, 'title' => $title);
 				//echo $top;
 			}
 			
