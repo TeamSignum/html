@@ -1,3 +1,3 @@
-$(function() {
-    var snapper = new Snap({element: document.getElementById('navbar:../')});
-});
+//$(function() {
+//    var snapper = new Snap({element: document.getElementById('navbar:../')});
+//});
