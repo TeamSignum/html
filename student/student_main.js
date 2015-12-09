@@ -1,4 +1,3 @@
-// Draws the layout of nodes for the student home page.
 var classarray = [];
 var planet_radius = 100;
 var orbital_radius = 200;
@@ -104,8 +103,6 @@ $( document ).ready(function() {
 	});
 	
 	inner.set('stroke', '#A00000').set('strokeWidth', 5);
-			
-	
 
 	var accountName = new fabric.Text('NAMGI', {
 		fill: 'white',

@@ -1,9 +1,11 @@
 
 <?php
 
+session_start();
+
 if (isset($_POST["submit"])){
 	
-	$nickname = strip_tags($_POST["nickname"]);
+	$uid = strip_tags($_POST["uid"]);
 	$email = strip_tags($_POST["email"]);
     $password1 = strip_tags($_POST["password1"]);
     $password2 = strip_tags($_POST["password2"]);
@@ -11,8 +13,9 @@ if (isset($_POST["submit"])){
 
     $error = array();
 
-    if(empty($nickname)){
-    	$error[] = "Please enter your nickname";
+    // empty check
+    if(empty($uid)){
+    	$error[] = "Please enter your uid";
     }
     if(empty($email)){
     	$error[] = "Please enter your email";
@@ -26,48 +29,47 @@ if (isset($_POST["submit"])){
     if($password1 != $password2){
     	$error[] = "Password and Confirm password are not matching";
     }
+    
+    if(!isset($_SESSION['id'])) // change to isset when everything is figured out.
+    {
+        // Set up the database connection
+        try{           
+            $DB = new PDO('mysql:host=ec2-52-33-118-140.us-west-2.compute.amazonaws.com;dbname=LU', 'Signum', 'signumDB4');
+            $DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $DB->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+        }catch(PDOException $e){
+            die($e->getMessage());
+        }
 
-    if(count($error) == 0){
-    	// datahase configuration
-    	$host = 'localhost';
-    	$db_name = 'ludb';
+        // check existed email of not
+        $stmt = $DB->prepare("SELECT email FROM LU.users WHERE email = '$email'");
+        $result = $stmt->execute();
+        $rows = $result->fetch
+        //print_r($stmt->fetchAll(PDO::FETCH_ASSOC));
+        
+        if($result->num_rows() != 0){
+            echo "already";
+        }else{
+            echo "new";
+        }
 
-    	$connection = new Mongo('localhost');
+        // // Set and prepare the database query
+        // $query = "INSERT INTO LU.users (email, password, uid) 
+        //             values ('$email', '$password1', '$uid')";
+        // $statement = $DB->prepare($query2);
 
-    	if(connection){
-    		//connecting to database
-    		$db = $connection->$db_name;
+        // try{
+        // // Execute the database query
+        //     $statement->execute();
+        //     $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+        //     header("location: ../index.html");
+        //     //echo json_encode($result);
+        // }catch  (PDOException $e){
+        //     echo $e->getMessage();
+        // }
+           
 
-    		//connect to specific collection
-    		$collection = $db->users;
-
-    		$query = array('email'=>$email);
-
-    		//checking for existing user
-    		$count=$collection->findOne($query);
-
-    		if(!count($count)){
-    			//save the new user
-    			$user = array('email'=>$email,'password'=>md5($password1),'type'=>$type);
-    			$collection->save($user);
-    			echo "Success!";
-    			header("location: ../index.html");
-    		}
-    		else{
-    			echo "Existed!";
-    			header("location: registration.html");
-    		}
-    	}
-    	else{
-    		die("Databese are not connected");
-    	}
     }
-    else{
-    	foreach ($error as $err) {
-    		echo $err. '</br>';
-    	}
-    }
-
 } 
 
 ?>
