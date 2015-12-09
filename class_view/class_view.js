@@ -1,4 +1,6 @@
 var canvas;
+var nid; 
+var nodes = [];
 
 $( document ).ready(function() {
 
@@ -8,9 +10,17 @@ $( document ).ready(function() {
 	loadEdges();
 	
 	canvas.on({
+
+		'mouse:down': function(e) {
+	    	if (e.target) 
+	    	{
+	    		loadNodePopup(e.target); 
+	    	}
+	    },
+
 	
 		'mouse:over': function(e){
-		if(e.target.id === "mapNode")
+			if(e.target.id === "mapNode")
 			{
 				e.target.setStroke('yellow');
 				canvas.renderAll();
@@ -41,7 +51,7 @@ function loadNodes(){
 			for(var i = 0; i < result.length; i++)
 			{
 				//alert(result[i]["top"] +1);
-				drawNode(parseFloat(result[i]["top"]), parseFloat(result[i]["left"]), parseFloat(result[i]["radius"]), result[i]["type"], result[i]["title"]);
+				drawNode(parseFloat(result[i]["top"]), parseFloat(result[i]["left"]), parseFloat(result[i]["radius"]), result[i]["type"], result[i]["title"], result[i]["id"]);
 			}
 			//canvas.renderAll();
 		}
@@ -71,7 +81,7 @@ function loadEdges(){
 	return false;
 }
 
-function drawNode(top, left, radius, type, title){
+function drawNode(top, left, radius, type, title, nodeID){
 	var c = new fabric.Circle({
 			top: top,
 			left: left,
@@ -80,7 +90,7 @@ function drawNode(top, left, radius, type, title){
 			stroke: 'white',
 			strokeWidth: 5,
 			id: type
-			});
+	});
 			
 	c.hasControls = false;
 	c.hasBorders = false;
@@ -88,7 +98,14 @@ function drawNode(top, left, radius, type, title){
 	c.lockMovementY = true;
 	
 	canvas.add(c);
-			
+
+	var temp = {
+		node: c,
+		id: nodeID,
+	}
+
+	nodes.push(temp); 
+
 	var t = new fabric.Text(title, {
 			fontFamily: 'arial black',
 			fontSize: 25,
@@ -135,4 +152,29 @@ function drawEdge(x1, y1, x2, y2, type){
 	l.lockMovementY = true;
 	
 	canvas.add(l);
+}
+
+function loadNodePopup(node){
+
+	var id; 
+	for(var i = 0; i < nodes.length; i++){
+		if(node.top == nodes[i].node.top && node.left == nodes[i].node.left){
+			id = nodes[i].id; 
+		}
+	}
+
+	var _data = 'nid=' + id; 
+
+	$.ajax({
+		async: false, 
+		type: 'POST', 
+		url: "load_node_popup.php",
+		data: _data, 
+		dataType: "json",
+		success: function(result){
+			alert(result); 
+		}
+	}); 
+
+	return false; 
 }

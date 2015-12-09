@@ -128,7 +128,7 @@ $( document ).ready(function() {
 			if(e.target.id === "toolbarUpload")
 				saveMap();
 
-	    	if(canvas_lock){
+	    	if(canvas_lock && (e.target.id === "mapNode")){
 	    		showPopup(); 
 	    		current_node = e.target; 
 	    	}
@@ -143,15 +143,15 @@ $( document ).ready(function() {
 		      copyNode(canvas, e.target);  
 		      e.target.id = "mapNodet";  
 		      mngr.addNode(e.target);
-				  nodes.push(e.target);
-				  var liness = [];
-				  var temp = {
-						node: e.target,
-						id: nodeID,
-						lines: liness
-				  };
-				  nodeID++;
-			  	bnodes.push(temp);
+			  nodes.push(e.target);
+			  var liness = [];
+			  var temp = {
+					node: e.target,
+					id: nodeID,
+					lines: liness
+			  };
+			  nodeID++;
+			  bnodes.push(temp);
 		    }
 			else if(e.target.id === "tb_lineSolid" || e.target.id === "tb_lineDotted")
 			{
@@ -196,108 +196,108 @@ $( document ).ready(function() {
 	  },
 
 	  'mouse:up': function(e) {
-	    if (e.target) {
-	      if(lineEditor === false)
-			  {
-					if(e.target.left < 180 && e.target.id != "tb_lineSolid" 
-						&& e.target.id != "tb_lineDotted" && e.target.id != "toolbarLock" 
-						&& e.target.id != "toolbarUpload"){
-							canvas.remove(e.target.title);
-							canvas.remove(e.target); 
-					}
+	  	if (e.target) {
+	    	if(lineEditor === false)
+			{
+				if(e.target.left < 180 && e.target.id != "tb_lineSolid" 
+					&& e.target.id != "tb_lineDotted" && e.target.id != "toolbarLock" 
+					&& e.target.id != "toolbarUpload"){
+						canvas.remove(e.target.title);
+						canvas.remove(e.target); 
+				}
 
-					e.target.opacity = 1;
-					if(e.target.left > 180 && e.target.id === "mapNodet")
-					{
-						e.target.id = "mapNode";
+				e.target.opacity = 1;
+				if(e.target.left > 180 && e.target.id === "mapNodet")
+				{
+					e.target.id = "mapNode";
+			
+					var title = new fabric.IText('Name', {
+						fontFamily: 'arial black',
+						fontSize: 25,
+						left: e.target.left,
+						top: e.target.top - 30,
+						id: "nodeText"
+					});
 				
-						var title = new fabric.IText('Name', {
-							fontFamily: 'arial black',
-							fontSize: 25,
-							left: e.target.left,
-							top: e.target.top - 30,
-							id: "nodeText"
-						});
+					title.node = e.target;
+				
+					var len = title.getWidth()/2;
+					var cenX = e.target.getCenterPoint().x;
+					title.left = cenX - len;
 					
-						title.node = e.target;
+					title.hasControls = false;
+					title.lockMovementX = true;
+					title.lockMovementY = true;
 					
-						var len = title.getWidth()/2;
-						var cenX = e.target.getCenterPoint().x;
-						title.left = cenX - len;
-						
-						title.hasControls = false;
-						title.lockMovementX = true;
-						title.lockMovementY = true;
-						
-						e.target.title = title;
-						
-						canvas.add(title);
-					}
+					e.target.title = title;
+					
+					canvas.add(title);
+				}
 
-					canvas.renderAll();
+				canvas.renderAll();
 		  	}
-		 		if(lineEditor === true)
-			  {
-				  if(e.target.id === "mapNode")
+		 	if(lineEditor === true)
+			{
+			  if(e.target.id === "mapNode")
+				{
+					to = e.target;
+					var line;
+					if(dotted === true)
 					{
-						to = e.target;
-						var line;
-						if(dotted === true)
-						{
-							line = new fabric.Line([from.getCenterPoint().x, from.getCenterPoint().y, to.getCenterPoint().x, to.getCenterPoint().y], {
-								fill: 'black',
-								stroke: 'black',
-								strokeWidth: 5,
-								strokeDashArray: [5, 5],
-								selectable: false,
-								id: "dotted"
-							});
-						}
-						if(solid === true)
-						{
-							line = new fabric.Line([from.getCenterPoint().x, from.getCenterPoint().y, to.getCenterPoint().x, to.getCenterPoint().y], {
-								fill: 'black',
-								stroke: 'black',
-								strokeWidth: 5,
-								selectable: false,
-								id: "solid"
-							});
-						}
-						for(var i = 0; i < bnodes.length; i++)
-						{
-							if(bnodes[i].node.top === from.top && bnodes[i].node.left === from.left)
-							{
-								bnodes[i].lines.push(line);
-							}
-							if(bnodes[i].node.top === e.target.top && bnodes[i].node.left === e.target.left)
-							{
-								bnodes[i].lines.push(line);
-							}
-						}
-						var temp = {
-							line: line,
-							id: edgeID
-						};
-
-						edgeID++;
-						mapLines.push(temp);
-						from.line = line;
-						canvas.add(to);
-						canvas.add(from);
-						canvas.add(line);
-						canvas.sendToBack(line);
-						canvas.renderAll();
+						line = new fabric.Line([from.getCenterPoint().x, from.getCenterPoint().y, to.getCenterPoint().x, to.getCenterPoint().y], {
+							fill: 'black',
+							stroke: 'black',
+							strokeWidth: 5,
+							strokeDashArray: [5, 5],
+							selectable: false,
+							id: "dotted"
+						});
 					}
+					if(solid === true)
+					{
+						line = new fabric.Line([from.getCenterPoint().x, from.getCenterPoint().y, to.getCenterPoint().x, to.getCenterPoint().y], {
+							fill: 'black',
+							stroke: 'black',
+							strokeWidth: 5,
+							selectable: false,
+							id: "solid"
+						});
+					}
+					for(var i = 0; i < bnodes.length; i++)
+					{
+						if(bnodes[i].node.top === from.top && bnodes[i].node.left === from.left)
+						{
+							bnodes[i].lines.push(line);
+						}
+						if(bnodes[i].node.top === e.target.top && bnodes[i].node.left === e.target.left)
+						{
+							bnodes[i].lines.push(line);
+						}
+					}
+					var temp = {
+						line: line,
+						id: edgeID
+					};
 
-					//mapLines.push(line);
-					//from.line = line;
-					//e.target.line.push(line);
-					//canvas.add(to);
-					//canvas.add(from);
-					//canvas.add(line);
-					//canvas.sendToBack(line);
-					//canvas.renderAll();
-					//saveMap();
+					edgeID++;
+					mapLines.push(temp);
+					from.line = line;
+					canvas.add(to);
+					canvas.add(from);
+					canvas.add(line);
+					canvas.sendToBack(line);
+					canvas.renderAll();
+				}
+
+				//mapLines.push(line);
+				//from.line = line;
+				//e.target.line.push(line);
+				//canvas.add(to);
+				//canvas.add(from);
+				//canvas.add(line);
+				//canvas.sendToBack(line);
+				//canvas.renderAll();
+				//saveMap();
 				}
 		  }
 	  },
@@ -385,16 +385,13 @@ function lockCanvas(){
  * Displays popups for nodes. 
  */ 
 function showPopup() {
+	$("#title").val("");
+	$("#description").val(""); 
+	$("#due_date").val(""); 
+	$("#notes").val(""); 
+
 	if(canvas_lock){
 		$("#popup").show(); 
-		$.ajax({
-			async: false, 
-			type: 'POST',
-			url: "load_node.php", 
-			dataType: "json",
-			success: function(result){
-			}
-		}); 
 	}
 }
 
@@ -413,6 +410,7 @@ function savePopup(){
 	var title = $("#title").val();
 	var desc = $("#description").val(); 
 	var duedate = $("#due_date").val(); 
+	var notes = $("#notes").val(); 
 
 	for(var i = 0; i < bnodes.length; i++){
 		if(bnodes[i].node.top == current_node.top && bnodes[i].node.left == current_node.left){
@@ -420,7 +418,7 @@ function savePopup(){
 		}
 	}
 
-	var _data = 'nid=' + nid + '&title=' + title + '&description=' + desc + '&duedate=' + duedate; 
+	var _data = 'nid=' + nid + '&title=' + title + '&description=' + desc + '&duedate=' + duedate + '&notes=' + notes; 
 
 	$.ajax({
 		async: false, 
@@ -481,7 +479,7 @@ function saveMap(){
 		data: {map: map, edges: edges},
 		
 		success: function(result){
-			alert("Saved");
+			swal("Saved"); 
 		}
 	});
 	

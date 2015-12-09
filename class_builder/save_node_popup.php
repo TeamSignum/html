@@ -4,6 +4,7 @@ $nid= $_POST["nid"];
 $title= $_POST["title"];
 $description= $_POST["description"];
 $duedate= $_POST["duedate"];
+$notes= $_POST["notes"];
 
 try
 {
@@ -13,13 +14,14 @@ try
 	$DB->beginTransaction();
 
 	// Create query 
-	$query = "INSERT into `nodepopups` (`nid`, `title`, `description`, `duedate`) values (?,?,?,?)";
+	$query = "INSERT into `nodepopups` (`nid`, `title`, `description`, `duedate`, `notes`) values (?,?,?,?,?)";
 	$statement = $DB->prepare($query);
 
 	$statement->bindValue (1, $nid);
 	$statement->bindValue (2, $title);
 	$statement->bindValue (3, $description);
 	$statement->bindValue (4, $duedate);
+	$statement->bindValue (5, $notes);
 
 	// Execute query
 	$statement->execute();
