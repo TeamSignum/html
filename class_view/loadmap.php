@@ -24,12 +24,13 @@ if(isset($_POST["map"]))
 			
 			foreach($result as $row)
 			{
+				$id = $row['nid']; 
 				$top = $row['top'];
 				$left = $row['left'];
 				$radius = $row['radius'];
 				$type = $row['type'];
 				$title = $row['title'];
-				$nodes[] = array('top' => $top, 'left' => $left, 'radius' => $radius, 'type' => $type, 'title' => $title);
+				$nodes[] = array('id' => $id, 'top' => $top, 'left' => $left, 'radius' => $radius, 'type' => $type, 'title' => $title);
 				//echo $top;
 			}
 			
