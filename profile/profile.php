@@ -1,75 +1,36 @@
 <?php
 
 	session_start();
+	
 	// TODO: Need to get id from POST that comes to this page
-	
-	// Get profile information from the database
-	// Connects to local mongo db
-	$db = new MongoClient('localhost');
-
-	// Select the DB
-	$db = $db->ludb;
-
-	// Select a collection
-	$collection = $db->users;
-	
-	// Query - Hard Code a user id for now
-	$query1 = array('_id' => 10); 
-
-	// find data
-	$cursor = $collection->find($query1);
-
-	/* TODO: Find profile data */
-	foreach ($cursor as $data) {
-	    if (true){
-	    	//TODO: Set fields into php variables
-	    }
-	    else{
-	    	//TODO: Handle error checking. 
-	    }
+	if(!isset($_SESSION['id'])) // change to isset when everything is figured out.
+	{		
+		// Get the user uid from the session.  Currently hard coding it.
+		//$uid = $_SESSION['id'];
+		$uid = 'user2';
+		
+		// Set up the database connection
+		$DB = new PDO('mysql:host=ec2-52-33-118-140.us-west-2.compute.amazonaws.com;dbname=LU', 'Signum', 'signumDB4');
+		$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		
+		// Set and prepare the database query
+		$query = "SELECT * FROM users WHERE uid = '" .$uid. "'";
+		$statement = $DB->prepare($query);
+		
+		// Execute the database query
+		$statement->execute();
+		$result = $statement->fetchAll(PDO::FETCH_ASSOC);
+		
+		echo json_encode($result);
+		
 	}
-	
-	$email = "joe@learninguniverse.com";
-	$userName = "AverageJoe";
-	$firstName = "Joe";
-	$lastName = "Cottongim";
-	$isProfileOwner = true;
-	$readonly = "readonly";  //Sets whether a text field can be edited.  Possible values are "readonly" or "".
+	else
+	{	
+		$email = "joe@learninguniverse.com";
+		$userName = "AverageJoe";
+		$firstName = "Joe";
+		$lastName = "Cottongim";
+		$isProfileOwner = true;
+		$readonly = "readonly";  //Sets whether a text field can be edited.  Possible values are "readonly" or "".
+	}
 ?>	
-	
-<!doctype html>
-<html>
-<head>
-<meta charset="utf-8">
-  <link rel="import" href="../imports/import.html">
-  <link rel="stylesheet" type="text/css" href="profile.css"> 
-  <script src="profile.js" type="text/javascript"></script>
-<title>Profile</title>
-</head>
-<body>
-  <div id="navbar:../"></div>
-  	   
-      <div class="col-md-4"></div>
-      <div class="col-md-4">
-      <h2 align="center">User Profile</h2>
-      <form id="profileForm" method="post" action="profile.php">
-
-          <label for="email">Email address</label>
-          <input type="email" name="email" class="form-control" id="email" placeholder="<?php echo $email?>" <?php echo $readonly?>>
-        
-          <label for="username">User Name</label>
-          <input type="text" name="username" class="form-control" id="nickname" placeholder="<?php echo $userName?>" <?php echo $readonly?>>          
-          <label for="firstname">First Name</label>
-          <input type="text" name="firstname" class="form-control" id="nickname" placeholder="<?php echo $firstName?>" <?php echo $readonly?>>
-          
-          <label for="lastname">Last Name</label>
-          <input type="text" name="lastname" class="form-control" id="nickname" placeholder="<?php echo $lastName?>" <?php echo $readonly?>>
-                
-      </form>
-      </div>
-      <div class="col-md-4"></div>
-</body>
-</html>
-	
-</body>
-</html>
