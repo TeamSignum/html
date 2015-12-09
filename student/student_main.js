@@ -1,18 +1,18 @@
-var classarray = [];
-var planet_radius = 100;
-var orbital_radius = 200;
-var class_radius = 60;
+var classNumberArray = [];
+var studentNodeRadius = 100;
+var classOrbitalRadius = 200;
+var classNodeRadius = 60;
 
-function getClassName(){
+function getClassNumbers(){
 	$.ajax({
 		async: false,
 		type: 'POST',
 		url: "student_main.php",
 		datatpye: "json",
 		success: function(result){	
-			var classnamearr = JSON.parse(result); 	
-			for(var x in classnamearr){
-				classarray.push(classnamearr[x]);
+			var classNumbersJson = JSON.parse(result); 	
+			for(var x in classNumbersJson){
+				classNumberArray.push(classNumbersJson[x].classnumber);
 			}
 			//alert(result);
 		}
@@ -21,43 +21,30 @@ function getClassName(){
 
 function drawclassnode(canvas){
 
-	var node_space = (Math.PI * 2) / classarray.length;
+	var classNodeSpacing = (Math.PI * 2) / classNumberArray.length;
 
-	for (var i = classarray.length - 1; i >= 0; i--) {
+	for (var i = classNumberArray.length - 1; i >= 0; i--) {
 		//
-		inite_angle = i * node_space;
+		currentAngle = i * classNodeSpacing;
 
 		//draw the circle
 		var classCircle = new fabric.Circle({
-			radius: class_radius,
-			originX: 'center',
-			originY: 'center',
-			fill: '#B80000 '
-		});
-		
-		classCircle.setGradient('fill', {
-		  x1: -classCircle.width / 2,
-		  y1: -classCircle.width / 2,
-		  x2: classCircle.width / 2,
-		  y2: classCircle.width / 2,
-		  colorStops: {
-			0: "white",
-			1: "#B80000"
-		  }
-		});
-		
-		classCircle.set('stroke', '#A00000').set('strokeWidth', 5);
-
-		//draw the text
-		var className = new fabric.Text(classarray[i],{
+			radius: classNodeRadius,
 			originX: 'center',
 			originY: 'center',
 			fill: 'white'
 		});
+		
+		//draw the text
+		var className = new fabric.Text(classNumberArray[i],{
+			originX: 'center',
+			originY: 'center',
+			fill: 'black'
+		});
 
 		var node_group = new fabric.Group([classCircle,className], {
-			left: canvas.width/2 + Math.cos(inite_angle)*orbital_radius - class_radius,
-			top: canvas.height/2 + Math.sin(inite_angle)*orbital_radius - class_radius,
+			left: canvas.width/2 + Math.cos(currentAngle)*classOrbitalRadius - classNodeRadius,
+			top: canvas.height/2 + Math.sin(currentAngle)*classOrbitalRadius - classNodeRadius,
 			selectable: false
 		});
 
@@ -72,57 +59,45 @@ $( document ).ready(function() {
 
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
+	canvas.background 
 
-	var outer = new fabric.Circle({
-		radius: orbital_radius,
-		fill: '#F0F0F0',
+	var classOrbital = new fabric.Circle({
+		radius: classOrbitalRadius,
+		fill: '#99ffff',
 		strokeWidth: 5,
-		stroke: "#A00000",
-		left: (canvas.width/2) - orbital_radius ,
-		top: (canvas.height/2) - orbital_radius,
+		stroke: "black",
+		left: (canvas.width/2) - classOrbitalRadius ,
+		top: (canvas.height/2) - classOrbitalRadius,
 		selectable: false
 	});
 
-	var inner= new fabric.Circle({
-		radius: planet_radius,
-		fill: '#B80000',
+	var studentNode= new fabric.Circle({
+		radius: studentNodeRadius,
+		fill: 'white',
 		originX: 'center',
 		originY: 'center',
 		//selectable: true
 	});
 	
-	inner.setGradient('fill', {
-	  x1: -inner.width / 2,
-	  y1: -inner.width / 2,
-	  x2: inner.width / 2,
-	  y2: inner.width / 2,
-	  colorStops: {
-	    0.1: "white",
-	    1: "#B80000"
-	  }
-	});
-	
-	inner.set('stroke', '#A00000').set('strokeWidth', 5);
-
-	var accountName = new fabric.Text('NAMGI', {
-		fill: 'white',
+	var studentName = new fabric.Text('NAMGI', {
+		fill: 'black',
 		originX: 'center',
 		originY: 'center',
 		selectable: false
 	});
 
-	var profile = new fabric.Group([inner,accountName], {
-		left: (canvas.width/2) - planet_radius ,
-		top: (canvas.height/2) - planet_radius,
-		selectable: true
+	var studentNodeGroup = new fabric.Group([studentNode, studentName], {
+		left: (canvas.width/2) - studentNodeRadius,
+		top: (canvas.height/2) - studentNodeRadius,
+		selectable: false
 	});
 	
-	profile.on('selected', function() {
+	studentNodeGroup.on('selected', function() {
   		alert("Clicked");
 	});
 
-	canvas.add(outer, profile);
-	getClassName();
+	canvas.add(classOrbital, studentNodeGroup);
+	getClassNumbers();
 	drawclassnode(canvas);
 
 });
