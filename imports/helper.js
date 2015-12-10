@@ -45,3 +45,17 @@
  	// TODO: change navbar-image src tag. 
 
  }); 
+
+ function clearDB(){
+ 	var _data = "";
+ 	$.ajax({
+		async: false, 
+		type: 'POST', 
+		url: "../imports/clear_db.php",
+		data: _data, 
+		success: function(result){
+		}
+	}); 
+
+	return false;
+ }

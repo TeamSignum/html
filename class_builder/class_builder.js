@@ -7,8 +7,8 @@
 var canvas_lock = false;
 var nodes = [];
 var mapLines = [];
-var nodeID;
-var edgeID;
+var nodeID = 1;
+var edgeID = 1;
 var bnodes = [];
 var current_node; 
 
