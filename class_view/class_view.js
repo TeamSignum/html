@@ -195,8 +195,7 @@ function fillPopup(title, description, duedate, notes){
 	$("#popup").show(); 
 	$("#title").html(title); 
 	$("#description").html(description); 
-	var _duedate = $("#duedate").html(); 
-	$("#duedate").html(_duedate + duedate); 
+	$("#duedate").html("Due date: " + duedate); 
 	$("#notes").html(notes); 
 }
 

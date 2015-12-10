@@ -42,7 +42,10 @@ function drawclassnode(canvas){
 		var className = new fabric.Text(classNumberArray[i],{
 			originX: 'center',
 			originY: 'center',
-			fill: 'black'
+			fill: 'black',
+			fontSize: '24',
+			fontFamily: 'Arial',
+			fontStyle: 'bold'
 		});
 
 		var node_group = new fabric.Group([classCircle,className], {
@@ -91,6 +94,9 @@ $( document ).ready(function() {
 	});
 	
 	var studentName = new fabric.Text('NAMGI', {
+		fontSize: '36',
+		fontFamily: 'Arial',
+		fontStyle: 'bold',
 		fill: 'black',
 		originX: 'center',
 		originY: 'center',
