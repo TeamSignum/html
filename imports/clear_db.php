@@ -9,16 +9,13 @@ try
 
 	$statement = $DB->prepare("TRUNCATE TABLE `nodepopups`");
 	$statement->execute();
-	$DB->commit();
 
 	$statement = $DB->prepare("TRUNCATE TABLE `nodes`");
 	$statement->execute();
-	$DB->commit();
 
 	$statement = $DB->prepare("TRUNCATE TABLE `edges`");
 	$statement->execute();
 	$DB->commit();
-
 }
 catch(PDOException $e)
 {
