@@ -1,6 +1,7 @@
 var canvas;
 var nid; 
 var nodes = [];
+var checked_off; 
 
 $( document ).ready(function() {
 
@@ -96,6 +97,8 @@ function drawNode(top, left, radius, type, title, nodeID){
 	c.lockMovementY = true;
 	
 	canvas.add(c);
+	
+	drawParticipantNodes(c);
 
 	var temp = {
 		node: c,
@@ -108,7 +111,7 @@ function drawNode(top, left, radius, type, title, nodeID){
 			fontFamily: 'arial black',
 			fontSize: 25,
 			left: left,
-			top: top - 30,
+			top: top - 35,
 			id: "nodeText"
 			});
 			
@@ -161,6 +164,7 @@ function loadNodePopup(node){
 		}
 	}
 
+	nid = id; 
 	var _data = 'nid=' + id; 
 
 	$.ajax({
@@ -189,4 +193,68 @@ function fillPopup(title, description, duedate, notes){
 
 function hidePopup(){
 	$("#popup").hide(); 
+}
+
+function checkOffNode(){
+	swal({   
+		title: "Are you sure?",   
+		text: "Clicking yes will check off this node.",   
+		type: "warning",   
+		showCancelButton: true,   
+		confirmButtonColor: "#DD6B55",   
+		confirmButtonText: "Yes",   
+		cancelButtonText: "No",   
+		closeOnConfirm: false,   
+		closeOnCancel: false }, 
+		function(isConfirm){   
+			if (isConfirm) {     
+				swal("Completed", "The node has been completed.", "success");
+				for(var i = 0; i < nodes.length; i++){
+					if(nodes[i].id == nid){
+						nodes[i].node.setFill("#0d0"); 
+						$("#popup").hide(); 
+					}
+				}   
+			} 
+			else {     
+				swal("Cancelled", "The node has not been completed.", "error");   
+			} 
+	});
+}
+
+function drawParticipantNodes(c){
+
+	var _left = c.left;
+	var _top = c.top;
+	var _radius = c.radius;
+	var _participants = 14;
+	
+	// calculate the center of the node we're drawing around
+	//var nodeCenterX = _left + _radius;
+	//var nodeCenterY = _top + radius;
+	var nodeCenterX = c.getCenterPoint().x;
+	var nodeCenterY = c.getCenterPoint().y;
+	
+	// determine the angle between each participant node
+	var participantNodeSpacing = (Math.PI * 2) / _participants;
+
+	for (var i = _participants - 1; i >= 0; i--) {
+		//
+		var currentAngle = i * participantNodeSpacing;
+
+		//draw the circle
+		var participantNode = new fabric.Circle({
+			radius: 5,
+			left: nodeCenterX + Math.sin(currentAngle) * (_radius + 10) - 5,  // need to verify this math
+			top: nodeCenterY + Math.cos(currentAngle) * (_radius + 10) - 5,  // need to verify this math
+			fill: 'red'
+		});
+		
+		participantNode.lockMovementX = true;
+		participantNode.lockMovementY = true;
+		participantNode.hasControls = false;
+		participantNode.hasBorders = false;
+		
+		canvas.add(participantNode);
+	}
 }
