@@ -1,6 +1,18 @@
 #canvas {
-	width: 100%; 
+	width: 110%; 
 	height: 800px;
 	text-align: center; 
 	background-color: #99ffff; 
+	position: absolute;
+}
+
+#popup {
+	border-radius: 25px;
+	border: 1px solid black;
+	background-color: #F9F9F9; 
+	margin-top: 50px; 
+	padding: 50px 0 50px 0; 
+	width: 50%;
+	left: 25%;
+	position: absolute;
 }

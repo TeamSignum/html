@@ -1,36 +1,31 @@
 <?php
 
 try{
+
+	$nid = $_POST["nid"];
+
 	// Setup connection 
 	$DB = new PDO("mysql:host=ec2-52-33-118-140.us-west-2.compute.amazonaws.com;dbname=LU", 'Signum', 'signumDB4');
 	$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 	// Prepare query
-	$query = "SELECT * FROM `nodepopups` WHERE `id` = ?";
+	$query = "SELECT * FROM `nodepopups` WHERE `nid` = ?";
 
 	$statement = $DB->prepare($query);
 	$statement->bindParam(1, $nid);
 
 	$statement->execute();
 
-	$result = $statement->fetchAll(PDO::FETCH_ASSOC);
+	$result = $statement->fetch(PDO::FETCH_ASSOC);
 
-	$popup = array();
+	$title = $result['title'];
+	$description = $result['description'];
+	$duedate = $result['duedate'];
+	$notes = $result['notes'];
 
-	echo "shit's fucked up man"; 
+	$popup = array('title' => $title, 'description' => $description, 'duedate' => $duedate, 'notes' => $notes);  
 
-
-	// foreach($result as $row)
-	// {
-	// 	$title = $row['title'];
-	// 	$description = $row['description'];
-	// 	$duedate = $row['duedate'];
-	// 	$notes = $row['notes'];
-
-	// 	$popup[] = array('top' => $top, 'left' => $left, 'radius' => $radius, 'type' => $type, 'title' => $title);
-	// }
-
-	// echo json_encode($nodes);
+	echo json_encode($popup);
 }
 catch(PDOException $e){
 	echo $e->getMessage();
