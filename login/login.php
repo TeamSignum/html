@@ -35,7 +35,9 @@ if (isset($_POST["submit"])){
 
         if(count($result) > 0 && $password == $result['password']){
             $_SESSION['email'] = $result['email'];
-            header("location: ../index.html");
+			//Temp
+			//Hard coded to go to basic student account page
+            header("location: ../student/student_main.html");
         }
         else{
             $error[] = "Email and password are no found <br>";
