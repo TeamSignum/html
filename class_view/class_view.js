@@ -97,6 +97,8 @@ function drawNode(top, left, radius, type, title, nodeID){
 	c.lockMovementY = true;
 	
 	canvas.add(c);
+	
+	drawParticipantNodes(c);
 
 	var temp = {
 		node: c,
@@ -109,7 +111,7 @@ function drawNode(top, left, radius, type, title, nodeID){
 			fontFamily: 'arial black',
 			fontSize: 25,
 			left: left,
-			top: top - 30,
+			top: top - 35,
 			id: "nodeText"
 			});
 			
@@ -218,4 +220,41 @@ function checkOffNode(){
 				swal("Cancelled", "The node has not been completed.", "error");   
 			} 
 	});
+}
+
+function drawParticipantNodes(c){
+
+	var _left = c.left;
+	var _top = c.top;
+	var _radius = c.radius;
+	var _participants = 14;
+	
+	// calculate the center of the node we're drawing around
+	//var nodeCenterX = _left + _radius;
+	//var nodeCenterY = _top + radius;
+	var nodeCenterX = c.getCenterPoint().x;
+	var nodeCenterY = c.getCenterPoint().y;
+	
+	// determine the angle between each participant node
+	var participantNodeSpacing = (Math.PI * 2) / _participants;
+
+	for (var i = _participants - 1; i >= 0; i--) {
+		//
+		var currentAngle = i * participantNodeSpacing;
+
+		//draw the circle
+		var participantNode = new fabric.Circle({
+			radius: 5,
+			left: nodeCenterX + Math.sin(currentAngle) * (_radius + 10) - 5,  // need to verify this math
+			top: nodeCenterY + Math.cos(currentAngle) * (_radius + 10) - 5,  // need to verify this math
+			fill: 'red'
+		});
+		
+		participantNode.lockMovementX = true;
+		participantNode.lockMovementY = true;
+		participantNode.hasControls = false;
+		participantNode.hasBorders = false;
+		
+		canvas.add(participantNode);
+	}
 }
