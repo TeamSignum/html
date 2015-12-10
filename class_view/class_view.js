@@ -17,7 +17,7 @@ $( document ).ready(function() {
 		'mouse:down': function(e) {
 			if(e.target)
 			{
-				if (e.target.id === "mapNode") 
+				if (e.target.id === "mapNode" || e.target.id === "cmapNode") 
 				{
 					loadNodePopup(e.target); 
 				}
@@ -32,7 +32,7 @@ $( document ).ready(function() {
 
 	
 		'mouse:over': function(e){
-			if(e.target.id === "mapNode")
+			if(e.target.id === "mapNode" || e.target.id === "cmapNode")
 			{
 				e.target.setStroke('yellow');
 				canvas.renderAll();
@@ -43,8 +43,12 @@ $( document ).ready(function() {
 			if(e.target.id === "mapNode")
 			{
 				e.target.setStroke('white');
-				canvas.renderAll();
 			}
+			if(e.target.id === "cmapNode")
+			{
+				e.target.setStroke("#0d0");
+			}
+			canvas.renderAll();
 		}
 	});
 });
@@ -228,7 +232,9 @@ function checkOffNode(){
 				swal("Completed", "The node has been completed.", "success");
 				for(var i = 0; i < nodes.length; i++){
 					if(nodes[i].id == nid){
-						nodes[i].node.setFill("#0d0"); 
+						nodes[i].node.setFill("#0d0");
+						nodes[i].node.setStroke("#0d0");
+						nodes[i].node.id = "cmapNode";
 						$("#popup").hide(); 
 					}
 				}   
