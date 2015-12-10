@@ -32,7 +32,10 @@ function drawclassnode(canvas){
 			radius: classNodeRadius,
 			originX: 'center',
 			originY: 'center',
-			fill: 'white'
+			fill: 'white',
+			stroke: 'white',
+			strokeWidth: 5,
+			id: "mapNode"
 		});
 		
 		//draw the text
@@ -45,12 +48,17 @@ function drawclassnode(canvas){
 		var node_group = new fabric.Group([classCircle,className], {
 			left: canvas.width/2 + Math.cos(currentAngle)*classOrbitalRadius - classNodeRadius,
 			top: canvas.height/2 + Math.sin(currentAngle)*classOrbitalRadius - classNodeRadius,
-			selectable: false
+			selectable: false,
+			id: "mapNode"
 		});
 
 		canvas.add(node_group);
 	};
 
+}
+
+function redirect(){
+	window.location = '../class_view/class_view.html';
 }
 
 $( document ).ready(function() {
@@ -76,6 +84,9 @@ $( document ).ready(function() {
 		fill: 'white',
 		originX: 'center',
 		originY: 'center',
+		stroke: 'white',
+		strokeWidth: 5,
+		id: "mapNode"
 		//selectable: true
 	});
 	
@@ -89,7 +100,10 @@ $( document ).ready(function() {
 	var studentNodeGroup = new fabric.Group([studentNode, studentName], {
 		left: (canvas.width/2) - studentNodeRadius,
 		top: (canvas.height/2) - studentNodeRadius,
-		selectable: false
+		selectable: false,
+		stroke: 'white',
+		strokeWidth: 5,
+		id: "mapNode"
 	});
 	
 	studentNodeGroup.on('selected', function() {
@@ -99,5 +113,45 @@ $( document ).ready(function() {
 	canvas.add(classOrbital, studentNodeGroup);
 	getClassNumbers();
 	drawclassnode(canvas);
+	
+	canvas.on({
+
+		'mouse:down': function(e) {
+	    	if (e.target) 
+	    	{
+	    		//loadNodePopup(e.target);
+				redirect();
+	    	}
+	    },
+		
+		'mouse:over': function(e){
+			if(e.target.id === "mapNode")
+			{
+				//e.target.studentNode.setStroke('yellow');
+				e.target.forEachObject(function(object,i){
+					if(object.id === "mapNode")
+					{
+						object.setStroke('yellow');
+					}
+				});
+				canvas.renderAll();
+			}
+		},
+	
+		'mouse:out': function(e){
+			if(e.target.id === "mapNode")
+			{
+				//e.target.setStroke('white');
+				e.target.forEachObject(function(object,i){
+					if(object.id === "mapNode")
+					{
+						object.setStroke('white');
+					}
+				});
+				canvas.renderAll();
+			}
+		}
+		
+	});
 
 });
