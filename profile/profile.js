@@ -40,6 +40,6 @@ function buildPage(){
 }
 
 function editProfile(){
-	alert("hello");
+	//alert("hello");
 	
 }

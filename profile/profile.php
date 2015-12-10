@@ -23,6 +23,8 @@
 		
 		echo json_encode($result);
 		
+		//header("location: ../profile/profile.html");
+		
 	}
 	else
 	{	

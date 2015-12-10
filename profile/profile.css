@@ -1,5 +1,15 @@
 @charset "utf-8";
 /* CSS Document */
+#canvas {
+	width: 100%; 
+	height: 100%;
+	text-align: center;
+	background-color: #99ffff; 
+}
+
+body {
+	background-color: #99ffff;	
+}
 
 
 
