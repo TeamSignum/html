@@ -15,7 +15,7 @@ $( document ).ready(function() {
 	canvas.on({
 
 		'mouse:down': function(e) {
-	    	if (e.target) 
+	    	if (e.target.id === "mapNode") 
 	    	{
 	    		loadNodePopup(e.target); 
 	    	}
