@@ -1,7 +1,9 @@
 var canvas;
 var nid; 
 var nodes = [];
-var checked_off; 
+var checked_off;
+var tempi = 0;
+var tempp = 16; 
 
 $( document ).ready(function() {
 
@@ -51,6 +53,7 @@ function loadNodes(){
 			{
 				//alert(result[i]["top"] +1);
 				drawNode(parseFloat(result[i]["top"]), parseFloat(result[i]["left"]), parseFloat(result[i]["radius"]), result[i]["type"], result[i]["title"], result[i]["id"]);
+				tempi++;
 			}
 			//canvas.renderAll();
 		}
@@ -98,7 +101,12 @@ function drawNode(top, left, radius, type, title, nodeID){
 	
 	canvas.add(c);
 	
-	drawParticipantNodes(c);
+	if(tempi < 3)
+	{
+		drawParticipantNodes(c, tempp);
+		//alert(tempp);
+		tempp = tempp - 6;
+	}
 
 	var temp = {
 		node: c,
@@ -222,12 +230,12 @@ function checkOffNode(){
 	});
 }
 
-function drawParticipantNodes(c){
+function drawParticipantNodes(c, num){
 
 	var _left = c.left;
 	var _top = c.top;
 	var _radius = c.radius;
-	var _participants = 14;
+	var _participants = num;
 	
 	// calculate the center of the node we're drawing around
 	//var nodeCenterX = _left + _radius;
