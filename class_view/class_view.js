@@ -161,6 +161,7 @@ function drawEdge(x1, y1, x2, y2, type){
 	l.lockMovementY = true;
 	
 	canvas.add(l);
+	canvas.sendToBack(l);
 }
 
 function loadNodePopup(node){
