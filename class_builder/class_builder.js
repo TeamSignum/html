@@ -495,10 +495,13 @@ function loadIDs()
 		data: {id: 1},
 		
 		success: function(result){
-			nodeID = parseInt(result["mnid"]);
-			edgeID = parseInt(result["meid"]);
-			nodeID++;
-			edgeID++;
+			if(result["mnid"] != null)
+			{
+				nodeID = parseInt(result["mnid"]);
+				edgeID = parseInt(result["meid"]);
+				nodeID++;
+				edgeID++;	
+			}
 			//alert(nodeID);
 			//alert(edgeID);
 		}
