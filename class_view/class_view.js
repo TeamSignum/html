@@ -34,9 +34,7 @@ $( document ).ready(function() {
 				canvas.renderAll();
 			}
 		}
-	  
 	});
-
 });
 
 function loadNodes(){
