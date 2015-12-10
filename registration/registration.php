@@ -29,6 +29,9 @@ if (isset($_POST["submit"])){
     if($password1 != $password2){
     	$error[] = "Password and Confirm password are not matching";
     }
+    if($password1 != $password2){
+        $error[] = "Password and Confirm password are not matching";
+    }
     
     if(count($error) == 0){
         // Set up the database connection

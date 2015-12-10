@@ -16,12 +16,17 @@
     <div class="col-md-4">
       <h2>Login to Learning Universe</h2>
       <form method="post" action="login.php">
-
-        <input class="form-control" name="email" type="text" value="" placeholder="Email">
-        <input class="form-control" name="password" type="password" value="" placeholder="Password">
-        <br/>
-        <input class="form-control" type="submit" name="submit" value="Login">
-        <br/>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input class="form-control" type="email" name="email"  value="" placeholder="Email">
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input class="form-control" name="password" type="password" value="" placeholder="Password">
+        </div>
+        <p class="submit">
+        <input class="btn btn-primary btn-lg btn-block" type="submit" name="submit" value="Login">
+        </p>
         <label>
           <input type="checkbox" name="remember_me" id="remember_me">
           Remember me on this computer
