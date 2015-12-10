@@ -1,6 +1,7 @@
 var canvas;
 var nid; 
 var nodes = [];
+var checked_off; 
 
 $( document ).ready(function() {
 
@@ -161,6 +162,7 @@ function loadNodePopup(node){
 		}
 	}
 
+	nid = id; 
 	var _data = 'nid=' + id; 
 
 	$.ajax({
@@ -189,4 +191,31 @@ function fillPopup(title, description, duedate, notes){
 
 function hidePopup(){
 	$("#popup").hide(); 
+}
+
+function checkOffNode(){
+	swal({   
+		title: "Are you sure?",   
+		text: "Clicking yes will check off this node.",   
+		type: "warning",   
+		showCancelButton: true,   
+		confirmButtonColor: "#DD6B55",   
+		confirmButtonText: "Yes",   
+		cancelButtonText: "No",   
+		closeOnConfirm: false,   
+		closeOnCancel: false }, 
+		function(isConfirm){   
+			if (isConfirm) {     
+				swal("Completed", "The node has been completed.", "success");
+				for(var i = 0; i < nodes.length; i++){
+					if(nodes[i].id == nid){
+						nodes[i].node.setFill("#0d0"); 
+						$("#popup").hide(); 
+					}
+				}   
+			} 
+			else {     
+				swal("Cancelled", "The node has not been completed.", "error");   
+			} 
+	});
 }
