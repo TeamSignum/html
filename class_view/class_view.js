@@ -15,11 +15,20 @@ $( document ).ready(function() {
 	canvas.on({
 
 		'mouse:down': function(e) {
-	    	if (e.target.id === "mapNode") 
-	    	{
-	    		loadNodePopup(e.target); 
-	    	}
+			if(e.target)
+			{
+				if (e.target.id === "mapNode") 
+				{
+					loadNodePopup(e.target); 
+				}
+			}
 	    },
+		
+		'mouse:up': function(e) {
+			if(e.target)
+			{
+			}
+		},
 
 	
 		'mouse:over': function(e){
