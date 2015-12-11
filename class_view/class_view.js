@@ -7,7 +7,7 @@ var tempp = 16;
 
 $( document ).ready(function() {
 
-	var canvas = new fabric.Canvas('map', {backgroundColor: "#99ffff"});
+	canvas = new fabric.Canvas('map', {backgroundColor: "#99ffff"});
 
 	loadNodes();
 	loadEdges();
