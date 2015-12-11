@@ -3,7 +3,7 @@ var nid;
 var nodes = [];
 var checked_off;
 var tempi = 0;
-var tempp = 16; 
+var tempp = 12; 
 
 $( document ).ready(function() {
 
@@ -118,7 +118,7 @@ function drawNode(top, left, radius, type, title, nodeID){
 	{
 		drawParticipantNodes(c, tempp);
 		//alert(tempp);
-		tempp = tempp - 6;
+		tempp = tempp - 4;
 	}
 
 	var temp = {
@@ -259,18 +259,17 @@ function drawParticipantNodes(c, num){
 	var nodeCenterY = c.getCenterPoint().y;
 	
 	// determine the angle between each participant node
-	var participantNodeSpacing = (Math.PI * 2) / _participants;
+	var participantNodeSpacing = (2 * Math.PI - (2 * Math.PI / 3)) / _participants;
+	var currentAngle = (Math.PI / 2) + (Math.PI / 6); 
 
-	for (var i = _participants - 1; i >= 0; i--) {
-		//
-		var currentAngle = i * participantNodeSpacing;
+	for (var i = _participants; i >= 0; i--) {
 
 		//draw the circle
 		var participantNode = new fabric.Circle({
-			radius: 5,
-			left: nodeCenterX + Math.sin(currentAngle) * (_radius + 10) - 5,  // need to verify this math
-			top: nodeCenterY + Math.cos(currentAngle) * (_radius + 10) - 5,  // need to verify this math
-			fill: 'red'
+			radius: 7,
+			left: nodeCenterX + Math.sin(currentAngle) * (_radius + 14) - 7,  // need to verify this math
+			top: nodeCenterY + Math.cos(currentAngle) * (_radius + 14) - 7,  // need to verify this math
+			fill: '#50a35d'
 		});
 		
 		participantNode.lockMovementX = true;
@@ -279,5 +278,7 @@ function drawParticipantNodes(c, num){
 		participantNode.hasBorders = false;
 		
 		canvas.add(participantNode);
+
+		currentAngle = currentAngle - participantNodeSpacing; 
 	}
 }
