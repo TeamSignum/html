@@ -81,7 +81,7 @@ $( document ).ready(function() {
 	var from;
 	var to;
 
-	var canvas = new fabric.Canvas('map');
+	var canvas = new fabric.Canvas('map', {backgroundColor: "#99ffff"});
 	canvas.add(new fabric.Circle({ radius: 50, fill: '#fff', top: 50,  left: 50, stoke: 'white', strokeWidth: 5, id: 'tb_largeCircle' }));
 	canvas.add(new fabric.Circle({ radius: 40, fill: '#fff', top: 200, left: 55, stoke: 'white', strokeWidth: 5, id: 'tb_mediumCircle' }));
 	canvas.add(new fabric.Circle({ radius: 30, fill: '#fff', top: 320, left: 60, stoke: 'white', strokeWidth: 5, id: 'tb_smallCircle' }));

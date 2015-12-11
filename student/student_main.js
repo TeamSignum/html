@@ -66,7 +66,7 @@ function redirect(){
 
 $( document ).ready(function() {
 
-	var canvas = new fabric.Canvas('student_main');
+	var canvas = new fabric.Canvas('student_main', {backgroundColor: "#99ffff"});
 
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
