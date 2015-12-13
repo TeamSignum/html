@@ -4,6 +4,7 @@
  * Date: 11/21/15 
  */ 
 
+ //Variables to hold map information
 var canvas_lock = false;
 var nodes = [];
 var mapLines = [];
@@ -12,6 +13,7 @@ var edgeID = 1;
 var bnodes = [];
 var current_node; 
 
+//Copies the node from the toolbar to the canvas
 function copyNode(canvas, node){
 	var radius = node.radius; 
 	var fill = node.fill; 
@@ -39,6 +41,7 @@ function copyNode(canvas, node){
 	canvas.add(n);  
 }
 
+//Copies the edge from the toolbar to the canvas
  function copyEdge(canvas, edge){
  	var x1 = edge.x1; 
  	var x2 = edge.x2; 
@@ -81,11 +84,15 @@ $( document ).ready(function() {
 	var from;
 	var to;
 
+	//Add the objects for the toolbar to the canvas
 	var canvas = new fabric.Canvas('map', {backgroundColor: "#99ffff"});
+	
+	//Node tools
 	canvas.add(new fabric.Circle({ radius: 50, fill: '#fff', top: 50,  left: 50, stoke: 'white', strokeWidth: 5, id: 'tb_largeCircle' }));
 	canvas.add(new fabric.Circle({ radius: 40, fill: '#fff', top: 200, left: 55, stoke: 'white', strokeWidth: 5, id: 'tb_mediumCircle' }));
 	canvas.add(new fabric.Circle({ radius: 30, fill: '#fff', top: 320, left: 60, stoke: 'white', strokeWidth: 5, id: 'tb_smallCircle' }));
 
+	//Line tools
 	canvas.add(new fabric.Line([60, 400, 120, 500], { fill: 'red', stroke: 'red', strokeWidth: 3, id: 'tb_lineSolid' }));
 	canvas.add(new fabric.Line([60, 525, 120, 625], { fill: 'red', stroke: 'red', strokeWidth: 3, strokeDashArray: [5, 5], id: 'tb_lineDotted' }));
 
@@ -105,6 +112,7 @@ $( document ).ready(function() {
 	canvas.item(4).lockMovementX = canvas.item(4).lockMovementY = true; 
 	canvas.item(4).selectable = canvas.item(4).hasControls = canvas.item(4).hasBorders = false; 	
 
+	//Pop-up tool
 	fabric.Image.fromURL('../imports/images/lock.png', function(oImg) {
 		oImg.scale(.2); 
 		oImg.set({left: 30, top: 740, id: 'toolbarLock'}); 
@@ -113,6 +121,7 @@ $( document ).ready(function() {
 		canvas.add(oImg); 
 	}); 
 
+	//Save map tool
 	fabric.Image.fromURL('../imports/images/upload.png', function(oImg) {
 		oImg.scale(.1); 
 		oImg.set({left: 110, top: 740, id: 'toolbarUpload'}); 
@@ -121,6 +130,7 @@ $( document ).ready(function() {
 		canvas.add(oImg); 
 	}); 
 
+	//Canvas events
 	canvas.on({
 
 	  'mouse:down': function(e) {
@@ -138,6 +148,7 @@ $( document ).ready(function() {
 				e.target.opacity = 0.5;
 			}
 
+			//Copy node to drag onto the canvas
 		    if(e.target.id === "tb_largeCircle" || e.target.id === "tb_mediumCircle" || e.target.id === "tb_smallCircle")
 		    {
 		      copyNode(canvas, e.target);  
@@ -153,6 +164,7 @@ $( document ).ready(function() {
 			  nodeID++;
 			  bnodes.push(temp);
 		    }
+			//Turn on/off line editing mode
 			else if(e.target.id === "tb_lineSolid" || e.target.id === "tb_lineDotted")
 			{
 				lineEditor = !lineEditor;
@@ -199,6 +211,7 @@ $( document ).ready(function() {
 	  	if (e.target) {
 	    	if(lineEditor === false)
 			{
+				//If node is placed in tool bar area delete node
 				if(e.target.left < 180 && e.target.id != "tb_lineSolid" 
 					&& e.target.id != "tb_lineDotted" && e.target.id != "toolbarLock" 
 					&& e.target.id != "toolbarUpload"){
@@ -207,6 +220,8 @@ $( document ).ready(function() {
 				}
 
 				e.target.opacity = 1;
+				
+				//Place copied node from tool bar onto the canvas and add title text
 				if(e.target.left > 180 && e.target.id === "mapNodet")
 				{
 					e.target.id = "mapNode";
@@ -238,6 +253,7 @@ $( document ).ready(function() {
 		  	}
 		 	if(lineEditor === true)
 			{
+			  //Grab to/from nodes and draw a line connecting both nodes
 			  if(e.target.id === "mapNode")
 				{
 					to = e.target;
@@ -313,6 +329,7 @@ $( document ).ready(function() {
 	  'text:changed': function(e) {
 			if(e.target.id === "nodeText")
 			{
+				//Center title text when text is edited
 				e.target.left = e.target.node.getCenterPoint().x - e.target.getWidth()/2;
 			}
 	  },
@@ -320,6 +337,7 @@ $( document ).ready(function() {
 	  'mouse:over': function(e){
 			if(e.target.id === "mapNode")
 			{
+				//Highlight node
 				e.target.setStroke('yellow');
 				canvas.renderAll();
 			}
@@ -328,6 +346,7 @@ $( document ).ready(function() {
 	  'mouse:out': function(e){
 			if(e.target.id === "mapNode")
 			{
+				//De-Highlight node
 				e.target.setStroke('white');
 				canvas.renderAll();
 			}
@@ -350,6 +369,8 @@ $( document ).ready(function() {
 						p = bnodes[i];
 					}
 				}
+				//Loop through current node's edges
+				//Change position of edges to follow the node when node is being moved on the canvas
 				if(p.lines.length != 0)
 				{
 					for(var j = 0; j < p.lines.length; j++)
@@ -434,9 +455,11 @@ function savePopup(){
 	return false; 
 }
 
+//Saves the nodes and edges of the map to the DB
 function saveMap(){
 	var map = [];
 	var edges = [];
+	//Grab all the node info
 	for(var i = 0; i < bnodes.length; i++)
 	{
 		var t = bnodes[i].node.title.getText();
@@ -455,6 +478,7 @@ function saveMap(){
 		//alert(bnodes[i].node.title.getText());
 	}
 	
+	//Grab all the edge info
 	for(var i = 0; i < mapLines.length; i++)
 	{
 		var temp = {
@@ -486,6 +510,7 @@ function saveMap(){
 	return false;
 }
 
+//Get the latest IDs for the node and edge table
 function loadIDs()
 {
 	$.ajax({

@@ -9,9 +9,11 @@ $( document ).ready(function() {
 
 	canvas = new fabric.Canvas('map', {backgroundColor: "#99ffff"});
 
+	//Load the learning map from the DB
 	loadNodes();
 	loadEdges();
 	
+	//Canvas events
 	canvas.on({
 
 		'mouse:down': function(e) {
@@ -53,6 +55,7 @@ $( document ).ready(function() {
 	});
 });
 
+//Get all the nodes from the DB and draw them on the canvas
 function loadNodes(){
 
 	$.ajax({
@@ -75,6 +78,7 @@ function loadNodes(){
 	return false;
 }
 
+//Get all the edges from the DB and draw them on the canvas
 function loadEdges(){
 
 	$.ajax({
@@ -96,7 +100,9 @@ function loadEdges(){
 	return false;
 }
 
+//Draw a node onto the canvas
 function drawNode(top, left, radius, type, title, nodeID){
+	//Draw the concept node
 	var c = new fabric.Circle({
 			top: top,
 			left: left,
@@ -114,6 +120,7 @@ function drawNode(top, left, radius, type, title, nodeID){
 	
 	canvas.add(c);
 	
+	//Draw participant nodes
 	if(tempi < 3)
 	{
 		drawParticipantNodes(c, tempp);
@@ -128,6 +135,7 @@ function drawNode(top, left, radius, type, title, nodeID){
 
 	nodes.push(temp); 
 
+	//Draw the title text
 	var t = new fabric.Text(title, {
 			fontFamily: 'arial black',
 			fontSize: 25,
@@ -148,6 +156,7 @@ function drawNode(top, left, radius, type, title, nodeID){
 	canvas.add(t);
 }
 
+//Draw an edge onto the canvas
 function drawEdge(x1, y1, x2, y2, type){
 	var l;
 	if(type === "solid")
@@ -177,6 +186,7 @@ function drawEdge(x1, y1, x2, y2, type){
 	canvas.sendToBack(l);
 }
 
+//Get the pop-up info for a specified node
 function loadNodePopup(node){
 
 	var id; 
@@ -203,7 +213,7 @@ function loadNodePopup(node){
 	return false; 
 }
 
-
+//Fill the pop-up
 function fillPopup(title, description, duedate, notes){
 	$("#popup").show(); 
 	$("#title").html(title); 
@@ -216,6 +226,7 @@ function hidePopup(){
 	$("#popup").hide(); 
 }
 
+//Check off the node as completed
 function checkOffNode(){
 	swal({   
 		title: "Are you sure?",   
@@ -245,6 +256,8 @@ function checkOffNode(){
 	});
 }
 
+//Calculates the participant nodes spacing
+//Draws the participant nodes around the specified node
 function drawParticipantNodes(c, num){
 
 	var _left = c.left;
