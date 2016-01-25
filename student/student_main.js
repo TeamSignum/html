@@ -2,6 +2,7 @@ var classNumberArray = [];
 var studentNodeRadius = 100;
 var classOrbitalRadius = 200;
 var classNodeRadius = 60;
+var account_name = "";
 
 function getClassNumbers(){
 	$.ajax({
@@ -9,14 +10,35 @@ function getClassNumbers(){
 		type: 'POST',
 		url: "student_main.php",
 		datatpye: "json",
+		data: {class: 1},
+		
 		success: function(result){	
 			var classNumbersJson = JSON.parse(result); 	
 			for(var x in classNumbersJson){
 				classNumberArray.push(classNumbersJson[x].classnumber);
 			}
+			classNumberArray.push("+");
 			//alert(result);
 		}
 	});
+}
+
+function getName()
+{
+	$.ajax({
+		type: 'POST',
+		url: "student_main.php",
+		dataType: 'json',
+		data: {name: 1},
+		async: false,
+		
+		success: function(result){
+			//alert(result.name);
+			account_name = result.name;
+		}
+	});
+	
+	return false;
 }
 
 function drawclassnode(canvas){
@@ -65,12 +87,14 @@ function redirect(){
 }
 
 $( document ).ready(function() {
+	
+	getName();
 
 	var canvas = new fabric.Canvas('student_main', {backgroundColor: "#99ffff"});
 
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
-	canvas.background 
+	//canvas.background 
 
 	var classOrbital = new fabric.Circle({
 		radius: classOrbitalRadius,
@@ -93,7 +117,7 @@ $( document ).ready(function() {
 		//selectable: true
 	});
 	
-	var studentName = new fabric.Text('NAMGI', {
+	var studentName = new fabric.Text('Name', {
 		fontSize: '36',
 		fontFamily: 'Arial',
 		fontStyle: 'bold',
@@ -102,6 +126,7 @@ $( document ).ready(function() {
 		originY: 'center',
 		selectable: false
 	});
+	studentName.setText(account_name);
 
 	var studentNodeGroup = new fabric.Group([studentNode, studentName], {
 		left: (canvas.width/2) - studentNodeRadius,
