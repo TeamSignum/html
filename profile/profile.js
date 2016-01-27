@@ -4,13 +4,20 @@ var _firstName;
 var _lastName;
 var _description;
 var _userid;
+var _profileimage;
 
 
 $( document ).ready(function() 
 {
 	getProfileData();
+	
+	// This prevents the profileform from submitting and refreshing the page.
+	$("#profileForm").submit(function(e){
+    e.preventDefault();
+  });
 });
 
+// Queries the database and stores profile information in javascript variables
 function getProfileData(){
 	"use strict";
 	$.ajax({
@@ -25,22 +32,39 @@ function getProfileData(){
 			_email = parsedResult[0].email;
 			_firstName = parsedResult[0].firstname;
 			_lastName = parsedResult[0].lastname;
+			if(parsedResult[0].profilepic === null){
+				_profileimage = "default.jpg";
+			}
+			else{
+				_profileimage=parsedResult[0].profilepic;
+			}
 
 			profileView();
 		}
 	});
 }
 
+// Submits profile information to the database
 function submitProfileChanges(){
+	"use strict";
 	if(validateFormData)
 	{
+		// Get the form information and create a FormData object
+		var form = document.getElementById("profileForm");
+		var formData = new FormData(form);
+		
 		//insert into database, handle any submission errors.
 		$.ajax({
 			async: false,
+			processData: false, // This must be false with FormData object
+      contentType: false, // This must be false with FormData object
 			type: 'POST',
 			url: "saveProfile.php",
-			data: $('#profileContainer').serialize(),
+			data: formData,
 			success: function(result){
+				//alert(result);
+				
+				// Reload the profileForm to get the new data
 				getProfileData();
 			}
 		});
@@ -50,18 +74,17 @@ function submitProfileChanges(){
 	{
 		alert("invalid data");
 	}
-	
-	
 }
 
-
-
+// Check if form information is in the appropriate format
 function validateFormData(){
 	return true;
 }
 
+// Displays the profile information in a non-editable format
+// *****TODO: Move element tags to the html file, and only use JS to change the contents*****
 function profileView(){
-	$('#profileContainer').html('<div class="col-md-4"></div>\
+	$('#profileForm').html('<div class="col-md-4"></div>\
 					<div class="col-md-4">\
 				<label for="email">Email address</label>\
 						<input type="email" name="email" class="form-control" id="email" value="' + _email + '" disabled>\
@@ -71,7 +94,11 @@ function profileView(){
 						<input type="text" name="firstname" class="form-control" id="firstname" value="' + _firstName + '" disabled>\
 				<label for="lastname">Last Name</label>\
 						<input type="text" name="lastname" class="form-control" id="lastname" value="' + _lastName + '" disabled>\
-						<br>\
+						<br/>\
+				<label for="picture">Profile Picture</label>\
+				<br>\
+					<img src="../profile_images/' + _profileimage + '">\
+					<br><br>\
 					<p id="buttonRegion">\
 								<button onclick="profileEdit()" class="btn btn-primary btn-lg btn-block">Edit Profile</button>\
 						</p>\
@@ -79,9 +106,10 @@ function profileView(){
 				<div class="col-md-4"></div>	');
 }
 
+// Displays the profile information in and editable format
+// *****TODO: Move element tags to the html file, and only use JS to change the contents*****
 function profileEdit(){
-	
-$('#profileContainer').html('<div class="col-md-4"></div>\
+$('#profileForm').html('<div class="col-md-4"></div>\
 	      <div class="col-md-4">\
 		  <label for="email">Email address</label>\
           <input type="email" name="email" class="form-control" id="email" value="' + _email + '">\
@@ -92,6 +120,9 @@ $('#profileContainer').html('<div class="col-md-4"></div>\
 		  <label for="lastname">Last Name</label>\
           <input type="text" name="lastname" class="form-control" id="lastname" value="' + _lastName + '" >\
           <br>\
+			<label for="picture">Profile Picture <input type="file" name="imageToUpload" id="imageToUpload" accept="image/*"></label>\
+					<img src="../profile_images/' + _profileimage + '" id="profilepic">\
+					<br><br>\
 	  	  <p id="buttonRegion">\
           		<button onclick="submitProfileChanges()" class="btn btn-primary btn-lg btn-block">Submit Changes</button>\
           </p>\
