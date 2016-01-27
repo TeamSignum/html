@@ -8,8 +8,10 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
         	break;
         case 'assignmnet' :
         	SaveAssignmentPopup();
+        	break;
         case 'quiz' : 
         	SaveQuizPopup();
+        	break;
     }
 }
 

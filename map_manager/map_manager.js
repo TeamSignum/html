@@ -339,7 +339,7 @@ MManager.prototype.LockOrUpload = function(button){
 MManager.prototype.LoadIds = function() {
 	$.ajax({
 		type: 'POST',
-		url: "mapsave.php",
+		url: "../map_manager/mapsave.php",
 		dataType: 'json',
 		data: {id: 1},
 		
@@ -399,7 +399,7 @@ MManager.prototype.SaveMap = function(){
 	$.ajax({
 		async: true, 
 		type: 'POST',
-		url: "mapsave.php",
+		url: "../map_manager/mapsave.php",
 		dataType: 'html',
 		data: {map: map, edges: edges},
 		
@@ -619,7 +619,7 @@ MManager.prototype.SavePopup = function(){
 	$.ajax({
 		async: true, 
 		type: 'POST', 
-		url: "save_node_popup.php",
+		url: "../map_manager/save_node_popup.php",
 		data: _data, 
 		success: function(result){
 			$("#popup").hide(); 

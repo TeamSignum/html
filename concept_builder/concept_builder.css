@@ -1,0 +1,33 @@
+#canvas {
+	width: 101%; 
+	height: 800px;
+	text-align: center; 
+	background-color: #99ffff; 
+	position: absolute;
+}
+
+#popup {
+	border-radius: 25px;
+	background-color: #fbfbfb; 
+	margin-top: 50px; 
+	padding: 50px 0 50px 0; 
+	width: 1000px;
+	left: 14%;
+	text-align: center; 
+	position: absolute;
+}
+
+#cancelorsave{
+	border-radius: 25px;
+	background-color: #fbfbfb; 
+	margin-top: 400px; 
+	padding: 50px 0 50px 0; 
+	width: 1000px;
+	left: 14%;
+	text-align: center; 
+	position: absolute;
+}
+
+#p_Cancel{
+	margin-right: 25px;
+}
