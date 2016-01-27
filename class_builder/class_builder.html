@@ -25,36 +25,21 @@
 		</div>
 
 		<div id="popup" style="display: none;"> 
-		  <div class="row"> 
-		    <div class="col-md-2"></div>
-		    <div class="col-md-8">
-		    	<h3 style="font-weight: bold;">Please fill in node popup details</h3>
-		      <form>
-
-		      	<br/>
-		        <input class="form-control" id="title" name="title" type="text" value="" placeholder="Title">
-		        <br/>
-		        <input class="form-control" id="description" name="description" type="text" value="" placeholder="Description">
-		        <br/>
-		        <input class="form-control" id="due_date" name="due_date" type="text" value="" placeholder="Due date (optional)">
-		        <br/>
-		        <textarea class="form-control" rows="3" id="notes" name="notes" value="" placeholder="Notes"></textarea>
-
-		        <br/>
-		        <button style="float:left; font-size:12pt;" type="button" class="btn btn-default btn-md">
-				  		<span class="glyphicon glyphicon-upload" aria-hidden="true"></span> Upload lecture notes
-						</button>
-
-						<br/>
-						<button type="button" class="btn btn-primary" id="p_Save" style="margin:25px 0 0 25px; float: right;">Save</button>
-						<button type="button" class="btn btn-primary" id="p_Cancel" style="margin-top:25px; float: right;">Cancel</button>
-
-		      </form>
-		    </div>
-		    <div class="col-md-2"></div>
-	  	</div>
+		</div>
+		<div id="cancelorsave" style="display: none;"> 
+			<div class="row">
+				<div class="col-md-2"></div>
+				<div class="col-md-8">
+					<button type="button" class="btn btn-primary" id="p_Save" style="margin-top:25px; float: right;">
+					Save
+					</button>
+					<button type="button" class="btn btn-primary" id="p_Cancel" style="margin-top:25px; float: right;">
+					Cancel
+					</button>
+				</div>
+				<div class="col-md-2"></div>
+			</div>
 		</div>
 	</div>
-
 </body>
 </html>

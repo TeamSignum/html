@@ -32,9 +32,17 @@ $( document ).ready(function() {
 
 	    	mngr.LockOrUpload(e.target); 
 
-	    	if(e.target.id === "tb_largeCircle" || e.target.id === "tb_mediumCircle" || e.target.id === "tb_smallCircle")
+	    	if(e.target.id === "tb_largeCircle")
+	    	{
+		    	mngr.CopyNode(e.target, mapNodeId, "concept");
+		    }
+		    else if(e.target.id === "tb_mediumCircle")
 		    {
-		    	mngr.CopyNode(e.target, mapNodeId);
+		    	mngr.CopyNode(e.target, mapNodeId, "assignment");
+		    }
+		    else if(e.target.id === "tb_smallCircle")
+		    {
+		    	mngr.CopyNode(e.target, mapNodeId, "quiz");
 		    }
 			else if(e.target.id === "tb_lineSolid")
 			{
@@ -104,13 +112,11 @@ $( document ).ready(function() {
 	  }
 	});
 
-
-	$("#p_Save").click(function(){
+	$( "#p_Save" ).click(function() {
 		mngr.SavePopup();
-    });
+	});
 
-    $("#p_Cancel").click(function(){
- 		mngr.HidePopup($("#popup"));
-    });
-
+	$( "#p_Cancel" ).click(function() {
+		mngr.HidePopup();
+	});
 });

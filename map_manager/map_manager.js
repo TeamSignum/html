@@ -37,7 +37,7 @@ MManager.prototype.GetNode = function(index){
 /* 
  * Copies a node from toolbar to canvas
  */
-MManager.prototype.CopyNode = function(node, new_id){
+MManager.prototype.CopyNode = function(node, new_id, type){
 	var radius = node.radius; 
 	var fill = node.fill; 
 	var top = node.top;
@@ -63,10 +63,14 @@ MManager.prototype.CopyNode = function(node, new_id){
 
 	node.id = new_id;
 
+	var popup = this.CreatePopup(type);
+
 	var my_node = { 
 		node: node,
 		id: this.nid,
-		lines: []
+		lines: [],
+		type: type,
+		popup: popup
 	};
 
 	this.nodes.push(my_node);
@@ -79,11 +83,6 @@ MManager.prototype.CopyNode = function(node, new_id){
  */
 MManager.prototype.HandleMapNodeSelect = function (node){
 	if(this.locked){
-	   	$("#title").val("");
-		$("#description").val(""); 
-		$("#due_date").val(""); 
-		$("#notes").val(""); 
-
 		this.ShowPopup(node, $("#popup")); 
 	}
 	else{
@@ -414,41 +413,208 @@ MManager.prototype.SaveMap = function(){
 /* ---------------------------------------- Popup Functions ---------------------------------------- */
 
 /*
- * Hides the popup. 
- * @param popup - jquery tag e.g $("#popup")
- */
-MManager.prototype.HidePopup = function(popup){
- 	popup.hide(); 
-}
-
-/*
  * Shows the popup. 
  * @param popup - jquery tag e.g $("#popup")
  * @param node  - node that was selected e.g e.target
  */ 
 MManager.prototype.ShowPopup = function(node, popup){
 	this.crrnt = node;
+
+	for(var i = 0; i < this.nodes.length; i++){
+		if(this.nodes[i].node.top == this.crrnt.top && this.nodes[i].node.left == this.crrnt.left){
+			popup.html(this.nodes[i].popup.innerHtml); 
+		}
+	}
+
 	popup.show();
+	$("#cancelorsave").show();
+}
+
+MManager.prototype.CreatePopup = function(type){
+	if (type === "concept")
+		return this.CreateConceptPopup();
+	else if (type === "assignment")
+		return this.CreateAssignmentPopup();
+	else if (type === "quiz")
+		return this.CreateQuizPopup();
+}
+
+MManager.prototype.CreateConceptPopup = function(){ 
+	var ids = [];
+	var innerHtml; 
+
+	innerHtml = "" + 
+ 	"<div class=\"row\">" +
+	 	"<div class=\"col-md-2\"></div>" +
+		"    <div class=\"col-md-8\">" +
+		"      	<h3 style=\"font-weight: bold;\">Please fill out concept node details</h3>" +
+		"      	<form>" +
+		"	      	<br/>" +
+		"	        <input class=\"form-control\" id=\"title\" name=\"title\" type=\"text\" value=\"\" placeholder=\"Title\">" +
+		"	        <br/>" +
+		"	        <input class=\"form-control\" id=\"description\" name=\"description\" type=\"text\" value=\"\" placeholder=\"Description\">" +
+		"	        <br/>" +
+		"	        <input class=\"form-control\" id=\"due_date\" name=\"due_date\" type=\"text\" value=\"\" placeholder=\"Due date (optional)\">" +
+		"" +
+		"	        <br/>" +
+		"	        <button id=\"lecture_notes\" style=\"float:left; font-size:12pt;\" type=\"button\" class=\"btn btn-default btn-md\">" +
+		"	        Download Lecture Notes" +
+		"			</button>" +
+		"" +
+		"      	</form>" +
+		"    </div>" +
+	 	"<div class=\"col-md-2\"></div>" +
+  	"</div> " +
+  	"";
+
+  	ids.push("title");
+  	ids.push("description");
+  	ids.push("due_date");
+  	ids.push("lecture_notes");
+
+  	var popup = {
+  		ids: ids,
+  		innerHtml: innerHtml
+  	};
+
+  	return popup;
+}
+
+MManager.prototype.CreateAssignmentPopup = function(){ 
+	var ids = [];
+	var innerHtml; 
+
+	innerHtml = "" + 
+ 	"<div class=\"row\">" +
+	 	"<div class=\"col-md-2\"></div>" +
+		"    <div class=\"col-md-8\">" +
+		"      	<h3 style=\"font-weight: bold;\">Please fill out assignment details</h3>" +
+		"      	<form>" +
+		"	      	<br/>" +
+		"	        <input class=\"form-control\" id=\"title\" name=\"title\" type=\"text\" value=\"\" placeholder=\"Title\">" +
+		"	        <br/>" +
+		"	        <input class=\"form-control\" id=\"description\" name=\"description\" type=\"text\" value=\"\" placeholder=\"Description\">" +
+		"	        <br/>" +
+		"	        <input class=\"form-control\" id=\"due_date\" name=\"due_date\" type=\"text\" value=\"\" placeholder=\"Due date (optional)\">" +
+		"" +
+		"	        <br/>" +
+		"	        <button id=\"j_notebook\" style=\"float:left; font-size:12pt;\" type=\"button\" class=\"btn btn-default btn-md\">" +
+		"	        Jupyter Notebook" +
+		"			</button>" +
+		"" +
+		"      	</form>" +
+		"    </div>" +
+	 	"<div class=\"col-md-2\"></div>" +
+  	"</div> " +
+  	"";
+
+  	ids.push("title");
+  	ids.push("description");
+  	ids.push("due_date");
+  	ids.push("j_notebook");
+
+  	var popup = {
+  		ids: ids,
+  		innerHtml: innerHtml
+  	};
+
+  	return popup;
+}
+
+MManager.prototype.CreateQuizPopup = function(){ 
+	var ids = [];
+	var innerHtml; 
+
+	innerHtml = "" + 
+ 	"<div class=\"row\">" +
+	 	"<div class=\"col-md-2\"></div>" +
+		"    <div class=\"col-md-8\">" +
+		"      	<h3 style=\"font-weight: bold;\">Please fill out quiz details</h3>" +
+		"      	<form>" +
+		"	      	<br/>" +
+		"	        <input class=\"form-control\" id=\"title\" name=\"title\" type=\"text\" value=\"\" placeholder=\"Title\">" +
+		"	        <br/>" +
+		"	        <input class=\"form-control\" id=\"description\" name=\"description\" type=\"text\" value=\"\" placeholder=\"Description\">" +
+		"	        <br/>" +
+		"	        <input class=\"form-control\" id=\"due_date\" name=\"due_date\" type=\"text\" value=\"\" placeholder=\"Due date (optional)\">" +
+		"" +
+		"	        <br/>" +
+		"	        <button id=\"take_quiz\" style=\"float:left; font-size:12pt;\" type=\"button\" class=\"btn btn-default btn-md\">" +
+		"	        Take Quiz" +
+		"			</button>" +
+		"" +
+		"      	</form>" +
+		"    </div>" +
+	 	"<div class=\"col-md-2\"></div>" +
+  	"</div> " +
+  	"";
+
+  	ids.push("title");
+  	ids.push("description");
+  	ids.push("due_date");
+  	ids.push("take_quiz");
+
+  	var popup = {
+  		ids: ids,
+  		innerHtml: innerHtml
+  	};
+
+  	return popup;
+}
+
+/*
+ * Hides the popup. 
+ */
+MManager.prototype.HidePopup = function(){
+ 	$("#popup").hide();
+ 	$("#popup").html("");
+ 	$("#cancelorsave").hide();
 }
 
 /* 
  * Saves the popup to the db. 
- * TODO: Some of this stuff is hardcoded and needs to change.
  */
 MManager.prototype.SavePopup = function(){
-	var nid; 
-	var title = $("#title").val();
-	var desc = $("#description").val(); 
-	var duedate = $("#due_date").val(); 
-	var notes = $("#notes").val(); 
 
+	var nid; 
+	var type; 
+
+	// Get the nid
 	for(var i = 0; i < this.nodes.length; i++){
 		if(this.nodes[i].node.top == this.crrnt.top && this.nodes[i].node.left == this.crrnt.left){
 			nid = this.nodes[i].id; 
+			type = this.nodes[i].type;
 		}
 	}
 
-	var _data = 'nid=' + nid + '&title=' + title + '&description=' + desc + '&duedate=' + duedate + '&notes=' + notes; 
+	switch(type){
+		case "concept": 
+			var title = $("#title").val();
+			var desc = $("#description").val(); 
+			var duedate = $("#due_date").val(); 
+			
+			var _data = {action: 'concept', nid: nid, title: title, description: desc, duedate: duedate};
+
+			break;
+
+		case "assignment":
+			var title = $("#title").val();
+			var desc = $("#description").val(); 
+			var duedate = $("#due_date").val(); 
+
+			var _data = {action: 'assignment', nid: nid, title: title, description: desc, duedate: duedate};
+
+			break;
+
+		case "quiz":
+			var title = $("#title").val();
+			var desc = $("#description").val(); 
+			var duedate = $("#due_date").val(); 
+
+			var _data = {action: 'quiz', nid: nid, title: title, description: desc, duedate: duedate};
+
+			break;
+	}
 
 	$.ajax({
 		async: true, 
@@ -457,6 +623,8 @@ MManager.prototype.SavePopup = function(){
 		data: _data, 
 		success: function(result){
 			$("#popup").hide(); 
+			$("#cancelorsave").hide(); 
+			$("#popup").html("");
 			$("#canvas").show(); 
 		}
 	}); 
