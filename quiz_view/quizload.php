@@ -20,7 +20,17 @@ if(isset($_POST["load"]))
 		{
 			$type = $row["type"];
 			$question = $row["question"];
-			$questions[] = array('type' => $type, 'question' => $question);
+			if(strcmp($type, "mc") == 0)
+			{
+				$a = $row["a"];
+				$b = $row["b"];
+				$c = $row["c"];
+				$questions[] = array('type' => $type, 'question' => $question, 'a' => $a, 'b' => $b, 'c' => $c);
+			}
+			else
+			{
+				$questions[] = array('type' => $type, 'question' => $question);
+			}
 		}
 		
 		echo json_encode($questions);

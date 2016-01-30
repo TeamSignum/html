@@ -9,6 +9,9 @@ if(isset($_POST["questions"]))
 		$type = $q["type"];
 		$question = $q["question"];
 		$answer = $q["answer"];
+		$a = $q["a"];
+		$b = $q["b"];
+		$c = $q["c"];
 		
 		try
 		{
@@ -16,13 +19,16 @@ if(isset($_POST["questions"]))
 			$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			$DB->beginTransaction();
 			
-			$query = "INSERT into `questions` (`type`, `question`, `answer`) values (?,?,?)";
+			$query = "INSERT into `questions` (`type`, `question`, `answer`, `a`, `b`, `c`) values (?,?,?,?,?,?)";
 
 			$statement = $DB->prepare($query);
 			
 			$statement->bindValue (1, $type);
 			$statement->bindValue (2, $question);
 			$statement->bindValue (3, $answer);
+			$statement->bindValue (4, $a);
+			$statement->bindValue (5, $b);
+			$statement->bindValue (6, $c);
 			
 			$statement->execute();
 			$DB->commit();

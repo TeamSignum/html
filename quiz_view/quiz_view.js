@@ -43,19 +43,23 @@ function createQuiz(q)
 		//alert(type + " " + question);
 		if(type === "mc")
 		{
+			var a = q[i].a;
+			var b = q[i].b;
+			var c = q[i].c;
+			
 			var temp = qmc.clone(true);
 			temp.attr("id", "MCQ" + num.toString());
 			
 			temp.find("#MXX").attr("id", "M" + num.toString()).text(question);
 			temp.find("#MLXX").attr("id", "ML" + num.toString()).attr("for", "M" + num.toString()).text("Question " + num.toString() + ": ");
 			
-			temp.find("#MAIXX").attr("id", "MAI" + num.toString());
+			temp.find("#MAIXX").attr("id", "MAI" + num.toString()).text(a);
 			temp.find("#AXX").attr("id", "A" + num.toString()).attr("name", "MC" + num.toString());
 			
-			temp.find("#MBIXX").attr("id", "MBI" + num.toString());
+			temp.find("#MBIXX").attr("id", "MBI" + num.toString()).text(b);
 			temp.find("#BXX").attr("id", "B" + num.toString()).attr("name", "MC" + num.toString());
 			
-			temp.find("#MCIXX").attr("id", "MCI" + num.toString());
+			temp.find("#MCIXX").attr("id", "MCI" + num.toString()).text(c);
 			temp.find("#CXX").attr("id", "C" + num.toString()).attr("name", "MC" + num.toString());
 			
 			$("#Quiz").append(temp);

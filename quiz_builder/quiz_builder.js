@@ -256,17 +256,17 @@ function saveQuiz()
 		}
 		
 		$.ajax({
-		//async: true, 
-		type: 'POST',
-		url: "quizsave.php",
-		dataType: 'html',
-		data: {questions: questions},
+			//async: true, 
+			type: 'POST',
+			url: "quizsave.php",
+			dataType: 'html',
+			data: {questions: questions},
 		
-		success: function(result){
-			//alert(result);
-			alert("Saved"); 
-		}
-	});
+			success: function(result){
+				//alert(result);
+				alert("Saved"); 
+			}
+		});
 	}
 	return false;
 }
