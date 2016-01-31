@@ -29,13 +29,15 @@ if (isset($_POST["submit"])){
             die($e->getMessage());
         }
 
-        $stmt = $DB->prepare("SELECT  email,password,idusers FROM LU.users WHERE email = '$email'");
+        $stmt = $DB->prepare("SELECT  email,password,idusers,uid,role FROM LU.users WHERE email = '$email'");
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if(count($result) > 0 && $password == $result['password']){
             $_SESSION['email'] = $result['email'];
 			$_SESSION['userid'] = $result['idusers'];
+			$_SESSION['uid'] = $result['uid'];
+			$_SESSION['role'] = $result['role'];
 			//Temp
 			//Hard coded to go to basic student account page
             header("location: ../student/student.php");

@@ -6,7 +6,7 @@ if(isset($_POST["class"]))
 
 	// Get the node id from the session.  Currently hard coding it.
 	//$uid = $_SESSION['id'];
-	$userid = 'user1';
+	$userid = $_SESSION['uid'];
 		
 	// Set up the database connection
 	$DB = new PDO('mysql:host=ec2-52-33-118-140.us-west-2.compute.amazonaws.com;dbname=LU', 'Signum', 'signumDB4');
@@ -50,6 +50,12 @@ if(isset($_POST["name"]))
 	{
 		echo $e->getMessage();
 	}
+}
+
+if(isset($_POST['direct']))
+{
+	$_SESSION['classid'] = $_POST['direct'];
+	echo "1";
 }
 
 ?>

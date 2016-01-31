@@ -12,7 +12,7 @@ function getClassNumbers(){
 		datatpye: "json",
 		data: {class: 1},
 		
-		success: function(result){	
+		success: function(result){
 			var classNumbersJson = JSON.parse(result); 	
 			for(var x in classNumbersJson){
 				classNumberArray.push(classNumbersJson[x].classnumber);
@@ -76,6 +76,8 @@ function drawclassnode(canvas){
 			selectable: false,
 			id: "mapNode"
 		});
+		
+		node_group.cid = classNumberArray[i];
 
 		canvas.add(node_group);
 	};
@@ -84,6 +86,29 @@ function drawclassnode(canvas){
 
 function redirect(){
 	window.location = '../class_view/class_view.html';
+}
+
+function directToClass(c)
+{
+	$.ajax({
+		type: 'POST',
+		url: "student_main.php",
+		dataType: 'html',
+		data: {direct: c},
+		//async: false,
+		
+		success: function(result){
+			//alert(result);
+			if(result === "1")
+			{
+				//alert("2");
+				//window.location = '../class_view/class.php';
+				window.location = '../class_view/class_view.html';
+			}
+		}
+	});
+	
+	return false;
 }
 
 $( document ).ready(function() {
@@ -150,8 +175,10 @@ $( document ).ready(function() {
 		'mouse:down': function(e) {
 	    	if (e.target) 
 	    	{
+				//alert(e.target.cid);
 	    		//loadNodePopup(e.target);
-				redirect();
+				//redirect();
+				directToClass(e.target.cid);
 	    	}
 	    },
 		
