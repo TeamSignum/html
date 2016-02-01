@@ -25,6 +25,8 @@ $(function () {
     $("#MCQXX").remove();
     $("#TFQXX").remove();
 	$("#SAQXX").remove();
+	
+	//loadQuiz();
 });
 
 function addmc(q)
@@ -269,4 +271,96 @@ function saveQuiz()
 		});
 	}
 	return false;
+}
+
+function loadQuiz()
+{
+	$.ajax({
+		//async: true, 
+		type: 'POST',
+		url: "quizsave.php",
+		dataType: 'json',
+		data: {load: 1},
+		
+		success: function(result){
+			//alert(result);
+			//alert(result[0].type);
+			populateQuiz(result);
+		}
+	});
+		
+	return false;
+}
+
+function populateQuiz(q)
+{
+	for(var i = 0; i < q.length; i++)
+	{
+		var type = q[i].type;
+		var question = q[i].question;
+		var answer = q[i].answer;
+		if(type === "mc")
+		{
+			var a = q[i].a;
+			var b = q[i].b;
+			var c = q[i].c;
+			
+			var temp = qmc.clone(true);
+			temp.attr("id", "MCQ" + num.toString());
+			temp.find("#MCDXX").attr("id", "MCD" + num.toString());
+	
+			temp.find("#MXX").attr("id", "M" + num.toString()).attr("name", "MT" + num.toString()).val(question);
+			temp.find("#MLXX").attr("id", "ML" + num.toString()).attr("for", "M" + num.toString()).text("Question " + num.toString() + ":");
+	
+			temp.find("#MAIXX").attr("id", "MAI" + num.toString()).val(a);
+			temp.find("#MBIXX").attr("id", "MBI" + num.toString()).val(b);
+			temp.find("#MCIXX").attr("id", "MCI" + num.toString()).val(c);
+	
+			temp.find("#AXX").attr("id", "A" + num.toString()).attr("name", "MC" + num.toString());
+			temp.find("#BXX").attr("id", "B" + num.toString()).attr("name", "MC" + num.toString());
+			temp.find("#CXX").attr("id", "C" + num.toString()).attr("name", "MC" + num.toString());
+			
+			temp.find("input[name=MC" + num.toString() + "][value=" + answer + "]").prop('checked', true);
+	
+			$("#Quiz").append(temp);
+	
+			num++;
+			qtype.push("mc");
+		}
+		if(type === "tf")
+		{
+			var temp = qtf.clone(true);
+			temp.attr("id", "TFQ" + num.toString());
+			temp.find("#TFDXX").attr("id", "TFD" + num.toString());
+	
+			temp.find("#TFXX").attr("id", "TF" + num.toString()).attr("name", "TFT" + num.toString()).val(question);
+			temp.find("#TFLXX").attr("id", "TFL" + num.toString()).attr("for", "TF" + num.toString()).text("Question " + num.toString() + ":");
+	
+			temp.find("#TXX").attr("id", "T" + num.toString()).attr("name", "TFC" + num.toString());
+			temp.find("#FXX").attr("id", "F" + num.toString()).attr("name", "TFC" + num.toString());
+			
+			temp.find("input[name=TFC" + num.toString() + "][value=" + answer + "]").prop('checked', true);
+	
+			$("#Quiz").append(temp);
+			
+			num++;
+			qtype.push("tf");
+		}
+		if(type === "sa")
+		{
+			var temp = qsa.clone(true);
+			temp.attr("id", "SAQ" + num.toString());
+			temp.find("#SADXX").attr("id", "SAD" + num.toString());
+	
+			temp.find("#SAXX").attr("id", "SA" + num.toString()).attr("name", "SAT" + num.toString()).val(question);
+			temp.find("#SALXX").attr("id", "SAL" + num.toString()).attr("for", "SA" + num.toString()).text("Question " + num.toString() + ":");
+	
+			temp.find("#ANSXX").attr("id", "ANS" + num.toString()).attr("name", "SAC" + num.toString());
+	
+			$("#Quiz").append(temp);
+	
+			num++;
+			qtype.push("sa");
+		}
+	}
 }

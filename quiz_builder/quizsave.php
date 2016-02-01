@@ -40,4 +40,46 @@ if(isset($_POST["questions"]))
 	}
 }
 
+if(isset($_POST['load']))
+{
+	try
+	{
+		$DB = new PDO("mysql:host=ec2-52-33-118-140.us-west-2.compute.amazonaws.com;dbname=LU", 'Signum', 'signumDB4');
+		$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$DB->beginTransaction();
+			
+		$query = "SELECT * FROM questions";
+		
+		$statement = $DB->prepare($query);
+		$statement->execute();
+		$result = $statement->fetchAll(PDO::FETCH_ASSOC);
+		
+		$questions = array();
+		
+		foreach($result as $row)
+		{
+			$type = $row["type"];
+			$question = $row["question"];
+			$answer = $row['answer'];
+			if(strcmp($type, "mc") == 0)
+			{
+				$a = $row["a"];
+				$b = $row["b"];
+				$c = $row["c"];
+				$questions[] = array('type' => $type, 'question' => $question, 'answer' => $answer, 'a' => $a, 'b' => $b, 'c' => $c);
+			}
+			else
+			{
+				$questions[] = array('type' => $type, 'question' => $question, 'answer' => $answer);
+			}
+		}
+		
+		echo json_encode($questions);
+	}
+	catch(PDOException $e)
+	{
+		echo $e-getMessage();
+	}
+}
+
 ?>
