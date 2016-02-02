@@ -29,7 +29,7 @@ if (isset($_POST["submit"])){
             die($e->getMessage());
         }
 
-        $stmt = $DB->prepare("SELECT  email,password,idusers,uid,role FROM LU.users WHERE email = '$email'");
+        $stmt = $DB->prepare("SELECT  email,password,idusers,uid,usertype FROM LU.users WHERE email = '$email'");
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
