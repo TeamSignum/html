@@ -1,0 +1,79 @@
+@charset "utf-8";
+/* CSS Document */
+
+body{
+	text-align: center;
+}
+
+header{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100vw;
+	height: 10vh;
+	background-color: black;
+	color: white;
+	font-size: 40px;
+}
+
+#gradeContainer{
+	width: 75vw;
+	height: 100vh;
+	background-color: #F0F0F0;
+	text-align: center;
+	margin: auto;
+}
+
+#classheader{
+	display: flex;
+}
+
+.trigger{
+  display: flex; /* Magical CSS helper */
+  height: 5vh; /* vh, vw is a percentage unit introduced in CSS3.  Height will be 10% of the window size */
+	width: 40vw;
+	background-color: #980000;
+	border-radius: 5px;
+  margin:10px auto 10px auto;
+ 	
+	/*Text properties*/
+	color: white;
+	align-items: center; /* Flex property to center vertically */
+  justify-content: left; /* Flex property */
+	font-size: xx-large;
+	box-shadow: 0 2px 0 #1b383b;
+	text-shadow: 0 1px 1px rgba(255, 255, 255, 0.2);
+}
+
+/* A 'panel' that can be toggled in and out */
+.toggle{
+	display: none; /* Default the panel to be hidden */
+}
+
+/* Used to pad text within other elements */
+span.textPadding{
+  margin: 20px;
+}
+
+.assignment{
+  display: flex; /* Magical CSS helper */
+  height: 9vh; /* vh, vw is a percentage unit introduced in CSS3.  Height will be 10% of the window size */
+	width: 30vw;
+	background-color: #B0B0B0;
+	border-radius: 5px;
+  margin:5px auto 5px auto;
+ 	
+	/*Text properties*/
+	color: white;
+	align-items: center; /* Flex property to center vertically */
+  justify-content: left; /* Flex property */
+	font-size: xx-large;
+	box-shadow: 0 2px 0 #1b383b;
+	text-shadow: 0 1px 1px rgba(255, 255, 255, 0.2);
+}
+
+.plus_icon{
+	height: 7vh;
+	width: 7vh;
+	float: left;
+}
