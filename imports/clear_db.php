@@ -7,7 +7,16 @@ try
 	$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$DB->beginTransaction();
 
-	$statement = $DB->prepare("TRUNCATE TABLE `nodepopups`");
+	$statement = $DB->prepare("TRUNCATE TABLE `grades`");
+	$statement->execute();
+
+	$statement = $DB->prepare("TRUNCATE TABLE `popupconcept`");
+	$statement->execute();
+
+	$statement = $DB->prepare("TRUNCATE TABLE `popupassignment`");
+	$statement->execute();
+
+	$statement = $DB->prepare("TRUNCATE TABLE `popupquiz`");
 	$statement->execute();
 
 	$statement = $DB->prepare("TRUNCATE TABLE `nodes`");

@@ -7,7 +7,7 @@
 /*
  * Map Manager Constructor  
  */ 
-var MManager = function(_canvas){
+var MManager = function(_canvas, builder){
  	this.canvas   = _canvas;
  	this.nodes 	  = []; 
  	this.nid      = 1;
@@ -22,7 +22,12 @@ var MManager = function(_canvas){
  	this.solid = false;
  	this.crrnt; 
 
- 	this.AddToolbar(); // Add the toolbar when you initialize the map manager
+ 	this.result_nodes; 
+ 	this.result_edges;
+
+ 	if(builder){
+ 		this.AddToolbar(); // Add the toolbar when you initialize the map manager
+ 	}
  }
 
 /* ---------------------------------------- Map Node Functions ---------------------------------------- */
@@ -88,6 +93,65 @@ MManager.prototype.HandleMapNodeSelect = function (node){
 	else{
 		this.from = node;
 	}
+}
+
+MManager.prototype.ConstructMap = function(result){
+
+}
+
+//Draw a node onto the canvas
+MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID){
+	//Draw the concept node
+	var c = new fabric.Circle({
+			top: top,
+			left: left,
+			radius: radius,
+			fill: '#fff',
+			stroke: 'white',
+			strokeWidth: 5,
+			id: type
+	});
+			
+	c.hasControls = false;
+	c.hasBorders = false;
+	c.lockMovementX = true;
+	c.lockMovementY = true;
+	
+	canvas.add(c);
+	
+	//Draw participant nodes
+	if(tempi < 3)
+	{
+		drawParticipantNodes(c, tempp);
+		tempp = tempp - 4;
+	}
+
+	var temp = {
+		node: c,
+		id: nodeID,
+	}
+
+	this.nodes.push(temp); 
+
+	//Draw the title text
+	var t = new fabric.Text(title, {
+			fontFamily: 'arial black',
+			fontSize: 25,
+			left: left,
+			top: top - 35,
+			id: "nodeText"
+	});
+			
+	var len = t.getWidth()/2;
+	var cenX = c.getCenterPoint().x;
+	t.left = cenX - len;
+				
+	t.hasControls = false;
+	t.hasBorders = false;
+	t.lockMovementX = true;
+	t.lockMovementY = true;
+			
+	canvas.add(t);
 }
 
 /* ---------------------------------------- Map Edge Functions ---------------------------------------- */
@@ -182,7 +246,7 @@ MManager.prototype.MoveEdges = function (node){
 /* 
  * Draws an edge between two nodes.
  */ 
-MManager.prototype.DrawEdge = function(node){
+MManager.prototype.DrawEdgeBetweenNodes = function(node){
 	if(this.lineEdit && node.id === "mapNode"){
 
 		this.to = node;
@@ -235,6 +299,39 @@ MManager.prototype.DrawEdge = function(node){
 		this.canvas.sendToBack(line);
 	}
 }
+
+/* 
+ * Draws an edge given parameters.
+ */ 
+MManager.prototype.DrawEdge = function(x1, y1, x2, y2, type){
+	var l;
+	if(type === "solid")
+	{
+		l = new fabric.Line([x1, y1, x2, y2], {
+			fill: 'black',
+			stroke: 'black',
+			strokeWidth: 5
+			});
+	}
+	if(type === "dotted")
+	{
+		l = new fabric.Line([x1, y1, x2, y2], {
+			fill: 'black',
+			stroke: 'black',
+			strokeWidth: 5,
+			strokeDashArray: [5, 5],
+			});
+	}
+	
+	l.hasControls = false;
+	l.hasBorders = false;
+	l.lockMovementX = true;
+	l.lockMovementY = true;
+	
+	canvas.add(l);
+	canvas.sendToBack(l);
+}
+
 
 /* ---------------------------------------- Map Text Functions ---------------------------------------- */
 
@@ -316,9 +413,9 @@ MManager.prototype.LockCanvas = function(){
 /*
  * Handles the lock or upload button press
  */ 
-MManager.prototype.LockOrUpload = function(button){
+MManager.prototype.LockOrUpload = function(button, level){
 	if(button.id === "toolbarUpload"){
-		this.SaveMap();
+		this.SaveMap(level);
 	}
 	else if (button.id === "toolbarLock"){
 		if (button.opacity == 1){
@@ -333,6 +430,74 @@ MManager.prototype.LockOrUpload = function(button){
 
 /* ---------------------------------------- Map Save/Load Functions ---------------------------------------- */
 
+//Get the pop-up info for a specified node
+MManager.prototype.LoadNodePopup = function(node, mngr){
+
+	var id; 
+	for(var i = 0; i < this.nodes.length; i++){
+		if(node.top == this.nodes[i].node.top && node.left == this.nodes[i].node.left){
+			id = this.nodes[i].id; 
+		}
+	}
+
+	var _data = 'nid=' + id; 
+
+	$.ajax({
+		async: true, 
+		type: 'POST', 
+		url: "../map_manager/load_node_popup.php",
+		data: _data, 
+		dataType: "json", 
+		success: function(result){
+			mngr.FillPopup(result["title"], result["description"], result["duedate"], result["notes"]); 
+		}
+	}); 
+
+	return false; 
+}
+
+//Get all the edges from the DB and draw them on the canvas
+MManager.prototype.LoadEdges = function(mngr, parent){
+
+	$.ajax({
+		async: true,
+		type: 'POST',
+		url: "../map_manager/loadmap.php",
+		dataType: 'json',
+		data: {map: 2, parent: parent},
+		
+		success: function(result){
+			for(var i = 0; i < result.length; i++)
+			{
+				mngr.DrawEdge(parseFloat(result[i]["x1"]), parseFloat(result[i]["y1"]), parseFloat(result[i]["x2"]), parseFloat(result[i]["y2"]), result[i]["type"]);
+			}
+		}
+	});
+	
+	return false;
+}
+
+//Get all the nodes from the DB and draw them on the canvas
+MManager.prototype.LoadMap = function(mngr, parent){
+
+	$.ajax({
+		async: true,
+		type: 'POST',
+		url: "../map_manager/loadmap.php",
+		dataType: 'json',
+		data: {map: 1, parent: parent},
+		
+		success: function(result){
+			for(var i = 0; i < result.length; i++)
+			{
+				mngr.DrawNode(parseFloat(result[i]["top"]), parseFloat(result[i]["left"]), parseFloat(result[i]["radius"]), result[i]["type"], result[i]["title"], result[i]["id"]);
+			}
+		}
+	});
+	
+	return false;
+}
+
 /*
  * Loads the last node and edge id from the database.
  */
@@ -346,8 +511,8 @@ MManager.prototype.LoadIds = function() {
 		success: function(result){
 			if(result["mnid"] != null)
 			{
-				this.nid = parseInt(result["mnid"]) + 1;
-				this.eid = parseInt(result["meid"]) + 1;
+				mngr.nid = parseInt(result["mnid"]) + 1;
+				mngr.eid = parseInt(result["meid"]) + 1;
 			}
 		}
 	});
@@ -358,7 +523,7 @@ MManager.prototype.LoadIds = function() {
 /* 
  * Saves the map to the db.
  */ 
-MManager.prototype.SaveMap = function(){
+MManager.prototype.SaveMap = function(parent){
 	var map = [];
 	var edges = [];
 	//Grab all the node info
@@ -401,7 +566,7 @@ MManager.prototype.SaveMap = function(){
 		type: 'POST',
 		url: "../map_manager/mapsave.php",
 		dataType: 'html',
-		data: {map: map, edges: edges},
+		data: {map: map, edges: edges, parent: parent},
 		
 		success: function(result){
 			swal("Saved"); 
@@ -411,6 +576,47 @@ MManager.prototype.SaveMap = function(){
 	return false;
 }
 /* ---------------------------------------- Popup Functions ---------------------------------------- */
+
+//Check off the node as completed
+MManager.prototype.CheckOffNode = function(){
+	swal({   
+		title: "Are you sure?",   
+		text: "Clicking yes will check off this node.",   
+		type: "warning",   
+		showCancelButton: true,   
+		confirmButtonColor: "#DD6B55",   
+		confirmButtonText: "Yes",   
+		cancelButtonText: "No",   
+		closeOnConfirm: false,   
+		closeOnCancel: false }, 
+		function(isConfirm){   
+			if (isConfirm) {     
+				swal("Completed", "The node has been completed.", "success");
+				for(var i = 0; i < mngr.nodes.length; i++){
+					if(mngr.nodes[i].id == mngr.nid){
+						mngr.nodes[i].node.setFill("#0d0");
+						mngr.nodes[i].node.setStroke("#0d0");
+						mngr.nodes[i].node.id = "cmapNode";
+						$("#popup").hide(); 
+					}
+				}   
+			} 
+			else {     
+				swal("Cancelled", "The node has not been completed.", "error");   
+			} 
+	});
+}
+
+/* 
+ * 
+ */
+MManager.prototype.FillPopup = function(title, description, duedate, notes){
+	$("#popup").show(); 
+	$("#title").html(title); 
+	$("#description").html(description); 
+	$("#duedate").html("Due date: " + duedate); 
+	$("#notes").html(notes); 
+}
 
 /*
  * Shows the popup. 
@@ -569,6 +775,13 @@ MManager.prototype.HidePopup = function(){
  	$("#popup").hide();
  	$("#popup").html("");
  	$("#cancelorsave").hide();
+}
+
+/*
+ * Hides the popup. 
+ */
+MManager.prototype.HidePopup2 = function(){
+ 	$("#popup").hide();
 }
 
 /* 

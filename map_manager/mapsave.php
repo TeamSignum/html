@@ -1,7 +1,11 @@
 <?php
+
+	include '../imports/ChromePhp.php';
+
 	if(isset($_POST["map"]))
 	{
 		$map = $_POST["map"];
+		$parent = $_POST["parent"];
 		
 		//$c = count($edges);
 		//echo $c;
@@ -17,7 +21,7 @@
 			$id = $node["id"];
 			$type = $node["type"];
 			$title = $node["title"];
-			
+
 			//$r .= $top . " " . $left . " " . $radius . " " . $fill . " " . $stroke . " " . $strokeWidth . " " . $id;
 			
 			try
@@ -26,8 +30,9 @@
 				$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 				$DB->beginTransaction();
 			
-				$query = "INSERT into `nodes` (`nid`, `top`, `left`, `radius`, `fill`, `stroke`, `strokeWidth`, `type`, `title`) values (?,?,?,?,?,?,?,?,?)";
-				//$query = "INSERT into nodes (top, left) values (?,?)";
+				$query = "INSERT into `nodes` (`nid`, `top`, `left`, `radius`, `fill`, `stroke`, `strokeWidth`, `type`, `title`, `parent`) values (?,?,?,?,?,?,?,?,?,?)";
+
+				ChromePhp::log($query);
 			
 				$statement = $DB->prepare($query);
 				
@@ -40,30 +45,11 @@
 				$statement->bindValue (7, $strokeWidth);
 				$statement->bindValue (8, $type);
 				$statement->bindValue (9, $title);
+				$statement->bindValue (10,$parent);
 				
 				$statement->execute();
 				$DB->commit();
 				
-				// Connects to local mongo db
-				//$db = new Mongo();
-				
-				// Select the DB
-				//$db = $db->ludb;
-				
-				// Select a collection
-				//$collection = $db->nodes;
-				
-				// Create insert array
-				//$in = array("top" => $top, 
-								//"left" => $left, 
-								//"radius" => $radius, 
-								//"fill" => $fill, 
-								//"stroke" => $stroke,
-								//"strokeWidth" => $strokeWidth,
-								//"id" => $id);
-
-				// Insert it into collection. 
-				//$collection->insert($in);
 			}
 			catch(PDOException $e)
 			{
@@ -76,6 +62,7 @@
 	if(isset($_POST["edges"]))
 	{
 		$edges = $_POST["edges"];
+		$parent = $_POST["parent"];
 		
 		foreach($edges as $line)
 		{
@@ -96,7 +83,7 @@
 				$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 				$DB->beginTransaction();
 			
-				$query = "INSERT into `edges` (`eid`, `x1`, `y1`, `x2`, `y2`, `type`) values (?,?,?,?,?,?)";
+				$query = "INSERT into `edges` (`eid`, `x1`, `y1`, `x2`, `y2`, `type`, `parent`) values (?,?,?,?,?,?,?)";
 			
 				$statement = $DB->prepare($query);
 				
@@ -105,6 +92,7 @@
 				$statement->bindValue (3, $y1);
 				$statement->bindValue (4, $x2);
 				$statement->bindValue (5, $y2);
+				$statement->bindValue (6, $type);
 				$statement->bindValue (6, $type);
 				
 				$statement->execute();

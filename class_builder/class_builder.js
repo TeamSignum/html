@@ -4,6 +4,8 @@
  * Date: 1/17/16 
  */ 
 
+ var mngr;
+
 $( document ).ready(function() {
 
 	var mapNodeId = "mapNode";
@@ -12,7 +14,7 @@ $( document ).ready(function() {
 	var canvas = new fabric.Canvas('map', {backgroundColor: "#99ffff"});
 
 	// Construct map manager
-	var mngr = new MManager(canvas);
+	mngr = new MManager(canvas, true);
 	mngr.LoadIds();
 
 	// We manually add Nodes and Edges to toolbar because it will be different for each view. But the dividing line and the lock and upload icon 
@@ -32,17 +34,9 @@ $( document ).ready(function() {
 
 	    	mngr.LockOrUpload(e.target); 
 
-	    	if(e.target.id === "tb_largeCircle")
+	    	if(e.target.id === "tb_largeCircle" || e.target.id === "tb_mediumCircle" || e.target.id === "tb_smallCircle" )
 	    	{
 		    	mngr.CopyNode(e.target, mapNodeId, "concept");
-		    }
-		    else if(e.target.id === "tb_mediumCircle")
-		    {
-		    	mngr.CopyNode(e.target, mapNodeId, "assignment");
-		    }
-		    else if(e.target.id === "tb_smallCircle")
-		    {
-		    	mngr.CopyNode(e.target, mapNodeId, "quiz");
 		    }
 			else if(e.target.id === "tb_lineSolid")
 			{
@@ -63,7 +57,7 @@ $( document ).ready(function() {
 	  'mouse:up': function(e) {
 	  	if (e.target) {
 			mngr.CheckBoundsAndAddText(e.target);
-			mngr.DrawEdge(e.target);
+			mngr.DrawEdgeBetweenNodes(e.target);
 			canvas.renderAll();
 		}
 	  },

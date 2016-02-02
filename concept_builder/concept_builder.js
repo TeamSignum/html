@@ -3,13 +3,16 @@
  * Date: 1/26/16 
  */ 
 
+ var mngr;
+
+
 $( document ).ready(function() {
 
 	var mapNodeId = "mapNode"; // Id for all nodes that end up on the map
 
 	var canvas = new fabric.Canvas('map', {backgroundColor: "#99ffff"}); // Create Canvas
 
-	var mngr = new MManager(canvas); // Construct map manager
+	mngr = new MManager(canvas, true); // Construct map manager
 	mngr.LoadIds(); // Get the last id from the node table
 
 	// We manually add Nodes and Edges to toolbar because it will be different for each view. But the dividing line and the lock and upload icon 
@@ -27,7 +30,7 @@ $( document ).ready(function() {
 	  'mouse:down': function(e) {
 	    if (e.target) {
 
-	    	mngr.LockOrUpload(e.target); 
+	    	mngr.LockOrUpload(e.target, 1); 
 
 	    	if(e.target.id === "tb_concept")
 	    	{
@@ -61,7 +64,7 @@ $( document ).ready(function() {
 	  'mouse:up': function(e) {
 	  	if (e.target) {
 			mngr.CheckBoundsAndAddText(e.target);
-			mngr.DrawEdge(e.target);
+			mngr.DrawEdgeBetweenNodes(e.target);
 			canvas.renderAll();
 		}
 	  },

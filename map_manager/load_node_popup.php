@@ -9,7 +9,7 @@ try{
 	$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 	// Prepare query
-	$query = "SELECT * FROM `nodepopups` WHERE `nid` = ?";
+	$query = "SELECT * FROM `popupconcept` WHERE `nid` = ?";
 
 	$statement = $DB->prepare($query);
 	$statement->bindParam(1, $nid);

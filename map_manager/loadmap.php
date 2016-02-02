@@ -1,27 +1,33 @@
 <?php
 
+include '../imports/ChromePhp.php';
+
 if(isset($_POST["map"]))
 {
 	$map = $_POST["map"];
+	$parent = $_POST["parent"];
 	
 	if($map == 1)
 	{
-		//echo "y";
-		
 		try{
 			$DB = new PDO("mysql:host=ec2-52-33-118-140.us-west-2.compute.amazonaws.com;dbname=LU", 'Signum', 'signumDB4');
 			$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-			//$DB->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, false);
-			//$DB->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-			
-			$query = "SELECT * FROM nodes";
-			
+
+			$nodes = array();
+
+
+			// hardcoded for now
+			if ($parent){
+				$query = "SELECT * FROM nodes WHERE nodes.parent = 1";
+			}
+			else{
+				$query = "SELECT * FROM nodes WHERE nodes.parent IS NULL";
+			}
+
 			$statement = $DB->prepare($query);
 			$statement->execute();
 			$result = $statement->fetchAll(PDO::FETCH_ASSOC);
-			
-			$nodes = array();
-			
+
 			foreach($result as $row)
 			{
 				$id = $row['nid']; 
@@ -31,7 +37,6 @@ if(isset($_POST["map"]))
 				$type = $row['type'];
 				$title = $row['title'];
 				$nodes[] = array('id' => $id, 'top' => $top, 'left' => $left, 'radius' => $radius, 'type' => $type, 'title' => $title);
-				//echo $top;
 			}
 			
 			echo json_encode($nodes);
@@ -45,10 +50,15 @@ if(isset($_POST["map"]))
 		try{
 			$DB = new PDO("mysql:host=ec2-52-33-118-140.us-west-2.compute.amazonaws.com;dbname=LU", 'Signum', 'signumDB4');
 			$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-			//$DB->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, false);
-			//$DB->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 			
-			$query = "SELECT * FROM edges";
+			ChromePhp::log($parent);
+			
+			if ($parent){
+				$query = "SELECT * FROM edges WHERE edges.parent = 1";
+			}
+			else{
+				$query = "SELECT * FROM edges WHERE edges.parent IS NULL";
+			}
 			
 			$statement = $DB->prepare($query);
 			$statement->execute();
