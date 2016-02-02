@@ -57,7 +57,7 @@ if(isset($_POST["map"]))
 				$query = "SELECT * FROM edges WHERE edges.parent = 1";
 			}
 			else{
-				$query = "SELECT * FROM edges WHERE edges.parent IS NULL";
+				$query = "SELECT * FROM edges WHERE edges.parent = 0";
 			}
 			
 			$statement = $DB->prepare($query);

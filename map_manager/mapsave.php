@@ -73,10 +73,6 @@
 			$type = $line["type"];
 			$id = $line["id"];
 			
-			//$r .= $x1 . " " . $y1 . " " . $x2 . " " . $y2;
-			
-			//echo $r;
-			
 			try
 			{
 				$DB = new PDO("mysql:host=ec2-52-33-118-140.us-west-2.compute.amazonaws.com;dbname=LU", 'Signum', 'signumDB4');
@@ -93,7 +89,7 @@
 				$statement->bindValue (4, $x2);
 				$statement->bindValue (5, $y2);
 				$statement->bindValue (6, $type);
-				$statement->bindValue (6, $type);
+				$statement->bindValue (7, $type);
 				
 				$statement->execute();
 				$DB->commit();

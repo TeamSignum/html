@@ -3,40 +3,50 @@
 		<link rel="import" href="../imports/import.html">
 		<script type="text/javascript" src="jquery.js"></script>
         <script type="text/javascript" src="quiz_builder.js"></script>
+        <title>Quiz Builder</title>
 	</head>
 	<body>
 		<div id="navbar:../"></div>
-		<div>
-			<form id="Quiz">
-				<div id="MCQXX">
-				<button class="delete_button" id="MCDXX" onclick="deleteQ(this.id)">X</button>
-				<li>
-					<label id="MLXX" for="MXX"></label><input type="text" id="MXX" name="MTXX" size="50"/>
-					<p>A)<input type="radio" name="MCXX" id="AXX" value="a"/><input type="text" id="MAIXX"/></p>
-					<p>B)<input type="radio" name="MCXX" id="BXX" value="b"/><input type="text" id="MBIXX"/></p>
-					<p>C)<input type="radio" name="MCXX" id="CXX" value="c"/><input type="text" id="MCIXX"/></p>
-				</li>
+		<div class="container"> 
+  			<div class="row"> 
+			    <div class="col-md-2"></div>
+			    <div class="col-md-8">
+				<form id="Quiz" style="margin-top: 20px;">
+					<div id="MCQXX" style="margin-top: 10 px;">
+					<li>
+						<label id="MLXX" for="MXX"></label>&nbsp;<input type="text" id="MXX" name="MTXX" size="50"/>
+						<button class="btn-danger" id="MCDXX" onclick="deleteQ(this.id)" style="display: inline;">X</button>
+						<br/>
+						<br/>
+						<p>A) <input type="radio" name="MCXX" id="AXX" value="a"/>&nbsp;<input type="text" id="MAIXX"/></p>
+						<p>B) <input type="radio" name="MCXX" id="BXX" value="b"/>&nbsp;<input type="text" id="MBIXX"/></p>
+						<p>C) <input type="radio" name="MCXX" id="CXX" value="c"/>&nbsp;<input type="text" id="MCIXX"/></p>
+					</li>
+					</div>
+					<div id="TFQXX" style="margin-top: 10px;">
+					<li>
+						<label id="TFLXX" for="TFXX"></label>&nbsp;<input type="text" id="TFXX" name="TFTXX" size="50"/>
+						<button class="btn-danger" id="TFDXX" onclick="deleteQ(this.id)" style="display: inline;">X</button>
+						<br/>
+						<p><input type="radio" name="TFCXX" id="TXX" value="t"/> True </p>
+						<p><input type="radio" name="TFCXX" id="FXX" value="f"/> False </p>
+					</li>
+					</div>
+					<div id="SAQXX" style="margin-top: 10px;">
+					<li>
+						<label id="SALXX" for="SAXX"></label>&nbsp;<input type="text" id="SAXX" name="SATXX" size="50"/>
+						<button class="btn-danger" id="SADXX" onclick="deleteQ(this.id)" style="display: inline;">X</button>
+						<p><textarea rows="6" cols="70" name="SACXX" id="ANSXX" style="margin-top: 10px;">Enter your text here.</textarea></p>
+					</li>
+					</div>
+				</form>
+				<button class="btn btn-default" id="addqmc" type="button">Add Multiple Choice</button>
+				<button class="btn btn-default" id="addqtf" type="button">Add True/False</button>
+				<button class="btn btn-default" id="addqsa" type="button">Add Short Answer</button>
+				<p><button class="btn btn-success" id="savequiz" type="button" style="margin-top: 30px;">Save</button></p>
 				</div>
-				<div id="TFQXX">
-				<button class="delete_button" id="TFDXX" onclick="deleteQ(this.id)">X</button>
-				<li>
-					<label id="TFLXX" for="TFXX"></label><input type="text" id="TFXX" name="TFTXX" size="50"/>
-					<p><input type="radio" name="TFCXX" id="TXX" value="t"/>True</p>
-					<p><input type="radio" name="TFCXX" id="FXX" value="f"/>False</p>
-				</li>
-				</div>
-				<div id="SAQXX">
-				<button class="delete_button" id="SADXX" onclick="deleteQ(this.id)">X</button>
-				<li>
-					<label id="SALXX" for="SAXX"></label><input type="text" id="SAXX" name="SATXX" size="50"/>
-					<p><textarea rows="6" cols="70" name="SACXX" id="ANSXX">Enter your text here.</textarea></p>
-				</li>
-				</div>
-			</form>
-			<button id="addqmc" type="button">Add Multiple Choice</button>
-			<button id="addqtf" type="button">Add True/False</button>
-			<button id="addqsa" type="button">Add Short Answer</button>
-			<p><button id="savequiz" type="button">Save</button></p>
+			</div>
+			<div class="col-md-2"></div>
 		</div>
 	</body>
 </html>
