@@ -10,7 +10,7 @@ header{
 	justify-content: center;
 	align-items: center;
 	width: 100vw;
-	height: 10vh;
+	height: 60px;
 	background-color: black;
 	color: white;
 	font-size: 40px;
@@ -28,9 +28,14 @@ header{
 	display: flex;
 }
 
+/* Used to pad text within other elements */
+span.textPadding{
+  margin: 20px;
+}
+
 .trigger{
-  display: flex; /* Magical CSS helper */
-  height: 5vh; /* vh, vw is a percentage unit introduced in CSS3.  Height will be 10% of the window size */
+  display: flex; /* CSS Flexbox */
+  height: 5vh;
 	width: 40vw;
 	background-color: #980000;
 	border-radius: 5px;
@@ -38,8 +43,8 @@ header{
  	
 	/*Text properties*/
 	color: white;
-	align-items: center; /* Flex property to center vertically */
-  justify-content: left; /* Flex property */
+	align-items: center; /* Flexbox property to center vertically */
+  justify-content: left; /* Flexbox property */
 	font-size: xx-large;
 	box-shadow: 0 2px 0 #1b383b;
 	text-shadow: 0 1px 1px rgba(255, 255, 255, 0.2);
@@ -50,14 +55,10 @@ header{
 	display: none; /* Default the panel to be hidden */
 }
 
-/* Used to pad text within other elements */
-span.textPadding{
-  margin: 20px;
-}
-
+/* A'row' in the toggle panel */
 .assignment{
-  display: flex; /* Magical CSS helper */
-  height: 9vh; /* vh, vw is a percentage unit introduced in CSS3.  Height will be 10% of the window size */
+  display: flex; /* CSS Flexbox */
+  height: 4vh;
 	width: 30vw;
 	background-color: #B0B0B0;
 	border-radius: 5px;
@@ -65,8 +66,8 @@ span.textPadding{
  	
 	/*Text properties*/
 	color: white;
-	align-items: center; /* Flex property to center vertically */
-  justify-content: left; /* Flex property */
+	align-items: center;
+  justify-content: left;
 	font-size: xx-large;
 	box-shadow: 0 2px 0 #1b383b;
 	text-shadow: 0 1px 1px rgba(255, 255, 255, 0.2);
@@ -74,6 +75,5 @@ span.textPadding{
 
 .plus_icon{
 	height: 7vh;
-	width: 7vh;
-	float: left;
+	width: vh;
 }
