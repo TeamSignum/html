@@ -51,9 +51,6 @@
 		$statement->bindValue (5, $filename);
 		$statement->bindValue (6, $uid);
 		
-		
-		
-		
 		$statement->execute();
 		
 	}
