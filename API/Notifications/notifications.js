@@ -1,5 +1,17 @@
+// Notification object
 var notifications = []; 
 
+/*
+ * GetNotifications
+ * Populates var notifications with notifications objects. 
+ * 		- A notificaiton object contains the score for grades. 
+ * 
+ * Pseudo Code: 
+ * foreach notifcation in notifications
+ * 		set innerhtm = notification.score
+ *
+ * @param: pid = person id (get from session)
+ */
 function GetNotifications(pid)
 {
 	$.ajax({
