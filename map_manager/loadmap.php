@@ -51,8 +51,6 @@ if(isset($_POST["map"]))
 			$DB = new PDO("mysql:host=ec2-52-33-118-140.us-west-2.compute.amazonaws.com;dbname=LU", 'Signum', 'signumDB4');
 			$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			
-			ChromePhp::log($parent);
-			
 			if ($parent){
 				$query = "SELECT * FROM edges WHERE edges.parent = 1";
 			}
