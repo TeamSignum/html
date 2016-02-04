@@ -19,7 +19,7 @@
 <div id="navbar:../"></div>
 
 <!-- One multi-step Form--> 
-<form id="msform">
+<form id="msform" method="post" action="registration.php">
   <!-- Profressbar -->
   <ul id="progressbar">
     <li class="active">ACCOUNT</li>
@@ -31,7 +31,7 @@
   <fieldset>
     <h2 class="fs-title">Create Account</h2>
     <h3 class="fs-subtitle">Umail can be allowed</h3>
-      <input id="email" type="email" name="email" placeholder="Email" />
+      <input id="email" type="email" name="email" placeholder="Email"/>
       <input id = "pass" type="password" name="pass" placeholder="Password" />
       <input id = "pass-check" type="password" name="cpass" placeholder="Confirmar Password" />
       <input type="button" name="Next" class="next action-button" value="Next" />
@@ -44,7 +44,7 @@
   <fieldset>
     <h2 class="fs-title">Type Your Information</h2>
     Picture
-    <img id="output"/>
+    <img id="output" name="profile_pic"/>
     <input type="file" accept="image/*" onchange="loadFile(event)">
     <script>
       var loadFile = function(event) {
@@ -52,6 +52,7 @@
         output.src = URL.createObjectURL(event.target.files[0]);
       };
     </script>
+    <input id = "uofuid" type="text" name="uid" placeholder="U Id" />
     <input id= "firstname" type="text" name="firstname" placeholder="Fisrt Name" />
     <input id = "lastname" type="text" name="lastname" placeholder="Last Name" />
     <select name="identity">
@@ -67,7 +68,7 @@
   <fieldset>
     <h2 class="fs-title">Add Your Classes</h2>
     <input type="button" name="previous" class="previous action-button" value="Previous" />
-    <input type="submit" name="submit" class="submit action-button" value="Submit" />
+    <input type="submit" name="submit"  value="Submit" class="next action-button"></input>
   </fieldset>
   <!-- end: Add Class fieldSet-->
 </form>
