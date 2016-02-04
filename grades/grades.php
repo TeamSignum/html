@@ -13,12 +13,11 @@
 	//print_r($_SESSION);
 	
 	// Check SESSION variables
-	if(!isset($_SESSION['uid']) || !isset($_SESSION['role'])){
+	if(!isset($_SESSION['userid'])){
 		; // TODO: redirect to the login page
 	}
 	else{
-		$uid = $_SESSION['uid'];
-		$role = $_SESSION['role'];
+		$userid = $_SESSION['userid'];
 	}
 	
 	// Check POST variables
@@ -51,40 +50,42 @@
 									INNER JOIN nodes n
 										ON g.nid=n.nid
 									INNER JOIN classes c
-										ON g.classid=c.id
-									WHERE g.uid=? and g.classid=? and n.nid=?;";
+										ON g.cid=c.cid
+									WHERE g.idusers=? and g.cid=? and n.nid=?;";
 									
 				$statement = $DB->prepare($query);
-				$statement->bindValue(1, $uid);					
+				$statement->bindValue(1, $userid);					
 				$statement->bindValue (2, $classid);
 				$statement->bindValue (3, $nid);
 				break;
+				
 			case 2: // Query all grades for a class
 				$query = "SELECT c.classnumber, n.title, g.score
 									FROM grades g
 									INNER JOIN nodes n
 										ON g.nid=n.nid
 									INNER JOIN classes c
-										ON g.classid=c.id
-									WHERE g.uid=? and g.classid=?
+										ON g.cid=c.cid
+									WHERE g.idusers=? and g.cid=?
 									ORDER BY n.nid ASC;";
 				
 				$statement = $DB->prepare($query);
-				$statement->bindValue (1, $uid);
+				$statement->bindValue (1, $userid);
 				$statement->bindValue (2, $classid);
 				break;
+			
 			case 3: // Query all grades for all classes
 				$query =	"SELECT c.classnumber, n.title, g.score
 									FROM grades g
 									INNER JOIN nodes n
 										ON g.nid=n.nid
 									INNER JOIN classes c
-										ON g.classid=c.id
-									WHERE g.uid=?
+										ON g.cid=c.cid
+									WHERE g.idusers=?
 									ORDER BY c.classnumber ASC;";
 									
 				$statement = $DB->prepare($query);
-				$statement->bindValue(1, $uid);		
+				$statement->bindValue(1, $userid);		
 				break;
 			
 			// Professor requests
@@ -94,51 +95,54 @@
 									INNER JOIN nodes n
 										ON g.nid=n.nid
 									INNER JOIN classes c
-										ON g.classid=c.id
-									WHERE g.uid=? and n.nid=?;";
+										ON g.cid=c.cid
+									WHERE g.idusers=? and n.nid=?;";
 				
 				$statement = $DB->prepare($query);
-				$statement->bindValue(1, $uid);					
+				$statement->bindValue(1, $userid);					
 				$statement->bindValue (2, $nid);
 				break;
+				
 			case 5: // Query all grades for a student for a specific class
 				$query =	"SELECT c.classnumber, n.title, g.score
 									FROM grades g
 									INNER JOIN nodes n
 										ON g.nid=n.nid
 									INNER JOIN classes c
-										ON g.classid=c.id
-									WHERE g.uid=? and g.classid=?
+										ON g.cid=c.cid
+									WHERE g.idusers=? and g.cid=?
 									ORDER BY n.nid ASC;";
 									
 				$statement = $DB->prepare($query);
-				$statement->bindValue(1, $uid);					
+				$statement->bindValue(1, $userid);					
 				$statement->bindValue (2, $classid);
 				break;
+				
 			case 6: // Query all grades for an assignment
 				$query =	"SELECT c.classnumber, n.title, g.score
 									FROM grades g
 									INNER JOIN nodes n
 										ON g.nid=n.nid
 									INNER JOIN classes c
-										ON g.classid=c.id
+										ON g.cid=c.cid
 									WHERE n.nid=?;";
 									
 				$statement = $DB->prepare($query);
 				$statement->bindValue(1, $nid);					
 				break;
+				
 			case 7: // Query all grades for a class
 				$query = "SELECT c.classnumber, n.title, g.score
 									FROM grades g
 									INNER JOIN nodes n
 										ON g.nid=n.nid
 									INNER JOIN classes c
-										ON g.classid=c.id
-									WHERE g.uid=? and g.classid=?
+										ON g.cid=c.cid
+									WHERE g.idusers=? and g.cid=?
 									ORDER BY n.nid ASC;";
 									
 				$statement = $DB->prepare($query);
-				$statement->bindValue(1, $uid);					
+				$statement->bindValue(1, $userid);					
 				$statement->bindValue (2, $classid);
 				break;
 		}
@@ -148,6 +152,8 @@
 			// Execute the database query
 			$statement->execute();
 			$result = $statement->fetchAll(PDO::FETCH_ASSOC);
+			
+			// TODO: Need error handling for empty query results
 			
 			// Check for a failed query
 			if(mysql_errno()){
