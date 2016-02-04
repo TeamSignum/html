@@ -6,10 +6,11 @@
 	 *
 	 * PHP file for queries relating to grades on the Learning Universe website
 	 *
-	 * 
 	 */
 
 	session_start();
+	
+	//print_r($_SESSION);
 	
 	// Check SESSION variables
 	if(!isset($_SESSION['uid']) || !isset($_SESSION['role'])){
@@ -54,7 +55,7 @@
 									WHERE g.uid=? and g.classid=? and n.nid=?;";
 									
 				$statement = $DB->prepare($query);
-				$statement->bindParam(1, $uid);					
+				$statement->bindValue(1, $uid);					
 				$statement->bindValue (2, $classid);
 				$statement->bindValue (3, $nid);
 				break;
@@ -83,7 +84,7 @@
 									ORDER BY c.classnumber ASC;";
 									
 				$statement = $DB->prepare($query);
-				$statement->bindParam(1, $uid);		
+				$statement->bindValue(1, $uid);		
 				break;
 			
 			// Professor requests
@@ -97,7 +98,7 @@
 									WHERE g.uid=? and n.nid=?;";
 				
 				$statement = $DB->prepare($query);
-				$statement->bindParam(1, $uid);					
+				$statement->bindValue(1, $uid);					
 				$statement->bindValue (2, $nid);
 				break;
 			case 5: // Query all grades for a student for a specific class
@@ -111,7 +112,7 @@
 									ORDER BY n.nid ASC;";
 									
 				$statement = $DB->prepare($query);
-				$statement->bindParam(1, $uid);					
+				$statement->bindValue(1, $uid);					
 				$statement->bindValue (2, $classid);
 				break;
 			case 6: // Query all grades for an assignment
@@ -124,7 +125,7 @@
 									WHERE n.nid=?;";
 									
 				$statement = $DB->prepare($query);
-				$statement->bindParam(1, $nid);					
+				$statement->bindValue(1, $nid);					
 				break;
 			case 7: // Query all grades for a class
 				$query = "SELECT c.classnumber, n.title, g.score
@@ -137,7 +138,7 @@
 									ORDER BY n.nid ASC;";
 									
 				$statement = $DB->prepare($query);
-				$statement->bindParam(1, $uid);					
+				$statement->bindValue(1, $uid);					
 				$statement->bindValue (2, $classid);
 				break;
 		}
