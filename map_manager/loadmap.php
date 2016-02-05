@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 include '../imports/ChromePhp.php';
 
@@ -6,6 +7,7 @@ if(isset($_POST["map"]))
 {
 	$map = $_POST["map"];
 	$parent = $_POST["parent"];
+	$cid = $_SESSION["classid"];
 	
 	if($map == 1)
 	{
@@ -21,7 +23,7 @@ if(isset($_POST["map"]))
 				$query = "SELECT * FROM nodes WHERE nodes.parent = 1";
 			}
 			else{
-				$query = "SELECT * FROM nodes WHERE nodes.parent IS NULL";
+				$query = "SELECT * FROM nodes WHERE nodes.cid = '$cid'";
 			}
 
 			$statement = $DB->prepare($query);
@@ -55,7 +57,7 @@ if(isset($_POST["map"]))
 				$query = "SELECT * FROM edges WHERE edges.parent = 1";
 			}
 			else{
-				$query = "SELECT * FROM edges WHERE edges.parent = 0";
+				$query = "SELECT * FROM edges WHERE edges.cid = '$cid'";
 			}
 			
 			$statement = $DB->prepare($query);

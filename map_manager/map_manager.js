@@ -509,9 +509,14 @@ MManager.prototype.LoadIds = function() {
 		data: {id: 1},
 		
 		success: function(result){
+			//alert(result["mnid"] + " " + result["meid"]);
 			if(result["mnid"] != null)
 			{
 				mngr.nid = parseInt(result["mnid"]) + 1;
+				//mngr.eid = parseInt(result["meid"]) + 1;
+			}
+			if(result["meid"] != null)
+			{
 				mngr.eid = parseInt(result["meid"]) + 1;
 			}
 		}

@@ -1,4 +1,6 @@
 <?php
+	session_start();
+	$cid = $_SESSION['classid'];
 
 	include '../imports/ChromePhp.php';
 
@@ -112,7 +114,7 @@
 				$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 				
 				//
-				$query = "SELECT MAX(nid) as mnid FROM nodes";
+				$query = "SELECT MAX(nid) as mnid FROM nodes WHERE cid = '$cid'";
 				
 				$statement = $DB->prepare($query);
 				$statement->execute();
@@ -120,8 +122,7 @@
 				
 				$mnid = $result['mnid'];
 				
-				//
-				$query = "SELECT MAX(eid) as meid FROM edges";
+				$query = "SELECT MAX(eid) as meid FROM edges WHERE cid = '$cid'";
 				
 				$statement = $DB->prepare($query);
 				$statement->execute();
@@ -139,7 +140,4 @@
 			}
 		}
 	}
-	//$test = 123;
-	//echo $test;
-
 ?>

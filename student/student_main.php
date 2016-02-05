@@ -6,23 +6,34 @@ if(isset($_POST["class"]))
 
 	// Get the node id from the session.  Currently hard coding it.
 	//$uid = $_SESSION['id'];
-	$userid = $_SESSION['uid'];
+	$userid = $_SESSION['userid'];
 		
 	// Set up the database connection
 	$DB = new PDO('mysql:host=ec2-52-33-118-140.us-west-2.compute.amazonaws.com;dbname=LU', 'Signum', 'signumDB4');
 	$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		
 	// Set and prepare the database query
-	$query = "SELECT b.classnumber
+	$query = "SELECT b.classnumber, b.cid
 				FROM enrolled a, classes b
-				WHERE a.cid = b.id and a.uid ='" .$userid. "'";
+				WHERE a.cid = b.cid and a.idusers ='" .$userid. "'";
+				
 	$statement = $DB->prepare($query);
 		
 	// Execute the database query
 	$statement->execute();
 	$result = $statement->fetchAll(PDO::FETCH_ASSOC);
 	
-	echo json_encode($result);
+	$enroll = array();
+	
+	foreach($result as $row)
+	{
+		$cid = $row['cid'];
+		$classnumber = $row['classnumber'];
+		$enroll[] = array('cid' => $cid, 'classnumber' => $classnumber);
+	}
+	//$enroll[] = array('cid' => "-1", 'classnumber' => "+");
+	
+	echo json_encode($enroll);
 }
 
 if(isset($_POST["name"]))

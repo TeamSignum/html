@@ -38,8 +38,8 @@ if (isset($_POST["submit"])){
 			$_SESSION['userid'] = $result['idusers'];
 			$_SESSION['uid'] = $result['uid'];
 			$_SESSION['role'] = $result['role'];
-			//Temp
-			//Hard coded to go to basic student account page
+			
+			//Navigate to account home
             header("location: ../student/student.php");
         }
         else{
@@ -54,5 +54,4 @@ if (isset($_POST["submit"])){
     }
 
 } 
-
 ?>
