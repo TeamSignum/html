@@ -7,7 +7,7 @@
 	if(isset($_POST["map"]))
 	{
 		$map = $_POST["map"];
-		$parent = $_POST["parent"];
+		//$parent = $_POST["parent"];
 		
 		//$c = count($edges);
 		//echo $c;
@@ -32,22 +32,22 @@
 				$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 				$DB->beginTransaction();
 			
-				$query = "INSERT into `nodes` (`nid`, `top`, `left`, `radius`, `fill`, `stroke`, `strokeWidth`, `type`, `title`, `parent`) values (?,?,?,?,?,?,?,?,?,?)";
+				$query = "INSERT into `nodes` (`cid`, `nid`, `top`, `left`, `radius`, `fill`, `stroke`, `strokeWidth`, `type`, `title`) values (?,?,?,?,?,?,?,?,?,?)";
 
 				ChromePhp::log($query);
 			
 				$statement = $DB->prepare($query);
 				
-				$statement->bindValue (1, $id);
-				$statement->bindValue (2, $top);
-				$statement->bindValue (3, $left);
-				$statement->bindValue (4, $radius);
-				$statement->bindValue (5, $fill);
-				$statement->bindValue (6, $stroke);
-				$statement->bindValue (7, $strokeWidth);
-				$statement->bindValue (8, $type);
-				$statement->bindValue (9, $title);
-				$statement->bindValue (10,$parent);
+				$statement->bindValue (1, $cid);
+				$statement->bindValue (2, $id);
+				$statement->bindValue (3, $top);
+				$statement->bindValue (4, $left);
+				$statement->bindValue (5, $radius);
+				$statement->bindValue (6, $fill);
+				$statement->bindValue (7, $stroke);
+				$statement->bindValue (8, $strokeWidth);
+				$statement->bindValue (9, $type);
+				$statement->bindValue (10, $title);
 				
 				$statement->execute();
 				$DB->commit();
@@ -64,7 +64,7 @@
 	if(isset($_POST["edges"]))
 	{
 		$edges = $_POST["edges"];
-		$parent = $_POST["parent"];
+		//$parent = $_POST["parent"];
 		
 		foreach($edges as $line)
 		{
@@ -81,17 +81,18 @@
 				$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 				$DB->beginTransaction();
 			
-				$query = "INSERT into `edges` (`eid`, `x1`, `y1`, `x2`, `y2`, `type`, `parent`) values (?,?,?,?,?,?,?)";
+				$query = "INSERT into `edges` (`cid`, `eid`, `x1`, `y1`, `x2`, `y2`, `type`) values (?,?,?,?,?,?,?)";
 			
 				$statement = $DB->prepare($query);
 				
-				$statement->bindValue (1, $id);
-				$statement->bindValue (2, $x1);
-				$statement->bindValue (3, $y1);
-				$statement->bindValue (4, $x2);
-				$statement->bindValue (5, $y2);
-				$statement->bindValue (6, $type);
+				$statement->bindValue (1, $cid);
+				$statement->bindValue (2, $id);
+				$statement->bindValue (3, $x1);
+				$statement->bindValue (4, $y1);
+				$statement->bindValue (5, $x2);
+				$statement->bindValue (6, $y2);
 				$statement->bindValue (7, $type);
+				//$statement->bindValue (7, $type);
 				
 				$statement->execute();
 				$DB->commit();
@@ -99,6 +100,43 @@
 			catch(Exception $e)
 			{
 				echo $e->getMessage();
+			}
+		}
+	}
+	
+	if(isset($_POST["connections"]))
+	{
+		$connections = $_POST['connections'];
+		
+		foreach($connections as $connection)
+		{
+			$nid = $connection['nid'];
+			$con = $connection['con'];
+			foreach($con as $c)
+			{
+				$eid = $c;
+				
+				try
+				{
+					$DB = new PDO("mysql:host=ec2-52-33-118-140.us-west-2.compute.amazonaws.com;dbname=LU", 'Signum', 'signumDB4');
+					$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+					$DB->beginTransaction();
+			
+					$query = "INSERT into `connected` (`cid`, `nid`, `eid`) values (?,?,?)";
+					
+					$statement = $DB->prepare($query);
+				
+					$statement->bindValue (1, $cid);
+					$statement->bindValue (2, $nid);
+					$statement->bindValue (3, $eid);
+					
+					$statement->execute();
+					$DB->commit();
+				}
+				catch(Exception $e)
+				{
+					echo $e->getMessage();
+				}
 			}
 		}
 	}

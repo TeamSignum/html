@@ -6,7 +6,7 @@ include '../imports/ChromePhp.php';
 if(isset($_POST["map"]))
 {
 	$map = $_POST["map"];
-	$parent = $_POST["parent"];
+	//$parent = $_POST["parent"];
 	$cid = $_SESSION["classid"];
 	
 	if($map == 1)
@@ -19,12 +19,12 @@ if(isset($_POST["map"]))
 
 
 			// hardcoded for now
-			if ($parent){
-				$query = "SELECT * FROM nodes WHERE nodes.parent = 1";
-			}
-			else{
+			//if ($parent){
+			//	$query = "SELECT * FROM nodes WHERE nodes.parent = 1";
+			//}
+			//else{
 				$query = "SELECT * FROM nodes WHERE nodes.cid = '$cid'";
-			}
+			//}
 
 			$statement = $DB->prepare($query);
 			$statement->execute();
@@ -53,12 +53,12 @@ if(isset($_POST["map"]))
 			$DB = new PDO("mysql:host=ec2-52-33-118-140.us-west-2.compute.amazonaws.com;dbname=LU", 'Signum', 'signumDB4');
 			$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			
-			if ($parent){
-				$query = "SELECT * FROM edges WHERE edges.parent = 1";
-			}
-			else{
+			//if ($parent){
+				//$query = "SELECT * FROM edges WHERE edges.parent = 1";
+			//}
+			//else{
 				$query = "SELECT * FROM edges WHERE edges.cid = '$cid'";
-			}
+			//}
 			
 			$statement = $DB->prepare($query);
 			$statement->execute();
@@ -77,6 +77,34 @@ if(isset($_POST["map"]))
 			}
 			
 			echo json_encode($edges);
+		}
+		catch(PDOException $e){
+			echo $e->getMessage();
+		}
+	}
+	
+	if($map == 3)
+	{
+		try{
+			$DB = new PDO("mysql:host=ec2-52-33-118-140.us-west-2.compute.amazonaws.com;dbname=LU", 'Signum', 'signumDB4');
+			$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			
+			$query = "SELECT * FROM connected WHERE connected.cid = '$cid'";
+			
+			$statement = $DB->prepare($query);
+			$statement->execute();
+			$result = $statement->fetchAll(PDO::FETCH_ASSOC);
+			
+			$connections = array();
+			
+			foreach($result as $row)
+			{
+				$nid = $row['nid'];
+				$eid = $row['eid'];
+				$connections[] = array('nid' => $nid, 'eid' => $eid);
+			}
+			
+			echo json_encode($connections);
 		}
 		catch(PDOException $e){
 			echo $e->getMessage();

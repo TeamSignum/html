@@ -273,6 +273,9 @@ MManager.prototype.DrawEdgeBetweenNodes = function(node){
 				id: "dotted"
 			});
 		}
+		
+		//test
+		line.eid = this.eid;
 
 		for(var i = 0; i < this.nodes.length; i++)
 		{
@@ -456,11 +459,55 @@ MManager.prototype.LoadNodePopup = function(node, mngr){
 	return false; 
 }
 
+MManager.prototype.updateCon = function(result)
+{
+	for(var i = 0; i < result.length; i++)
+	{
+		for(var j = 0; j < this.nodes.length; j++)
+		{
+			if(this.nodes[j].nid == result[i].nid)
+			{
+				for(var k = 0; this.edges.length; k++)
+				{
+					if(this.edges[k].id == result[i].eid)
+					{
+						this.nodes[j].lines.push(this.edges[k]);
+					}
+				}
+			}
+		}
+	}
+}
+
+MManager.prototype.LoadConnections = function(){
+	//alert("h");
+	$.ajax({
+		async: false,
+		type: 'POST',
+		url: "../map_manager/loadmap.php",
+		dataType: 'json',
+		data: {map: 3},
+		
+		success: function(result){
+			//alert(result.length);
+			mngr.updateCon(result);
+			
+		},
+		error: function(result){
+			alert("e" + result);
+			alert(JSON.stringify(result));
+		}
+		
+	});
+	
+	return false;
+}
+
 //Get all the edges from the DB and draw them on the canvas
 MManager.prototype.LoadEdges = function(mngr, parent){
 
 	$.ajax({
-		async: true,
+		async: false,
 		type: 'POST',
 		url: "../map_manager/loadmap.php",
 		dataType: 'json',
@@ -481,7 +528,7 @@ MManager.prototype.LoadEdges = function(mngr, parent){
 MManager.prototype.LoadMap = function(mngr, parent){
 
 	$.ajax({
-		async: true,
+		async: false,
 		type: 'POST',
 		url: "../map_manager/loadmap.php",
 		dataType: 'json',
@@ -566,14 +613,33 @@ MManager.prototype.SaveMap = function(parent){
 		edges.push(temp);
 	}
 	
+	var connections = [];
+	for(var i = 0; i < this.nodes.length; i++)
+	{
+		var n = this.nodes[i];
+		var nid = n.id;
+		var con = [];
+		for(var j = 0; j < n.lines.length; j++)
+		{
+			var eid = n.lines[j].eid;
+			con.push(eid);
+		}
+		var temp = {
+			nid: nid,
+			con: con
+		};
+		connections.push(temp);
+	}
+	
 	$.ajax({
 		async: true, 
 		type: 'POST',
 		url: "../map_manager/mapsave.php",
 		dataType: 'html',
-		data: {map: map, edges: edges, parent: parent},
+		data: {map: map, edges: edges, parent: parent, connections: connections},
 		
 		success: function(result){
+			//alert(result);
 			swal("Saved"); 
 		}
 	});
