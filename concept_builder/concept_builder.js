@@ -13,7 +13,7 @@ $( document ).ready(function() {
 	var canvas = new fabric.Canvas('map', {backgroundColor: "#99ffff"}); // Create Canvas
 
 	mngr = new MManager(canvas, true); // Construct map manager
-	mngr.LoadIds(); // Get the last id from the node table
+	mngr.LoadIds(2); // Get the last id from the node table
 
 	// We manually add Nodes and Edges to toolbar because it will be different for each view. But the dividing line and the lock and upload icon 
 	// should stay the same (added on when we create map manager).
@@ -30,7 +30,7 @@ $( document ).ready(function() {
 	  'mouse:down': function(e) {
 	    if (e.target) {
 
-	    	mngr.LockOrUpload(e.target, 1); 
+	    	mngr.LockOrUpload(e.target, 2); 
 
 	    	if(e.target.id === "tb_concept")
 	    	{

@@ -8,6 +8,7 @@ if(isset($_POST["map"]))
 	$map = $_POST["map"];
 	//$parent = $_POST["parent"];
 	$cid = $_SESSION["classid"];
+	$level = $_POST["level"];
 	
 	if($map == 1)
 	{
@@ -17,13 +18,20 @@ if(isset($_POST["map"]))
 
 			$nodes = array();
 
-
+			if($level == 2)
+			{
+				$query = "SELECT * FROM nodes2 WHERE nodes.cid = '$cid'";
+			}
+			else
+			{
+				$query = "SELECT * FROM nodes WHERE nodes.cid = '$cid'";
+			}
 			// hardcoded for now
 			//if ($parent){
 			//	$query = "SELECT * FROM nodes WHERE nodes.parent = 1";
 			//}
 			//else{
-				$query = "SELECT * FROM nodes WHERE nodes.cid = '$cid'";
+				//$query = "SELECT * FROM nodes WHERE nodes.cid = '$cid'";
 			//}
 
 			$statement = $DB->prepare($query);
@@ -53,11 +61,20 @@ if(isset($_POST["map"]))
 			$DB = new PDO("mysql:host=ec2-52-33-118-140.us-west-2.compute.amazonaws.com;dbname=LU", 'Signum', 'signumDB4');
 			$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			
+			if($level == 2)
+			{
+				$query = "SELECT * FROM edges2 WHERE edges.cid = '$cid'";
+			}
+			else
+			{
+				$query = "SELECT * FROM edges WHERE edges.cid = '$cid'";
+			}
+			
 			//if ($parent){
 				//$query = "SELECT * FROM edges WHERE edges.parent = 1";
 			//}
 			//else{
-				$query = "SELECT * FROM edges WHERE edges.cid = '$cid'";
+				//$query = "SELECT * FROM edges WHERE edges.cid = '$cid'";
 			//}
 			
 			$statement = $DB->prepare($query);
@@ -68,12 +85,13 @@ if(isset($_POST["map"]))
 			
 			foreach($result as $row)
 			{
+				$eid = $row['eid'];
 				$x1 = $row['x1'];
 				$y1 = $row['y1'];
 				$x2 = $row['x2'];
 				$y2 = $row['y2'];
 				$type = $row['type'];
-				$edges[] = array('x1' => $x1, 'y1' => $y1, 'x2' => $x2, 'y2' => $y2, 'type' => $type);
+				$edges[] = array('eid' => $eid, 'x1' => $x1, 'y1' => $y1, 'x2' => $x2, 'y2' => $y2, 'type' => $type);
 			}
 			
 			echo json_encode($edges);
@@ -89,7 +107,14 @@ if(isset($_POST["map"]))
 			$DB = new PDO("mysql:host=ec2-52-33-118-140.us-west-2.compute.amazonaws.com;dbname=LU", 'Signum', 'signumDB4');
 			$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			
-			$query = "SELECT * FROM connected WHERE connected.cid = '$cid'";
+			if($level == 2)
+			{
+				$query = "SELECT * FROM connected2 WHERE connected.cid = '$cid'";
+			}
+			else
+			{
+				$query = "SELECT * FROM connected WHERE connected.cid = '$cid'";
+			}
 			
 			$statement = $DB->prepare($query);
 			$statement->execute();
