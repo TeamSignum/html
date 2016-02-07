@@ -543,6 +543,7 @@ MManager.prototype.LoadEdges = function(mngr, level, mode){
 		data: {map: 2, level: level},
 		
 		success: function(result){
+			//alert(result);
 			for(var i = 0; i < result.length; i++)
 			{
 				mngr.DrawEdge(result[i]["eid"], parseFloat(result[i]["x1"]), parseFloat(result[i]["y1"]), parseFloat(result[i]["x2"]), parseFloat(result[i]["y2"]), result[i]["type"], mode);
@@ -564,6 +565,7 @@ MManager.prototype.LoadMap = function(mngr, level, mode){
 		data: {map: 1, level: level},
 		
 		success: function(result){
+			//alert(result);
 			for(var i = 0; i < result.length; i++)
 			{
 				mngr.DrawNode(parseFloat(result[i]["top"]), parseFloat(result[i]["left"]), parseFloat(result[i]["radius"]), result[i]["type"], result[i]["title"], result[i]["id"], mode);

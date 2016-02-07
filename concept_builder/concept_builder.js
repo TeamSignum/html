@@ -4,16 +4,22 @@
  */ 
 
  var mngr;
+ var canvas;
+ var tempi = 0;
+ var tempp = 12;
 
 
 $( document ).ready(function() {
 
 	var mapNodeId = "mapNode"; // Id for all nodes that end up on the map
 
-	var canvas = new fabric.Canvas('map', {backgroundColor: "#99ffff"}); // Create Canvas
+	canvas = new fabric.Canvas('map', {backgroundColor: "#99ffff"}); // Create Canvas
 
 	mngr = new MManager(canvas, true); // Construct map manager
 	mngr.LoadIds(2); // Get the last id from the node table
+	mngr.LoadMap(mngr, 2, 1);
+	mngr.LoadEdges(mngr, 2, 1);
+	mngr.LoadConnections(2);
 
 	// We manually add Nodes and Edges to toolbar because it will be different for each view. But the dividing line and the lock and upload icon 
 	// should stay the same (added on when we create map manager).
@@ -121,3 +127,6 @@ $( document ).ready(function() {
 		mngr.HidePopup();
 	});
 });
+
+function drawParticipantNodes(c, num){
+}
