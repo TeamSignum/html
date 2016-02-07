@@ -11,7 +11,6 @@
 	session_start();
 	
 	//print_r($_SESSION);
-	//print_r($_POST);
 	
 	// Check SESSION variables
 	if(!isset($_SESSION['userid'])){
@@ -158,10 +157,10 @@
 			
 			// Check for a failed query
 			if(mysql_errno()){
-    			echo "MySQL error ".mysql_errno().": "
-         		.mysql_error()."\n<br>When executing <br>\n$query\n<br>";
+    		echo "MySQL error ".mysql_errno().": "
+         .mysql_error()."\n<br>When executing <br>\n$query\n<br>";
 			}
-			else{
+			else {
 				echo(json_encode($result));
 			}
 			
