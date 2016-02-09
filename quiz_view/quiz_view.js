@@ -8,8 +8,9 @@ $( document ).ready(function () {
 	qtf = $("#TFQXX").clone(true);
 	qsa = $("#SAQXX").clone(true);
 
-	//$("#savequiz").click(
-    //    function() {saveQuiz(); });			
+	$("#savequiz").click(
+       function() { swal("Saved"); 
+    });			
     
     $("#MCQXX").remove();
     $("#TFQXX").remove();
