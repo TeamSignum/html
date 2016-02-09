@@ -93,7 +93,6 @@ $(".next").click(function(){
      var usertypeVal = $('#usertype').val();
      if(usertypeVal == null){
         $('#usertype').addClass('warning');
-        alert("hello");
         error = 1;
      }
   }

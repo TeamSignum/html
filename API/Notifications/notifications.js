@@ -24,7 +24,7 @@ function GetNotifications(pid)
 		success: function(results){
 			var notification = '';
 			for (var i = 0; i < results.length; i++){
-				notification += '<li><a href="#">'+results[i]["score"]+'</a></li>';
+				notification += '<li><a href="#">Your grade is '+results[i]["score"]+'</a></li>';
 			}
 			$('#sidebar').html('<ul>'+notification+'</ul>');
 		}
