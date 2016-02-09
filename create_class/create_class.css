@@ -1,0 +1,26 @@
+@charset "utf-8";
+/* CSS Document */
+
+body{
+	
+}
+
+header{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100vw;
+	height: 60px;
+	background-color: black;
+	color: white;
+	font-size: 40px;
+}
+
+#createClassContainer{
+	width: 75vw;
+	height: 100vh;
+	background-color: #F0F0F0;
+	
+	margin: auto;
+	padding-top: 15px;
+}
