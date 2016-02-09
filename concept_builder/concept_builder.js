@@ -24,7 +24,7 @@ $( document ).ready(function() {
 	// We manually add Nodes and Edges to toolbar because it will be different for each view. But the dividing line and the lock and upload icon 
 	// should stay the same (added on when we create map manager).
 	mngr.AddToolbarNode(new fabric.Circle({ radius: 50, fill: '#fff', top: 50,  left: 50, stoke: '#fff', strokeWidth: 5, id: 'tb_concept' }));
-	mngr.AddToolbarNode(new fabric.Circle({ radius: 50, fill: '#fdf5e6', top: 200, left: 50, stoke: '#fdf5e6', strokeWidth: 5, id: 'tb_assignment' }));
+	mngr.AddToolbarNode(new fabric.Circle({ radius: 50, fill: '#fdf5e6', top: 185, left: 50, stoke: '#fdf5e6', strokeWidth: 5, id: 'tb_assignment' }));
 	mngr.AddToolbarNode(new fabric.Circle({ radius: 50, fill: '#faf0e6', top: 320, left: 50, stoke: '#faf0e6', strokeWidth: 5, id: 'tb_quiz' }));
 
 	mngr.AddToolbarEdge(new fabric.Line([60, 450, 120, 550], { fill: 'red', stroke: 'red', strokeWidth: 3, id: 'tb_lineSolid' }));

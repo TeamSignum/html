@@ -714,21 +714,13 @@ MManager.prototype.NavigateToConcept = function(){
 MManager.prototype.NavigateToQuiz = function(){
 	var nid = this.crrnt.nid;
 	var mode = this.mode;
-	
-	$.ajax({
-		async: true, 
-		type: 'POST',
-		url: "../map_manager/mapsave.php",
-		dataType: 'html',
-		data: {direct: nid},
-		
-		success: function(result){
-			if(result === "1")
-			{
-				window.location = '../concept_view/concept_view.html';
-			}
-		}
-	});
+
+	if(mode == 0){
+		window.location = '../quiz_view/quiz_view.html'
+	}
+	else{
+		window.location = '../quiz_builder/quiz_builder.html'
+	}
 	
 	return false;
 }
