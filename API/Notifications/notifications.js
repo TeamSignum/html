@@ -1,17 +1,17 @@
-var userId = 1;
+// Notification object
+var notifications = []; 
 
-$(document).ready(function() {
-	
-	GetNotifications(1);
-
-  	$("[data-toggle]").click(function() {
-    	var toggle_el = $(this).data("toggle");
-    	$(toggle_el).toggleClass("open-sidebar");
-  	});
-  
-});
-
-
+/*
+ * GetNotifications
+ * Populates var notifications with notifications objects. 
+ * 		- A notificaiton object contains the score for grades. 
+ * 
+ * Pseudo Code: 
+ * foreach notifcation in notifications
+ * 		set innerhtm = notification.score
+ *
+ * @param: pid = person id (get from session)
+ */
 function GetNotifications(pid)
 {
 

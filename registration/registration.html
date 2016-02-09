@@ -19,7 +19,7 @@
 <div id="navbar:../"></div>
 
 <!-- One multi-step Form--> 
-<form id="msform" method="post" action="registration.php">
+<form id="msform" enctype="multipart/form-data" method="post" action="registration.php">
   <!-- Profressbar -->
   <ul id="progressbar">
     <li class="active">ACCOUNT</li>
@@ -43,14 +43,16 @@
   <!-- Profile fieldSet -->
   <fieldset>
     <h2 class="fs-title">Type Your Information</h2>
+    <!--
     <img id="output" name="profile_pic" width=110px, height=130px/>
-    <input id="upload" name="upload" type="file" accept="image/*" onchange="loadFile(event)">
+    <input id="upload" name="upload" type="file" onchange="loadFile(event)">
     <script>
       var loadFile = function(event) {
         var output = document.getElementById('output');
         output.src = URL.createObjectURL(event.target.files[0]);
       };
     </script>
+  -->
     <input id = "uofuid" type="text" name="uid" placeholder="U Id" />
     <input id= "firstname" type="text" name="firstname" placeholder="Fisrt Name" />
     <input id = "lastname" type="text" name="lastname" placeholder="Last Name" />

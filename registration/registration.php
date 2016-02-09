@@ -11,11 +11,34 @@ if (isset($_POST["submit"])){
     $fname = strip_tags($_POST["firstname"]);
     $lname = strip_tags($_POST["lastname"]);
 
-    if(isset($_FILES["upload"]){
-        if(move_uploaded_file($_FILES["upload"]['test1'], "./profile_images/{$_FILES['upload']['test1']}")){
-            echo "hello";
-        }
-    }
+    // $target_dir = "profile_images/";
+    // $target_file = $target_dir . basename($_FILES["upload"]["name"]);
+
+    // $uploadOk = 1;
+
+    // $imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
+
+    // var_dump($imageFileType);
+
+    // $check = getimagesize($_FILES["upload"]["tmp_name"]);
+
+    // if($check !== false) {
+    //     echo "File is an image - " . $check["mime"] . ".";
+    //     $uploadOk = 1;
+    // } else {
+    //     echo "File is not an image.";
+    //     $uploadOk = 0;
+    // }
+    // if ($uploadOk == 0) {
+    // echo "Sorry, your file was not uploaded.";
+    // // if everything is ok, try to upload file
+    // } else {
+    //     if (move_uploaded_file($_FILES["upload"]["tmp_name"], $target_file)) {
+    //         echo "The file ". basename( $_FILES["upload"]["name"]). " has been uploaded.";
+    //     } else {
+    //         echo "Sorry, there was an error uploading your file.";
+    //     }
+    // }
 
     try{           
         $DB = new PDO('mysql:host=ec2-52-33-118-140.us-west-2.compute.amazonaws.com;dbname=LU', 'Signum', 'signumDB4');

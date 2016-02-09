@@ -56,8 +56,6 @@ $(".next").click(function(){
   }
   //step 2
   else if(fieldsetn == 2){
-    var picVal = $('#upload').val();
-    alert(picVal);
 
     var uidVal = $('#uofuid').val();
     var uidReg = /^u[0-9]{7}$/;
@@ -93,8 +91,6 @@ $(".next").click(function(){
      }
 
      var usertypeVal = $('#usertype').val();
-     alert(usertypeVal);
-
      if(usertypeVal == null){
         $('#usertype').addClass('warning');
         alert("hello");
