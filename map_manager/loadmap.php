@@ -20,7 +20,7 @@ if(isset($_POST["map"]))
 
 			if($level == 2)
 			{
-				$nid = 1;
+				$nid = $_SESSION["nid"];
 				$query = "SELECT * FROM nodes2 WHERE nodes2.cid = '$cid' AND nodes2.nid = '$nid'";
 			}
 			else
@@ -72,7 +72,7 @@ if(isset($_POST["map"]))
 			
 			if($level == 2)
 			{
-				$nid = 1;
+				$nid = $_SESSION["nid"];
 				$query = "SELECT * FROM edges2 WHERE edges2.cid = '$cid' AND edges2.nid = '$nid'";
 			}
 			else
@@ -127,7 +127,7 @@ if(isset($_POST["map"]))
 			
 			if($level == 2)
 			{
-				$nid = 1;
+				$nid = $_SESSION["nid"];
 				$query = "SELECT * FROM connected2 WHERE connected2.cid = '$cid' AND connected2.nid = '$nid'";
 			}
 			else

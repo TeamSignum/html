@@ -323,4 +323,10 @@
 			}
 		}
 	}
+	
+	if(isset($_POST["direct"]))
+	{
+		$_SESSION["nid"] = $_POST["direct"];
+		echo 1;
+	}
 ?>

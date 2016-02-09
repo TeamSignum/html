@@ -685,6 +685,23 @@ MManager.prototype.SaveMap = function(level){
 
 MManager.prototype.NavigateToConcept = function(){
 	var nid = this.crrnt.nid;
+	
+	$.ajax({
+		async: true, 
+		type: 'POST',
+		url: "../map_manager/mapsave.php",
+		dataType: 'html',
+		data: {direct: nid},
+		
+		success: function(result){
+			if(result === "1")
+			{
+				window.location = '../concept_view/concept_view.html';
+			}
+		}
+	});
+	
+	return false;
 }
 
 //Check off the node as completed
