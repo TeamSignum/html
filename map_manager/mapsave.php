@@ -40,7 +40,7 @@
 					$statement = $DB->prepare($query);
 				
 					//test hardcode
-					$nid = 1;
+					$nid = $_SESSION['nid'];
 				
 					$statement->bindValue (1, $cid);
 					$statement->bindValue (2, $nid);
@@ -133,7 +133,7 @@
 			
 					$statement = $DB->prepare($query);
 					
-					$nid = 1;
+					$nid = $_SESSION['nid'];
 				
 					$statement->bindValue (1, $cid);
 					$statement->bindValue (2, $nid);
@@ -214,7 +214,7 @@
 					
 						$statement = $DB->prepare($query);
 						
-						$nid = 1;
+						$nid = $_SESSION['nid'];
 					
 						$statement->bindValue (1, $cid);
 						$statement->bindValue (2, $nid);
@@ -271,7 +271,7 @@
 				
 				if($level == 2)
 				{
-					$nid = 1;
+					$nid = $_SESSION['nid'];
 				
 					$query = "SELECT MAX(nid2) as mnid FROM nodes2 WHERE cid = '$cid' AND nid = '$nid'";
 				
@@ -327,6 +327,14 @@
 	if(isset($_POST["direct"]))
 	{
 		$_SESSION["nid"] = $_POST["direct"];
-		echo 1;
+		$role = $_SESSION["role"];
+		if(strcmp($role, "professor") == 0)
+		{
+			echo 1;
+		}
+		else
+		{
+			echo 2;
+		}
 	}
 ?>

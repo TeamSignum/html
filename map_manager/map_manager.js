@@ -700,6 +700,10 @@ MManager.prototype.NavigateToConcept = function(){
 		success: function(result){
 			if(result === "1")
 			{
+				window.location = '../concept_builder/concept_builder.html';
+			}
+			if(result === "2")
+			{
 				window.location = '../concept_view/concept_view.html';
 			}
 		}

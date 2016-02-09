@@ -4,6 +4,7 @@ var studentNodeRadius = 100;
 var classOrbitalRadius = 200;
 var classNodeRadius = 60;
 var account_name = "";
+var acc_role;
 
 function getClassNumbers(){
 	$.ajax({
@@ -46,6 +47,8 @@ function getName()
 		success: function(result){
 			//alert(result.name);
 			account_name = result.name;
+			acc_role = result.role;
+			//alert(result.role);
 		}
 	});
 	
@@ -122,7 +125,14 @@ function directToClass(c)
 			{
 				//alert("2");
 				//window.location = '../class_view/class.php';
-				window.location = '../class_view/class_view.html';
+				if(acc_role === "student")
+				{
+					window.location = '../class_view/class_view.html';
+				}
+				if(acc_role === "professor")
+				{
+					window.location = '../class_builder/class_builder.html';
+				}
 			}
 		}
 	});
@@ -203,11 +213,13 @@ $( document ).ready(function() {
 				}
 				if(e.target.id === "addNode")
 				{
-					alert(e.target.cid);
+					//alert(e.target.cid);
+					alert("Not added yet");
 				}
 				if(e.target.id === "accountNode")
 				{
-					alert("t");
+					//alert("t");
+					window.location = '../profile/profile.html';
 				}
 			}
 	    },
