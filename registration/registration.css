@@ -81,6 +81,10 @@ body {
   color:#2C3E50;
 }
 
+#msform select.warning{
+	border: 1px solid #FF0000;
+}
+
 #msform input.warning {
 	border: 1px solid #FF0000;
 }

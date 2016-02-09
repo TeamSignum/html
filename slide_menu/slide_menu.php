@@ -5,6 +5,7 @@
 	<link rel="import" href="../imports/import.html">
     <script src="http://thecodeplayer.com/uploads/js/jquery-1.9.1.min.js" type="text/javascript"></script>
     <script src="../API/Notifications/notifications.js" type="text/javascript"></script>
+    <?php session_start(); $userid = $_SESSION('userid'); ?>
 </head>
 <body>
 

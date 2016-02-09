@@ -8,6 +8,7 @@ var fieldsetn = 1;
 $(".next").click(function(){
   var error = 0;
 
+  //step 1
   if(fieldsetn == 1){
     var emailVal = $('#email').val();
     var emailReg = /^([\w-\.]+@utah.edu)?$/;
@@ -52,8 +53,53 @@ $(".next").click(function(){
       $('#pass-check').removeClass('warning');
     }
 
-  }else if(fieldsetn == 2){
-    
+  }
+  //step 2
+  else if(fieldsetn == 2){
+    var picVal = $('#upload').val();
+    alert(picVal);
+
+    var uidVal = $('#uofuid').val();
+    var uidReg = /^u[0-9]{7}$/;
+     // uid check
+     if(uidVal == ""){
+        $('#uofuid').addClass('warning');
+        $('#uofuid').attr("placeholder", "Empty, type your Uid");
+        error = 1;
+     }else if(!uidReg.test(uidVal)){
+        $('#uofuid').addClass('warning');
+        $('#uofuid').attr("placeholder", "Type correctly (ex. u0xxxxxx)");
+        error = 1;
+     }else{
+        $('#uofuid').removeClass('warning');
+     }
+
+     var firstnameVal = $('#firstname').val();
+     var lastnameVal = $('#lastname').val();
+      // Name check
+     if(firstnameVal == ""){
+        $('#firstname').addClass('warning');
+        $('#firstname').attr("placeholder", "Type your firstname");
+        error = 1;
+     }else{
+        $('#firstname').removeClass('warning');
+     }
+     if(lastnameVal == ""){
+        $('#lastname').addClass('warning');
+        $('#lastname').attr("placeholder", "Type your lastname");
+        error = 1;
+     }else{
+        $('#lastname').removeClass('warning');
+     }
+
+     var usertypeVal = $('#usertype').val();
+     alert(usertypeVal);
+
+     if(usertypeVal == null){
+        $('#usertype').addClass('warning');
+        alert("hello");
+        error = 1;
+     }
   }
   
 

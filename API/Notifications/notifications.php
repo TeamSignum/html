@@ -22,13 +22,13 @@ function GetNotifications($person_id){
 		$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 		// Prepare query
-		$query = "SELECT * FROM `grades` WHERE `idusers` = ? AND `date_entered` >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)";
+		$query = "SELECT * FROM LU.grades WHERE `idusers` = '$person_id' AND `date_entered` >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)";
 
 		$statement = $DB->prepare($query);
 		$statement->bindParam(1, $person_id);
 		$statement->execute();
 		$result = $statement->fetchAll(PDO::FETCH_ASSOC);
-
+		
 		foreach($result as $row)
 		{
 			$score = $row['score']; 
