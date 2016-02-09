@@ -25,7 +25,10 @@ var MManager = function(_canvas, builder){
  	this.result_nodes; 
  	this.result_edges;
 
+ 	this.mode = 0;
+
  	if(builder){
+ 		this.mode = 1;
  		this.locked = false;
  		this.AddToolbar(); // Add the toolbar when you initialize the map manager
  	}
@@ -685,6 +688,7 @@ MManager.prototype.SaveMap = function(level){
 
 MManager.prototype.NavigateToConcept = function(){
 	var nid = this.crrnt.nid;
+	var mode = this.mode;
 	
 	$.ajax({
 		async: true, 
