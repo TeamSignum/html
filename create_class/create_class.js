@@ -8,7 +8,7 @@ $( document ).ready(function()
   });
 });
 
-// Queries the database and stores profile information in javascript variables
+// Queries the database and stores class information in javascript variables
 function createClass(){
 	// Get the form information and create a FormData object
 		var form = document.getElementById("createForm");
