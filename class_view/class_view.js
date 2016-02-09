@@ -24,7 +24,7 @@ $( document ).ready(function() {
 			{
 				if (e.target.id === "mapNode") 
 				{
-					mngr.LoadNodePopup(e.target, mngr); 
+					mngr.HandleMapNodeSelect(e.target);
 				}
 			}
 	    },

@@ -12,7 +12,7 @@ var MManager = function(_canvas, builder){
  	this.nodes 	  = []; 
  	this.nid      = 1;
  	this.eid      = 1;
- 	this.locked   = false;
+ 	this.locked   = true;
 
  	this.edges 	  = []; 
  	this.lineEdit = false;
@@ -26,6 +26,7 @@ var MManager = function(_canvas, builder){
  	this.result_edges;
 
  	if(builder){
+ 		this.locked = false;
  		this.AddToolbar(); // Add the toolbar when you initialize the map manager
  	}
  }
@@ -67,6 +68,7 @@ MManager.prototype.CopyNode = function(node, new_id, type){
 	this.canvas.add(n);  
 
 	node.id = new_id;
+	node.nid = this.nid;
 
 	var popup = this.CreatePopup(type);
 
@@ -109,8 +111,10 @@ MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, m
 			fill: '#fff',
 			stroke: 'white',
 			strokeWidth: 5,
-			id: type
+			id: "mapNode"
 	});
+
+	c.nid = nodeID;
 			
 	c.hasControls = false;
 	c.hasBorders = false;
@@ -135,8 +139,12 @@ MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, m
 	var temp = {
 		node: c,
 		id: nodeID,
-		lines: []
+		lines: [], 
+		type: type, 
+		popup: ""
 	}
+
+	this.LoadNodePopup(nodeID, type, this.nodes.length);
 
 	this.nodes.push(temp); 
 
@@ -462,25 +470,17 @@ MManager.prototype.LockOrUpload = function(button, level){
 /* ---------------------------------------- Map Save/Load Functions ---------------------------------------- */
 
 //Get the pop-up info for a specified node
-MManager.prototype.LoadNodePopup = function(node, mngr){
-
-	var id; 
-	for(var i = 0; i < this.nodes.length; i++){
-		if(node.top == this.nodes[i].node.top && node.left == this.nodes[i].node.left){
-			id = this.nodes[i].id; 
-		}
-	}
-
-	var _data = 'nid=' + id; 
+MManager.prototype.LoadNodePopup = function(id, type, index){
 
 	$.ajax({
 		async: true, 
 		type: 'POST', 
 		url: "../map_manager/load_node_popup.php",
-		data: _data, 
+		data: {nid: id, type: type}, 
 		dataType: "json", 
 		success: function(result){
-			mngr.FillPopup(result["title"], result["description"], result["duedate"], result["notes"]); 
+			mngr.nodes[index].popup = mngr.CreatePopupWithData(type, result["title"], result["description"], result["duedate"], result["notes"]);
+			//mngr.FillPopup(result["title"], result["description"], result["duedate"], result["notes"]); 
 		}
 	}); 
 
@@ -565,7 +565,6 @@ MManager.prototype.LoadMap = function(mngr, level, mode){
 		data: {map: 1, level: level},
 		
 		success: function(result){
-			//alert(result);
 			for(var i = 0; i < result.length; i++)
 			{
 				mngr.DrawNode(parseFloat(result[i]["top"]), parseFloat(result[i]["left"]), parseFloat(result[i]["radius"]), result[i]["type"], result[i]["title"], result[i]["id"], mode);
@@ -622,7 +621,7 @@ MManager.prototype.SaveMap = function(level){
 			stroke: this.nodes[i].node.stroke,
 			strokeWidth: this.nodes[i].node.strokeWidth,
 			id: this.nodes[i].id,
-			type: this.nodes[i].node.id,
+			type: this.nodes[i].type,
 			title: t
 		};
 		map.push(temp);
@@ -683,6 +682,11 @@ MManager.prototype.SaveMap = function(level){
 }
 /* ---------------------------------------- Popup Functions ---------------------------------------- */
 
+
+MManager.prototype.NavigateToConcept = function(){
+	var nid = this.crrnt.nid;
+}
+
 //Check off the node as completed
 MManager.prototype.CheckOffNode = function(){
 	swal({   
@@ -740,18 +744,29 @@ MManager.prototype.ShowPopup = function(node, popup){
 
 	popup.show();
 	$("#cancelorsave").show();
+	$("#dim_div").show();
 }
 
 MManager.prototype.CreatePopup = function(type){
 	if (type === "concept")
-		return this.CreateConceptPopup();
+		return this.CreateConceptPopup("", "", "", "");
 	else if (type === "assignment")
 		return this.CreateAssignmentPopup();
 	else if (type === "quiz")
 		return this.CreateQuizPopup();
 }
 
-MManager.prototype.CreateConceptPopup = function(){ 
+MManager.prototype.CreatePopupWithData = function(type, title, description, due_date, notes){
+	if (type === "concept")
+		return this.CreateConceptPopup(title, description, due_date, notes);
+	else if (type === "assignment")
+		return this.CreateAssignmentPopup();
+	else if (type === "quiz")
+		return this.CreateQuizPopup();
+}
+
+
+MManager.prototype.CreateConceptPopup = function(title, description, due_date, notes){ 
 	var ids = [];
 	var innerHtml; 
 
@@ -759,21 +774,22 @@ MManager.prototype.CreateConceptPopup = function(){
  	"<div class=\"row\">" +
 	 	"<div class=\"col-md-2\"></div>" +
 		"    <div class=\"col-md-8\">" +
-		"      	<h3 style=\"font-weight: bold;\">Please fill out concept node details</h3>" +
-		"      	<form>" +
-		"	      	<br/>" +
-		"	        <input class=\"form-control\" id=\"title\" name=\"title\" type=\"text\" value=\"\" placeholder=\"Title\">" +
-		"	        <br/>" +
-		"	        <input class=\"form-control\" id=\"description\" name=\"description\" type=\"text\" value=\"\" placeholder=\"Description\">" +
-		"	        <br/>" +
-		"	        <input class=\"form-control\" id=\"due_date\" name=\"due_date\" type=\"text\" value=\"\" placeholder=\"Due date (optional)\">" +
-		"" +
-		"	        <br/>" +
-		"	        <button id=\"lecture_notes\" style=\"float:left; font-size:12pt;\" type=\"button\" class=\"btn btn-default btn-md\">" +
-		"	        Download Lecture Notes" +
-		"			</button>" +
-		"" +
-		"      	</form>" +
+		" 	 <div class=\"form-style-2\">" + 
+		"    	<div class=\"form-style-2-heading\">Concept Node Details</div>" + 
+		"			 <form>"+ 
+		"    			<label for=\"field1\"><span>Title <span class=\"required\">*</span></span><input class=\"input-field\" id=\"title\" name=\"title\" type=\"text\" value=\""+ title +"\" placeholder=\"Title\"/></label>"+
+		"				<label for=\"field2\"><span>Description <span class=\"required\">*</span></span><input class=\"input-field\" id=\"description\" name=\"description\" type=\"text\" value=\""+ description +"\" placeholder=\"Description\"/></label>"+
+		"				<label for=\"field5\"><span>Notes <span class=\"\"></span></span><textarea name=\"notes\" id=\"notes\" class=\"textarea-field\" value=\""+ notes +"\"></textarea></label>"+
+		"				<label for=\"field2\"><span>Due Date<span class=\"\"></span></span><input class=\"input-field\" id=\"due_date\" name=\"due_date\" type=\"text\" value=\""+ due_date +"\" placeholder=\"Due date\"/></label>"+
+		"	        	<button id=\"lecture_notes\" style=\"float:left; font-size:12pt;\" type=\"button\" class=\"btn btn-default btn-md\">" +
+		"	        	Lecture Notes" +
+		"				</button>" +
+		"	        	<button id=\"concept_navigate\" onclick=\"mngr.NavigateToConcept();\" style=\"float:left; font-size:12pt;\" type=\"button\" class=\"btn btn-default btn-md\">" +
+		"	        	Concept Page" +
+		"				</button>" +
+		"			 </form>"+
+		"		</div>"+
+		"    </div>" +
 		"    </div>" +
 	 	"<div class=\"col-md-2\"></div>" +
   	"</div> " +
@@ -881,6 +897,7 @@ MManager.prototype.HidePopup = function(){
  	$("#popup").hide();
  	$("#popup").html("");
  	$("#cancelorsave").hide();
+ 	$("#dim_div").hide();
 }
 
 /*
@@ -910,9 +927,10 @@ MManager.prototype.SavePopup = function(){
 		case "concept": 
 			var title = $("#title").val();
 			var desc = $("#description").val(); 
+			var notes = $("#notes").val(); 
 			var duedate = $("#due_date").val(); 
 			
-			var _data = {action: 'concept', nid: nid, title: title, description: desc, duedate: duedate};
+			var _data = {action: 'concept', nid: nid, title: title, description: desc, notes: notes, duedate: duedate};
 
 			break;
 
@@ -967,8 +985,8 @@ MManager.prototype.AddToolbar = function(){
 
 	//Lock tool
 	fabric.Image.fromURL('../imports/images/lock.png', function(oImg) {
-		oImg.scale(.2); 
-		oImg.set({left: 30, top: 740, id: 'toolbarLock'}); 
+		oImg.scale(.4); 
+		oImg.set({left: 40, top: 720, id: 'toolbarLock'}); 
 		oImg.lockMovementX = oImg.lockMovementY = true; 
 		oImg.hasControls = oImg.hasBorders = false; 
 		oImg.selectable = false;
@@ -977,8 +995,8 @@ MManager.prototype.AddToolbar = function(){
 
 	//Upload tool
 	fabric.Image.fromURL('../imports/images/upload.png', function(oImg) {
-		oImg.scale(.1); 
-		oImg.set({left: 110, top: 740, id: 'toolbarUpload'}); 
+		oImg.scale(.4); 
+		oImg.set({left: 100, top: 724, id: 'toolbarUpload'}); 
 		oImg.lockMovementX = oImg.lockMovementY = true; 
 		oImg.hasControls = oImg.hasBorders = false; 
 		oImg.selectable = false;

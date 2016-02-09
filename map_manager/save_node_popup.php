@@ -29,13 +29,14 @@ function SaveConceptPopup(){
 		$DB->beginTransaction();
 
 		// Create query 
-		$query = "INSERT into `popupconcept` (`nid`, `title`, `description`, `duedate`) values (?,?,?,?)";
+		$query = "INSERT into `popupconcept` (`nid`, `title`, `description`, `duedate`, `notes`) values (?,?,?,?,?")";
 		$statement = $DB->prepare($query);
 
 		$statement->bindValue (1, $nid);
 		$statement->bindValue (2, $title);
 		$statement->bindValue (3, $description);
 		$statement->bindValue (4, $duedate);
+		$statement->bindValue (4, $notes);
 
 		// Execute query
 		$statement->execute();
