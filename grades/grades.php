@@ -76,7 +76,7 @@
 				break;
 			
 			case 3: // Query all grades for all classes
-				$query =	"SELECT c.classnumber, n.title, g.score
+				$query =	"SELECT c.cid, c.classnumber, n.title, g.score
 									FROM grades g
 									INNER JOIN nodes n
 										ON g.nid=n.nid

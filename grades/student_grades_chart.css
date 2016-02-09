@@ -1,0 +1,31 @@
+@charset "utf-8";
+/* CSS Document */
+
+body{
+	text-align: center;
+}
+
+header{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100vw;
+	height: 60px;
+	background-color: black;
+	color: white;
+	font-size: 40px;
+}
+
+#gradecharts{
+	width: 50%;
+	height: 100vh;
+	background-color: #F0F0F0;
+	text-align: center;
+	margin: auto;
+}
+
+#classheader{
+	display: flex;
+}
+
+

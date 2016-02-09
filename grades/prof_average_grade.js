@@ -64,10 +64,7 @@ function buildGoogleChart(gradeData){
 
         // Set chart options
         var options = {
-          	bar: {groupWidth: "50%" },
-          	colors: ['#FF0000', '#FFD700', '#228B22'],
-          	'width': 800,
-          	'title':'CS 4500'
+          	
         };
 
         // Instantiate and draw our chart, passing in some options.
