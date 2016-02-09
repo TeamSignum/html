@@ -214,7 +214,13 @@ $( document ).ready(function() {
 				if(e.target.id === "addNode")
 				{
 					//alert(e.target.cid);
-					alert("Not added yet");
+					if(acc_role === "professor"){
+						window.location.href = "/create_class/create_class.html";
+					}
+					else{
+						alert("Not added yet");
+					}
+
 				}
 				if(e.target.id === "accountNode")
 				{
