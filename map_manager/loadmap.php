@@ -55,7 +55,8 @@ if(isset($_POST["map"]))
 				$radius = $row['radius'];
 				$type = $row['type'];
 				$title = $row['title'];
-				$nodes[] = array('id' => $id, 'top' => $top, 'left' => $left, 'radius' => $radius, 'type' => $type, 'title' => $title);
+				$fill = $row['fill'];
+				$nodes[] = array('id' => $id, 'top' => $top, 'left' => $left, 'radius' => $radius, 'type' => $type, 'title' => $title, 'fill' => $fill);
 			}
 			
 			echo json_encode($nodes);

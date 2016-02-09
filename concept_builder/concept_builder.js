@@ -15,7 +15,7 @@ $( document ).ready(function() {
 
 	canvas = new fabric.Canvas('map', {backgroundColor: "#99ffff"}); // Create Canvas
 
-	mngr = new MManager(canvas, true); // Construct map manager
+	mngr = new MManager(canvas, true, 1); // Construct map manager
 	mngr.LoadIds(2); // Get the last id from the node table
 	mngr.LoadMap(mngr, 2, 1);
 	mngr.LoadEdges(mngr, 2, 1);

@@ -7,7 +7,7 @@
 /*
  * Map Manager Constructor  
  */ 
-var MManager = function(_canvas, builder){
+var MManager = function(_canvas, builder, classOrConcept){
  	this.canvas   = _canvas;
  	this.nodes 	  = []; 
  	this.nid      = 1;
@@ -26,6 +26,7 @@ var MManager = function(_canvas, builder){
  	this.result_edges;
 
  	this.mode = 0;
+ 	this.classOrConcept = classOrConcept;
 
  	if(builder){
  		this.mode = 1;
@@ -105,13 +106,13 @@ MManager.prototype.ConstructMap = function(result){
 }
 
 //Draw a node onto the canvas
-MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, mode){
+MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, fill, mode){
 	//Draw the concept node
 	var c = new fabric.Circle({
 			top: top,
 			left: left,
 			radius: radius,
-			fill: '#fff',
+			fill: fill,
 			stroke: 'white',
 			strokeWidth: 5,
 			id: "mapNode"
@@ -479,11 +480,10 @@ MManager.prototype.LoadNodePopup = function(id, type, index){
 		async: true, 
 		type: 'POST', 
 		url: "../map_manager/load_node_popup.php",
-		data: {nid: id, type: type}, 
+		data: {nid: id, type: type, classOrConcept: this.classOrConcept}, 
 		dataType: "json", 
 		success: function(result){
 			mngr.nodes[index].popup = mngr.CreatePopupWithData(type, result["title"], result["description"], result["duedate"], result["notes"]);
-			//mngr.FillPopup(result["title"], result["description"], result["duedate"], result["notes"]); 
 		}
 	}); 
 
@@ -570,7 +570,7 @@ MManager.prototype.LoadMap = function(mngr, level, mode){
 		success: function(result){
 			for(var i = 0; i < result.length; i++)
 			{
-				mngr.DrawNode(parseFloat(result[i]["top"]), parseFloat(result[i]["left"]), parseFloat(result[i]["radius"]), result[i]["type"], result[i]["title"], result[i]["id"], mode);
+				mngr.DrawNode(parseFloat(result[i]["top"]), parseFloat(result[i]["left"]), parseFloat(result[i]["radius"]), result[i]["type"], result[i]["title"], result[i]["id"], result[i]["fill"], mode);
 			}
 		}
 	});
@@ -676,7 +676,6 @@ MManager.prototype.SaveMap = function(level){
 		data: {map: map, edges: edges, connections: connections, level: level},
 		
 		success: function(result){
-			alert(result);
 			swal("Saved"); 
 		}
 	});
@@ -712,6 +711,33 @@ MManager.prototype.NavigateToConcept = function(){
 	return false;
 }
 
+MManager.prototype.NavigateToQuiz = function(){
+	var nid = this.crrnt.nid;
+	var mode = this.mode;
+	
+	$.ajax({
+		async: true, 
+		type: 'POST',
+		url: "../map_manager/mapsave.php",
+		dataType: 'html',
+		data: {direct: nid},
+		
+		success: function(result){
+			if(result === "1")
+			{
+				window.location = '../concept_view/concept_view.html';
+			}
+		}
+	});
+	
+	return false;
+}
+
+
+MManager.prototype.NavigateToJupyterNotebook = function(){
+	window.location.href = "http://jupyter.org/";
+}
+
 //Check off the node as completed
 MManager.prototype.CheckOffNode = function(){
 	swal({   
@@ -733,6 +759,8 @@ MManager.prototype.CheckOffNode = function(){
 						mngr.nodes[i].node.setStroke("#0d0");
 						mngr.nodes[i].node.id = "cmapNode";
 						$("#popup").hide(); 
+						$("#dim_div").hide();
+						$("#checkorx").hide();
 					}
 				}   
 			} 
@@ -768,7 +796,12 @@ MManager.prototype.ShowPopup = function(node, popup){
 	}
 
 	popup.show();
-	$("#cancelorsave").show();
+	if(this.mode == 0){
+		$("#checkorx").show();
+	}
+	else{
+		$("#cancelorsave").show();
+	}
 	$("#dim_div").show();
 }
 
@@ -776,24 +809,33 @@ MManager.prototype.CreatePopup = function(type){
 	if (type === "concept")
 		return this.CreateConceptPopup("", "", "", "");
 	else if (type === "assignment")
-		return this.CreateAssignmentPopup();
+		return this.CreateAssignmentPopup("", "", "", "");
 	else if (type === "quiz")
-		return this.CreateQuizPopup();
+		return this.CreateQuizPopup("", "", "", "");
 }
 
 MManager.prototype.CreatePopupWithData = function(type, title, description, due_date, notes){
 	if (type === "concept")
 		return this.CreateConceptPopup(title, description, due_date, notes);
 	else if (type === "assignment")
-		return this.CreateAssignmentPopup();
+		return this.CreateAssignmentPopup(title, description, due_date, notes);
 	else if (type === "quiz")
-		return this.CreateQuizPopup();
+		return this.CreateQuizPopup(title, description, due_date, notes);
 }
 
 
 MManager.prototype.CreateConceptPopup = function(title, description, due_date, notes){ 
 	var ids = [];
 	var innerHtml; 
+
+	if(title == null)
+		title = "";
+	if(description == null)
+		description = "";
+	if(due_date == null)
+		due_date = "";
+	if(notes == null)
+		notes = "";
 
 	innerHtml = "" + 
  	"<div class=\"row\">" +
@@ -804,11 +846,12 @@ MManager.prototype.CreateConceptPopup = function(title, description, due_date, n
 		"			 <form>"+ 
 		"    			<label for=\"field1\"><span>Title <span class=\"required\">*</span></span><input class=\"input-field\" id=\"title\" name=\"title\" type=\"text\" value=\""+ title +"\" placeholder=\"Title\"/></label>"+
 		"				<label for=\"field2\"><span>Description <span class=\"required\">*</span></span><input class=\"input-field\" id=\"description\" name=\"description\" type=\"text\" value=\""+ description +"\" placeholder=\"Description\"/></label>"+
-		"				<label for=\"field5\"><span>Notes <span class=\"\"></span></span><textarea name=\"notes\" id=\"notes\" class=\"textarea-field\" value=\""+ notes +"\"></textarea></label>"+
+		"				<label for=\"field5\"><span>Notes <span class=\"\"></span></span><textarea name=\"notes\" id=\"notes\" class=\"textarea-field\">"+ notes +"</textarea></label>"+
 		"				<label for=\"field2\"><span>Due Date<span class=\"\"></span></span><input class=\"input-field\" id=\"due_date\" name=\"due_date\" type=\"text\" value=\""+ due_date +"\" placeholder=\"Due date\"/></label>"+
 		"	        	<button id=\"lecture_notes\" style=\"float:left; font-size:12pt;\" type=\"button\" class=\"btn btn-default btn-md\">" +
 		"	        	Lecture Notes" +
 		"				</button>" +
+		"               </br></br></br>" +
 		"	        	<button id=\"concept_navigate\" onclick=\"mngr.NavigateToConcept();\" style=\"float:left; font-size:12pt;\" type=\"button\" class=\"btn btn-default btn-md\">" +
 		"	        	Concept Page" +
 		"				</button>" +
@@ -833,29 +876,40 @@ MManager.prototype.CreateConceptPopup = function(title, description, due_date, n
   	return popup;
 }
 
-MManager.prototype.CreateAssignmentPopup = function(){ 
+MManager.prototype.CreateAssignmentPopup = function(title, description, due_date, notes){ 
 	var ids = [];
 	var innerHtml; 
+
+	if(title == null)
+		title = "";
+	if(description == null)
+		description = "";
+	if(due_date == null)
+		due_date = "";
+	if(notes == null)
+		notes = "";
 
 	innerHtml = "" + 
  	"<div class=\"row\">" +
 	 	"<div class=\"col-md-2\"></div>" +
 		"    <div class=\"col-md-8\">" +
-		"      	<h3 style=\"font-weight: bold;\">Please fill out assignment details</h3>" +
-		"      	<form>" +
-		"	      	<br/>" +
-		"	        <input class=\"form-control\" id=\"title\" name=\"title\" type=\"text\" value=\"\" placeholder=\"Title\">" +
-		"	        <br/>" +
-		"	        <input class=\"form-control\" id=\"description\" name=\"description\" type=\"text\" value=\"\" placeholder=\"Description\">" +
-		"	        <br/>" +
-		"	        <input class=\"form-control\" id=\"due_date\" name=\"due_date\" type=\"text\" value=\"\" placeholder=\"Due date (optional)\">" +
-		"" +
-		"	        <br/>" +
-		"	        <button id=\"j_notebook\" style=\"float:left; font-size:12pt;\" type=\"button\" class=\"btn btn-default btn-md\">" +
-		"	        Jupyter Notebook" +
-		"			</button>" +
-		"" +
-		"      	</form>" +
+		" 	 <div class=\"form-style-2\">" + 
+		"    	<div class=\"form-style-2-heading\">Assignment Node Details</div>" + 
+		"			 <form>"+ 
+		"    			<label for=\"field1\"><span>Title <span class=\"required\">*</span></span><input class=\"input-field\" id=\"title\" name=\"title\" type=\"text\" value=\""+ title +"\" placeholder=\"Title\"/></label>"+
+		"				<label for=\"field2\"><span>Description <span class=\"required\">*</span></span><input class=\"input-field\" id=\"description\" name=\"description\" type=\"text\" value=\""+ description +"\" placeholder=\"Description\"/></label>"+
+		"				<label for=\"field5\"><span>Notes <span class=\"\"></span></span><textarea name=\"notes\" id=\"notes\" class=\"textarea-field\">"+ notes +"</textarea></label>"+
+		"				<label for=\"field2\"><span>Due Date<span class=\"\"></span></span><input class=\"input-field\" id=\"due_date\" name=\"due_date\" type=\"text\" value=\""+ due_date +"\" placeholder=\"Due date\"/></label>"+
+		"	        	<button id=\"jnotebook\" style=\"float:left; font-size:12pt;\" onclick=\"mngr.NavigateToJupyterNotebook();\" type=\"button\" class=\"btn btn-default btn-md\">" +
+		"	        	Jupyter Notebook Link" +
+		"				</button>" +
+		"               </br></br></br>" +
+		"	        	<button id=\"concept_navigate\" onclick=\"mngr.NavigateToConcept();\" style=\"float:left; font-size:12pt;\" type=\"button\" class=\"btn btn-default btn-md\">" +
+		"	        	Concept Page" +
+		"				</button>" +
+		"			 </form>"+
+		"		</div>"+
+		"    </div>" +
 		"    </div>" +
 	 	"<div class=\"col-md-2\"></div>" +
   	"</div> " +
@@ -864,7 +918,6 @@ MManager.prototype.CreateAssignmentPopup = function(){
   	ids.push("title");
   	ids.push("description");
   	ids.push("due_date");
-  	ids.push("j_notebook");
 
   	var popup = {
   		ids: ids,
@@ -874,29 +927,38 @@ MManager.prototype.CreateAssignmentPopup = function(){
   	return popup;
 }
 
-MManager.prototype.CreateQuizPopup = function(){ 
+MManager.prototype.CreateQuizPopup = function(title, description, due_date, notes){ 
 	var ids = [];
 	var innerHtml; 
+
+	if(title == null)
+		title = "";
+	if(description == null)
+		description = "";
+	if(due_date == null)
+		due_date = "";
+	if(notes == null)
+		notes = "";
 
 	innerHtml = "" + 
  	"<div class=\"row\">" +
 	 	"<div class=\"col-md-2\"></div>" +
 		"    <div class=\"col-md-8\">" +
-		"      	<h3 style=\"font-weight: bold;\">Please fill out quiz details</h3>" +
-		"      	<form>" +
-		"	      	<br/>" +
-		"	        <input class=\"form-control\" id=\"title\" name=\"title\" type=\"text\" value=\"\" placeholder=\"Title\">" +
-		"	        <br/>" +
-		"	        <input class=\"form-control\" id=\"description\" name=\"description\" type=\"text\" value=\"\" placeholder=\"Description\">" +
-		"	        <br/>" +
-		"	        <input class=\"form-control\" id=\"due_date\" name=\"due_date\" type=\"text\" value=\"\" placeholder=\"Due date (optional)\">" +
-		"" +
-		"	        <br/>" +
-		"	        <button id=\"take_quiz\" style=\"float:left; font-size:12pt;\" type=\"button\" class=\"btn btn-default btn-md\">" +
-		"	        Take Quiz" +
-		"			</button>" +
-		"" +
-		"      	</form>" +
+		" 	 <div class=\"form-style-2\">" + 
+		"    	<div class=\"form-style-2-heading\">Quiz Node Details</div>" + 
+		"			 <form>"+ 
+		"    			<label for=\"field1\"><span>Title <span class=\"required\">*</span></span><input class=\"input-field\" id=\"title\" name=\"title\" type=\"text\" value=\""+ title +"\" placeholder=\"Title\"/></label>"+
+		"				<label for=\"field2\"><span>Description <span class=\"required\">*</span></span><input class=\"input-field\" id=\"description\" name=\"description\" type=\"text\" value=\""+ description +"\" placeholder=\"Description\"/></label>"+
+		"				<label for=\"field5\"><span>Notes <span class=\"\"></span></span><textarea name=\"notes\" id=\"notes\" class=\"textarea-field\">"+ notes +"</textarea></label>"+
+		"				<label for=\"field2\"><span>Due Date<span class=\"\"></span></span><input class=\"input-field\" id=\"due_date\" name=\"due_date\" type=\"text\" value=\""+ due_date +"\" placeholder=\"Due date\"/></label>"+
+		"	        	<button id=\"quiz_navigate\" onclick=\"mngr.NavigateToQuiz();\" style=\"float:left; font-size:12pt;\" type=\"button\" class=\"btn btn-default btn-md\">" +
+		"	        	Quiz Builder" +
+		"				</button>" +
+		"               </br></br></br>" +
+		"               </br></br></br>" +
+		"			 </form>"+
+		"		</div>"+
+		"    </div>" +
 		"    </div>" +
 	 	"<div class=\"col-md-2\"></div>" +
   	"</div> " +
@@ -905,7 +967,6 @@ MManager.prototype.CreateQuizPopup = function(){
   	ids.push("title");
   	ids.push("description");
   	ids.push("due_date");
-  	ids.push("take_quiz");
 
   	var popup = {
   		ids: ids,
@@ -930,6 +991,8 @@ MManager.prototype.HidePopup = function(){
  */
 MManager.prototype.HidePopup2 = function(){
  	$("#popup").hide();
+ 	$("#checkorx").hide();
+ 	$("#dim_div").hide();
 }
 
 /* 
@@ -939,14 +1002,17 @@ MManager.prototype.SavePopup = function(){
 
 	var nid; 
 	var type; 
+	var current_node; 
 
 	// Get the nid
 	for(var i = 0; i < this.nodes.length; i++){
 		if(this.nodes[i].node.top == this.crrnt.top && this.nodes[i].node.left == this.crrnt.left){
-			nid = this.nodes[i].id; 
-			type = this.nodes[i].type;
+			current_node = this.nodes[i];
 		}
 	}
+
+	nid = current_node.id;
+	type = current_node.type;
 
 	switch(type){
 		case "concept": 
@@ -954,26 +1020,34 @@ MManager.prototype.SavePopup = function(){
 			var desc = $("#description").val(); 
 			var notes = $("#notes").val(); 
 			var duedate = $("#due_date").val(); 
+
+			current_node.popup = this.CreatePopupWithData(type, title, desc, duedate, notes); // Updates the current popup with current data.
 			
-			var _data = {action: 'concept', nid: nid, title: title, description: desc, notes: notes, duedate: duedate};
+			var _data = {action: 'concept', classOrConcept: this.classOrConcept, nid: nid, title: title, description: desc, notes: notes, duedate: duedate};
 
 			break;
 
 		case "assignment":
 			var title = $("#title").val();
 			var desc = $("#description").val(); 
+			var notes = $("#notes").val(); 
 			var duedate = $("#due_date").val(); 
 
-			var _data = {action: 'assignment', nid: nid, title: title, description: desc, duedate: duedate};
+			current_node.popup = this.CreatePopupWithData(type, title, desc, duedate, notes); // Updates the current popup with current data.
+
+			var _data = {action: 'assignment', classOrConcept: this.classOrConcept, nid: nid, title: title, description: desc, notes: notes, duedate: duedate};
 
 			break;
 
 		case "quiz":
 			var title = $("#title").val();
 			var desc = $("#description").val(); 
+			var notes = $("#notes").val(); 
 			var duedate = $("#due_date").val(); 
+			
+			current_node.popup = this.CreatePopupWithData(type, title, desc, duedate, notes); // Updates the current popup with current data.
 
-			var _data = {action: 'quiz', nid: nid, title: title, description: desc, duedate: duedate};
+			var _data = {action: 'quiz', classOrConcept: this.classOrConcept, nid: nid, title: title, description: desc, notes: notes, duedate: duedate};
 
 			break;
 	}
@@ -988,6 +1062,7 @@ MManager.prototype.SavePopup = function(){
 			$("#cancelorsave").hide(); 
 			$("#popup").html("");
 			$("#canvas").show(); 
+ 			$("#dim_div").hide();
 		}
 	}); 
 
@@ -1010,7 +1085,7 @@ MManager.prototype.AddToolbar = function(){
 
 	//Lock tool
 	fabric.Image.fromURL('../imports/images/lock.png', function(oImg) {
-		oImg.scale(.4); 
+		oImg.scale(.37); 
 		oImg.set({left: 40, top: 720, id: 'toolbarLock'}); 
 		oImg.lockMovementX = oImg.lockMovementY = true; 
 		oImg.hasControls = oImg.hasBorders = false; 

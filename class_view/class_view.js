@@ -10,7 +10,7 @@ $( document ).ready(function() {
 	canvas = new fabric.Canvas('map', {backgroundColor: "#99ffff"});
 
 	// Construct map manager
-	mngr = new MManager(canvas, false);
+	mngr = new MManager(canvas, false, 0);
 
 	//Load the learning map from the DB
 	mngr.LoadMap(mngr, 1, 0);
