@@ -13,8 +13,8 @@ $( document ).ready(function() {
 	mngr = new MManager(canvas, false);
 
 	//Load the learning map from the DB
-	mngr.LoadMap(mngr, null);
-	mngr.LoadEdges(mngr, null);
+	mngr.LoadMap(mngr, 1, 0);
+	mngr.LoadEdges(mngr, 1, 0);
 	
 	//Canvas events
 	canvas.on({

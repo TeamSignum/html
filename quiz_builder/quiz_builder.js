@@ -265,6 +265,7 @@ function saveQuiz()
 			data: {questions: questions},
 		
 			success: function(result){
+				alert(result);
 				swal("Saved"); 
 			}
 		});

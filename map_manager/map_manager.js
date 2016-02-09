@@ -100,7 +100,7 @@ MManager.prototype.ConstructMap = function(result){
 }
 
 //Draw a node onto the canvas
-MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID){
+MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, mode){
 	//Draw the concept node
 	var c = new fabric.Circle({
 			top: top,
@@ -114,8 +114,14 @@ MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID){
 			
 	c.hasControls = false;
 	c.hasBorders = false;
-	c.lockMovementX = true;
-	c.lockMovementY = true;
+	//c.lockMovementX = true;
+	//c.lockMovementY = true;
+	
+	if(mode == 0)
+	{
+		c.lockMovementX = true;
+		c.lockMovementY = true;
+	}
 	
 	canvas.add(c);
 	
@@ -129,6 +135,7 @@ MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID){
 	var temp = {
 		node: c,
 		id: nodeID,
+		lines: []
 	}
 
 	this.nodes.push(temp); 
@@ -141,6 +148,9 @@ MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID){
 			top: top - 35,
 			id: "nodeText"
 	});
+	
+	//test
+	c.title = t;
 			
 	var len = t.getWidth()/2;
 	var cenX = c.getCenterPoint().x;
@@ -235,6 +245,7 @@ MManager.prototype.MoveEdges = function (node){
 			{
 				current_node.lines[j].set({'x1': current_node.node.getCenterPoint().x, 'y1': current_node.node.getCenterPoint().y});
 			}
+			//alert(current_node.node.left+2*current_node.node.radius + " " + current_node.lines[j].x2);
 			if(current_node.node.left+2*current_node.node.radius > current_node.lines[j].x2 && current_node.node.left < current_node.lines[j].x2 && current_node.node.top+2*current_node.node.radius > current_node.lines[j].y2 && current_node.node.top < current_node.lines[j].y2)
 			{
 				current_node.lines[j].set({'x2': current_node.node.getCenterPoint().x, 'y2': current_node.node.getCenterPoint().y});	
@@ -273,6 +284,9 @@ MManager.prototype.DrawEdgeBetweenNodes = function(node){
 				id: "dotted"
 			});
 		}
+		
+		//test
+		line.eid = this.eid;
 
 		for(var i = 0; i < this.nodes.length; i++)
 		{
@@ -303,14 +317,15 @@ MManager.prototype.DrawEdgeBetweenNodes = function(node){
 /* 
  * Draws an edge given parameters.
  */ 
-MManager.prototype.DrawEdge = function(x1, y1, x2, y2, type){
+MManager.prototype.DrawEdge = function(eid, x1, y1, x2, y2, type, mode){
 	var l;
 	if(type === "solid")
 	{
 		l = new fabric.Line([x1, y1, x2, y2], {
 			fill: 'black',
 			stroke: 'black',
-			strokeWidth: 5
+			strokeWidth: 5,
+			id: "solid"
 			});
 	}
 	if(type === "dotted")
@@ -320,13 +335,29 @@ MManager.prototype.DrawEdge = function(x1, y1, x2, y2, type){
 			stroke: 'black',
 			strokeWidth: 5,
 			strokeDashArray: [5, 5],
+			id: "dotted"
 			});
 	}
 	
+	l.eid = eid;
+	
 	l.hasControls = false;
 	l.hasBorders = false;
-	l.lockMovementX = true;
-	l.lockMovementY = true;
+	//l.lockMovementX = true;
+	//l.lockMovementY = true;
+	
+	if(mode == 0)
+	{
+		l.lockMovementX = true;
+		l.lockMovementY = true;
+	}
+	
+	var temp = {
+			line: l,
+			id: eid
+		};
+		
+	this.edges.push(temp);
 	
 	canvas.add(l);
 	canvas.sendToBack(l);
@@ -456,20 +487,66 @@ MManager.prototype.LoadNodePopup = function(node, mngr){
 	return false; 
 }
 
-//Get all the edges from the DB and draw them on the canvas
-MManager.prototype.LoadEdges = function(mngr, parent){
+MManager.prototype.updateCon = function(result)
+{
+	for(var i = 0; i < result.length; i++)
+	{
+		for(var j = 0; j < this.nodes.length; j++)
+		{
+			if(this.nodes[j].id == result[i].nid)
+			{
+				for(var k = 0; k < this.edges.length; k++)
+				{
+					if(this.edges[k].id == result[i].eid)
+					{
+						this.nodes[j].lines.push(this.edges[k].line);
+					}
+				}
+			}
+		}
+	}
+}
 
+MManager.prototype.LoadConnections = function(level){
+	//alert("h");
 	$.ajax({
-		async: true,
+		async: false,
 		type: 'POST',
 		url: "../map_manager/loadmap.php",
 		dataType: 'json',
-		data: {map: 2, parent: parent},
+		data: {map: 3, level: level},
 		
 		success: function(result){
+			//alert(result.length);
+			//alert(result[0].nid);
+			mngr.updateCon(result);
+			
+		},
+		error: function(result){
+			alert("e" + result);
+			alert(JSON.stringify(result));
+		}
+		
+	});
+	
+	return false;
+}
+
+//Get all the edges from the DB and draw them on the canvas
+MManager.prototype.LoadEdges = function(mngr, level, mode){
+
+	$.ajax({
+		async: false,
+		type: 'POST',
+		url: "../map_manager/loadmap.php",
+		dataType: 'json',
+		data: {map: 2, level: level},
+		
+		success: function(result){
+			//alert(result);
 			for(var i = 0; i < result.length; i++)
 			{
-				mngr.DrawEdge(parseFloat(result[i]["x1"]), parseFloat(result[i]["y1"]), parseFloat(result[i]["x2"]), parseFloat(result[i]["y2"]), result[i]["type"]);
+				mngr.DrawEdge(result[i]["eid"], parseFloat(result[i]["x1"]), parseFloat(result[i]["y1"]), parseFloat(result[i]["x2"]), parseFloat(result[i]["y2"]), result[i]["type"], mode);
 			}
 		}
 	});
@@ -478,19 +555,20 @@ MManager.prototype.LoadEdges = function(mngr, parent){
 }
 
 //Get all the nodes from the DB and draw them on the canvas
-MManager.prototype.LoadMap = function(mngr, parent){
+MManager.prototype.LoadMap = function(mngr, level, mode){
 
 	$.ajax({
-		async: true,
+		async: false,
 		type: 'POST',
 		url: "../map_manager/loadmap.php",
 		dataType: 'json',
-		data: {map: 1, parent: parent},
+		data: {map: 1, level: level},
 		
 		success: function(result){
+			//alert(result);
 			for(var i = 0; i < result.length; i++)
 			{
-				mngr.DrawNode(parseFloat(result[i]["top"]), parseFloat(result[i]["left"]), parseFloat(result[i]["radius"]), result[i]["type"], result[i]["title"], result[i]["id"]);
+				mngr.DrawNode(parseFloat(result[i]["top"]), parseFloat(result[i]["left"]), parseFloat(result[i]["radius"]), result[i]["type"], result[i]["title"], result[i]["id"], mode);
 			}
 		}
 	});
@@ -501,17 +579,23 @@ MManager.prototype.LoadMap = function(mngr, parent){
 /*
  * Loads the last node and edge id from the database.
  */
-MManager.prototype.LoadIds = function() {
+MManager.prototype.LoadIds = function(level) {
 	$.ajax({
 		type: 'POST',
 		url: "../map_manager/mapsave.php",
 		dataType: 'json',
-		data: {id: 1},
+		data: {id: 1, level: level},
 		
 		success: function(result){
+			//alert(result);
+			//alert(result["mnid"] + " " + result["meid"]);
 			if(result["mnid"] != null)
 			{
 				mngr.nid = parseInt(result["mnid"]) + 1;
+				//mngr.eid = parseInt(result["meid"]) + 1;
+			}
+			if(result["meid"] != null)
+			{
 				mngr.eid = parseInt(result["meid"]) + 1;
 			}
 		}
@@ -523,7 +607,7 @@ MManager.prototype.LoadIds = function() {
 /* 
  * Saves the map to the db.
  */ 
-MManager.prototype.SaveMap = function(parent){
+MManager.prototype.SaveMap = function(level){
 	var map = [];
 	var edges = [];
 	//Grab all the node info
@@ -561,14 +645,36 @@ MManager.prototype.SaveMap = function(parent){
 		edges.push(temp);
 	}
 	
+	var connections = [];
+	for(var i = 0; i < this.nodes.length; i++)
+	{
+		var n = this.nodes[i];
+		var nid = n.id;
+		if(n.lines.length != 0)
+		{
+			var con = [];
+			for(var j = 0; j < n.lines.length; j++)
+			{
+				var eid = n.lines[j].eid;
+				con.push(eid);
+			}
+			var temp = {
+				nid: nid,
+				con: con
+			};
+			connections.push(temp);
+		}
+	}
+	
 	$.ajax({
 		async: true, 
 		type: 'POST',
 		url: "../map_manager/mapsave.php",
 		dataType: 'html',
-		data: {map: map, edges: edges, parent: parent},
+		data: {map: map, edges: edges, connections: connections, level: level},
 		
 		success: function(result){
+			alert(result);
 			swal("Saved"); 
 		}
 	});

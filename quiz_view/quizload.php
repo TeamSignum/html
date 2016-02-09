@@ -1,5 +1,9 @@
 <?php
 
+session_start();
+$cid = $_SESSION['classid'];
+$nid = 1;
+
 if(isset($_POST["load"]))
 {
 	try
@@ -8,7 +12,7 @@ if(isset($_POST["load"]))
 		$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$DB->beginTransaction();
 		
-		$query = "SELECT * FROM questions";
+		$query = "SELECT * FROM questions WHERE cid='$cid' AND nid='$nid'";
 		
 		$statement = $DB->prepare($query);
 		$statement->execute();

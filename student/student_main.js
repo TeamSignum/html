@@ -1,4 +1,5 @@
 var classNumberArray = [];
+var classIdArray = [];
 var studentNodeRadius = 100;
 var classOrbitalRadius = 200;
 var classNodeRadius = 60;
@@ -9,16 +10,26 @@ function getClassNumbers(){
 		async: false,
 		type: 'POST',
 		url: "student_main.php",
-		datatpye: "json",
+		datatpye: 'json',
 		data: {class: 1},
 		
 		success: function(result){
-			var classNumbersJson = JSON.parse(result); 	
-			for(var x in classNumbersJson){
-				classNumberArray.push(classNumbersJson[x].classnumber);
-			}
-			classNumberArray.push("+");
 			//alert(result);
+			var temp = JSON.parse(result);
+			for(var x in temp)
+			{
+				classIdArray.push(temp[x].cid);
+				classNumberArray.push(temp[x].classnumber);
+			}
+			classIdArray.push("-1");
+			classNumberArray.push("+");
+			//classNumberArray.push({cid: "-1", classnumber: "+"});
+			//alert(classNumberArray);
+			//var classNumbersJson = JSON.parse(result); 	
+			//for(var x in classNumbersJson){
+				//classNumberArray.push(classNumbersJson[x].classnumber);
+			//}
+			//classNumberArray.push("+");
 		}
 	});
 }
@@ -48,6 +59,15 @@ function drawclassnode(canvas){
 	for (var i = classNumberArray.length - 1; i >= 0; i--) {
 		//
 		currentAngle = i * classNodeSpacing;
+		var idname = classNumberArray[i];
+		if(idname === "+")
+		{
+			idname = "addNode";
+		}
+		else
+		{
+			idname = "classNode";
+		}
 
 		//draw the circle
 		var classCircle = new fabric.Circle({
@@ -74,14 +94,13 @@ function drawclassnode(canvas){
 			left: canvas.width/2 + Math.cos(currentAngle)*classOrbitalRadius - classNodeRadius,
 			top: canvas.height/2 + Math.sin(currentAngle)*classOrbitalRadius - classNodeRadius,
 			selectable: false,
-			id: "mapNode"
+			id: idname
 		});
 		
-		node_group.cid = classNumberArray[i];
+		node_group.cid = classIdArray[i];
 
 		canvas.add(node_group);
 	};
-
 }
 
 function redirect(){
@@ -159,7 +178,7 @@ $( document ).ready(function() {
 		selectable: false,
 		stroke: 'white',
 		strokeWidth: 5,
-		id: "mapNode"
+		id: "accountNode"
 	});
 	
 	studentNodeGroup.on('selected', function() {
@@ -173,17 +192,28 @@ $( document ).ready(function() {
 	canvas.on({
 
 		'mouse:down': function(e) {
-	    	if (e.target) 
-	    	{
-				//alert(e.target.cid);
-	    		//loadNodePopup(e.target);
-				//redirect();
-				directToClass(e.target.cid);
-	    	}
+			if(e.target)
+			{
+				if (e.target.id === "classNode") 
+				{
+					//alert(e.target.cid);
+					//loadNodePopup(e.target);
+					//redirect();
+					directToClass(e.target.cid);
+				}
+				if(e.target.id === "addNode")
+				{
+					alert(e.target.cid);
+				}
+				if(e.target.id === "accountNode")
+				{
+					alert("t");
+				}
+			}
 	    },
 		
 		'mouse:over': function(e){
-			if(e.target.id === "mapNode")
+			if(e.target.id === "classNode" || e.target.id === "addNode" || e.target.id === "accountNode")
 			{
 				//e.target.studentNode.setStroke('yellow');
 				e.target.forEachObject(function(object,i){
@@ -197,7 +227,7 @@ $( document ).ready(function() {
 		},
 	
 		'mouse:out': function(e){
-			if(e.target.id === "mapNode")
+			if(e.target.id === "classNode" || e.target.id === "addNode" || e.target.id === "accountNode")
 			{
 				//e.target.setStroke('white');
 				e.target.forEachObject(function(object,i){
