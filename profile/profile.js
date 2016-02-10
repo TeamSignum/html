@@ -57,7 +57,7 @@ function submitProfileChanges(){
 		$.ajax({
 			async: true,
 			processData: false, // This must be false with FormData object
-      contentType: false, // This must be false with FormData object
+      		contentType: false, // This must be false with FormData object
 			type: 'POST',
 			url: "saveProfile.php",
 			data: formData,

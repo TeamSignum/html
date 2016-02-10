@@ -1,8 +1,8 @@
 <?php
 
 	/* 
-	 * Author: Joseph Cottongim
-	 * Date: February 8, 2016
+	 * Author: Learning Universe
+	 * Last Updated: February 9, 2016
 	 *
 	 * PHP backend functionality for professor to create a class
 	 *
@@ -11,8 +11,8 @@
 	// TODO: Add all error checking
 	session_start();
 	
-	print_r($_SESSION);
-	print_r($_POST);
+	//print_r($_SESSION);
+	//print_r($_POST);
 	
 	// Check SESSION variables
 	if(!isset($_SESSION['userid'])){
@@ -45,25 +45,49 @@
 	try {
 		// Login to the database	
 		$DB=openDB();
-			
-		$query = "INSERT INTO classes 
-				  (section, classnumber, classname, description, ekey)
-				  VALUES
-				  (?,?,?,?,?)";
+		// Use a transaction since there are multiple queries
+		$DB->beginTransaction();
+		
+			// Insert info into classes table	
+			$query = "INSERT INTO classes 
+					  (section, classnumber, classname, description, ekey)
+					  VALUES
+					  (?,?,?,?,?)";
 
-		$statement = $DB->prepare($query);
-		$statement->bindValue (1, $section);
-		$statement->bindValue (2, $classnumber);
-		$statement->bindValue (3, $classname);					
-		$statement->bindValue (4, $description);
-		$statement->bindValue (5, $ekey);
-		$statement->execute();
+			$statement = $DB->prepare($query);
+			$statement->bindValue (1, $section);
+			$statement->bindValue (2, $classnumber);
+			$statement->bindValue (3, $classname);					
+			$statement->bindValue (4, $description);
+			$statement->bindValue (5, $ekey);
+			$statement->execute();
+
+			// Get the CID of the newly inserted class
+			$query="SELECT LAST_INSERT_ID()";
+			$statement = $DB->prepare($query);
+			$statement->execute();
+			$result = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+			$cid=$result[0]['LAST_INSERT_ID()'];
+
+			// Insert the info into the teaching table
+			$query = "INSERT INTO teaching
+					  (idusers, cid)
+					  VALUES
+					  (?,?)";
+			$statement = $DB->prepare($query);
+			$statement->bindValue (1, $userid);
+			$statement->bindValue (2, $cid);
+			$statement->execute();
+		// Commit the transaction
+		$DB->commit();
 	}
-	catch  (PDOException $ex){
-		echo
+	catch (Exception $ex){
+    	$DB->rollback();
+    	echo
 		    "<p>oops</p>
 		     <p> Code: {$ex->getCode()} </p>
 		     <pre>$ex</pre>";
-	}
+    }
 	
 ?>
