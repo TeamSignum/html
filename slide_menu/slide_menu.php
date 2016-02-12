@@ -13,14 +13,14 @@
 	<div id="navbar:../"></div>
 
 	<div class="container-slide">
-    <div id="sidebar" style="overflow:scroll;  height:300px;">
-        
-    </div>
-    <div class="main-content">
-        <a href="#" data-toggle=".container-slide" id="sidebar-toggle">
-            <span>Toggle nav</span>
-        </a>
-    </div>
+        <div id="sidebar" style="overflow:scroll;  height:300px;">
+            
+        </div>
+        <div class="main-content">
+            <a href="#" data-toggle=".container-slide" id="sidebar-toggle">
+                <span>Toggle nav</span>
+            </a>
+        </div>
     </div>
 </body>
 </html>

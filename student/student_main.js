@@ -218,7 +218,7 @@ $( document ).ready(function() {
 						window.location.href = "/create_class/create_class.html";
 					}
 					else{
-						alert("Not added yet");
+						window.location = '../add_class/add_class.html';
 					}
 
 				}
