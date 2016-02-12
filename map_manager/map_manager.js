@@ -129,6 +129,44 @@ MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, f
 	{
 		c.lockMovementX = true;
 		c.lockMovementY = true;
+		
+		var pc = new fabric.Circle({
+				top: top + 35,
+				left: left + 2*radius + 20,
+				radius: 15,
+				fill: 'red',
+				id: "partNode"
+		});
+		
+		pc.hasControls = false;
+		pc.hasBorders = false;
+		pc.lockMovementX = true;
+		pc.lockMovementY = true;
+		
+		canvas.add(pc);
+		
+		var pt = new fabric.Text("0", {
+				fontFamily: 'arial black',
+				fontSize: 12,
+				left: left + 2*radius + 20,
+				top: top + 35 + 7,
+				id: "partText"
+		});
+		
+		var plen = pt.getWidth()/2;
+		var pcenX = pc.getCenterPoint().x;
+		pt.left = pcenX - plen;
+		
+		pt.hasControls = false;
+		pt.hasBorders = false;
+		pt.lockMovementX = true;
+		pt.lockMovementY = true;
+		
+		pc.ptext = pt;
+		
+		c.pnode = pc;
+		
+		canvas.add(pt);
 	}
 	
 	canvas.add(c);
@@ -136,7 +174,7 @@ MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, f
 	//Draw participant nodes
 	if(tempi < 3)
 	{
-		drawParticipantNodes(c, tempp);
+		//drawParticipantNodes(c, tempp);
 		tempp = tempp - 4;
 	}
 
