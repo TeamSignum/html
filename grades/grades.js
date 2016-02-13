@@ -22,6 +22,7 @@ function getGrades(){
 		success: function(result){
 			//alert(result);
 			var parsedResult = JSON.parse(result);
+
 			buildDisplayPage(parsedResult);
 		}
 	});

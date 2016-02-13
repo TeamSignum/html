@@ -3,7 +3,6 @@
 	/* 
 	 * Author: Joseph Cottongim
 	 * Date: January 31, 2016
-	 * Last Edited: February 13, 2016
 	 *
 	 * PHP file for queries relating to grades on the Learning Universe website
 	 *
@@ -22,7 +21,14 @@
 		$userid = $_SESSION['userid'];
 	}
 	
-	// Check gradeQuery to determine execution
+	// Check POST variables
+	if(isset($_POST['classid'])){
+		$classid = $_POST['classid'];
+	}
+	if(isset($_POST['nid'])){
+		$nid = $_POST['nid'];
+	}
+	
 	if(isset($_POST['gradeQuery']))
 	{
 		$gradeQuery=$_POST['gradeQuery'];
@@ -35,164 +41,110 @@
 		// Login to the database	
 		$DB=openDB();
 		
-		// Determine which gradeQuery is required and run it
+		// Queries are numbered 1-7
 		switch($gradeQuery) 
 		{
-			// #### Student requests ####
-			// Request a single grade
-			case 'studentOneGrade':
-				// Set up required variables
-				if(isset($_POST['cid']) && isset($_POST['idassignment'])){
-					$cid = $_POST['cid'];
-					$idassignment = $_POST['idassignment'];
-				}
-				else{
-					die("Information required for query was not found.")
-				}
-
-				$query = "SELECT c.classnumber, p.title, g.score
-						  FROM grades g
-						  INNER JOIN popupassignment p
-						  	  ON g.idassignment=p.idpopupassignment
-						  INNER JOIN classes c
-						      ON p.cid=c.cid
-						  WHERE g.idusers=? and c.cid=? and g.idassignment=?";
+			// Student requests
+			case 1: // Query a grade for a single assignment
+				$query = "SELECT c.classnumber, n.title, g.score
+									FROM grades g
+									INNER JOIN nodes n
+										ON g.nid=n.nid
+									INNER JOIN classes c
+										ON g.cid=c.cid
+									WHERE g.idusers=? and g.cid=? and n.nid=?;";
 									
 				$statement = $DB->prepare($query);
 				$statement->bindValue(1, $userid);					
-				$statement->bindValue(2, $cid);
-				$statement->bindValue(3, $idassignment);
+				$statement->bindValue (2, $classid);
+				$statement->bindValue (3, $nid);
 				break;
-			
-			// Query all grades for a class	
-			case 'studentAllGradesOneClass': 
-				// Set up required variables
-				if(isset($_POST['cid'])){
-					$cid = $_POST['cid'];
-				}
-				else{
-					die("Information required for query was not found.")
-				}
-
-				$query = "SELECT c.classnumber, p.title, g.score
-						  FROM grades g
-						  INNER JOIN popupassignment p
-						      ON g.idassignment=p.idpopupassignment
-						  INNER JOIN classes c
-							  ON p.cid=c.cid
-						  WHERE g.idusers=? and p.cid=?
-						  ORDER BY p.duedate ASC";
+				
+			case 2: // Query all grades for a class
+				$query = "SELECT c.classnumber, n.title, g.score
+									FROM grades g
+									INNER JOIN nodes n
+										ON g.nid=n.nid
+									INNER JOIN classes c
+										ON g.cid=c.cid
+									WHERE g.idusers=? and g.cid=?
+									ORDER BY n.nid ASC;";
 				
 				$statement = $DB->prepare($query);
-				$statement->bindValue(1, $userid);
-				$statement->bindValue(2, $classid);
+				$statement->bindValue (1, $userid);
+				$statement->bindValue (2, $classid);
 				break;
 			
-			// Query all grades for all classes
-			case 'studentAllGradesAllClasses': 
-				$query = "SELECT c.cid, c.classnumber, n.title, g.score
-						  FROM grades g
-						  INNER JOIN nodes n
-							  ON g.nid=n.nid
-						  INNER JOIN classes c
-							  ON g.cid=c.cid
-						  WHERE g.idusers=?
-						  ORDER BY c.classnumber ASC";
+			case 3: // Query all grades for all classes
+				$query =	"SELECT c.cid, c.classnumber, n.title, g.score
+									FROM grades g
+									INNER JOIN nodes n
+										ON g.nid=n.nid
+									INNER JOIN classes c
+										ON g.cid=c.cid
+									WHERE g.idusers=?
+									ORDER BY c.classnumber ASC;";
 									
 				$statement = $DB->prepare($query);
 				$statement->bindValue(1, $userid);		
 				break;
 			
-			// #### Professor requests ####
-			// Query a single student grade for a single assignment
-			case 'professorOneStudentOneAssignment': 
-				// Set up required variables
-				if(isset($_POST['studentid']) && isset($_POST['cid']) && isset($_POST['idassignment'])){
-					$studentid = $_POST['studentid'];
-					$cid = $_POST['cid'];
-					$idassignment = $_POST['idassignment'];
-				}
-				else{
-					die("Information required for query was not found.")
-				}
-
-				$query = "SELECT c.classnumber, p.title, g.score
-						  FROM grades g
-						  INNER JOIN popupassignment p
-							  ON g.idassignment=p.idpopupassignment
-						  INNER JOIN classes c
-							  ON p.cid=c.cid
-						  WHERE g.idusers=? and c.cid=? and g.idassignment=?";
+			// Professor requests
+			case 4: // Query a single student grade for a single assignment
+				$query =	"SELECT c.classnumber, n.title, g.score
+									FROM grades g
+									INNER JOIN nodes n
+										ON g.nid=n.nid
+									INNER JOIN classes c
+										ON g.cid=c.cid
+									WHERE g.idusers=? and n.nid=?;";
 				
 				$statement = $DB->prepare($query);
-				$statement->bindValue(1, $studentid);					
-				$statement->bindValue(2, $cid);
-				$statement->bindValue(3, $idassignment);
-				break;
-			
-			// Query all grades for a student for a specific class	
-			case 'professorOneStudentAllAssignments': 
-				if(isset($_POST['studentid']) && isset($_POST['cid'])){
-					$studentid = $_POST['studentid'];
-					$cid = $_POST['cid'];
-				}
-				else{
-					die("Information required for query was not found.")
-				}
-				$query = "SELECT c.classnumber, p.title, g.score
-						  FROM grades g
-						  INNER JOIN popupassignment p
-							  ON g.idassignment=p.idpopupassignment
-						  INNER JOIN classes c
-							  ON p.cid=c.cid
-						  WHERE g.idusers=? and c.cid=?";
-									
-				$statement = $DB->prepare($query);
-				$statement->bindValue(1, $studentid);					
-				$statement->bindValue (2, $cid);
+				$statement->bindValue(1, $userid);					
+				$statement->bindValue (2, $nid);
 				break;
 				
-			// Query all grades for a specific assignment	
-			case 'professorOneClassOneAssignments': 
-				if(isset($_POST['cid']) && isset($_POST['idassignment'])){
-					$cid = $_POST['cid'];
-					$idassignment = $_POST['idassignment'];
-				}
-				else{
-					die("Information required for query was not found.")
-				}
-				$query = "SELECT c.classnumber, p.title, g.score
-						  FROM grades g
-						  INNER JOIN popupassignment p
-						    ON g.idassignment=p.idpopupassignment
-						  INNER JOIN classes c
-						    ON p.cid=c.cid
-						  WHERE g.idassignment=? and c.cid=?";
+			case 5: // Query all grades for a student for a specific class
+				$query =	"SELECT c.classnumber, n.title, g.score
+									FROM grades g
+									INNER JOIN nodes n
+										ON g.nid=n.nid
+									INNER JOIN classes c
+										ON g.cid=c.cid
+									WHERE g.idusers=? and g.cid=?
+									ORDER BY n.nid ASC;";
 									
 				$statement = $DB->prepare($query);
-				$statement->bindValue(1, $idassignment);					
-				$statement->bindValue (2, $cid);
+				$statement->bindValue(1, $userid);					
+				$statement->bindValue (2, $classid);
 				break;
-			
-			// Query all grades for a class	
-			case 'professorOneClassAllAssignments':
-				if(isset($_POST['cid'])){
-					$cid = $_POST['cid'];
-				}
-				else{
-					die("Information required for query was not found.")
-				}
-
-				$query = "SELECT c.classnumber, p.title, g.score
-						  FROM grades g
-						  INNER JOIN popupassignment p
-						    ON g.idassignment=p.idpopupassignment
-						  INNER JOIN classes c
-						    ON p.cid=c.cid
-						  WHERE c.cid=?";
+				
+			case 6: // Query all grades for an assignment
+				$query =	"SELECT c.classnumber, n.title, g.score
+									FROM grades g
+									INNER JOIN nodes n
+										ON g.nid=n.nid
+									INNER JOIN classes c
+										ON g.cid=c.cid
+									WHERE n.nid=?;";
 									
 				$statement = $DB->prepare($query);
-				$statement->bindValue (1, $cid);
+				$statement->bindValue(1, $nid);					
+				break;
+				
+			case 7: // Query all grades for a class
+				$query = "SELECT c.classnumber, n.title, g.score
+									FROM grades g
+									INNER JOIN nodes n
+										ON g.nid=n.nid
+									INNER JOIN classes c
+										ON g.cid=c.cid
+									WHERE g.idusers=? and g.cid=?
+									ORDER BY n.nid ASC;";
+									
+				$statement = $DB->prepare($query);
+				$statement->bindValue(1, $userid);					
+				$statement->bindValue (2, $classid);
 				break;
 		}
 		
