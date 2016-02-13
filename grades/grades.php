@@ -47,7 +47,7 @@
 					$idassignment = $_POST['idassignment'];
 				}
 				else{
-					die("Information required for query was not found.")
+					die("Information required for query was not found.");
 				}
 
 				$query = "SELECT c.classnumber, p.title, g.score
@@ -71,7 +71,7 @@
 					$cid = $_POST['cid'];
 				}
 				else{
-					die("Information required for query was not found.")
+					die("Information required for query was not found.");
 				}
 
 				$query = "SELECT c.classnumber, p.title, g.score
@@ -90,13 +90,13 @@
 			
 			// Query all grades for all classes
 			case 'studentAllGradesAllClasses': 
-				$query = "SELECT c.cid, c.classnumber, n.title, g.score
+				$query = "SELECT c.cid, c.classnumber, p.title, g.score
 						  FROM grades g
-						  INNER JOIN nodes n
-							  ON g.nid=n.nid
+						  INNER JOIN popupassignment p
+							  ON g.idassignment=p.idpopupassignment
 						  INNER JOIN classes c
-							  ON g.cid=c.cid
-						  WHERE g.idusers=?
+							  ON p.cid=c.cid
+						  WHERE g.idusers=$userid
 						  ORDER BY c.classnumber ASC";
 									
 				$statement = $DB->prepare($query);
@@ -113,7 +113,7 @@
 					$idassignment = $_POST['idassignment'];
 				}
 				else{
-					die("Information required for query was not found.")
+					die("Information required for query was not found.");
 				}
 
 				$query = "SELECT c.classnumber, p.title, g.score
@@ -137,7 +137,7 @@
 					$cid = $_POST['cid'];
 				}
 				else{
-					die("Information required for query was not found.")
+					die("Information required for query was not found.");
 				}
 				$query = "SELECT c.classnumber, p.title, g.score
 						  FROM grades g
@@ -159,7 +159,7 @@
 					$idassignment = $_POST['idassignment'];
 				}
 				else{
-					die("Information required for query was not found.")
+					die("Information required for query was not found.");
 				}
 				$query = "SELECT c.classnumber, p.title, g.score
 						  FROM grades g
@@ -180,7 +180,7 @@
 					$cid = $_POST['cid'];
 				}
 				else{
-					die("Information required for query was not found.")
+					die("Information required for query was not found.");
 				}
 
 				$query = "SELECT c.classnumber, p.title, g.score
