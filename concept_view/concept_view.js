@@ -16,6 +16,8 @@ $( document ).ready(function() {
 	mngr.LoadMap(mngr, 2, 0);
 	mngr.LoadEdges(mngr, 2, 0);
 	
+	getParticipants();
+	
 	//Canvas events
 	canvas.on({
 
@@ -24,6 +26,8 @@ $( document ).ready(function() {
 			{
 				if (e.target.id === "mapNode") 
 				{
+					setParticipant(e.target.nid);
+					getParticipants();
 					mngr.HandleMapNodeSelect(e.target);
 				}
 			}
@@ -59,6 +63,65 @@ $( document ).ready(function() {
 	});
 
 });
+
+function setParticipant(nid)
+{
+	$.ajax({
+		type: 'POST',
+		url: "concept_view.php",
+		dataType: 'html',
+		data: {setp: nid},
+		//async: false,
+		
+		success: function(result){
+			//alert(result);
+		}
+	});
+	
+	return false;
+}
+
+function getParticipants()
+{
+	var temp = [];
+	for(var i = 0; i < mngr.nodes.length; i++)
+	{
+		//alert(mngr.nodes[i].id);
+		temp.push(mngr.nodes[i].id);
+	}
+	$.ajax({
+		type: 'POST',
+		url: "concept_view.php",
+		dataType: 'json',
+		data: {pnodes: temp},
+		//async: false,
+		
+		success: function(result){
+			//alert(result);
+			//alert(result[0].nid + " " + result[0].count);
+			for(var i = 0; i < result.length; i++)
+			{
+				drawParticipants(result[i].nid, result[i].count);
+			}
+		}
+	});
+	
+	return false;
+}
+
+function drawParticipants(nid, count)
+{
+	var temp;
+	for(var i = 0; i < mngr.nodes.length; i++)
+	{
+		if(mngr.nodes[i].id == nid)
+		{
+			temp = mngr.nodes[i].node;
+		}
+	}
+	
+	temp.pnode.ptext.setText(count);
+}
 
 
 //Calculates the participant nodes spacing
