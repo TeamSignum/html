@@ -62,6 +62,37 @@ $( document ).ready(function() {
 
 });
 
+function getPercents()
+{
+	var temp = [];
+	for(var i = 0; i < mngr.nodes.length; i++)
+	{
+		//alert(mngr.nodes[i].id);
+		temp.push(mngr.nodes[i].id);
+	}
+	$.ajax({
+		type: 'POST',
+		url: "class_view.php",
+		dataType: 'json',
+		data: {userperc: temp},
+		//async: false,
+		
+		success: function(result){
+			//alert(result);
+			//alert(result[0].nid + " " + result[0].count);
+			for(var i = 0; i < result.length; i++)
+			{
+				if(result[i].count != null)
+				{
+					//drawParticipants(result[i].nid, result[i].count);
+				}
+			}
+		}
+	});
+	
+	return false;
+}
+
 function getParticipants()
 {
 	var temp = [];
