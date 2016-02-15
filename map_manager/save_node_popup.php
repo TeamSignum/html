@@ -2,6 +2,8 @@
 
 include '../imports/ChromePhp.php';
 
+session_start();
+
 if(isset($_POST['action']) && !empty($_POST['action'])) {
     $action = $_POST['action'];
     ChromePhp::log($action);
@@ -26,6 +28,7 @@ function SaveConceptPopup(){
 	$description= $_POST["description"];
 	$notes = $_POST["notes"];
 	$duedate= $_POST["duedate"];
+	$cid = $_SESSION['classid'];
 
 	try
 	{
@@ -36,10 +39,10 @@ function SaveConceptPopup(){
 
 		// Create query 
 		if($classOrConcept == 0){
-			$query = "REPLACE INTO `popupconcept` (`nid`, `title`, `description`, `duedate`, `notes`) values (?,?,?,?,?)";
+			$query = "REPLACE INTO `popupconcept` (`nid`, `title`, `description`, `duedate`, `notes`, `cid`) values (?,?,?,?,?,?)";
 		}
 		else{
-			$query = "REPLACE INTO `popupconcept2` (`nid`, `title`, `description`, `duedate`, `notes`) values (?,?,?,?,?)";
+			$query = "REPLACE INTO `popupconcept2` (`nid`, `title`, `description`, `duedate`, `notes`, `cid`) values (?,?,?,?,?,?)";
 		}
 		$statement = $DB->prepare($query);
 
@@ -48,6 +51,7 @@ function SaveConceptPopup(){
 		$statement->bindValue (3, $description);
 		$statement->bindValue (4, $duedate);
 		$statement->bindValue (5, $notes);
+		$statement->bindValue (6, $cid);
 
 		// Execute query
 		$statement->execute();
@@ -66,6 +70,7 @@ function SaveAssignmentPopup(){
 	$description= $_POST["description"];
 	$notes = $_POST["notes"];
 	$duedate= $_POST["duedate"];
+	$cid = $_SESSION['classid'];
 
 	try
 	{
@@ -74,16 +79,15 @@ function SaveAssignmentPopup(){
 		$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$DB->beginTransaction();
 
-		$query = "REPLACE INTO `popupassignment` (`nid`, `title`, `description`, `duedate`, `notes`) values (?,?,?,?,?)";
+		$query = "REPLACE INTO `popupassignment` (`nid`, `title`, `description`, `duedate`, `notes`, `cid`) values (?,?,?,?,?,?)";
 		$statement = $DB->prepare($query);
-
-		ChromePhp::log($query);
 
 		$statement->bindValue (1, $nid);
 		$statement->bindValue (2, $title);
 		$statement->bindValue (3, $description);
 		$statement->bindValue (4, $duedate);
 		$statement->bindValue (5, $notes);
+		$statement->bindValue (6, $cid);
 
 		// Execute query
 		$statement->execute();
@@ -102,6 +106,7 @@ function SaveQuizPopup(){
 	$description= $_POST["description"];
 	$duedate= $_POST["duedate"];
 	$notes= $_POST["notes"];
+	$cid = $_SESSION['classid'];
 
 	try
 	{
@@ -111,7 +116,7 @@ function SaveQuizPopup(){
 		$DB->beginTransaction();
 
 		// Create query 
-		$query = "REPLACE INTO `popupquiz` (`nid`, `title`, `description`, `duedate`, `notes`) values (?,?,?,?,?)";
+		$query = "REPLACE INTO `popupquiz` (`nid`, `title`, `description`, `duedate`, `notes`, `cid`) values (?,?,?,?,?,?)";
 		$statement = $DB->prepare($query);
 
 		$statement->bindValue (1, $nid);
@@ -119,6 +124,7 @@ function SaveQuizPopup(){
 		$statement->bindValue (3, $description);
 		$statement->bindValue (4, $duedate);
 		$statement->bindValue (5, $notes);
+		$statement->bindValue (6, $cid);
 
 		// Execute query
 		$statement->execute();

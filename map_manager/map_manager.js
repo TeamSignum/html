@@ -101,8 +101,8 @@ MManager.prototype.HandleMapNodeSelect = function (node){
 	}
 }
 
-MManager.prototype.ConstructMap = function(result){
-
+MManager.prototype.GetCurrentId = function(result){
+	return this.crrnt.nid;
 }
 
 //Draw a node onto the canvas
@@ -788,9 +788,10 @@ MManager.prototype.CheckOffNode = function(){
 						mngr.nodes[i].node.setFill("#0d0");
 						mngr.nodes[i].node.setStroke("#0d0");
 						mngr.nodes[i].node.id = "cmapNode";
-						$("#popup").hide(); 
+						//$("#popup").hide(); 
 						$("#dim_div").hide();
-						$("#checkorx").hide();
+						//$("#checkorx").hide();
+						$("#custom_container").hide();
 					}
 				}   
 			} 
@@ -804,11 +805,13 @@ MManager.prototype.CheckOffNode = function(){
  * 
  */
 MManager.prototype.FillPopup = function(title, description, duedate, notes){
-	$("#popup").show(); 
-	$("#title").html(title); 
-	$("#description").html(description); 
-	$("#duedate").html("Due date: " + duedate); 
-	$("#notes").html(notes); 
+	// $("#popup").show(); 
+	// $("#title").html(title); 
+	// $("#description").html(description); 
+	// $("#duedate").html("Due date: " + duedate); 
+	// $("#notes").html(notes); 
+
+	$("#custom_container").show();
 }
 
 /*
@@ -825,13 +828,8 @@ MManager.prototype.ShowPopup = function(node, popup){
 		}
 	}
 
-	popup.show();
-	if(this.mode == 0){
-		$("#checkorx").show();
-	}
-	else{
-		$("#cancelorsave").show();
-	}
+	LoadDiscussion(this.crrnt.nid); // From API/Discussion/discussion.js
+	$("#custom_container").show();
 	$("#dim_div").show();
 }
 
@@ -868,12 +866,10 @@ MManager.prototype.CreateConceptPopup = function(title, description, due_date, n
 		notes = "";
 
 	innerHtml = "" + 
- 	"<div class=\"row\">" +
-	 	"<div class=\"col-md-2\"></div>" +
-		"    <div class=\"col-md-8\">" +
-		" 	 <div class=\"form-style-2\">" + 
-		"    	<div class=\"form-style-2-heading\">Concept Node Details</div>" + 
-		"			 <form>"+ 
+ 	"<div>" +
+		" 	 <div class=\"form-style-2\" style=\"width: 90%;\">" + 
+		"    <div class=\"form-style-2-heading\" style=\"width: 110%;\">Concept Node Details</div>" + 
+		"			 <form style=\"margin-left: 13%;\">"+ 
 		"    			<label for=\"field1\"><span>Title <span class=\"required\">*</span></span><input class=\"input-field\" id=\"title\" name=\"title\" type=\"text\" value=\""+ title +"\" placeholder=\"Title\"/></label>"+
 		"				<label for=\"field2\"><span>Description <span class=\"required\">*</span></span><input class=\"input-field\" id=\"description\" name=\"description\" type=\"text\" value=\""+ description +"\" placeholder=\"Description\"/></label>"+
 		"				<label for=\"field5\"><span>Notes <span class=\"\"></span></span><textarea name=\"notes\" id=\"notes\" class=\"textarea-field\">"+ notes +"</textarea></label>"+
@@ -886,12 +882,9 @@ MManager.prototype.CreateConceptPopup = function(title, description, due_date, n
 		"	        	Concept Page" +
 		"				</button>" +
 		"			 </form>"+
-		"		</div>"+
+		"	 </div>" +
 		"    </div>" +
-		"    </div>" +
-	 	"<div class=\"col-md-2\"></div>" +
-  	"</div> " +
-  	"";
+  	"</div>";
 
   	ids.push("title");
   	ids.push("description");
@@ -923,8 +916,8 @@ MManager.prototype.CreateAssignmentPopup = function(title, description, due_date
  	"<div class=\"row\">" +
 	 	"<div class=\"col-md-2\"></div>" +
 		"    <div class=\"col-md-8\">" +
+		"    <div class=\"form-style-2-heading\">Assignment Node Details</div>" + 
 		" 	 <div class=\"form-style-2\">" + 
-		"    	<div class=\"form-style-2-heading\">Assignment Node Details</div>" + 
 		"			 <form>"+ 
 		"    			<label for=\"field1\"><span>Title <span class=\"required\">*</span></span><input class=\"input-field\" id=\"title\" name=\"title\" type=\"text\" value=\""+ title +"\" placeholder=\"Title\"/></label>"+
 		"				<label for=\"field2\"><span>Description <span class=\"required\">*</span></span><input class=\"input-field\" id=\"description\" name=\"description\" type=\"text\" value=\""+ description +"\" placeholder=\"Description\"/></label>"+
@@ -1010,18 +1003,20 @@ MManager.prototype.CreateQuizPopup = function(title, description, due_date, note
  * Hides the popup. 
  */
 MManager.prototype.HidePopup = function(){
- 	$("#popup").hide();
+ 	//$("#popup").hide();
  	$("#popup").html("");
- 	$("#cancelorsave").hide();
+ 	//$("#cancelorsave").hide();
  	$("#dim_div").hide();
+ 	$("#custom_container").hide();
 }
 
 /*
  * Hides the popup. 
  */
 MManager.prototype.HidePopup2 = function(){
- 	$("#popup").hide();
- 	$("#checkorx").hide();
+ 	//$("#popup").hide();
+ 	//$("#checkorx").hide();
+ 	$("#custom_container").hide();
  	$("#dim_div").hide();
 }
 
@@ -1088,8 +1083,9 @@ MManager.prototype.SavePopup = function(){
 		url: "../map_manager/save_node_popup.php",
 		data: _data, 
 		success: function(result){
-			$("#popup").hide(); 
-			$("#cancelorsave").hide(); 
+			//$("#popup").hide(); 
+			//$("#cancelorsave").hide(); 
+			$("#custom_container").hide();
 			$("#popup").html("");
 			$("#canvas").show(); 
  			$("#dim_div").hide();
