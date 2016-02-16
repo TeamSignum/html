@@ -3,7 +3,6 @@
 include '../../imports/ChromePhp.php';
 
 session_start();
-$idusers = $_SESSION['idusers'];
 
 if(isset($_POST['action']) && !empty($_POST['action'])) {
     $action = $_POST['action'];
@@ -19,15 +18,18 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
 
 function LoadDiscussion(){
 	$nid = $_POST["nid"];
+	$cid     = $_SESSION['classid'];
+	$idusers = $_SESSION['idusers'];
 
 	try{
 		$DB = new PDO("mysql:host=ec2-52-33-118-140.us-west-2.compute.amazonaws.com;dbname=LU", 'Signum', 'signumDB4');
 		$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-		$query = "SELECT * FROM discussions WHERE discussions.nid = ? ORDER BY discussions.level";
+		$query = "SELECT * FROM discussions WHERE discussions.nid = ? AND discussions.cid = ? ORDER BY discussions.level";
 
 		$statement = $DB->prepare($query);
 		$statement->bindParam(1, $nid);
+		$statement->bindParam(2, $cid);
 		$statement->execute();
 
 		$results = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -59,6 +61,8 @@ function SaveDiscussion(){
 	$level   = $_POST["level"];
 	$content = $_POST["content"];
 	$parent  = $_POST["parent"];
+	$cid     = $_SESSION['classid'];
+	$idusers = $_SESSION['idusers'];
 
 	try
 	{
@@ -68,15 +72,16 @@ function SaveDiscussion(){
 		$DB->beginTransaction();
 
 		// Create Query
-		$query = "INSERT INTO `discussions` (`nid`, `idusers`, `level`, `content`, `parent`) values (?,?,?,?,?)";
+		$query = "INSERT INTO `discussions` (`nid`, `cid`, `idusers`, `level`, `content`, `parent`) values (?,?,?,?,?,?)";
 		$statement = $DB->prepare($query);
 
 		// Bind Values
 		$statement->bindValue (1, $nid);
-		$statement->bindValue (2, $idusers);
-		$statement->bindValue (3, $level);
-		$statement->bindValue (4, $content);
-		$statement->bindValue (5, $parent);
+		$statement->bindValue (2, $cid);
+		$statement->bindValue (3, $idusers);
+		$statement->bindValue (4, $level);
+		$statement->bindValue (5, $content);
+		$statement->bindValue (6, $parent);
 
 		// Execute query
 		$statement->execute();
