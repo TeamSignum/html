@@ -85,17 +85,23 @@ function enroll(ekeyVal, addclassVal){
 }
 
 function deleteMyClass(deleteclassVal){
-	$.ajax({
-		async: true,
-		type: 'POST',
-		url: "add_class.php",
-		datatype: 'json',
-		data: {'function': 'deleteMyClass', 'cid': deleteclassVal},
-		success: function(result){
-			 window.location='../student/student.php';	
-		},
-		error:function(request,status,error){
-        	alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-       	}
-	});
+	var check = confirm("Are you sure?");
+
+	if(check == true){
+		$.ajax({
+			async: true,
+			type: 'POST',
+			url: "add_class.php",
+			datatype: 'json',
+			data: {'function': 'deleteMyClass', 'cid': deleteclassVal},
+			success: function(result){
+				 window.location='../student/student.php';	
+			},
+			error:function(request,status,error){
+	        	alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+	       	}
+		});
+	}else{
+		alert('You pressed Cancel!');
+	}
 }
