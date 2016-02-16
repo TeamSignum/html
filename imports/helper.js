@@ -42,7 +42,13 @@
 
  	$('*[id^="navbar"]').load(path); 
 
- 	// TODO: change navbar-image src tag. 
+ 	// slide_menu
+
+ 	// var $element  = $('*[id^="slide_menu"]'); 
+ 	// var id        = $element[0].id; 
+ 	// var path      = id.split(":")[1] + "slide_menu/slide_menu_ver2.html"; 
+
+ 	// $('*[id^="slide_menu"]').load(path);  
 
  }); 
 

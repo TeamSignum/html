@@ -1,14 +1,6 @@
-body, html {
-    height: 100%;
-    margin: 0;
-    overflow:hidden;
-    font-family: helvetica;
-    font-weight: 100;
-}
 .container-slide {
-    position: relative;
-    height: 100%;
-    width: 100%;
+    position: fixed;
+    top: 50%;
     right: 0;
     -webkit-transition:  right 0.4s ease-in-out;
     -moz-transition:  right 0.4s ease-in-out;
@@ -22,14 +14,20 @@ body, html {
 }
  
 #sidebar {
-    position: absolute;
+    position: relative;
+    right: -240px;
+    width: 15em;
+    margin-top: -2.5em;
+    background: #001fff;
+    /*position: absolute;
     right: -240px;
     background: #000000;
     width: 240px;
     height: 100%;
-    box-sizing: border-box;
+    box-sizing: border-box;*/
 }
 #sidebar ul {
+   
     margin: 0;
     padding: 0;
     list-style: none;
@@ -52,7 +50,7 @@ body, html {
     transition:  background 0.3s ease-in-out;
 }
 #sidebar ul li:hover a {
-    background: #0ff0f0;
+    background: #ff0000;
 }
 .main-content {
     width: 100%;
@@ -76,7 +74,7 @@ body, html {
     line-height: 160%;
 }
 .main-content #sidebar-toggle {
-    background: #000000;
+    background: #ffffff;
     border-radius: 3px;
     display: block;
     position: relative;

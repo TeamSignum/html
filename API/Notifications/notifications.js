@@ -20,7 +20,7 @@ function GetNotifications(pid)
 		type: 'POST',
 		url: "../API/Notifications/notifications.php",
 		dataType: 'json',
-		data: {func: 1, pid: pid},
+		data: {pid: pid},
 		success: function(results){
 			var notification = '';
 			for (var i = 0; i < results.length; i++){
