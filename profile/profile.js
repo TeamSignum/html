@@ -19,7 +19,6 @@ $( document ).ready(function()
 
 // Queries the database and stores profile information in javascript variables
 function getProfileData(){
-	"use strict";
 	$.ajax({
 		async: true,
 		type: 'POST',
