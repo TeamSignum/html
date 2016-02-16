@@ -1,3 +1,16 @@
+#custom_container {
+    position: absolute;
+    z-index: 998;
+    width: 80%;
+    left: 10%;
+    background-color: #fbfbfb; 
+    border-radius: 25px;
+    margin-top: 20px; 
+    margin-bottom: 20px; 
+    padding: 50px 0 50px 0; 
+    text-align: center; 
+}
+
 #canvas {
     width: 101%; 
     height: 800px;
@@ -6,43 +19,36 @@
     position: absolute;
 }
 
-#popup {
-    border-radius: 25px;
-    background-color: #fbfbfb; 
-    margin-top: 20px; 
-    padding: 50px 0 50px 0; 
+#lvl0{
+    text-align: left;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 30px;
     width: 80%;
-    left: 10%;
-    text-align: center; 
-    position: absolute;
-    z-index: 999;
-}
-
-
-#checkorx{
-    border-radius: 25px;
-    background-color: #fbfbfb; 
-    margin-top: 480px; 
-    padding: 50px 0 50px 0; 
-    width: 80%;
-    left: 10%;
-    text-align: center; 
-    position: absolute;
-    z-index: 999;
+    margin-left: 10%;
 }
 
 #p_Cancel{
     margin-right: 25px;
 }
 
+
+#checkorx{
+    margin-top: 50px;
+    background-color: #fbfbfb; 
+    width: 100%;
+    text-align: center; 
+    z-index: 999;
+}
+
 #dim_div{
     background-color: rgba(100, 100, 100, .6);
     display: none;
-    position: absolute;
+    position: fixed;
     width: 100%;
-    height: 800px;
-    top: 70;
-    z-index: 998;
+    top: 0px;
+    height: 1200px;
+    z-index: 997;
 }
 
 .form-style-2{
@@ -103,6 +109,10 @@
     height:100px;
     width: 70%;
 }
+.form-style-2 .textarea-field2{
+    height:80px;
+    width: 100%;
+}
 .form-style-2 input[type=submit],
 .form-style-2 input[type=button]{
     border: none;
@@ -120,4 +130,45 @@
 .form-style-2 input[type=button]:hover{
     background: #EA7B00;
     color: #fff;
+}
+
+.btn1 {
+  -webkit-border-radius: 40;
+  -moz-border-radius: 40;
+  border-radius: 40px;
+  font-family: Arial;
+  color: #000000;
+  font-size: 14px;
+  background: #63e024;
+  padding: 8px 20px 8px 20px;
+  border: solid #7abf13 2px;
+  text-decoration: none;
+  float: right;
+  margin-top: 10px;
+}
+
+.btn1:hover {
+  background: #ffffff;
+  text-decoration: none;
+}
+
+.btn2 {
+  -webkit-border-radius: 40;
+  -moz-border-radius: 40;
+  border-radius: 40px;
+  font-family: Arial;
+  color: #000000;
+  font-size: 14px;
+  background: #C66E78;
+  padding: 8px 20px 8px 20px;
+  border: solid #A51B2A 2px;
+  text-decoration: none;
+  float: right;
+  margin-top: 10px;
+  margin-right: 10px;
+}
+
+.btn2:hover {
+  background: #ffffff;
+  text-decoration: none;
 }
