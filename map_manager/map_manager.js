@@ -851,6 +851,21 @@ MManager.prototype.CreatePopupWithData = function(type, title, description, due_
 		return this.CreateQuizPopup(title, description, due_date, notes);
 }
 
+MManager.prototype.UploadFile = function(){
+	var formData = new FormData();
+	formData.append('nid', this.crrnt.nid);
+	formData.append('file', $('#filechooser')[0].files[0]);
+
+	$.ajax({
+       url : '../map_manager/upload.php',
+       type : 'POST',
+       data : formData,
+       processData: false,  // tell jQuery not to process the data
+       contentType: false,  // tell jQuery not to set contentType
+       success : function(data) {
+       }
+	});
+}
 
 MManager.prototype.CreateConceptPopup = function(title, description, due_date, notes){ 
 	var ids = [];
@@ -874,10 +889,9 @@ MManager.prototype.CreateConceptPopup = function(title, description, due_date, n
 		"				<label for=\"field2\"><span>Description <span class=\"required\">*</span></span><input class=\"input-field\" id=\"description\" name=\"description\" type=\"text\" value=\""+ description +"\" placeholder=\"Description\"/></label>"+
 		"				<label for=\"field5\"><span>Notes <span class=\"\"></span></span><textarea name=\"notes\" id=\"notes\" class=\"textarea-field\">"+ notes +"</textarea></label>"+
 		"				<label for=\"field2\"><span>Due Date<span class=\"\"></span></span><input class=\"input-field\" id=\"due_date\" name=\"due_date\" type=\"text\" value=\""+ due_date +"\" placeholder=\"Due date\"/></label>"+
-		"	        	<button id=\"lecture_notes\" style=\"float:left; font-size:12pt;\" type=\"button\" class=\"btn btn-default btn-md\">" +
-		"	        	Lecture Notes" +
-		"				</button>" +
-		"               </br></br></br>" +
+		"               </br>" +
+		"	        	<input type=\"file\" id=\"filechooser\" onchange=\"mngr.UploadFile();\">" +
+		"               </br>" +
 		"	        	<button id=\"concept_navigate\" onclick=\"mngr.NavigateToConcept();\" style=\"float:left; font-size:12pt;\" type=\"button\" class=\"btn btn-default btn-md\">" +
 		"	        	Concept Page" +
 		"				</button>" +
