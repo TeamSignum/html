@@ -14,7 +14,31 @@ $(document).ready(function() {
 		
 		enroll(ekeyVal, addclassVal);
   	});
+
+	getMyClasses();
+
+  	$('#delete').click(function(){
+  		var deleteclassVal = $('#myclass').val();
+  		deleteMyClass(deleteclassVal);
+  	});
 });
+
+function getMyClasses(){
+	$.ajax({
+		async: true,
+		type: 'POST',
+		url: "add_class.php",
+		datatype: 'json',
+		data: {'function': 'getMyClasses'},
+		success: function(result){
+			var myclasses = JSON.parse(result);			
+			$('#myclass').html(insertClasses(myclasses));			
+		},
+		error:function(request,status,error){
+        	alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+       	}
+	});
+}
 
 function getAllClasses(){
 	$.ajax({
@@ -24,8 +48,8 @@ function getAllClasses(){
 		datatype: 'json',
 		data: {'function': 'getallclasses'},
 		success: function(result){
-			var classes = JSON.parse(result);
-			insertClasses(classes);			
+			var classes = JSON.parse(result);			
+			$('#allclass').html(insertClasses(classes));		
 		},
 		error:function(request,status,error){
         	alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
@@ -40,9 +64,9 @@ function insertClasses(classes){
 		html += '<option value="'+classes[i].cid+'">'
 								+classes[i].classnumber+'</option>'; 
 	}
-	$('#allclass').html(html);
-}
 
+	return html;
+}
 
 function enroll(ekeyVal, addclassVal){
 	$.ajax({
@@ -52,8 +76,23 @@ function enroll(ekeyVal, addclassVal){
 		datatype: 'json',
 		data: {'function': 'enroll', 'ekey': ekeyVal, 'cid': addclassVal},
 		success: function(results){
-			//var test = JSON.parse(results);
 			 window.location='../student/student.php';
+		},
+		error:function(request,status,error){
+        	alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+       	}
+	});
+}
+
+function deleteMyClass(deleteclassVal){
+	$.ajax({
+		async: true,
+		type: 'POST',
+		url: "add_class.php",
+		datatype: 'json',
+		data: {'function': 'deleteMyClass', 'cid': deleteclassVal},
+		success: function(result){
+			 window.location='../student/student.php';	
 		},
 		error:function(request,status,error){
         	alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
