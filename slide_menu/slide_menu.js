@@ -37,7 +37,7 @@ function getNotifications()
 		success: function(result){
 			if(role == "student"){
 				studentNotification(result);
-			}else if(role == 'professer'){
+			}else if(role == 'professor'){
 				professorNotification(result);
 			}
 		},
@@ -52,11 +52,16 @@ function getNotifications()
 function studentNotification(result){
 	var notification = '';
 	for (var i = 0; i < result.length; i++){
-		notification += '<li><a href="../grades/grades.html">Your grade is '+result[i]['score']+'</a></li>';
+		notification += '<li><a href="../grades/grade_charts.html">Your grade is '+result[i]['score']+'</a></li>';
 	}
 	$('#sidebar').html('<ul>'+notification+'</ul>');
 }
 
 function professorNotification(result){
 	//todo something
+	var notification = '';
+	for (var i = 0; i < result.length; i++){
+		notification += '<li><a href="#">your students number is '+result[i]['students']+'</a></li>';
+	}
+	$('#sidebar').html('<ul>'+notification+'</ul>');
 }
