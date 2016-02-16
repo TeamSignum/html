@@ -31,6 +31,10 @@ function UseLoadData(result){
 		if(result[i]["level"] == 0){
 			AddTextContainer(result[i]["content"], lvl0, result[i]["id"]);
 		}
+		else if(result[i]["level"] == 1){
+			var container = "#rtext" + result[i]["parent"];
+			AddTextContainer2(result[i]["content"], $(container), result[i]["id"]);
+		}
 	}
 }
 

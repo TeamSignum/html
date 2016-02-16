@@ -41,8 +41,10 @@ function LoadDiscussion(){
 			$idusers = $row['idusers'];
 			$level   = $row['level'];
 			$content = $row['content'];
+			$parent  = $row['parent'];
 
-			$discussions[] = array('id' => $id, 'nid' => $nid, 'idusers' => $idusers, 'level' => $level, 'content' => $content);
+			$discussions[] = array('id' => $id, 'nid' => $nid, 'idusers' => $idusers, 'level' => $level, 'content' => $content,
+				'parent' => $parent);
 		}
 		
 		echo json_encode($discussions);
