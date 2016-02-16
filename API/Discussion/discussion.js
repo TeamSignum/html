@@ -2,10 +2,12 @@
  * Discussion forum API
  */
 
- var dnum = 0;
+ var dnid = 0;
+ var did  = 0;
 
 function LoadDiscussion(nid){
 
+	dnid = nid;
 	lvl0.innerHTML = "";
 
 	$.ajax({
@@ -23,15 +25,34 @@ function LoadDiscussion(nid){
 }
 
 function UseLoadData(result){
-	dnum = result.length - 1;
+	did = result[result.length - 1]["id"]; 
+
 	for(var i = 0; i < result.length; i++){
 		if(result[i]["level"] == 0){
-			AddTextContainer(result[i]["content"], lvl0, i);
+			AddTextContainer(result[i]["content"], lvl0, result[i]["id"]);
 		}
 	}
 }
 
-function SubmitReply(){
+function SubmitReply(textarea, containerid, parentid){
+
+	var content = textarea.value;
+	var container = "#rtext" + parentid;
+	var level = 1;
+	did++;
+
+	$.ajax({
+		async: true, 
+		type: 'POST', 
+		url: "../API/Discussion/discussion.php",
+		data: {action: "save", nid: dnid, level: level, content: content, parent: parentid}, 
+		success: function(result){
+			textarea.value = "";
+			AddTextContainer2(content, $(container), did);
+		}
+	}); 
+
+	return false;
 }
 
 /*
@@ -40,6 +61,7 @@ function SubmitReply(){
 function SubmitNewQuestion(textarea, nid, level, container){
 
 	var content = textarea.value;
+	did++;
 
 	$.ajax({
 		async: true, 
@@ -48,15 +70,14 @@ function SubmitNewQuestion(textarea, nid, level, container){
 		data: {action: "save", nid: nid, level: level, content: content}, 
 		success: function(result){
 			textarea.value = "";
-			dnum++;
-			AddTextContainer(content, container, dnum);
+			AddTextContainer(content, container, did);
 		}
 	}); 
 
 	return false;
 }
 
-function AddReplyContainer(container, num){
+function AddReplyContainer(container, id){
 	$('*[id^="reply"]').html("");
 	
 	var html = `
@@ -64,29 +85,40 @@ function AddReplyContainer(container, num){
 		<form style="margin-bottom: 50px;">
 			<textarea id="reply" class="textarea-field" style="width:100%;height:60px;" placeholder="Reply"></textarea>
 			<div>
-				<button type="button" class="btn1" id="" onclick="">Reply</button>
+				<button type="button" class="btn1" id="" onclick="SubmitReply(reply,'`+container.id+`',`+id+`)">Reply</button>
 				<button type="button" class="btn2" id="" onclick="ClearReplyContainer('`+container.id+`')">Cancel</button>
 			</div>
 		</form>
 	</div>
 	`;
 
-	container.innerHTML = container.innerHTML + html;
+	container.innerHTML = html;
 }
 
 function ClearReplyContainer(containerid){
 	$('*[id^="reply"]').html("");
 }
 
-function AddTextContainer(content, container, num){
+function AddTextContainer(content, container, id){
 	var html = `
-	  <div class="textcontainer" id="d` + num + `">
+	  <div class="textcontainer" id="d` + id + `">
 	    <span>` + content + `</span>
-	    <img src="../imports/images/reply.png" alt="Reply" style="width:16px;height:16px;float:right;" onclick="AddReplyContainer(reply`+num+`,`+num+`)">
-	  	<div id="reply` + num + `"></div>
+	    <img src="../imports/images/reply.png" alt="Reply" style="width:16px;height:16px;float:right;" onclick="AddReplyContainer(reply`+id+`,`+id+`)">
+	  	<div id="reply` + id + `"></div>
+	  	<div id="rtext` + id + `" style="margin: 25px 0px 0px 10%;"></div>
 	    <hr>
 	  </div>
 	`;
 
 	container.innerHTML = container.innerHTML + html;
+}
+
+function AddTextContainer2(content, container, id){
+	var html = `
+	  <div class="textcontainer" id="d` + id + `" style="font-weight: bold; margin-bottom: 20px; font-size: 14px;">
+	    <span>` + content + `</span>
+	  </div>
+	`;
+
+	container.html(container.html() + html);
 }
