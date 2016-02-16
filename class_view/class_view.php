@@ -40,7 +40,7 @@ if(isset($_POST['pnodes']))
 if(isset($_POST['userperc']))
 {
 	$cid = $_SESSION['classid'];
-	$idusers = $_SESSION[];
+	$idusers = $_SESSION['userid'];
 	
 	$nids = $_POST['userperc'];
 	
@@ -63,7 +63,7 @@ if(isset($_POST['userperc']))
 			
 			$total = $result['ptotal'];
 			
-			$query = "SELECT COUNT(*) as pcount FROM complete WHERE complete.idusers='$idusers' AND complete.cid='$cid' AND complete.nid='$nid'";
+			$query = "SELECT COUNT(*) as pcount FROM completed WHERE completed.idusers='$idusers' AND completed.cid='$cid' AND completed.nid='$nid'";
 			
 			$statement = $DB->prepare($query);
 			$statement->execute();
@@ -78,5 +78,6 @@ if(isset($_POST['userperc']))
 			echo $e->getMessage();
 		}
 	}
+	echo json_encode($percents);
 }
 ?>

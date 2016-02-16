@@ -18,6 +18,8 @@ $( document ).ready(function() {
 	
 	getParticipants();
 	
+	var timer = setInterval(function() {getParticipants()}, 10000);
+	
 	//Canvas events
 	canvas.on({
 
@@ -83,6 +85,7 @@ function setParticipant(nid)
 
 function getParticipants()
 {
+	//alert("h");
 	var temp = [];
 	for(var i = 0; i < mngr.nodes.length; i++)
 	{

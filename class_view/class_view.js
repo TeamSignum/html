@@ -17,6 +17,7 @@ $( document ).ready(function() {
 	mngr.LoadEdges(mngr, 1, 0);
 	
 	getParticipants();
+	getPercents();
 	
 	//Canvas events
 	canvas.on({
@@ -84,13 +85,47 @@ function getPercents()
 			{
 				if(result[i].count != null)
 				{
-					//drawParticipants(result[i].nid, result[i].count);
+					drawPercents(result[i].nid, result[i].count, result[i].total);
 				}
 			}
 		}
 	});
 	
 	return false;
+}
+
+function drawPercents(nid, count, total)
+{
+	var temp;
+	for(var i = 0; i < mngr.nodes.length; i++)
+	{
+		if(mngr.nodes[i].id == nid)
+		{
+			temp = mngr.nodes[i].node;
+		}
+	}
+	
+	var perc = "0%";
+	
+	if(count != 0)
+	{
+		var p = Math.floor((parseFloat(count) / parseFloat(total)) * 100);
+		//alert(Math.floor((parseFloat(count) / parseFloat(total)) * 100));
+		perc = p + "%";
+	}
+	
+	var t = new fabric.Text(perc, {
+			fontFamily: 'arial black',
+			fontSize: 20,
+			left: temp.left,
+			top: temp.top + temp.radius - 10
+	});
+	
+	var len = t.getWidth()/2;
+	var cenX = temp.getCenterPoint().x;
+	t.left = cenX - len;
+	
+	canvas.add(t);
 }
 
 function getParticipants()
