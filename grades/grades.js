@@ -9,20 +9,38 @@
  
 $( document ).ready(function() 
 {
-	getGrades();
+	getSessionInfo();
+	
 });
 
-function getGrades(){
+function getSessionInfo(){
 	$.ajax({
 		async: true,
 		type: 'POST',
-		url: "grades.php",
-		data: {'gradeQuery': '3'}, // Query number for obtaining all grades
+		url: "../navbar/phpInfoGetter.php",
+		data: {'GETINFO': 'SESSION'}, // Query number for obtaining all grades
 		datatpye: "json",
 		success: function(result){
 			//alert(result);
 			var parsedResult = JSON.parse(result);
+			
+			getGrades(parsedResult);
+		}
+	});
+}
 
+function getGrades(parsedResult){
+	$.ajax({
+		async: true,
+		type: 'POST',
+		url: "grades.php",
+		data: {'gradeQuery': 'studentAllGradesOneClass',
+				  'classid': parsedResult.classid},
+		datatpye: "json",
+		success: function(result){
+			//alert(result);
+			var parsedResult = JSON.parse(result);
+			
 			buildDisplayPage(parsedResult);
 		}
 	});

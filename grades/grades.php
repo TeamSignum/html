@@ -67,8 +67,8 @@
 			// Query all grades for a class	
 			case 'studentAllGradesOneClass': 
 				// Set up required variables
-				if(isset($_POST['cid'])){
-					$cid = $_POST['cid'];
+				if(isset($_POST['classid'])){
+					$classid = $_POST['classid'];
 				}
 				else{
 					die("Information required for query was not found.");
