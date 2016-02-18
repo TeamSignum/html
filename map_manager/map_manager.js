@@ -784,13 +784,11 @@ MManager.prototype.CheckOffNode = function(){
 			if (isConfirm) {     
 				swal("Completed", "The node has been completed.", "success");
 				for(var i = 0; i < mngr.nodes.length; i++){
-					if(mngr.nodes[i].id == mngr.nid){
+					if(mngr.nodes[i].id == mngr.crrnt.nid){
 						mngr.nodes[i].node.setFill("#0d0");
 						mngr.nodes[i].node.setStroke("#0d0");
-						mngr.nodes[i].node.id = "cmapNode";
-						//$("#popup").hide(); 
+
 						$("#dim_div").hide();
-						//$("#checkorx").hide();
 						$("#custom_container").hide();
 					}
 				}   
