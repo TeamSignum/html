@@ -37,11 +37,11 @@ function evaluateSessionInfo(parsedResult){
 		html+='<ul class="nav navbar-nav">';
 		// Login link
 		html+='<li>';
-		html+='<a href="/login/login.html" style="margin-top: 12px; font-size:14pt;">Login</a>';
+		html+='<a href="../login/login.html" style="margin-top: 12px; font-size:14pt;">Login</a>';
 		html+='</li>';
 		// Register link
 		html+='<li>';
-		html+='<a href="/registration/registration.html" style="margin-top: 12px; font-size:14pt;">Register</a>';
+		html+='<a href="../registration/registration.html" style="margin-top: 12px; font-size:14pt;">Register</a>';
 		html+='</li>';
 		
 		html+='</ul>';				
@@ -52,28 +52,28 @@ function evaluateSessionInfo(parsedResult){
 		html+='<ul class="nav navbar-nav">';
 		// Account home link
 		html+='<li>';
-		html+='<a href="/student/student_main.html" style="margin-top: 12px; font-size:14pt;">Account Home</a>';
+		html+='<a href="../student/student_main.html" style="margin-top: 12px; font-size:14pt;">Account Home</a>';
 		html+='</li>';
 
 		// Logic for grades links
 		if(document.title=='student_main_page'){
 			html+='<li>';
-			html+='<a href="/grades/grade_charts.html" style="margin-top: 12px; font-size:14pt;">Grades</a>';
+			html+='<a href="../grades/grade_charts.html" style="margin-top: 12px; font-size:14pt;">Grades</a>';
 			html+='</li>';
 		}
 		else if(document.title=='Class View'){
 			html+='<li>';
-			html+='<a href="/grades/grades.html" style="margin-top: 12px; font-size:14pt;">Grades</a>';
+			html+='<a href="../grades/grades.html" style="margin-top: 12px; font-size:14pt;">Grades</a>';
 			html+='</li>';
 		}
 
 		// Profile link
 		html+='<li>';
-		html+='<a href="/profile/profile.html" style="margin-top: 12px; font-size:14pt;">Profile</a>';
+		html+='<a href="../profile/profile.html" style="margin-top: 12px; font-size:14pt;">Profile</a>';
 		html+='</li>';	
 		// Logout link
 		html+='<li>';
-		html+='<a href="/logout.php" style="margin-top: 12px; font-size:14pt;">Logout</a>';
+		html+='<a href="../logout.php" style="margin-top: 12px; font-size:14pt;">Logout</a>';
 		html+='</li>';	
 
 		html+='</ul>';	
@@ -85,7 +85,7 @@ function evaluateSessionInfo(parsedResult){
 		html+='<ul class="nav navbar-nav">';
 		// Account home link
 		html+='<li>';
-		html+='<a href="/student/student_main.html" style="margin-top: 12px; font-size:14pt;">Account Home</a>';
+		html+='<a href="../student/student_main.html" style="margin-top: 12px; font-size:14pt;">Account Home</a>';
 		html+='</li>';
 		// All grades chart link
 		// html+='<li>';
@@ -93,19 +93,19 @@ function evaluateSessionInfo(parsedResult){
 		// html+='</li>';	
 		// Profile link
 		html+='<li>';
-		html+='<a href="/profile/profile.html" style="margin-top: 12px; font-size:14pt;">Profile</a>';
+		html+='<a href="../profile/profile.html" style="margin-top: 12px; font-size:14pt;">Profile</a>';
 		html+='</li>';
 		// Class View link
 		html+='<li>';
-		html+='<a href="/class_view/class_view.html" style="margin-top: 12px; font-size:14pt;">Class View</a>';
+		html+='<a href="../class_view/class_view.html" style="margin-top: 12px; font-size:14pt;">Class View</a>';
 		html+='</li>';	
 		// Class Builder link
 		html+='<li>';
-		html+='<a href="/class_builder/class_builder.html" style="margin-top: 12px; font-size:14pt;">Class Builder</a>';
+		html+='<a href="../class_builder/class_builder.html" style="margin-top: 12px; font-size:14pt;">Class Builder</a>';
 		html+='</li>';		
 		// Logout link
 		html+='<li>';
-		html+='<a href="/logout.php" style="margin-top: 12px; font-size:14pt;">Logout</a>';
+		html+='<a href="../logout.php" style="margin-top: 12px; font-size:14pt;">Logout</a>';
 		html+='</li>';	
 
 		html+='</ul>';	
