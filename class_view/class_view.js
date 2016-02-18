@@ -54,7 +54,7 @@ $( document ).ready(function() {
 	});
 
 	$( "#checkoff" ).click(function() {
-		mngr.CheckOffNode();
+		//mngr.CheckOffNode();
 	});
 
 	$( "#xmark" ).click(function() {
