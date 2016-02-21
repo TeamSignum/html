@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head> 
+  <link rel="import" href="../imports/import.html">
+  <link rel="stylesheet" type="text/css" href="concept_view.css"> 
+  <script src="../map_manager/map_manager.js" type="text/javascript"></script>
+  <script src="../API/Discussion/discussion.js" type="text/javascript"></script>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script src="prof_concept_view.js" type="text/javascript"></script>
+  <title> Professor Concept View </title>  
+</head> 
+<body>
+
+	<div id="navbar:../"></div>
+
+  	<div class="row" style="text-align:center;background-color: #000; color: #fff;"> 
+		<div class="col-md-4"></div>
+		<div class="col-md-4">
+			<h1 style="font-weight: bold;">Professor Concept View</h1>
+		</div>
+		<div class="col-md-4"></div>
+	</div>
+
+	<div id="dim_div"></div>
+	<div class="row">
+		<div id="canvas"> 
+		  <canvas id="map" width="1900" height="800"></canvas>
+		</div>
+
+		<div id="custom_container" style="display: none;">
+			<div id="popup"> 
+				<div id="stat_total"></div>
+			</div>
+			</br>
+			<div id="chart_title"></div>
+			<div id="stat_chart"></div>
+			
+			<button type="button" class="btn btn-primary" id="p_Cancel" style="margin-top:25px;">
+				Cancel
+				</button>
+		</div>
+	</div>
+	<div id="stat_chart"></div>
+</body>
+</html>
