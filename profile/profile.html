@@ -12,8 +12,8 @@
 	<div id="navbar:../"></div>
     
     <div class="row" style="text-align:center;background-color: #000; color: #fff;"> 
-		<div class="col-md-4"></div>
-		<div class="col-md-4" style="text-align:center;">
+		
+		<div style="text-align:center;">
 			<h1 style="font-weight: bold;">User Profile</h1>
 		</div>
 	</div>
@@ -21,27 +21,89 @@
   <br>
   <br>
   <br>
-        
-    <form id="profileForm" method="post" enctype="multipart/form-data">
-   		<div class="col-md-4"></div>
-				<div class="col-md-4">
-          <label for="email">Email address</label>
-            <input type="email" name="email" class="form-control" id="email" placeholder="Email">
-          <label for="userid">User ID</label>
-            <input type="text" name="userid" class="form-control" id="userid" placeholder="User ID">
-          <label for="firstname">First Name</label>
-            <input type="text" name="firstname" class="form-control" id="firstname" placeholder="First Name">
-          <label for="lastname">Last Name</label>
-            <input type="text" name="lastname" class="form-control" id="lastname" placeholder="Last Name">
-          <br>
-          <label for="picture">Profile Picture</label>
-          <br>
-          <p id="browsebutton"><input type="file" name="imageToUpload" id="imageToUpload" accept="image/*"></p>
-					<p><img src="" id="profileimage"><p>
-					<p id="buttonregion"></p>
-				</div>
-				<div class="col-md-4"></div>	
+
+  <div class="col-md-3"></div>
+
+  <!-- Email Form -->
+  <div class="col-md-6">
+    <form class="form-horizontal" role="form" id="email-form" method="post" enctype="multipart/form-data">
+      <div class="form-group">
+        <div class="col-md-1"></div>
+        <label for="email" class="col-md-2 control-label">Email Address:</label>
+          <div class="col-md-6">
+            <input type="email" class="form-control" name="email" id="email" placeholder="Email" disabled required>
+          </div>
+          <div class="col-md-1 extra-button-padding edit-button">
+            <button type="submit" id="edit-email-button"></button>
+          </div>
+          <div class="col-md-1 extra-button-padding">
+            <button type="button" id="cancel-edit-email-button" class="btn btn-danger btn-sm cancel-button">CANCEL</button>
+          </div>
+      </div>
+      <hr>
     </form>
+  <!-- UserID Form -->
+    <form class="form-horizontal" role="form" id="userid-form" method="post" enctype="multipart/form-data">
+      <div class="form-group">
+        <div class="col-md-1"></div>
+        <label for="userid" class="col-md-2 control-label">User ID:</label>
+          <div class="col-md-6">
+            <input type="text" class="form-control" name="userid" id="userid" placeholder="User ID" disabled required>
+          </div>
+          <div class="col-md-1 extra-button-padding edit-button">
+            <button type="submit" id="edit-userid-button"></button>
+          </div>
+          <div class="col-md-1 extra-button-padding">
+            <button type="button" id="cancel-edit-userid-button" class="btn btn-danger btn-sm cancel-button">CANCEL</button>
+          </div>
+      </div>
+      <hr>
+    </form>  
+  <!-- Name Form -->
+    <form class="form-horizontal" role="form" id="name-form">
+        <div class="form-group">
+          <div class="col-md-1"></div>
+          <label for="firstname" class="col-md-2 control-label">First Name:</label>
+            <div class="col-md-6">
+              <input type="text" class="form-control" name="firstname" id="firstname" placeholder="First Name" disabled required>
+            </div>
+            <div class="col-md-1 extra-button-padding edit-button">
+              <button type="submit" id="edit-name-button"></button>
+            </div>
+            <div class="col-md-1 extra-button-padding">
+              <button type="button" id="cancel-edit-name-button" class="btn btn-danger btn-sm cancel-button">CANCEL</button>
+            </div>
+          </div>
+        <div class="form-group">
+          <div class="col-md-1"></div>
+          <label for="lastname" class="col-md-2 control-label">Last Name:</label>
+            <div class="col-md-6">
+              <input type="text" class="form-control" name="lastname" id="lastname" placeholder="Last Name" disabled required>
+            </div>
+        </div>
+      <hr>
+    </form>
+  <!-- Profile Picture Form -->
+  <form class="form-horizontal" role="form" id="picture-form">
+    <div class="form-group">
+      <div class="col-md-1"></div>
+      <label for="picture" class="col-md-2 control-label">Profile Picture:</label>
+      <div class="col-md-6">
+        <p id="browse-picture" hidden><input type="file" name="imageToUpload" id="imageToUpload" accept="image/*"></p>
+        <p><img src="" id="profileimage"><p>
+      </div>
+      <div class="col-md-1 extra-button-padding edit-button">
+        <button type="submit" id="edit-picture-button"></button>
+      </div>
+      <div class="col-md-1 extra-button-padding">
+        <button type="button" id="cancel-edit-picture-button" class="btn btn-danger btn-sm cancel-button">CANCEL</button>
+      </div>
+      <div class="col-md-3"></div>
+    </div>
+  </form>
+  
+  <div class="col-md-3"></div>
+  
 </body>
 </html>
 
