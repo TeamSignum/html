@@ -15,7 +15,7 @@
  
 #sidebar {
     position: relative;
-    right: -240px;
+    right: -370px;
     width: 15em;
     margin-top: -2.5em;
     background: #001fff;
@@ -78,7 +78,6 @@
     border-radius: 3px;
     display: block;
     position: relative;
-    padding: 10px 7px;
     float: right;
 }
 .main-content #sidebar-toggle .bar {

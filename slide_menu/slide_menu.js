@@ -3,7 +3,9 @@ var role = '';
 $(document).ready(function() {
 	getRole();
   	$("[data-toggle]").click(function() {
-  		getNotifications();
+  		var notification_type = document.getElementById('notification_type').value;
+  		if (notification_type == '') { alert('missing keyword'); return }
+  		getNotifications(notification_type);
   	   	var toggle_el = $(this).data("toggle");
     	$(toggle_el).toggleClass("open-sidebar");
   	});
@@ -11,6 +13,7 @@ $(document).ready(function() {
 
 
 function getRole(){
+	$path = 
 	$.ajax({
 		async: true,
 		type: 'POST',
@@ -26,17 +29,19 @@ function getRole(){
 	});
 }
 
-function getNotifications()
+function getNotifications(notification_type)
 {
 	$.ajax({
 		async: true,
 		type: 'POST',
 		url: "../slide_menu/slide_menu.php",
 		dataType: 'json',
-		data: {'function': 'getNotifications'},
+		data: {'function': 'getNotifications', 'notype': notification_type},
 		success: function(result){
 			if(role == "student"){
-				studentNotification(result);
+				//studentNotification(result);
+				studentGrade(result);
+				//studentDiscussion(result);
 			}else if(role == 'professor'){
 				professorNotification(result);
 			}
@@ -47,6 +52,28 @@ function getNotifications()
 	});
 
 	return false;
+}
+
+function studentDiscussion(result){
+	alert(result);
+	// var notification = '';
+	// for (var i = 0; i < result.length; i++){
+	// 	notification += '<li><a href="#">New discussion is written by '
+	// 					+result[i]['Name']+' in '
+	// 					+result[i]['classnumber']+'</a></li>';
+	// }
+	// $('#sidebar').html('<ul>'+notification+'</ul>');
+}
+
+function studentGrade(result){
+	var notification = '';
+	for (var i = 0; i < result.length; i++){
+		notification += '<li><a href="../grades/grades.html">The Score of '
+						+result[i]['title']+' in '
+						+result[i]['classnumber']+' has been posted at '
+						+result[i]['date_entered']+'</a></li>';
+	}
+	$('#sidebar').html('<ul>'+notification+'</ul>');
 }
 
 function studentNotification(result){
