@@ -64,6 +64,23 @@ $( document ).ready(function() {
 
 });
 
+function setParticipant(nid)
+{
+	$.ajax({
+		type: 'POST',
+		url: "concept_view.php",
+		dataType: 'html',
+		data: {setp: nid},
+		//async: false,
+		
+		success: function(result){
+			//alert(result);
+		}
+	});
+	
+	return false;
+}
+
 function getPercents()
 {
 	var temp = [];

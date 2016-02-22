@@ -123,15 +123,6 @@ function getStats(nid, title)
 
 function buildChart(result, title)
 {
-	//google.charts.load('current', {packages: ['bar']});
-	
-	//google.charts.setOnLoadCallback(drawChart);
-	
-	//function drawChart(result) {
-		//var data = google.visualization.arrayToDataTable([
-		//	['Type', 'Num'],
-		//	['A1', 100]
-		//]);
 		var data = new google.visualization.DataTable();
 		data.addColumn('string', 'Node');
         data.addColumn('number', 'Total students');
@@ -160,7 +151,6 @@ function buildChart(result, title)
 		var chart = new google.charts.Bar(document.getElementById('stat_chart'));
 
         chart.draw(data, options);
-	//}
 }
 
 function getParticipants()
@@ -169,7 +159,7 @@ function getParticipants()
 	for(var i = 0; i < mngr.nodes.length; i++)
 	{
 		//alert(mngr.nodes[i].id);
-		temp.push(mngr.nodes[i].id);
+		temp.push(mngr.nodes[i].nid);
 	}
 	$.ajax({
 		type: 'POST',
@@ -199,9 +189,9 @@ function drawParticipants(nid, count)
 	var temp;
 	for(var i = 0; i < mngr.nodes.length; i++)
 	{
-		if(mngr.nodes[i].id == nid)
+		if(mngr.nodes[i].nid == nid)
 		{
-			temp = mngr.nodes[i].node;
+			temp = mngr.nodes[i];
 		}
 	}
 	
@@ -214,7 +204,7 @@ function getPercents()
 	for(var i = 0; i < mngr.nodes.length; i++)
 	{
 		//alert(mngr.nodes[i].id);
-		temp.push(mngr.nodes[i].id);
+		temp.push(mngr.nodes[i].nid);
 	}
 	$.ajax({
 		type: 'POST',
@@ -241,9 +231,9 @@ function drawPercents(nid, count)
 	var temp;
 	for(var i = 0; i < mngr.nodes.length; i++)
 	{
-		if(mngr.nodes[i].id == nid)
+		if(mngr.nodes[i].nid == nid)
 		{
-			temp = mngr.nodes[i].node;
+			temp = mngr.nodes[i];
 		}
 	}
 	

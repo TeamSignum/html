@@ -162,7 +162,7 @@ function getParticipants()
 	for(var i = 0; i < mngr.nodes.length; i++)
 	{
 		//alert(mngr.nodes[i].id);
-		temp.push(mngr.nodes[i].id);
+		temp.push(mngr.nodes[i].nid);
 	}
 	$.ajax({
 		type: 'POST',
@@ -189,9 +189,9 @@ function drawParticipants(nid, count)
 	var temp;
 	for(var i = 0; i < mngr.nodes.length; i++)
 	{
-		if(mngr.nodes[i].id == nid)
+		if(mngr.nodes[i].nid == nid)
 		{
-			temp = mngr.nodes[i].node;
+			temp = mngr.nodes[i];
 		}
 	}
 	
@@ -204,7 +204,7 @@ function getPercents()
 	for(var i = 0; i < mngr.nodes.length; i++)
 	{
 		//alert(mngr.nodes[i].id);
-		temp.push(mngr.nodes[i].id);
+		temp.push(mngr.nodes[i].nid);
 	}
 	$.ajax({
 		type: 'POST',
@@ -231,9 +231,9 @@ function drawPercents(nid, count)
 	var temp;
 	for(var i = 0; i < mngr.nodes.length; i++)
 	{
-		if(mngr.nodes[i].id == nid)
+		if(mngr.nodes[i].nid == nid)
 		{
-			temp = mngr.nodes[i].node;
+			temp = mngr.nodes[i];
 		}
 	}
 	
