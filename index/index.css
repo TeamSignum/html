@@ -1,3 +1,6 @@
+body{
+	background-color: #D0D0D0;
+}
 .myButton {
 	-moz-box-shadow:inset 0px 1px 0px 0px #f5978e;
 	-webkit-box-shadow:inset 0px 1px 0px 0px #f5978e;

@@ -438,7 +438,7 @@ MManager.prototype.LoadNodePopup = function(node, id, type){
 	$.ajax({
 		async: true, 
 		type: 'POST', 
-		url: "../map_manager/load_node_popup.php",
+		url: "../API/Map/load_node_popup.php",
 		data: {nid: id, type: type, classOrConcept: this.classOrConcept}, 
 		dataType: "json", 
 		success: function(result){
@@ -476,7 +476,7 @@ MManager.prototype.LoadConnections = function(level){
 	$.ajax({
 		async: false,
 		type: 'POST',
-		url: "../map_manager/loadmap.php",
+		url: "../API/Map/loadmap.php",
 		dataType: 'json',
 		data: {map: 3, level: level},
 		
@@ -500,7 +500,7 @@ MManager.prototype.LoadEdges = function(mngr, level, mode){
 	$.ajax({
 		async: false,
 		type: 'POST',
-		url: "../map_manager/loadmap.php",
+		url: "../API/Map/loadmap.php",
 		dataType: 'json',
 		data: {map: 2, level: level},
 		
@@ -522,7 +522,7 @@ MManager.prototype.LoadMap = function(mngr, level, mode){
 	$.ajax({
 		async: false,
 		type: 'POST',
-		url: "../map_manager/loadmap.php",
+		url: "../API/Map/loadmap.php",
 		dataType: 'json',
 		data: {map: 1, level: level},
 		
@@ -543,7 +543,7 @@ MManager.prototype.LoadMap = function(mngr, level, mode){
 MManager.prototype.LoadIds = function(level) {
 	$.ajax({
 		type: 'POST',
-		url: "../map_manager/mapsave.php",
+		url: "../API/Map/mapsave.php",
 		dataType: 'json',
 		data: {id: 1, level: level},
 		
@@ -630,7 +630,7 @@ MManager.prototype.SaveMap = function(level){
 	$.ajax({
 		async: true, 
 		type: 'POST',
-		url: "../map_manager/mapsave.php",
+		url: "../API/Map/mapsave.php",
 		dataType: 'html',
 		data: {map: map, edges: edges, connections: connections, level: level},
 		
@@ -684,7 +684,7 @@ MManager.prototype.NavigateToConcept = function(){
 	$.ajax({
 		async: true, 
 		type: 'POST',
-		url: "../map_manager/mapsave.php",
+		url: "../API/Map/mapsave.php",
 		dataType: 'html',
 		data: {direct: nid},
 		
@@ -761,7 +761,9 @@ MManager.prototype.CheckOffNode = function(){
 MManager.prototype.ShowPopup = function(node, popup){
 	popup.html(node.popup.innerHtml);
 
-	LoadDiscussion(node.nid); // From API/Discussion/discussion.js
+	if (this.mode == 0){
+		LoadDiscussion(node.nid); // From API/Discussion/discussion.js
+	}
 	$("#custom_container").show();
 	$("#dim_div").show();
 }
@@ -790,7 +792,7 @@ MManager.prototype.UploadFile = function(){
 	formData.append('file', $('#filechooser')[0].files[0]);
 
 	$.ajax({
-       url : '../map_manager/upload.php',
+       url : '../API/Map/upload.php',
        type : 'POST',
        data : formData,
        processData: false,  // tell jQuery not to process the data
@@ -1016,7 +1018,7 @@ MManager.prototype.SavePopup = function(){
 	$.ajax({
 		async: true, 
 		type: 'POST', 
-		url: "../map_manager/save_node_popup.php",
+		url: "../API/Map/save_node_popup.php",
 		data: _data, 
 		success: function(result){
 			$("#custom_container").hide();
