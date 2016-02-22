@@ -10,6 +10,7 @@
 var MManager = function(_canvas, builder, classOrConcept){
  	this.canvas   = _canvas;
  	this.nodes 	  = []; 
+ 	this.popupnodes = []; 
  	this.nid      = 1;
  	this.eid      = 1;
  	this.locked   = true;
@@ -20,7 +21,6 @@ var MManager = function(_canvas, builder, classOrConcept){
  	this.from; 
  	this.to;
  	this.solid = false;
- 	this.crrnt; 
 
  	this.result_nodes; 
  	this.result_edges;
@@ -36,13 +36,6 @@ var MManager = function(_canvas, builder, classOrConcept){
  }
 
 /* ---------------------------------------- Map Node Functions ---------------------------------------- */
-
-/*
- * Returns the node at index
- */
-MManager.prototype.GetNode = function(index){
-	return nodes[index]; 
-}
 
 /* 
  * Copies a node from toolbar to canvas
@@ -73,18 +66,10 @@ MManager.prototype.CopyNode = function(node, new_id, type){
 
 	node.id = new_id;
 	node.nid = this.nid;
+	node.type = type;
+	node.lines = [];
 
-	var popup = this.CreatePopup(type);
-
-	var my_node = { 
-		node: node,
-		id: this.nid,
-		lines: [],
-		type: type,
-		popup: popup
-	};
-
-	this.nodes.push(my_node);
+	this.nodes.push(node);
 	this.nid++;
 }
 
@@ -93,7 +78,9 @@ MManager.prototype.CopyNode = function(node, new_id, type){
  * TODO: Some of this is hardcoded and needs to change
  */
 MManager.prototype.HandleMapNodeSelect = function (node){
-	if(this.locked){
+	node = node;
+
+	if(node.id === "popupnode"){
 		this.ShowPopup(node, $("#popup")); 
 	}
 	else{
@@ -102,7 +89,7 @@ MManager.prototype.HandleMapNodeSelect = function (node){
 }
 
 MManager.prototype.GetCurrentId = function(result){
-	return this.crrnt.nid;
+	return node.nid;
 }
 
 //Draw a node onto the canvas
@@ -119,12 +106,16 @@ MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, f
 	});
 
 	c.nid = nodeID;
-			
+	c.type = type;
+	c.lines = []; 
+
 	c.hasControls = false;
 	c.hasBorders = false;
-	//c.lockMovementX = true;
-	//c.lockMovementY = true;
-	
+
+	canvas.add(c);
+	this.LoadNodePopup(c, nodeID, type);
+	this.nodes.push(c); 
+
 	if(mode == 0)
 	{
 		c.lockMovementX = true;
@@ -169,8 +160,6 @@ MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, f
 		canvas.add(pt);
 	}
 	
-	canvas.add(c);
-	
 	//Draw participant nodes
 	if(tempi < 3)
 	{
@@ -178,24 +167,12 @@ MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, f
 		tempp = tempp - 4;
 	}
 
-	var temp = {
-		node: c,
-		id: nodeID,
-		lines: [], 
-		type: type, 
-		popup: ""
-	}
-
-	this.LoadNodePopup(nodeID, type, this.nodes.length);
-
-	this.nodes.push(temp); 
-
 	//Draw the title text
 	var t = new fabric.Text(title, {
 			fontFamily: 'arial black',
 			fontSize: 25,
 			left: left,
-			top: top - 35,
+			top: top + radius - 13,
 			id: "nodeText"
 	});
 	
@@ -227,78 +204,36 @@ MManager.prototype.LineEditor = function(edge, solid){
 	{
 		if (this.lineEdit){
 			edge.opacity = .5;
-			this.nodes[i].node.lockMovementX = true;
-			this.nodes[i].node.lockMovementY = true;
-			this.nodes[i].node.selectable = false;
+			this.nodes[i].lockMovementX = true;
+			this.nodes[i].lockMovementY = true;
+			this.nodes[i].selectable = false;
 		}
 		else {
 			edge.opacity = 1;
-			this.nodes[i].node.lockMovementX = false;
-			this.nodes[i].node.lockMovementY = false;
-			this.nodes[i].node.selectable = true;
+			this.nodes[i].lockMovementX = false;
+			this.nodes[i].lockMovementY = false;
+			this.nodes[i].selectable = true;
 		}
 	}
-}
-
-/* 
- * Copies an edge from toolbar to map
- */ 
-MManager.prototype.CopyEdge = function(edge, new_id){
-	var x1 = edge.x1; 
-	var x2 = edge.x2; 
-	var y1 = edge.y1; 
-	var y2 = edge.y2; 
-	var fill = edge.fill; 
-	var stroke = edge.stroke; 
-	var strokeWidth = edge.strokeWidth; 
-	var id = edge.id; 
-	var dotted; 
-	var e; 
-
-	if (id === "tb_lineDotted"){
-		dotted = edge.strokeDashArray; 
-	}
-
-	e = new fabric.Line([x1, y1, x2, y2], {
-		fill: fill, 
-		stroke: stroke, 
-		strokeWidth: strokeWidth, 
-		strokeDashArray: dotted,
-		id: id
-	}); 
-
-	e.hasControls = true; 
-	e.hasBorders  = true; 
-
-	this.canvas.add(e); 
 }
 
 /* 
  * Moves all the edges linked to a node when the node moves.
  */ 
 MManager.prototype.MoveEdges = function (node){
-	var current_node;
-
-	for(var i = 0; i < this.nodes.length; i++)
-	{
-		if(this.nodes[i].node.top === node.top && this.nodes[i].node.left === node.left)
+	if(node){
+		if(node.lines.length != 0)
 		{
-			current_node = this.nodes[i];
-		}
-	}
-
-	if(current_node.lines.length != 0)
-	{
-		for(var j = 0; j < current_node.lines.length; j++)
-		{
-			if(current_node.node.left+2*current_node.node.radius > current_node.lines[j].x1 && current_node.node.left < current_node.lines[j].x1 && current_node.node.top+2*current_node.node.radius > current_node.lines[j].y1 && current_node.node.top < current_node.lines[j].y1)
+			for(var j = 0; j < node.lines.length; j++)
 			{
-				current_node.lines[j].set({'x1': current_node.node.getCenterPoint().x, 'y1': current_node.node.getCenterPoint().y});
-			}
-			//alert(current_node.node.left+2*current_node.node.radius + " " + current_node.lines[j].x2);
-			if(current_node.node.left+2*current_node.node.radius > current_node.lines[j].x2 && current_node.node.left < current_node.lines[j].x2 && current_node.node.top+2*current_node.node.radius > current_node.lines[j].y2 && current_node.node.top < current_node.lines[j].y2)
-			{
-				current_node.lines[j].set({'x2': current_node.node.getCenterPoint().x, 'y2': current_node.node.getCenterPoint().y});	
+				if(node.left+2*node.radius > node.lines[j].x1 && node.left < node.lines[j].x1 && node.top+2*node.radius > node.lines[j].y1 && node.top < node.lines[j].y1)
+				{
+					node.lines[j].set({'x1': node.getCenterPoint().x, 'y1': node.getCenterPoint().y});
+				}
+				if(node.left+2*node.radius > node.lines[j].x2 && node.left < node.lines[j].x2 && node.top+2*node.radius > node.lines[j].y2 && node.top < node.lines[j].y2)
+				{
+					node.lines[j].set({'x2': node.getCenterPoint().x, 'y2': node.getCenterPoint().y});	
+				}
 			}
 		}
 	}
@@ -335,20 +270,13 @@ MManager.prototype.DrawEdgeBetweenNodes = function(node){
 			});
 		}
 		
-		//test
 		line.eid = this.eid;
+		line.hasControls = line.hasBorders = false;
+		line.lockMovementX = line.lockMovementY = true;
 
-		for(var i = 0; i < this.nodes.length; i++)
-		{
-			if(this.nodes[i].node.top === this.from.top && this.nodes[i].node.left === this.from.left)
-			{
-				this.nodes[i].lines.push(line);
-			}
-			if(this.nodes[i].node.top === node.top && this.nodes[i].node.left === node.left)
-			{
-				this.nodes[i].lines.push(line);
-			}
-		}
+		this.from.lines.push(line);
+		this.to.lines.push(line);
+		
 		var temp = {
 			line: line,
 			id: this.eid
@@ -356,9 +284,6 @@ MManager.prototype.DrawEdgeBetweenNodes = function(node){
 
 		this.eid++;
 		this.edges.push(temp);
-		this.from.line = line;
-		this.canvas.add(this.to);
-		this.canvas.add(this.from);
 		this.canvas.add(line);
 		this.canvas.sendToBack(line);
 	}
@@ -376,7 +301,7 @@ MManager.prototype.DrawEdge = function(eid, x1, y1, x2, y2, type, mode){
 			stroke: 'black',
 			strokeWidth: 5,
 			id: "solid"
-			});
+		});
 	}
 	if(type === "dotted")
 	{
@@ -386,29 +311,19 @@ MManager.prototype.DrawEdge = function(eid, x1, y1, x2, y2, type, mode){
 			strokeWidth: 5,
 			strokeDashArray: [5, 5],
 			id: "dotted"
-			});
+		});
 	}
 	
 	l.eid = eid;
-	
-	l.hasControls = false;
-	l.hasBorders = false;
-	//l.lockMovementX = true;
-	//l.lockMovementY = true;
-	
-	if(mode == 0)
-	{
-		l.lockMovementX = true;
-		l.lockMovementY = true;
-	}
+	l.hasControls = l.hasBorders = false;
+	l.lockMovementX = l.lockMovementY = true;
 	
 	var temp = {
-			line: l,
-			id: eid
-		};
+		line: l,
+		id: eid
+	};
 		
 	this.edges.push(temp);
-	
 	canvas.add(l);
 	canvas.sendToBack(l);
 }
@@ -419,13 +334,14 @@ MManager.prototype.DrawEdge = function(eid, x1, y1, x2, y2, type, mode){
 /* 
  * Checks the bounds of a node and adds the text.
  */
-MManager.prototype.CheckBoundsAndAddText = function(node){
+MManager.prototype.AddNodeToCanvas = function(node){
 	if(!this.lineEdit){
 		if(node.left < 180 && node.id === "mapNode"){
 				this.canvas.remove(node.title);
 				this.canvas.remove(node); 
 		}
 		else if(node.left > 180 && node.id === "mapNode"){
+			this.CreatePopupNode(node, this.CreatePopup(node.type), !node.title); 
 			this.GenText(node);
 		}
 	}
@@ -440,7 +356,7 @@ MManager.prototype.GenText = function(node){
 			fontFamily: 'arial black',
 			fontSize: 25,
 			left: node.left,
-			top: node.top - 30,
+			top: node.top + node.radius - 13,
 			id: "nodeText"
 		});
 	
@@ -463,10 +379,15 @@ MManager.prototype.GenText = function(node){
 /* 
  * Moves the node title when a node moves
  */
-MManager.prototype.MoveNodeTitle = function (node){
+MManager.prototype.MoveNode = function (node){
 	if (node.title){
-		node.title.set({'top': node.top - 30, 'left': (node.getCenterPoint().x - node.title.getWidth()/2)});
+		node.title.set({'top': node.top + node.radius - 13, 'left': (node.getCenterPoint().x - node.title.getWidth()/2)});
 		node.title.setCoords();
+	}
+
+	if (node.popupnode){
+		node.popupnode.set({'top': node.top + 5, 'left': node.left + (2 * node.radius) - 5});
+		node.popupnode.setCoords();
 	}
 }
 
@@ -512,7 +433,7 @@ MManager.prototype.LockOrUpload = function(button, level){
 /* ---------------------------------------- Map Save/Load Functions ---------------------------------------- */
 
 //Get the pop-up info for a specified node
-MManager.prototype.LoadNodePopup = function(id, type, index){
+MManager.prototype.LoadNodePopup = function(node, id, type){
 
 	$.ajax({
 		async: true, 
@@ -521,7 +442,9 @@ MManager.prototype.LoadNodePopup = function(id, type, index){
 		data: {nid: id, type: type, classOrConcept: this.classOrConcept}, 
 		dataType: "json", 
 		success: function(result){
-			mngr.nodes[index].popup = mngr.CreatePopupWithData(type, result["title"], result["description"], result["duedate"], result["notes"]);
+			mngr.CreatePopupNode(node, 
+				mngr.CreatePopupWithData(type, result["title"], 
+					result["description"], result["duedate"], result["notes"]), true);
 		}
 	}); 
 
@@ -534,7 +457,7 @@ MManager.prototype.updateCon = function(result)
 	{
 		for(var j = 0; j < this.nodes.length; j++)
 		{
-			if(this.nodes[j].id == result[i].nid)
+			if(this.nodes[j].nid == result[i].nid)
 			{
 				for(var k = 0; k < this.edges.length; k++)
 				{
@@ -558,8 +481,6 @@ MManager.prototype.LoadConnections = function(level){
 		data: {map: 3, level: level},
 		
 		success: function(result){
-			//alert(result.length);
-			//alert(result[0].nid);
 			mngr.updateCon(result);
 			
 		},
@@ -723,8 +644,41 @@ MManager.prototype.SaveMap = function(level){
 /* ---------------------------------------- Popup Functions ---------------------------------------- */
 
 
+MManager.prototype.CreatePopupNode = function(node, popup, docreate){
+	if (docreate){
+		var nid = node.nid;
+		var type = node.type;
+		var popup = popup;
+
+		var radius = node.radius; 
+		var top = node.top;
+		var left = node.left; 
+
+		var popupnode = new fabric.Circle({
+			radius: 10, 
+			fill : '#009ACD', 
+			top : top + 5, 
+			left : left + 2 * radius - 5,
+			stroke: '#009ACD',
+			strokeWidth: 2,		
+			id: 'popupnode'
+		}); 
+		
+		popupnode.lockMovementX = popupnode.lockMovementY = true;
+
+		popupnode.hasControls = false; 
+		popupnode.hasBorders  = false; 
+		popupnode.nid = nid;
+		popupnode.type = type;
+		popupnode. popup = popup; 
+		node.popupnode = popupnode;
+		this.canvas.add(popupnode);  
+		this.popupnodes.push(popupnode);
+	}
+}
+
 MManager.prototype.NavigateToConcept = function(){
-	var nid = this.crrnt.nid;
+	var nid = node.nid;
 	var mode = this.mode;
 	
 	$.ajax({
@@ -750,7 +704,7 @@ MManager.prototype.NavigateToConcept = function(){
 }
 
 MManager.prototype.NavigateToQuiz = function(){
-	var nid = this.crrnt.nid;
+	var nid = node.nid;
 	var mode = this.mode;
 
 	if(mode == 0){
@@ -799,34 +753,15 @@ MManager.prototype.CheckOffNode = function(){
 	});
 }
 
-/* 
- * 
- */
-MManager.prototype.FillPopup = function(title, description, duedate, notes){
-	// $("#popup").show(); 
-	// $("#title").html(title); 
-	// $("#description").html(description); 
-	// $("#duedate").html("Due date: " + duedate); 
-	// $("#notes").html(notes); 
-
-	$("#custom_container").show();
-}
-
 /*
  * Shows the popup. 
  * @param popup - jquery tag e.g $("#popup")
  * @param node  - node that was selected e.g e.target
  */ 
 MManager.prototype.ShowPopup = function(node, popup){
-	this.crrnt = node;
+	popup.html(node.popup.innerHtml);
 
-	for(var i = 0; i < this.nodes.length; i++){
-		if(this.nodes[i].node.top == this.crrnt.top && this.nodes[i].node.left == this.crrnt.left){
-			popup.html(this.nodes[i].popup.innerHtml); 
-		}
-	}
-
-	LoadDiscussion(this.crrnt.nid); // From API/Discussion/discussion.js
+	LoadDiscussion(node.nid); // From API/Discussion/discussion.js
 	$("#custom_container").show();
 	$("#dim_div").show();
 }
@@ -851,7 +786,7 @@ MManager.prototype.CreatePopupWithData = function(type, title, description, due_
 
 MManager.prototype.UploadFile = function(){
 	var formData = new FormData();
-	formData.append('nid', this.crrnt.nid);
+	formData.append('nid', node.nid);
 	formData.append('file', $('#filechooser')[0].files[0]);
 
 	$.ajax({
@@ -1037,19 +972,8 @@ MManager.prototype.HidePopup2 = function(){
  */
 MManager.prototype.SavePopup = function(){
 
-	var nid; 
-	var type; 
-	var current_node; 
-
-	// Get the nid
-	for(var i = 0; i < this.nodes.length; i++){
-		if(this.nodes[i].node.top == this.crrnt.top && this.nodes[i].node.left == this.crrnt.left){
-			current_node = this.nodes[i];
-		}
-	}
-
-	nid = current_node.id;
-	type = current_node.type;
+	var nid = node.nid;
+	var type = node.type;
 
 	switch(type){
 		case "concept": 
@@ -1058,7 +982,7 @@ MManager.prototype.SavePopup = function(){
 			var notes = $("#notes").val(); 
 			var duedate = $("#due_date").val(); 
 
-			current_node.popup = this.CreatePopupWithData(type, title, desc, duedate, notes); // Updates the current popup with current data.
+			node.popup = this.CreatePopupWithData(type, title, desc, duedate, notes); // Updates the current popup with current data.
 			
 			var _data = {action: 'concept', classOrConcept: this.classOrConcept, nid: nid, title: title, description: desc, notes: notes, duedate: duedate};
 
@@ -1070,7 +994,7 @@ MManager.prototype.SavePopup = function(){
 			var notes = $("#notes").val(); 
 			var duedate = $("#due_date").val(); 
 
-			current_node.popup = this.CreatePopupWithData(type, title, desc, duedate, notes); // Updates the current popup with current data.
+			node.popup = this.CreatePopupWithData(type, title, desc, duedate, notes); // Updates the current popup with current data.
 
 			var _data = {action: 'assignment', classOrConcept: this.classOrConcept, nid: nid, title: title, description: desc, notes: notes, duedate: duedate};
 
@@ -1082,7 +1006,7 @@ MManager.prototype.SavePopup = function(){
 			var notes = $("#notes").val(); 
 			var duedate = $("#due_date").val(); 
 			
-			current_node.popup = this.CreatePopupWithData(type, title, desc, duedate, notes); // Updates the current popup with current data.
+			node.popup = this.CreatePopupWithData(type, title, desc, duedate, notes); // Updates the current popup with current data.
 
 			var _data = {action: 'quiz', classOrConcept: this.classOrConcept, nid: nid, title: title, description: desc, notes: notes, duedate: duedate};
 
@@ -1095,8 +1019,6 @@ MManager.prototype.SavePopup = function(){
 		url: "../map_manager/save_node_popup.php",
 		data: _data, 
 		success: function(result){
-			//$("#popup").hide(); 
-			//$("#cancelorsave").hide(); 
 			$("#custom_container").hide();
 			$("#popup").html("");
 			$("#canvas").show(); 
@@ -1121,20 +1043,10 @@ MManager.prototype.AddToolbar = function(){
 
 	var canvas = this.canvas;
 
-	//Lock tool
-	fabric.Image.fromURL('../imports/images/lock.png', function(oImg) {
-		oImg.scale(.37); 
-		oImg.set({left: 40, top: 720, id: 'toolbarLock'}); 
-		oImg.lockMovementX = oImg.lockMovementY = true; 
-		oImg.hasControls = oImg.hasBorders = false; 
-		oImg.selectable = false;
-		canvas.add(oImg); 
-	}); 
-
 	//Upload tool
 	fabric.Image.fromURL('../imports/images/upload.png', function(oImg) {
 		oImg.scale(.4); 
-		oImg.set({left: 100, top: 724, id: 'toolbarUpload'}); 
+		oImg.set({left: 190, top: 10, id: 'toolbarUpload'}); 
 		oImg.lockMovementX = oImg.lockMovementY = true; 
 		oImg.hasControls = oImg.hasBorders = false; 
 		oImg.selectable = false;

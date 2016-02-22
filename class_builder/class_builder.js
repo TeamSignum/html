@@ -51,7 +51,7 @@ $( document ).ready(function() {
 			else if(e.target.id === "tb_lineDotted"){
 				mngr.LineEditor(e.target, false);
 			}
-			else if(e.target.id === mapNodeId)
+			else if(e.target.id === mapNodeId || e.target.id === "popupnode")
 			{
 				mngr.HandleMapNodeSelect(e.target);
 			}
@@ -62,7 +62,9 @@ $( document ).ready(function() {
 
 	  'mouse:up': function(e) {
 	  	if (e.target) {
-			mngr.CheckBoundsAndAddText(e.target);
+	  		if (e.target.id === "mapNode"){
+				mngr.AddNodeToCanvas(e.target);
+	  		}
 			mngr.DrawEdgeBetweenNodes(e.target);
 			canvas.renderAll();
 		}
@@ -105,7 +107,7 @@ $( document ).ready(function() {
 	  'object:moving' : function(e) {
 		if(e.target.id === mapNodeId)
 		{
-			mngr.MoveNodeTitle(e.target);
+			mngr.MoveNode(e.target);
 			mngr.MoveEdges(e.target);
 			canvas.renderAll();
 		}
