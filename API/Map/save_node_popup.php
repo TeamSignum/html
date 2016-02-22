@@ -1,6 +1,6 @@
 <?php
 
-include '../imports/ChromePhp.php';
+include '../../imports/ChromePhp.php';
 
 session_start();
 

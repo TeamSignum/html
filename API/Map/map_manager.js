@@ -22,6 +22,8 @@ var MManager = function(_canvas, builder, classOrConcept){
  	this.to;
  	this.solid = false;
 
+ 	this.crrnt;
+
  	this.result_nodes; 
  	this.result_edges;
 
@@ -78,7 +80,7 @@ MManager.prototype.CopyNode = function(node, new_id, type){
  * TODO: Some of this is hardcoded and needs to change
  */
 MManager.prototype.HandleMapNodeSelect = function (node){
-	node = node;
+	this.crrnt = node;
 
 	if(node.id === "popupnode"){
 		this.ShowPopup(node, $("#popup")); 
@@ -89,7 +91,7 @@ MManager.prototype.HandleMapNodeSelect = function (node){
 }
 
 MManager.prototype.GetCurrentId = function(result){
-	return node.nid;
+	return this.crrnt.nid;
 }
 
 //Draw a node onto the canvas
@@ -122,10 +124,10 @@ MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, f
 		c.lockMovementY = true;
 		
 		var pc = new fabric.Circle({
-				top: top + 35,
-				left: left + 2*radius + 20,
+				top: top - 5,
+				left: left - 5,
 				radius: 15,
-				fill: 'red',
+				fill: 'green',
 				id: "partNode"
 		});
 		
@@ -139,8 +141,8 @@ MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, f
 		var pt = new fabric.Text("0", {
 				fontFamily: 'arial black',
 				fontSize: 12,
-				left: left + 2*radius + 20,
-				top: top + 35 + 7,
+				left: left + 2,
+				top: top + 2,
 				id: "partText"
 		});
 		
@@ -160,13 +162,6 @@ MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, f
 		canvas.add(pt);
 	}
 	
-	//Draw participant nodes
-	if(tempi < 3)
-	{
-		//drawParticipantNodes(c, tempp);
-		tempp = tempp - 4;
-	}
-
 	//Draw the title text
 	var t = new fabric.Text(title, {
 			fontFamily: 'arial black',
@@ -176,13 +171,10 @@ MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, f
 			id: "nodeText"
 	});
 	
-	//test
 	c.title = t;
-			
 	var len = t.getWidth()/2;
 	var cenX = c.getCenterPoint().x;
 	t.left = cenX - len;
-				
 	t.hasControls = false;
 	t.hasBorders = false;
 	t.lockMovementX = true;
@@ -655,10 +647,10 @@ MManager.prototype.CreatePopupNode = function(node, popup, docreate){
 		var left = node.left; 
 
 		var popupnode = new fabric.Circle({
-			radius: 10, 
+			radius: 15, 
 			fill : '#009ACD', 
-			top : top + 5, 
-			left : left + 2 * radius - 5,
+			top : top - 5, 
+			left : left + (2 * radius) - 20,
 			stroke: '#009ACD',
 			strokeWidth: 2,		
 			id: 'popupnode'
@@ -678,8 +670,7 @@ MManager.prototype.CreatePopupNode = function(node, popup, docreate){
 }
 
 MManager.prototype.NavigateToConcept = function(){
-	var nid = node.nid;
-	var mode = this.mode;
+	var nid = this.crrnt.nid;
 	
 	$.ajax({
 		async: true, 
@@ -704,7 +695,7 @@ MManager.prototype.NavigateToConcept = function(){
 }
 
 MManager.prototype.NavigateToQuiz = function(){
-	var nid = node.nid;
+	var nid = this.crrnt.nid;
 	var mode = this.mode;
 
 	if(mode == 0){
@@ -788,7 +779,7 @@ MManager.prototype.CreatePopupWithData = function(type, title, description, due_
 
 MManager.prototype.UploadFile = function(){
 	var formData = new FormData();
-	formData.append('nid', node.nid);
+	formData.append('nid', this.crrnt.nid);
 	formData.append('file', $('#filechooser')[0].files[0]);
 
 	$.ajax({
@@ -974,8 +965,8 @@ MManager.prototype.HidePopup2 = function(){
  */
 MManager.prototype.SavePopup = function(){
 
-	var nid = node.nid;
-	var type = node.type;
+	var nid = this.crrnt.nid;
+	var type = this.crrnt.type;
 
 	switch(type){
 		case "concept": 
@@ -984,7 +975,7 @@ MManager.prototype.SavePopup = function(){
 			var notes = $("#notes").val(); 
 			var duedate = $("#due_date").val(); 
 
-			node.popup = this.CreatePopupWithData(type, title, desc, duedate, notes); // Updates the current popup with current data.
+			this.crrnt.popup = this.CreatePopupWithData(type, title, desc, duedate, notes); // Updates the current popup with current data.
 			
 			var _data = {action: 'concept', classOrConcept: this.classOrConcept, nid: nid, title: title, description: desc, notes: notes, duedate: duedate};
 
@@ -996,7 +987,7 @@ MManager.prototype.SavePopup = function(){
 			var notes = $("#notes").val(); 
 			var duedate = $("#due_date").val(); 
 
-			node.popup = this.CreatePopupWithData(type, title, desc, duedate, notes); // Updates the current popup with current data.
+			this.crrnt.popup = this.CreatePopupWithData(type, title, desc, duedate, notes); // Updates the current popup with current data.
 
 			var _data = {action: 'assignment', classOrConcept: this.classOrConcept, nid: nid, title: title, description: desc, notes: notes, duedate: duedate};
 
@@ -1008,7 +999,7 @@ MManager.prototype.SavePopup = function(){
 			var notes = $("#notes").val(); 
 			var duedate = $("#due_date").val(); 
 			
-			node.popup = this.CreatePopupWithData(type, title, desc, duedate, notes); // Updates the current popup with current data.
+			this.crrnt.popup = this.CreatePopupWithData(type, title, desc, duedate, notes); // Updates the current popup with current data.
 
 			var _data = {action: 'quiz', classOrConcept: this.classOrConcept, nid: nid, title: title, description: desc, notes: notes, duedate: duedate};
 

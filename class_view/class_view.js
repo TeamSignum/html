@@ -1,8 +1,6 @@
 var canvas;
 var nid; 
 var checked_off;
-var tempi = 0;
-var tempp = 12; 
 var mngr;
 
 $( document ).ready(function() {
@@ -25,7 +23,7 @@ $( document ).ready(function() {
 		'mouse:down': function(e) {
 			if(e.target)
 			{
-				if (e.target.id === "mapNode") 
+				if (e.target.id === "mapNode" || e.target.id === "popupnode") 
 				{
 					mngr.HandleMapNodeSelect(e.target);
 				}
@@ -68,19 +66,15 @@ function getPercents()
 	var temp = [];
 	for(var i = 0; i < mngr.nodes.length; i++)
 	{
-		//alert(mngr.nodes[i].id);
-		temp.push(mngr.nodes[i].id);
+		temp.push(mngr.nodes[i].nid);
 	}
 	$.ajax({
+		async: true,
 		type: 'POST',
 		url: "class_view.php",
 		dataType: 'json',
 		data: {userperc: temp},
-		//async: false,
-		
 		success: function(result){
-			//alert(result);
-			//alert(result[0].nid + " " + result[0].count);
 			for(var i = 0; i < result.length; i++)
 			{
 				if(result[i].count != null)
@@ -99,9 +93,9 @@ function drawPercents(nid, count, total)
 	var temp;
 	for(var i = 0; i < mngr.nodes.length; i++)
 	{
-		if(mngr.nodes[i].id == nid)
+		if(mngr.nodes[i].nid == nid)
 		{
-			temp = mngr.nodes[i].node;
+			temp = mngr.nodes[i];
 		}
 	}
 	
@@ -110,15 +104,14 @@ function drawPercents(nid, count, total)
 	if(count != 0)
 	{
 		var p = Math.floor((parseFloat(count) / parseFloat(total)) * 100);
-		//alert(Math.floor((parseFloat(count) / parseFloat(total)) * 100));
 		perc = p + "%";
 	}
 	
 	var t = new fabric.Text(perc, {
-			fontFamily: 'arial black',
-			fontSize: 20,
-			left: temp.left,
-			top: temp.top + temp.radius - 10
+		fontFamily: 'arial black',
+		fontSize: 20,
+		left: temp.left,
+		top: temp.top + temp.radius + 15
 	});
 	
 	var len = t.getWidth()/2;
@@ -133,19 +126,16 @@ function getParticipants()
 	var temp = [];
 	for(var i = 0; i < mngr.nodes.length; i++)
 	{
-		//alert(mngr.nodes[i].id);
-		temp.push(mngr.nodes[i].id);
+		temp.push(mngr.nodes[i].nid);
 	}
 	$.ajax({
+		async: true,
 		type: 'POST',
 		url: "class_view.php",
 		dataType: 'json',
 		data: {pnodes: temp},
-		//async: false,
 		
 		success: function(result){
-			//alert(result);
-			//alert(result[0].nid + " " + result[0].count);
 			for(var i = 0; i < result.length; i++)
 			{
 				if(result[i].count != null)
@@ -164,51 +154,11 @@ function drawParticipants(nid, count)
 	var temp;
 	for(var i = 0; i < mngr.nodes.length; i++)
 	{
-		if(mngr.nodes[i].id == nid)
+		if(mngr.nodes[i].nid == nid)
 		{
-			temp = mngr.nodes[i].node;
+			temp = mngr.nodes[i];
 		}
 	}
 	
 	temp.pnode.ptext.setText(count);
-}
-
-//Calculates the participant nodes spacing
-//Draws the participant nodes around the specified node
-function drawParticipantNodes(c, num){
-
-	var _left = c.left;
-	var _top = c.top;
-	var _radius = c.radius;
-	var _participants = num;
-	
-	// calculate the center of the node we're drawing around
-	//var nodeCenterX = _left + _radius;
-	//var nodeCenterY = _top + radius;
-	var nodeCenterX = c.getCenterPoint().x;
-	var nodeCenterY = c.getCenterPoint().y;
-	
-	// determine the angle between each participant node
-	var participantNodeSpacing = (2 * Math.PI - (2 * Math.PI / 3)) / _participants;
-	var currentAngle = (Math.PI / 2) + (Math.PI / 6); 
-
-	for (var i = _participants; i >= 0; i--) {
-
-		//draw the circle
-		var participantNode = new fabric.Circle({
-			radius: 7,
-			left: nodeCenterX + Math.sin(currentAngle) * (_radius + 14) - 7,  // need to verify this math
-			top: nodeCenterY + Math.cos(currentAngle) * (_radius + 14) - 7,  // need to verify this math
-			fill: '#50a35d'
-		});
-		
-		participantNode.lockMovementX = true;
-		participantNode.lockMovementY = true;
-		participantNode.hasControls = false;
-		participantNode.hasBorders = false;
-		
-		canvas.add(participantNode);
-
-		currentAngle = currentAngle - participantNodeSpacing; 
-	}
 }

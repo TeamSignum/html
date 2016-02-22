@@ -2,7 +2,7 @@
 	session_start();
 	$cid = $_SESSION['classid'];
 
-	include '../imports/ChromePhp.php';
+	include '../../imports/ChromePhp.php';
 
 	if(isset($_POST["map"]))
 	{

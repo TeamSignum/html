@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-include '../imports/ChromePhp.php';
+include '../../imports/ChromePhp.php';
 
 if(isset($_POST["map"]))
 {

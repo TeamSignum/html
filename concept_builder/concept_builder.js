@@ -58,7 +58,7 @@ $( document ).ready(function() {
 			{
 				mngr.LineEditor(e.target, false);
 			}
-			else if(e.target.id === mapNodeId)
+			else if(e.target.id === mapNodeId || e.target.id === "popupnode")
 			{
 				mngr.HandleMapNodeSelect(e.target);
 			}
