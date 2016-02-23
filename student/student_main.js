@@ -82,7 +82,7 @@ function drawclassnode(canvas){
 			strokeWidth: 5,
 			id: "mapNode"
 		});
-		
+
 		//draw the text
 		var className = new fabric.Text(classNumberArray[i],{
 			originX: 'center',
@@ -103,6 +103,25 @@ function drawclassnode(canvas){
 		node_group.cid = classIdArray[i];
 
 		canvas.add(node_group);
+
+
+		// Draw popup
+		var popupCircle = new fabric.Circle({
+			radius: 15,
+			left: canvas.width/2 + Math.cos(currentAngle)*classOrbitalRadius + classNodeRadius - 30,
+			top: canvas.height/2 + Math.sin(currentAngle)*classOrbitalRadius - classNodeRadius - 5,
+			fill: '#009ACD',
+			stroke: 'white',
+			strokeWidth: 5,
+			id: "popupnode"
+		});
+		popupCircle.cid = classIdArray[i];
+		popupCircle.popup = "";
+		popupCircle.lockMovementX = popupCircle.lockMovementY = true;
+		popupCircle.hasControls = popupCircle.hasBorders = false;
+		canvas.bringToFront(popupCircle);
+		canvas.add(popupCircle);
+
 	};
 }
 
@@ -138,6 +157,48 @@ function directToClass(c)
 	});
 	
 	return false;
+}
+
+function LoadPopup(node){
+
+	$.ajax({
+		async: true, 
+		type: 'POST', 
+		url: "../API/Map/load_class_popup.php",
+		data: {cid: node.cid}, 
+		dataType: "json", 
+		success: function(result){
+			node.popup = GenPopup(result);
+			$("#popup").html(node.popup);
+			$("#custom_container").show();
+			$("#dim_div").show();
+		}
+	}); 
+
+	return false; 
+}
+
+function HidePopup(){
+	$("#custom_container").hide();
+	$("#dim_div").hide();
+}
+
+function GenPopup(result){
+	var html = `
+	<div class="form-style-2">
+		<div class="form-style-2-heading" style="width: 100%;">`+result["name"]+`</div>
+			<div style="font-size:16px; font-weight:bold; text-align: left;">
+				<p style="float:left; margin-left: 15px;">Number: `+ result["number"] +`</p>
+				</br></br>
+				<p style="float:left; margin-left: 15px;">Section: `+ result["section"] +`</p>
+				</br></br>
+				<p style="float:left; margin-left: 15px;">Description: `+ result["description"] +`</p>
+			</div>
+		</div>
+	</div>
+	`;
+
+	return html;
 }
 
 $( document ).ready(function() {
@@ -227,6 +288,10 @@ $( document ).ready(function() {
 					//alert("t");
 					window.location = '../profile/profile.html';
 				}
+
+				if(e.target.id === "popupnode"){
+					LoadPopup(e.target);
+				}
 			}
 	    },
 		
@@ -260,4 +325,7 @@ $( document ).ready(function() {
 		
 	});
 
+	$( "#xmark" ).click(function() {
+		HidePopup();
+	});
 });

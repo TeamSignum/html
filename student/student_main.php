@@ -16,13 +16,13 @@ if(isset($_POST["class"]))
 	// Set and prepare the database query
 	if(strcmp($role, "professor") == 0)
 	{
-		$query = "SELECT b.classnumber, b.cid
+		$query = "SELECT b.classnumber, b.cid, b.classname, b.description
 				FROM teaching a, classes b
 				WHERE a.cid = b.cid and a.idusers ='" .$userid. "'";
 	}
 	else
 	{
-		$query = "SELECT b.classnumber, b.cid
+		$query = "SELECT b.classnumber, b.cid, b.classname, b.description
 				FROM enrolled a, classes b
 				WHERE a.cid = b.cid and a.idusers ='" .$userid. "'";
 	}
@@ -39,7 +39,9 @@ if(isset($_POST["class"]))
 	{
 		$cid = $row['cid'];
 		$classnumber = $row['classnumber'];
-		$enroll[] = array('cid' => $cid, 'classnumber' => $classnumber);
+		$classname = $row['classname'];
+		$classdesc = $row['description'];
+		$enroll[] = array('cid' => $cid, 'classnumber' => $classnumber, 'classname' => $classname, 'classdesc' => $classdesc);
 	}
 	//$enroll[] = array('cid' => "-1", 'classnumber' => "+");
 	
