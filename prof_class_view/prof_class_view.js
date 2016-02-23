@@ -30,8 +30,12 @@ $( document ).ready(function() {
 				if (e.target.id === "mapNode") 
 				{
 					//mngr.HandleMapNodeSelect(e.target);
-					getStats(e.target.nid, e.target.title.text);
+					navigate(e.target.nid);
 					//showPopup();
+				}
+				if(e.target.id === "popupnode")
+				{
+					getStats(e.target.nid)//, e.target.title.text);
 				}
 			}
 	    },
@@ -67,6 +71,27 @@ $( document ).ready(function() {
 	});
 
 });
+
+function navigate(nid)
+{
+	$.ajax({
+		type: 'POST',
+		url: "prof_class_view.php",
+		dataType: 'html',
+		data: {direct: nid},
+		//async: false,
+		
+		success: function(result){
+			//alert(result);
+			if(result === "1")
+			{
+				window.location = '../prof_concept_view/prof_concept_view.html';
+			}
+		}
+	});
+	
+	return false;
+}
 
 function showPopup()
 {
