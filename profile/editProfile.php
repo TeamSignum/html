@@ -164,12 +164,17 @@ switch ($queryType) {
 		      die("Uploaded file is not an image.");
 		}
 
-		// Get image file prefix
-		$prefix=($_FILES['imageToUpload']['name']);
+		// Get image file name
+		$uploadedFileName=pathinfo(($_FILES['imageToUpload']['name']), PATHINFO_FILENAME);
 		// Set target directory
-		$targetDirectory="../profile_images/";
+		// This line for testing on local machine (windows)
+		//$targetDirectory=dirname(__DIR__)."\profile_images";
+		// This line is for the server (Linux);
+		$targetDirectory=dirname(__DIR__)."/profile_images";
+		echo($targetDirectory);
 		// Create a unique file name with tempnam function
-		$destinationFileName = tempnam($targetDirectory, $prefix);
+		$destinationFileName = tempnam($targetDirectory, $uploadedFileName);
+		//echo($destinationFileName);
 		
 		// Assuming $_FILES['file']['error'] == 0 (no errors)
 		if (move_uploaded_file($_FILES['imageToUpload']['tmp_name'], $destinationFileName)) {

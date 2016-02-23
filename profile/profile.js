@@ -337,7 +337,7 @@ function submitPictureChange(){
 			url: "editProfile.php",
 			data: formData,
 			success: function(result){
-				//alert(result);
+				alert(result);
 				if(result.indexOf("Success: ") !=-1){
 					//alert(result.substring(result.indexOf(" ")+1));
 					_profileimage="../profile_images/" + result.substring(result.indexOf(" ")+1);
