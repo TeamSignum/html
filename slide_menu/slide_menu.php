@@ -85,7 +85,7 @@ function getGrade($userid, $DB){
 	$notifications = array();
 	$query = "SELECT cid, title, score, date_entered FROM LU.grades 
 				left join LU.popupassignment on grades.idassignment = popupassignment.idassignment 
-				where idusers = ? and date_entered >= DATE_SUB(CURDATE(), INTERVAL 10 DAY)
+				where idusers = ? and date_entered >= DATE_SUB(CURDATE(), INTERVAL 20 DAY)
 				order by date_entered;";
 	$statement = $DB->prepare($query);
 	$statement->bindValue(1, $userid);	
@@ -112,10 +112,28 @@ function getGrade($userid, $DB){
 	echo json_encode($notifications);
 }
 
-function getDiscussion(){
+function getDiscussion($userid, $DB){
+	$notifications = array();
+	$query = "SELECT classes.classnumber, users.firstname, discussions.content, discussions.date_entered from LU.discussions 
+					inner join LU.enrolled on enrolled.cid = discussions.cid
+					inner join LU.classes on enrolled.cid = classes.cid
+					inner join LU.users on enrolled.idusers = users.idusers
+					where 	enrolled.idusers = ? and 
+							enrolled.idusers != discussions.idusers and
+        					date_entered >= DATE_SUB(CURDATE(), INTERVAL 10 DAY)
+					order by date_entered;";
+	$statement = $DB->prepare($query);
+	$statement->bindValue(1, $userid);	
+	$statement->execute();
+	$result = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-	
-	echo json_encode("getDiscussion");
+	foreach ($result as $row) {
+		$notifications[] = array(	'classnumber' => $row['classnumber'], 
+									'firstname' => $row['firstname'],
+									'content' => $row['content'],
+									'date_entered' => $row['date_entered']);
+	}
+	echo json_encode($notifications);
 }
 
 function getAssignmentNQuiz(){

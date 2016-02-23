@@ -1,10 +1,11 @@
 var role = '';
 
+
 $(document).ready(function() {
 	getRole();
   	$("[data-toggle]").click(function() {
   		var notification_type = document.getElementById('notification_type').value;
-  		if (notification_type == '') { alert('missing keyword'); return }
+  		if (notification_type == '' ) { alert('missing keyword'); return }
   		getNotifications(notification_type);
   	   	var toggle_el = $(this).data("toggle");
     	$(toggle_el).toggleClass("open-sidebar");
@@ -39,8 +40,22 @@ function getNotifications(notification_type)
 		data: {'function': 'getNotifications', 'notype': notification_type},
 		success: function(result){
 			if(role == "student"){
+				switch(notification_type) {
+				    case '1':
+				        studentGrade(result);
+				        break;
+				    case '2':
+				        studentDiscussion(result);
+				        break;
+			        case '3':
+				        studentAssignment(result);
+				        break;
+				    default:
+				        alert('Incorrect Keyword');
+				        break;
+				}
 				//studentNotification(result);
-				studentGrade(result);
+				//studentGrade(result);
 				//studentDiscussion(result);
 			}else if(role == 'professor'){
 				professorNotification(result);
@@ -55,14 +70,19 @@ function getNotifications(notification_type)
 }
 
 function studentDiscussion(result){
+	//alert(result);
+	var notification = '';
+	for (var i = 0; i < result.length; i++){
+		notification += '<li><a href="#">New discussion is written by '
+						+result[i]['firstname']+' in '
+						+result[i]['classnumber']+ ' at '
+						+result[i]['date_entered'] + '</a></li>';
+	}
+	$('#sidebar').html('<ul>'+notification+'</ul>');
+}
+
+function studentAssignment(result){
 	alert(result);
-	// var notification = '';
-	// for (var i = 0; i < result.length; i++){
-	// 	notification += '<li><a href="#">New discussion is written by '
-	// 					+result[i]['Name']+' in '
-	// 					+result[i]['classnumber']+'</a></li>';
-	// }
-	// $('#sidebar').html('<ul>'+notification+'</ul>');
 }
 
 function studentGrade(result){
