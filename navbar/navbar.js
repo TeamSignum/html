@@ -56,12 +56,13 @@ function evaluateSessionInfo(parsedResult){
 		html+='</li>';
 
 		// Logic for grades links
-		if(document.title=='student_main_page'){
-			html+='<li>';
-			html+='<a href="../grades/grade_charts.html" style="margin-top: 12px; font-size:14pt;">Grades</a>';
-			html+='</li>';
-		}
-		else if(document.title=='Class View'){
+		// if(document.title=='student_main_page'){
+		// 	html+='<li>';
+		// 	html+='<a href="../grades/grade_charts.html" style="margin-top: 12px; font-size:14pt;">Grades</a>';
+		// 	html+='</li>';
+		// }
+		//else 
+			if(document.title=='Class View'){
 			html+='<li>';
 			html+='<a href="../grades/grades.html" style="margin-top: 12px; font-size:14pt;">Grades</a>';
 			html+='</li>';
