@@ -133,7 +133,10 @@ function drawPercents(nid, count, total)
 		left: temp.left,
 		top: temp.top + temp.radius + 15
 	});
-	
+
+	t.lockMovementX = t.lockMovementY = true;
+	t.selectable = t.hasControls = t.hasBorders = false;
+
 	var len = t.getWidth()/2;
 	var cenX = temp.getCenterPoint().x;
 	t.left = cenX - len;

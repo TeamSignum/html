@@ -17,9 +17,8 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
 }
 
 function LoadDiscussion(){
-	$nid = $_POST["nid"];
+	$nid     = $_POST["nid"];
 	$cid     = $_SESSION['classid'];
-	//$idusers = $_SESSION['idusers'];
 
 	try{
 		$DB = new PDO("mysql:host=ec2-52-33-118-140.us-west-2.compute.amazonaws.com;dbname=LU", 'Signum', 'signumDB4');
@@ -62,7 +61,7 @@ function SaveDiscussion(){
 	$content = $_POST["content"];
 	$parent  = $_POST["parent"];
 	$cid     = $_SESSION['classid'];
-	$idusers = $_SESSION['idusers'];
+	$idusers = $_SESSION['userid'];
 
 	try
 	{
