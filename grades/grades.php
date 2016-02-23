@@ -53,7 +53,7 @@
 				$query = "SELECT c.classnumber, p.title, g.score
 						  FROM grades g
 						  INNER JOIN popupassignment p
-						  	  ON g.idassignment=p.idpopupassignment
+						  	  ON g.idassignment=p.idassignment
 						  INNER JOIN classes c
 						      ON p.cid=c.cid
 						  WHERE g.idusers=? and c.cid=? and g.idassignment=?";
@@ -77,7 +77,7 @@
 				$query = "SELECT c.classnumber, p.title, g.score
 						  FROM grades g
 						  INNER JOIN popupassignment p
-						      ON g.idassignment=p.idpopupassignment
+						      ON g.idassignment=p.idassignment
 						  INNER JOIN classes c
 							  ON p.cid=c.cid
 						  WHERE g.idusers=? and p.cid=?
@@ -93,7 +93,7 @@
 				$query = "SELECT c.cid, c.classnumber, p.title, g.score
 						  FROM grades g
 						  INNER JOIN popupassignment p
-							  ON g.idassignment=p.idpopupassignment
+							  ON g.idassignment=p.idassignment
 						  INNER JOIN classes c
 							  ON p.cid=c.cid
 						  WHERE g.idusers=$userid
@@ -119,7 +119,7 @@
 				$query = "SELECT c.classnumber, p.title, g.score
 						  FROM grades g
 						  INNER JOIN popupassignment p
-							  ON g.idassignment=p.idpopupassignment
+							  ON g.idassignment=p.idassignment
 						  INNER JOIN classes c
 							  ON p.cid=c.cid
 						  WHERE g.idusers=? and c.cid=? and g.idassignment=?";
@@ -142,7 +142,7 @@
 				$query = "SELECT c.classnumber, p.title, g.score
 						  FROM grades g
 						  INNER JOIN popupassignment p
-							  ON g.idassignment=p.idpopupassignment
+							  ON g.idassignment=p.idassignment
 						  INNER JOIN classes c
 							  ON p.cid=c.cid
 						  WHERE g.idusers=? and c.cid=?";
@@ -164,7 +164,7 @@
 				$query = "SELECT c.classnumber, p.title, g.score
 						  FROM grades g
 						  INNER JOIN popupassignment p
-						    ON g.idassignment=p.idpopupassignment
+						    ON g.idassignment=p.idassignment
 						  INNER JOIN classes c
 						    ON p.cid=c.cid
 						  WHERE g.idassignment=? and c.cid=?";
@@ -186,7 +186,7 @@
 				$query = "SELECT c.classnumber, p.title, g.score
 						  FROM grades g
 						  INNER JOIN popupassignment p
-						    ON g.idassignment=p.idpopupassignment
+						    ON g.idassignment=p.idassignment
 						  INNER JOIN classes c
 						    ON p.cid=c.cid
 						  WHERE c.cid=?";
