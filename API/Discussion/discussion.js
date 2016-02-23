@@ -25,8 +25,10 @@ function LoadDiscussion(nid){
 }
 
 function UseLoadData(result){
-	did = result[result.length - 1]["id"]; 
-
+	if(result.length > 0){
+		did = result[result.length - 1]["id"]; 
+	}
+	
 	for(var i = 0; i < result.length; i++){
 		if(result[i]["level"] == 0){
 			AddTextContainer(result[i]["content"], lvl0, result[i]["id"]);

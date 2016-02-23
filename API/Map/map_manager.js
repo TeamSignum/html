@@ -814,9 +814,15 @@ MManager.prototype.CreateConceptPopup = function(title, description, due_date, n
 		"    			<label for=\"field1\"><span>Title <span class=\"required\">*</span></span><input class=\"input-field\" id=\"title\" name=\"title\" type=\"text\" value=\""+ title +"\" placeholder=\"Title\"/></label>"+
 		"				<label for=\"field2\"><span>Description <span class=\"required\">*</span></span><input class=\"input-field\" id=\"description\" name=\"description\" type=\"text\" value=\""+ description +"\" placeholder=\"Description\"/></label>"+
 		"				<label for=\"field5\"><span>Notes <span class=\"\"></span></span><textarea name=\"notes\" id=\"notes\" class=\"textarea-field\">"+ notes +"</textarea></label>"+
-		"				<label for=\"field2\"><span>Due Date<span class=\"\"></span></span><input class=\"input-field\" id=\"due_date\" name=\"due_date\" type=\"text\" value=\""+ due_date +"\" placeholder=\"Due date\"/></label>"+
-		"               </br>" +
-		"	        	<input type=\"file\" id=\"filechooser\" onchange=\"mngr.UploadFile();\">" +
+		"				<label for=\"field2\"><span>Due Date<span class=\"\"></span></span><input class=\"input-field\" id=\"due_date\" name=\"due_date\" type=\"text\" value=\""+ due_date +"\" placeholder=\"Due date\"/></label>";
+
+		if (this.mode ==  1){
+			innerHtml +=
+			"               </br>" +
+			"	        	<input type=\"file\" id=\"filechooser\" onchange=\"mngr.UploadFile();\">";
+		}
+		
+		innerHtml +=
 		"               </br>" +
 		"	        	<button id=\"concept_navigate\" onclick=\"mngr.NavigateToConcept();\" style=\"float:left; font-size:12pt;\" type=\"button\" class=\"btn btn-default btn-md\">" +
 		"	        	Concept Page" +

@@ -6,8 +6,6 @@
 
  var mngr;
  var canvas;
- var tempi = 0;
- var tempp = 12; 
 
 $( document ).ready(function() {
 
@@ -122,6 +120,3 @@ $( document ).ready(function() {
 		mngr.HidePopup();
 	});
 });
-
-function drawParticipantNodes(c, num){
-}

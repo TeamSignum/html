@@ -141,6 +141,21 @@ function drawPercents(nid, count, total)
 	canvas.add(t);
 }
 
+function setParticipant(nid)
+{
+	$.ajax({
+		async: true,
+		type: 'POST',
+		url: "concept_view.php",
+		dataType: 'html',
+		data: {setp: nid},
+		success: function(result){
+		}
+	});
+	
+	return false;
+}
+
 function getParticipants()
 {
 	var temp = [];
