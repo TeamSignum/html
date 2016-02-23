@@ -756,7 +756,7 @@ MManager.prototype.ShowPopup = function(node, popup){
 	popup.html(node.popup.innerHtml);
 
 	if (this.mode == 0){
-		LoadDiscussion(node.nid); // From API/Discussion/discussion.js
+		LoadDiscussion(node.nid, this.classOrConcept); // From API/Discussion/discussion.js
 	}
 	$("#custom_container").show();
 	$("#dim_div").show();

@@ -18,13 +18,20 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
 
 function LoadDiscussion(){
 	$nid     = $_POST["nid"];
+	$classOrConcept = $_POST["classOrConcept"];
 	$cid     = $_SESSION['classid'];
 
 	try{
 		$DB = new PDO("mysql:host=ec2-52-33-118-140.us-west-2.compute.amazonaws.com;dbname=LU", 'Signum', 'signumDB4');
 		$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-		$query = "SELECT * FROM discussions WHERE discussions.nid = ? AND discussions.cid = ? ORDER BY discussions.level";
+		$query = "";
+		if($classOrConcept){
+			$query = "SELECT * FROM discussions2 WHERE discussions2.nid = ? AND discussions2.cid = ? ORDER BY discussions2.level";
+		}
+		else{
+			$query = "SELECT * FROM discussions WHERE discussions.nid = ? AND discussions.cid = ? ORDER BY discussions.level";
+		}
 
 		$statement = $DB->prepare($query);
 		$statement->bindParam(1, $nid);
@@ -60,6 +67,7 @@ function SaveDiscussion(){
 	$level   = $_POST["level"];
 	$content = $_POST["content"];
 	$parent  = $_POST["parent"];
+	$classOrConcept = $_POST["classOrConcept"];
 	$cid     = $_SESSION['classid'];
 	$idusers = $_SESSION['userid'];
 
@@ -70,8 +78,13 @@ function SaveDiscussion(){
 		$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$DB->beginTransaction();
 
-		// Create Query
-		$query = "INSERT INTO `discussions` (`nid`, `cid`, `idusers`, `level`, `content`, `parent`) values (?,?,?,?,?,?)";
+		$query = "";
+		if($classOrConcept){
+			$query = "INSERT INTO `discussions2` (`nid`, `cid`, `idusers`, `level`, `content`, `parent`) values (?,?,?,?,?,?)";
+		}
+		else{
+			$query = "INSERT INTO `discussions` (`nid`, `cid`, `idusers`, `level`, `content`, `parent`) values (?,?,?,?,?,?)";
+		}
 		$statement = $DB->prepare($query);
 
 		// Bind Values
