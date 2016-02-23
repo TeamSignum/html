@@ -66,7 +66,9 @@ $( document ).ready(function() {
 
 	  'mouse:up': function(e) {
 	  	if (e.target) {
-			mngr.CheckBoundsAndAddText(e.target);
+	  		if (e.target.id === "mapNode"){
+				mngr.AddNodeToCanvas(e.target);
+	  		}
 			mngr.DrawEdgeBetweenNodes(e.target);
 			canvas.renderAll();
 		}

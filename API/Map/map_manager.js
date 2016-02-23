@@ -993,7 +993,7 @@ MManager.prototype.SavePopup = function(){
 			var title = $("#title").val();
 			var desc = $("#description").val(); 
 			var notes = $("#notes").val(); 
-			var duedate = $("#due_date").val(); 
+			var duedate = $("#due_date").val();
 
 			this.crrnt.popup = this.CreatePopupWithData(type, title, desc, duedate, notes); // Updates the current popup with current data.
 
@@ -1005,7 +1005,7 @@ MManager.prototype.SavePopup = function(){
 			var title = $("#title").val();
 			var desc = $("#description").val(); 
 			var notes = $("#notes").val(); 
-			var duedate = $("#due_date").val(); 
+			var duedate = $("#due_date").val();
 			
 			this.crrnt.popup = this.CreatePopupWithData(type, title, desc, duedate, notes); // Updates the current popup with current data.
 

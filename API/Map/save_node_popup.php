@@ -79,6 +79,9 @@ function SaveAssignmentPopup(){
 		$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$DB->beginTransaction();
 
+		$duedate = strtotime($duedate);
+		$duedate = date("Y-m-d H:i:s", $duedate);
+
 		$query = "REPLACE INTO `popupassignment` (`nid`, `title`, `description`, `duedate`, `notes`, `cid`) values (?,?,?,?,?,?)";
 		$statement = $DB->prepare($query);
 
@@ -114,6 +117,9 @@ function SaveQuizPopup(){
 		$DB = new PDO("mysql:host=ec2-52-33-118-140.us-west-2.compute.amazonaws.com;dbname=LU", 'Signum', 'signumDB4');
 		$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$DB->beginTransaction();
+
+		$duedate = strtotime($duedate);
+		$duedate = date("Y-m-d H:i:s", $duedate);
 
 		// Create query 
 		$query = "REPLACE INTO `popupquiz` (`nid`, `title`, `description`, `duedate`, `notes`, `cid`) values (?,?,?,?,?,?)";
