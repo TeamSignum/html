@@ -5,7 +5,11 @@ $(document).ready(function() {
 	getRole();
   	$("[data-toggle]").click(function() {
   		var notification_type = document.getElementById('notification_type').value;
-  		if (notification_type == '' ) { alert('missing keyword'); return }
+  		if (notification_type != '1' && notification_type != '2' && notification_type != '3' ) { 
+  			alert('missing keyword or wrong keyword');
+  			alert('please types "1" for grade or "2" for discussion or "3" for Assignment ');
+  			return 
+  		}
   		getNotifications(notification_type);
   	   	var toggle_el = $(this).data("toggle");
     	$(toggle_el).toggleClass("open-sidebar");
@@ -48,10 +52,10 @@ function getNotifications(notification_type)
 				        studentDiscussion(result);
 				        break;
 			        case '3':
-				        studentAssignment(result);
+				        studentAssignmentNQuiz(result);
 				        break;
 				    default:
-				        alert('Incorrect Keyword');
+				        alert('error:Incorrect Keyword please types "1" for grade or "2" for discussion or "3" for Assignment ');
 				        break;
 				}
 				//studentNotification(result);
@@ -70,10 +74,10 @@ function getNotifications(notification_type)
 }
 
 function studentDiscussion(result){
-	//alert(result);
 	var notification = '';
 	for (var i = 0; i < result.length; i++){
-		notification += '<li><a href="#">New discussion is written by '
+		notification += '<li><a href="../class_view/class_view.html">New discussion: "'
+						+result[i]['content']+'" is written by '
 						+result[i]['firstname']+' in '
 						+result[i]['classnumber']+ ' at '
 						+result[i]['date_entered'] + '</a></li>';
@@ -81,8 +85,15 @@ function studentDiscussion(result){
 	$('#sidebar').html('<ul>'+notification+'</ul>');
 }
 
-function studentAssignment(result){
-	alert(result);
+function studentAssignmentNQuiz(result){
+	var notification = '';
+	for (var i = 0; i < result.length; i++){
+		notification += '<li><a href="#">New Assignment: "'
+						+result[i]['title']+'" in '
+						+result[i]['classnumber']+' Due to '
+						+result[i]['duedate']+ '</a></li>';
+	}
+	$('#sidebar').html('<ul>'+notification+'</ul>');
 }
 
 function studentGrade(result){
