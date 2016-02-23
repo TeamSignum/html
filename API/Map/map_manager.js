@@ -124,10 +124,11 @@ MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, f
 		c.lockMovementY = true;
 		
 		var pc = new fabric.Circle({
-				top: top - 5,
-				left: left - 5,
+				top: top + radius,
+				left: left - 20,
 				radius: 15,
 				fill: 'green',
+				stroke: 'white',
 				id: "partNode"
 		});
 		
@@ -141,8 +142,8 @@ MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, f
 		var pt = new fabric.Text("0", {
 				fontFamily: 'arial black',
 				fontSize: 12,
-				left: left + 2,
-				top: top + 2,
+				left: left - 18,
+				top: top + radius + 8,
 				id: "partText"
 		});
 		
@@ -167,7 +168,7 @@ MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, f
 			fontFamily: 'arial black',
 			fontSize: 25,
 			left: left,
-			top: top + radius - 13,
+			top: top,
 			id: "nodeText"
 	});
 	
@@ -348,7 +349,7 @@ MManager.prototype.GenText = function(node){
 			fontFamily: 'arial black',
 			fontSize: 25,
 			left: node.left,
-			top: node.top + node.radius - 13,
+			top: node.top,
 			id: "nodeText"
 		});
 	
@@ -373,12 +374,12 @@ MManager.prototype.GenText = function(node){
  */
 MManager.prototype.MoveNode = function (node){
 	if (node.title){
-		node.title.set({'top': node.top + node.radius - 13, 'left': (node.getCenterPoint().x - node.title.getWidth()/2)});
+		node.title.set({'top': node.top, 'left': (node.getCenterPoint().x - node.title.getWidth()/2)});
 		node.title.setCoords();
 	}
 
 	if (node.popupnode){
-		node.popupnode.set({'top': node.top + 5, 'left': node.left + (2 * node.radius) - 5});
+		node.popupnode.set({'top': node.top + node.radius, 'left': node.left + (2 * node.radius) - 10});
 		node.popupnode.setCoords();
 	}
 }
@@ -649,14 +650,14 @@ MManager.prototype.CreatePopupNode = function(node, popup, docreate){
 		var popupnode = new fabric.Circle({
 			radius: 15, 
 			fill : '#009ACD', 
-			top : top - 5, 
-			left : left + (2 * radius) - 20,
-			stroke: '#009ACD',
+			top : top + radius, 
+			left : left + (2 * radius) - 10,
+			stroke: 'white',
 			strokeWidth: 2,		
 			id: 'popupnode'
 		});
 
-		popupnode.title = node.title.text;
+		popupnode.title = node.title;
 		
 		popupnode.lockMovementX = popupnode.lockMovementY = true;
 
@@ -755,7 +756,7 @@ MManager.prototype.ShowPopup = function(node, popup){
 	popup.html(node.popup.innerHtml);
 
 	if (this.mode == 0){
-		LoadDiscussion(node.nid); // From API/Discussion/discussion.js
+		LoadDiscussion(node.nid, this.classOrConcept); // From API/Discussion/discussion.js
 	}
 	$("#custom_container").show();
 	$("#dim_div").show();
@@ -825,10 +826,14 @@ MManager.prototype.CreateConceptPopup = function(title, description, due_date, n
 		}
 		
 		innerHtml +=
-		"               </br>" +
-		"	        	<button id=\"concept_navigate\" onclick=\"mngr.NavigateToConcept();\" style=\"float:left; font-size:12pt;\" type=\"button\" class=\"btn btn-default btn-md\">" +
-		"	        	Concept Page" +
-		"				</button>" +
+		"               </br>";
+		if (this.classOrConcept == 0){
+			innerHtml +=
+			"	        	<button id=\"concept_navigate\" onclick=\"mngr.NavigateToConcept();\" style=\"float:left; font-size:12pt;\" type=\"button\" class=\"btn btn-default btn-md\">" +
+			"	        	Concept Page" +
+			"				</button>";
+		}
+		innerHtml +=
 		"			 </form>"+
 		"	 </div>" +
 		"    </div>" +
@@ -874,10 +879,14 @@ MManager.prototype.CreateAssignmentPopup = function(title, description, due_date
 		"	        	<button id=\"jnotebook\" style=\"float:left; font-size:12pt;\" onclick=\"mngr.NavigateToJupyterNotebook();\" type=\"button\" class=\"btn btn-default btn-md\">" +
 		"	        	Jupyter Notebook Link" +
 		"				</button>" +
-		"               </br></br></br>" +
-		"	        	<button id=\"concept_navigate\" onclick=\"mngr.NavigateToConcept();\" style=\"float:left; font-size:12pt;\" type=\"button\" class=\"btn btn-default btn-md\">" +
-		"	        	Concept Page" +
-		"				</button>" +
+		"               </br></br></br>";
+		if (this.classOrConcept == 0){
+			innerHtml +=
+			"	        	<button id=\"concept_navigate\" onclick=\"mngr.NavigateToConcept();\" style=\"float:left; font-size:12pt;\" type=\"button\" class=\"btn btn-default btn-md\">" +
+			"	        	Concept Page" +
+			"				</button>";
+		}
+		innerHtml +=
 		"			 </form>"+
 		"		</div>"+
 		"    </div>" +
@@ -922,8 +931,16 @@ MManager.prototype.CreateQuizPopup = function(title, description, due_date, note
 		"				<label for=\"field2\"><span>Description <span class=\"required\">*</span></span><input class=\"input-field\" id=\"description\" name=\"description\" type=\"text\" value=\""+ description +"\" placeholder=\"Description\"/></label>"+
 		"				<label for=\"field5\"><span>Notes <span class=\"\"></span></span><textarea name=\"notes\" id=\"notes\" class=\"textarea-field\">"+ notes +"</textarea></label>"+
 		"				<label for=\"field2\"><span>Due Date<span class=\"\"></span></span><input class=\"input-field\" id=\"due_date\" name=\"due_date\" type=\"text\" value=\""+ due_date +"\" placeholder=\"Due date\"/></label>"+
-		"	        	<button id=\"quiz_navigate\" onclick=\"mngr.NavigateToQuiz();\" style=\"float:left; font-size:12pt;\" type=\"button\" class=\"btn btn-default btn-md\">" +
-		"	        	Quiz Builder" +
+		"	        	<button id=\"quiz_navigate\" onclick=\"mngr.NavigateToQuiz();\" style=\"float:left; font-size:12pt;\" type=\"button\" class=\"btn btn-default btn-md\">";
+		if (this.mode ==  1){
+			innerHtml +=
+		"	        	Quiz Builder";
+		}
+		else{
+			innerHtml +=
+		"	        	Quiz Taker";
+		}
+		innerHtml +=
 		"				</button>" +
 		"               </br></br></br>" +
 		"               </br></br></br>" +

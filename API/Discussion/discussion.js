@@ -4,8 +4,11 @@
 
  var dnid = 0;
  var did  = 0;
+ var classOrConcept;
 
-function LoadDiscussion(nid){
+function LoadDiscussion(nid, _classOrConcept){
+
+	classOrConcept = _classOrConcept;
 
 	dnid = nid;
 	lvl0.innerHTML = "";
@@ -15,7 +18,7 @@ function LoadDiscussion(nid){
 		type: 'POST', 
 		url: "../API/Discussion/discussion.php",
 		dataType: 'json',
-		data: {action: "load", nid: nid}, 
+		data: {action: "load", nid: nid, classOrConcept: classOrConcept}, 
 		success: function(result){
 			UseLoadData(result);
 		}
@@ -51,7 +54,7 @@ function SubmitReply(textarea, containerid, parentid){
 		async: true, 
 		type: 'POST', 
 		url: "../API/Discussion/discussion.php",
-		data: {action: "save", nid: dnid, level: level, content: content, parent: parentid}, 
+		data: {action: "save", nid: dnid, level: level, content: content, parent: parentid, classOrConcept: classOrConcept}, 
 		success: function(result){
 			textarea.value = "";
 			AddTextContainer2(content, $(container), did);
@@ -73,7 +76,7 @@ function SubmitNewQuestion(textarea, nid, level, container){
 		async: true, 
 		type: 'POST', 
 		url: "../API/Discussion/discussion.php",
-		data: {action: "save", nid: nid, level: level, content: content}, 
+		data: {action: "save", nid: nid, level: level, content: content, classOrConcept: classOrConcept}, 
 		success: function(result){
 			textarea.value = "";
 			AddTextContainer(content, container, did);

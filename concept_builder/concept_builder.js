@@ -111,7 +111,7 @@ $( document ).ready(function() {
 	  'object:moving' : function(e) {
 		if(e.target.id === mapNodeId)
 		{
-			mngr.MoveNodeTitle(e.target);
+			mngr.MoveNode(e.target);
 			mngr.MoveEdges(e.target);
 			canvas.renderAll();
 		}

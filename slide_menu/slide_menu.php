@@ -80,7 +80,6 @@ else{
 	echo (json_encode('No Role'));
 }// end iduser
 
-
 function getGrade($userid, $DB){
 	$notifications = array();
 	$query = "SELECT cid, title, score, date_entered FROM LU.grades 
@@ -136,8 +135,29 @@ function getDiscussion($userid, $DB){
 	echo json_encode($notifications);
 }
 
-function getAssignmentNQuiz(){
-	echo json_encode("getAssignmentNQuiz");
+function getAssignmentNQuiz($userid, $DB){
+	$notifications = array();
+	$query = "SELECT classes.classnumber, popupassignment.title, popupassignment.duedate FROM LU.popupassignment 
+				LEFT JOIN LU.enrolled on LU.enrolled.cid = LU.popupassignment.cid 
+				LEFT JOIN LU.classes on  LU.classes.cid = LU.popupassignment.cid
+				WHERE LU.enrolled.idusers = ? 
+				AND
+					LU.popupassignment.duedate >= DATE(now())
+				AND
+				    LU.popupassignment.duedate <= DATE_ADD(DATE(now()), INTERVAL 2 WEEK);";
+	$statement = $DB->prepare($query);
+	$statement->bindValue(1, $userid);	
+	$statement->execute();
+	$result = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+	foreach ($result as $row) {
+		$notifications[] = array(	'title' => $row['title'], 
+									'duedate' => $row['duedate'],
+									'classnumber' => $row['classnumber']);
+	}
+
+
+	echo json_encode($notifications);
 }
 
 ?>

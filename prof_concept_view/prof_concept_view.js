@@ -39,7 +39,7 @@ $( document ).ready(function() {
 				}
 				if(e.target.id === "popupnode")
 				{
-					getStats(e.target.nid, e.target.title);
+					getStats(e.target.nid, e.target.title.text);
 				}
 			}
 	    },
