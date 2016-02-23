@@ -654,7 +654,9 @@ MManager.prototype.CreatePopupNode = function(node, popup, docreate){
 			stroke: '#009ACD',
 			strokeWidth: 2,		
 			id: 'popupnode'
-		}); 
+		});
+
+		popupnode.title = node.title.text;
 		
 		popupnode.lockMovementX = popupnode.lockMovementY = true;
 

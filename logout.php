@@ -22,6 +22,8 @@ if(isset($_SESSION['email']))
 			$statement = $DB->prepare($query);
 			$statement->execute();
 			$DB->commit();
+			
+			unset($_SESSION['currentnode']);
 		}
 		catch(PDOException $e)
 		{

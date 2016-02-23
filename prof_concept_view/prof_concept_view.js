@@ -36,6 +36,9 @@ $( document ).ready(function() {
 					//setParticipant(e.target.nid);
 					//getParticipants();
 					//mngr.HandleMapNodeSelect(e.target);
+				}
+				if(e.target.id === "popupnode")
+				{
 					getStats(e.target.nid, e.target.title.text);
 				}
 			}
