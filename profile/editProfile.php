@@ -166,45 +166,41 @@ switch ($queryType) {
 
 		// Get image file name
 		$uploadedFileName=pathinfo(($_FILES['imageToUpload']['name']), PATHINFO_FILENAME);
-		// Set target directory
-		// This line for testing on local machine (windows)
-		//$targetDirectory=dirname(__DIR__)."\profile_images";
-		// This line is for the server (Linux);
+		// Set target directory - this line only works on the server
+		// Will not work for local testing on windows.
 		$targetDirectory=dirname(__DIR__)."/profile_images";
-		echo($targetDirectory);
+		//echo($targetDirectory);
 		// Create a unique file name with tempnam function
 		$destinationFileName = tempnam($targetDirectory, $uploadedFileName);
-		//echo($destinationFileName);
-		
+		echo($destinationFileName);
+		// Get the extension from uploaded file
+		$fileExtension = '.' . pathinfo($_FILES['imageToUpload']['name'], PATHINFO_EXTENSION);
+		// Add the extension to the unique file name
+		$destinationFileName.=$fileExtension;
+
 		// Assuming $_FILES['file']['error'] == 0 (no errors)
 		if (move_uploaded_file($_FILES['imageToUpload']['tmp_name'], $destinationFileName)) {
-		    // Get the extension from uploaded file
-		    $fileExtension = '.' . pathinfo($_FILES['imageToUpload']['name'], PATHINFO_EXTENSION);
-		    // Replace tmp with actual file extension
-		    $newFileName=str_replace('.tmp', $fileExtension, $destinationFileName);
-		    // update the file name
-		    rename($destinationFileName, $newFileName);
 		    // Strip the file path to store the image name in the database
-		    $databaseFileName=basename($newFileName);
-
+		    $databaseFileName=basename($destinationFileName);
+		    echo($databaseFileName);
 		    // File uploaded successfully, add reference to the database
 		    try{
 			// Login to the database	
-			$DB=openDB();
+				$DB=openDB();
 
-			$query = "UPDATE users
-					  SET profilepic=?
-					  WHERE uid=?";
-							
-			$statement = $DB->prepare($query);
-			$statement->bindValue(1, $databaseFileName);	
-			$statement->bindValue(2, $uid);
-			
-			$statement->execute();
+				$query = "UPDATE users
+						  SET profilepic=?
+						  WHERE uid=?";
+								
+				$statement = $DB->prepare($query);
+				$statement->bindValue(1, $databaseFileName);	
+				$statement->bindValue(2, $uid);
+				
+				$statement->execute();
 
-			echo("Success: " . $databaseFileName);
+				echo("Success: " . $databaseFileName);
 
-			// TODO:  Need to delete the old file...
+				// TODO:  Need to delete the old file...
 			}
 			catch(PDOException $ex){
 				if($ex->getCode()=="23000"){
@@ -217,9 +213,10 @@ switch ($queryType) {
 				      <pre>$ex</pre>";
 				}
 			die();
-		}
+			}
 
-		} else {
+		} 
+		else {
 		    // tempnam() created a new file, but moving the uploaded file failed
 		    unlink($destinationFileName); // remove temporary file
 		    die('File could not be uploaded.');
