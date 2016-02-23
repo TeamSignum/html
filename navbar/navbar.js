@@ -99,6 +99,10 @@ function evaluateSessionInfo(parsedResult){
 		html+='<li>';
 		html+='<a href="../class_view/class_view.html" style="margin-top: 12px; font-size:14pt;">Class View</a>';
 		html+='</li>';	
+		// Professor Class View
+		html+='<li>';
+		html+='<a href="../prof_class_view/prof_class_view.html" style="margin-top: 12px; font-size:14pt;">Professor Class View</a>';
+		html+='</li>';	
 		// Class Builder link
 		html+='<li>';
 		html+='<a href="../class_builder/class_builder.html" style="margin-top: 12px; font-size:14pt;">Class Builder</a>';
