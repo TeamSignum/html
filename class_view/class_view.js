@@ -17,6 +17,8 @@ $( document ).ready(function() {
 	getParticipants();
 	getPercents();
 	
+	canvas.hoverCursor = 'pointer';
+	
 	//Canvas events
 	canvas.on({
 

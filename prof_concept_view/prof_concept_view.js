@@ -25,6 +25,8 @@ $( document ).ready(function() {
 	
 	//var timer = setInterval(function() {getParticipants()}, 10000);
 	
+	canvas.hoverCursor = 'pointer';
+	
 	//Canvas events
 	canvas.on({
 

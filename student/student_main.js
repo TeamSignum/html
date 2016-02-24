@@ -260,6 +260,8 @@ $( document ).ready(function() {
 	getClassNumbers();
 	drawclassnode(canvas);
 	
+	canvas.hoverCursor = 'pointer';
+	
 	canvas.on({
 
 		'mouse:down': function(e) {

@@ -266,6 +266,7 @@ MManager.prototype.DrawEdgeBetweenNodes = function(node){
 		line.eid = this.eid;
 		line.hasControls = line.hasBorders = false;
 		line.lockMovementX = line.lockMovementY = true;
+		line.perPixelTargetFind = true;
 
 		this.from.lines.push(line);
 		this.to.lines.push(line);
@@ -310,6 +311,7 @@ MManager.prototype.DrawEdge = function(eid, x1, y1, x2, y2, type, mode){
 	l.eid = eid;
 	l.hasControls = l.hasBorders = false;
 	l.lockMovementX = l.lockMovementY = true;
+	l.perPixelTargetFind = true;
 	
 	var temp = {
 		line: l,

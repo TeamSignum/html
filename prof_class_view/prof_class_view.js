@@ -21,6 +21,8 @@ $( document ).ready(function() {
 	getEnrolled();
 	getPercents();
 	
+	canvas.hoverCursor = 'pointer';
+	
 	//Canvas events
 	canvas.on({
 
@@ -43,7 +45,7 @@ $( document ).ready(function() {
 		'mouse:over': function(e){
 			if(e.target.id === "mapNode" || e.target.id === "cmapNode")
 			{
-				e.target.setStroke('yellow');
+				e.target.setStroke('yellow');				
 				canvas.renderAll();
 			}
 		},
@@ -275,7 +277,8 @@ function drawPercents(nid, count)
 			fontFamily: 'arial black',
 			fontSize: 20,
 			left: temp.left,
-			top: temp.top + temp.radius - 10
+			top: temp.top + temp.radius - 10,
+			id: "percNode"
 	});
 	
 	var len = t.getWidth()/2;

@@ -27,6 +27,8 @@ $( document ).ready(function() {
 	mngr.AddToolbarEdge(new fabric.Line([60, 450, 120, 550], { fill: 'red', stroke: 'red', strokeWidth: 3, id: 'tb_lineSolid' }));
 	mngr.AddToolbarEdge(new fabric.Line([60, 575, 120, 675], { fill: 'red', stroke: 'red', strokeWidth: 3, strokeDashArray: [5, 5], id: 'tb_lineDotted' }));
 
+	canvas.hoverCursor = 'pointer';
+	
 	//Canvas events
 	canvas.on({
 
