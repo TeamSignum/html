@@ -169,20 +169,19 @@ switch ($queryType) {
 		// Set target directory - this line only works on the server
 		// Will not work for local testing on windows.
 		$targetDirectory=dirname(__DIR__)."/profile_images";
-		//echo($targetDirectory);
 		// Create a unique file name with tempnam function
 		$destinationFileName = tempnam($targetDirectory, $uploadedFileName);
-		echo($destinationFileName);
 		// Get the extension from uploaded file
 		$fileExtension = '.' . pathinfo($_FILES['imageToUpload']['name'], PATHINFO_EXTENSION);
 		// Add the extension to the unique file name
 		$destinationFileName.=$fileExtension;
+		//echo($destinationFileName);
 
 		// Assuming $_FILES['file']['error'] == 0 (no errors)
 		if (move_uploaded_file($_FILES['imageToUpload']['tmp_name'], $destinationFileName)) {
 		    // Strip the file path to store the image name in the database
 		    $databaseFileName=basename($destinationFileName);
-		    echo($databaseFileName);
+		    //echo($databaseFileName);
 		    // File uploaded successfully, add reference to the database
 		    try{
 			// Login to the database	
@@ -203,15 +202,10 @@ switch ($queryType) {
 				// TODO:  Need to delete the old file...
 			}
 			catch(PDOException $ex){
-				if($ex->getCode()=="23000"){
-					echo("User ID already taken.");
-				}
-				else{
-				  	echo
+				echo
 				     "<p>oops</p>
 				      <p> Code: {$ex->getCode()} </p>
 				      <pre>$ex</pre>";
-				}
 			die();
 			}
 
