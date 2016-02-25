@@ -5,10 +5,178 @@ var classOrbitalRadius = 200;
 var classNodeRadius = 60;
 var account_name = "";
 var acc_role;
+var canvas;
+
+$( document ).ready(function() {
+
+	canvas = new fabric.Canvas('student_main', 
+					{width: window.innerWidth,
+					 height: window.innerHeight - 120,
+					 backgroundColor: "#99ffff",
+					 // This flag should help render faster
+					 renderOnAddRemove: false});
+
+	window.addEventListener('resize', resizeCanvas, false);
+
+	function resizeCanvas(){
+		canvas.width = window.innerWidth;
+		canvas.height = window.innerHeight - 120;
+		// I think there is an easier way to do this, but
+		// this works for now.
+		canvas.clear();
+		drawStudentNode();
+		drawClassNode();
+	}
+
+	// Function calls to the database, which in turn call
+	// functions to draw the page.  Is it possible to have one
+	// DB query to speed up the response?
+	getName();
+	getClassNumbers();
+	
+	canvas.hoverCursor = 'pointer';
+	
+	canvas.on({
+
+		'mouse:down': function(e) {
+			if(e.target)
+			{
+				if (e.target.id === "classNode") 
+				{
+					//alert(e.target.cid);
+					//loadNodePopup(e.target);
+					//redirect();
+					directToClass(e.target.cid);
+				}
+				if(e.target.id === "addNode")
+				{
+					//alert(e.target.cid);
+					if(acc_role === "professor"){
+						window.location.href = "/create_class/create_class.html";
+					}
+					else{
+						window.location = '../add_class/add_class.html';
+					}
+
+				}
+				if(e.target.id === "accountNode")
+				{
+					//alert("t");
+					window.location = '../profile/profile.html';
+				}
+
+				if(e.target.id === "popupnode"){
+					LoadPopup(e.target);
+				}
+			}
+	    },
+		
+		'mouse:over': function(e){
+			if(e.target.id === "classNode" || e.target.id === "addNode" || e.target.id === "accountNode")
+			{
+				//e.target.studentNode.setStroke('yellow');
+				e.target.forEachObject(function(object,i){
+					if(object.id === "mapNode")
+					{
+						object.setStroke('yellow');
+					}
+				});
+				canvas.renderAll();
+			}
+		},
+	
+		'mouse:out': function(e){
+			if(e.target.id === "classNode" || e.target.id === "addNode" || e.target.id === "accountNode")
+			{
+				//e.target.setStroke('white');
+				e.target.forEachObject(function(object,i){
+					if(object.id === "mapNode")
+					{
+						object.setStroke('white');
+					}
+				});
+				canvas.renderAll();
+			}
+		}
+		
+	});
+
+	$( "#xmark" ).click(function() {
+		HidePopup();
+	});
+});
+
+function getName()
+{
+	$.ajax({
+		type: 'POST',
+		url: "student_main.php",
+		dataType: 'json',
+		data: {name: 1},
+		async: true,
+		
+		success: function(result){
+			//alert(result.name);
+			account_name = result.name;
+			acc_role = result.role;
+			drawStudentNode();
+		}
+	});
+	
+	return false;
+}
+
+function drawStudentNode(){
+	var classOrbital = new fabric.Circle({
+		radius: classOrbitalRadius,
+		fill: 'transparent',
+		strokeWidth: 5,
+		stroke: "black",
+		left: (canvas.width/2) - classOrbitalRadius,
+		top: (canvas.height/2) - classOrbitalRadius,
+		selectable: false
+	});
+
+	var studentNode= new fabric.Circle({
+		radius: studentNodeRadius,
+		fill: 'white',
+		originX: 'center',
+		originY: 'center',
+		stroke: 'white',
+		strokeWidth: 5,
+		id: "mapNode"
+	});
+	
+	var studentName = new fabric.Text('Name', {
+		fontSize: '36',
+		fontFamily: 'Arial',
+		fontStyle: 'bold',
+		fill: 'black',
+		originX: 'center',
+		originY: 'center',
+		selectable: false
+	});
+	studentName.setText(account_name);
+
+	var studentNodeGroup = new fabric.Group([studentNode, studentName], {
+		left: (canvas.width/2) - studentNodeRadius,
+		top: (canvas.height/2) - studentNodeRadius,
+		selectable: false,
+		stroke: 'white',
+		strokeWidth: 5,
+		id: "accountNode"
+	});
+	
+	studentNodeGroup.on('selected', function() {
+  		alert("Clicked");
+	});
+
+	canvas.add(classOrbital, studentNodeGroup);
+}
 
 function getClassNumbers(){
 	$.ajax({
-		async: false,
+		async: true,
 		type: 'POST',
 		url: "student_main.php",
 		datatpye: 'json',
@@ -31,31 +199,13 @@ function getClassNumbers(){
 				//classNumberArray.push(classNumbersJson[x].classnumber);
 			//}
 			//classNumberArray.push("+");
+
+			drawClassNode();
 		}
 	});
 }
 
-function getName()
-{
-	$.ajax({
-		type: 'POST',
-		url: "student_main.php",
-		dataType: 'json',
-		data: {name: 1},
-		async: false,
-		
-		success: function(result){
-			//alert(result.name);
-			account_name = result.name;
-			acc_role = result.role;
-			//alert(result.role);
-		}
-	});
-	
-	return false;
-}
-
-function drawclassnode(canvas){
+function drawClassNode(){
 
 	var classNodeSpacing = (Math.PI * 2) / classNumberArray.length;
 
@@ -103,7 +253,7 @@ function drawclassnode(canvas){
 		node_group.cid = classIdArray[i];
 
 		canvas.add(node_group);
-
+		canvas.bringToFront(node_group);
 
 		// Draw popup
 		var popupCircle = new fabric.Circle({
@@ -201,133 +351,5 @@ function GenPopup(result){
 	return html;
 }
 
-$( document ).ready(function() {
-	
-	getName();
 
-	var canvas = new fabric.Canvas('student_main', {backgroundColor: "#99ffff"});
 
-	canvas.width = window.innerWidth;
-	canvas.height = window.innerHeight;
-	//canvas.background 
-
-	var classOrbital = new fabric.Circle({
-		radius: classOrbitalRadius,
-		fill: '#99ffff',
-		strokeWidth: 5,
-		stroke: "black",
-		left: (canvas.width/2) - classOrbitalRadius ,
-		top: (canvas.height/2) - classOrbitalRadius,
-		selectable: false
-	});
-
-	var studentNode= new fabric.Circle({
-		radius: studentNodeRadius,
-		fill: 'white',
-		originX: 'center',
-		originY: 'center',
-		stroke: 'white',
-		strokeWidth: 5,
-		id: "mapNode"
-		//selectable: true
-	});
-	
-	var studentName = new fabric.Text('Name', {
-		fontSize: '36',
-		fontFamily: 'Arial',
-		fontStyle: 'bold',
-		fill: 'black',
-		originX: 'center',
-		originY: 'center',
-		selectable: false
-	});
-	studentName.setText(account_name);
-
-	var studentNodeGroup = new fabric.Group([studentNode, studentName], {
-		left: (canvas.width/2) - studentNodeRadius,
-		top: (canvas.height/2) - studentNodeRadius,
-		selectable: false,
-		stroke: 'white',
-		strokeWidth: 5,
-		id: "accountNode"
-	});
-	
-	studentNodeGroup.on('selected', function() {
-  		alert("Clicked");
-	});
-
-	canvas.add(classOrbital, studentNodeGroup);
-	getClassNumbers();
-	drawclassnode(canvas);
-	
-	canvas.hoverCursor = 'pointer';
-	
-	canvas.on({
-
-		'mouse:down': function(e) {
-			if(e.target)
-			{
-				if (e.target.id === "classNode") 
-				{
-					//alert(e.target.cid);
-					//loadNodePopup(e.target);
-					//redirect();
-					directToClass(e.target.cid);
-				}
-				if(e.target.id === "addNode")
-				{
-					//alert(e.target.cid);
-					if(acc_role === "professor"){
-						window.location.href = "/create_class/create_class.html";
-					}
-					else{
-						window.location = '../add_class/add_class.html';
-					}
-
-				}
-				if(e.target.id === "accountNode")
-				{
-					//alert("t");
-					window.location = '../profile/profile.html';
-				}
-
-				if(e.target.id === "popupnode"){
-					LoadPopup(e.target);
-				}
-			}
-	    },
-		
-		'mouse:over': function(e){
-			if(e.target.id === "classNode" || e.target.id === "addNode" || e.target.id === "accountNode")
-			{
-				//e.target.studentNode.setStroke('yellow');
-				e.target.forEachObject(function(object,i){
-					if(object.id === "mapNode")
-					{
-						object.setStroke('yellow');
-					}
-				});
-				canvas.renderAll();
-			}
-		},
-	
-		'mouse:out': function(e){
-			if(e.target.id === "classNode" || e.target.id === "addNode" || e.target.id === "accountNode")
-			{
-				//e.target.setStroke('white');
-				e.target.forEachObject(function(object,i){
-					if(object.id === "mapNode")
-					{
-						object.setStroke('white');
-					}
-				});
-				canvas.renderAll();
-			}
-		}
-		
-	});
-
-	$( "#xmark" ).click(function() {
-		HidePopup();
-	});
-});
