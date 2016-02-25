@@ -172,6 +172,8 @@ function drawStudentNode(){
 	});
 
 	canvas.add(classOrbital, studentNodeGroup);
+	canvas.sendToBack(classOrbital);
+	canvas.sendToBack(studentNodeGroup);
 }
 
 function getClassNumbers(){
