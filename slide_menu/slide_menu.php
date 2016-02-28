@@ -4,7 +4,8 @@ session_start();
 
 if(isset($_SESSION['userid'])){
 
-   	$userid = $_SESSION['userid']; 
+   	$userid = $_SESSION['userid'];
+
    	$role = '';
 	$query= null;
 
@@ -18,8 +19,6 @@ if(isset($_SESSION['userid'])){
 	if(isset($_POST['function'])){
 		$fun = $_POST['function'];
 
-		if(isset($_POST['notype'])){$ntype = $_POST['notype'];}
-		
 		switch($fun)
 		{
 			case 'getRole':
@@ -37,20 +36,14 @@ if(isset($_SESSION['userid'])){
 				$result = $statement->fetch();
 				$role = $result[0];
 				if($role == 'student'){
-					switch ($ntype) {
-						case '1':
+					
 							getGrade($userid, $DB);
-							break;
-						case '2':
-							getDiscussion($userid, $DB);
-							break;
-						case '3':
-							getAssignmentNQuiz($userid, $DB);
-							break;
-						default:
-							echo (json_encode("Nope!!"));
-							break;
-					}
+						
+							// getDiscussion($userid, $DB);
+							
+							// getAssignmentNQuiz($userid, $DB);
+							
+					
 					
 				}else if($role=='professor'){
 					$notifications = array();

@@ -1,18 +1,12 @@
 var role = '';
 
-
 $(document).ready(function() {
 	getRole();
   	$("[data-toggle]").click(function() {
-  		var notification_type = document.getElementById('notification_type').value;
-  		if (notification_type != '1' && notification_type != '2' && notification_type != '3' ) { 
-  			alert('missing keyword or wrong keyword');
-  			alert('please types "1" for grade or "2" for discussion or "3" for Assignment ');
-  			return 
-  		}
-  		getNotifications(notification_type);
+  		getNotifications();
   	   	var toggle_el = $(this).data("toggle");
-    	$(toggle_el).toggleClass("open-sidebar");
+    	$(toggle_el).toggleClass("open");
+    	//$("#dim_div").show();
   	});
 });
 
@@ -34,30 +28,19 @@ function getRole(){
 	});
 }
 
-function getNotifications(notification_type)
+function getNotifications()
 {
 	$.ajax({
 		async: true,
 		type: 'POST',
 		url: "../slide_menu/slide_menu.php",
 		dataType: 'json',
-		data: {'function': 'getNotifications', 'notype': notification_type},
+		data: {'function': 'getNotifications'},
 		success: function(result){
 			if(role == "student"){
-				switch(notification_type) {
-				    case '1':
-				        studentGrade(result);
-				        break;
-				    case '2':
-				        studentDiscussion(result);
-				        break;
-			        case '3':
-				        studentAssignmentNQuiz(result);
-				        break;
-				    default:
-				        alert('error:Incorrect Keyword please types "1" for grade or "2" for discussion or "3" for Assignment ');
-				        break;
-				}
+				studentGrade(result);				     
+		        //studentDiscussion(result);				       
+		        //studentAssignmentNQuiz(result);
 				//studentNotification(result);
 				//studentGrade(result);
 				//studentDiscussion(result);
