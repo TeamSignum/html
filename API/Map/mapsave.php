@@ -337,4 +337,171 @@
 			echo 2;
 		}
 	}
+	
+	if(isset($_POST["complete"]))
+	{
+		if($_POST["complete"] == 1)
+		{
+			$iduser = $_SESSION["userid"];
+			$nid = $_SESSION["nid"];
+			$nid2 = $_POST["nid2"];
+			
+			$date = date("Y-m-d H:i:s", time());
+			
+			//echo $date;
+			
+			try
+			{
+				$DB = new PDO("mysql:host=ec2-52-33-118-140.us-west-2.compute.amazonaws.com;dbname=LU", 'Signum', 'signumDB4');
+				$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+				$DB->beginTransaction();
+				
+				$query = "INSERT into completed (idusers,cid,nid,nid2,complete,cdate) values (?,?,?,?,?,?)";
+				
+				$statement = $DB->prepare($query);
+					
+				$statement->bindValue (1, $iduser);
+				$statement->bindValue (2, $cid);
+				$statement->bindValue (3, $nid);
+				$statement->bindValue (4, $nid2);
+				$statement->bindValue (5, 1);
+				$statement->bindValue (6, $date);
+					
+				$statement->execute();
+				$DB->commit();
+			}
+			catch(PDOException $e)
+			{
+				echo $e->getMessage();
+			}
+		}
+	}
+	
+	if(isset($_POST["deleten"]))
+	{
+		$level = $_POST["level"];
+		
+		try
+		{
+			$DB = new PDO("mysql:host=ec2-52-33-118-140.us-west-2.compute.amazonaws.com;dbname=LU", 'Signum', 'signumDB4');
+			$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			
+			if($level == 2)
+			{
+				$nid = $_SESSION["nid"];
+				if(isset($_POST["cons"]))
+				{
+					$cons = $_POST["cons"];
+					foreach($cons as $c)
+					{
+						$nid2 = $c['nid'];
+						$eid2 = $c['eid'];
+						
+						$DB->beginTransaction();
+						$query = "DELETE FROM connected2 WHERE cid='$cid' AND nid='$nid' AND nid2='$nid2' AND eid2='$eid2'";
+					
+						$statement = $DB->prepare($query);
+						$statement->execute();
+						$DB->commit();
+					}
+				}
+				if(isset($_POST["dedges"]))
+				{
+					$dedges = $_POST["dedges"];
+					foreach($dedges as $e)
+					{
+						$DB->beginTransaction();
+						$query = "DELETE FROM edges2 WHERE cid='$cid' AND nid='$nid' AND eid2='$e'";
+					
+						$statement = $DB->prepare($query);
+						$statement->execute();
+						$DB->commit();
+					}
+				}
+				if(isset($_POST["dnid"]))
+				{
+					$nid2 = $_POST["dnid"];
+					
+					$DB->beginTransaction();
+					$query = "DELETE FROM nodes2 WHERE cid='$cid' AND nid='$nid' AND nid2='$nid2'";
+					
+					$statement = $DB->prepare($query);
+					$statement->execute();
+					$DB->commit();
+				}
+			}
+			if($level == 1)
+			{
+				if(isset($_POST["cons"]))
+				{
+					$cons = $_POST["cons"];
+					foreach($cons as $c)
+					{
+						$nid = $c['nid'];
+						$eid = $c['eid'];
+						
+						$DB->beginTransaction();
+						$query = "DELETE FROM connected WHERE cid='$cid' AND nid='$nid' AND eid='$eid'";
+					
+						$statement = $DB->prepare($query);
+						$statement->execute();
+						$DB->commit();
+					}
+				}
+				if(isset($_POST["dedges"]))
+				{
+					$dedges = $_POST["dedges"];
+					foreach($dedges as $e)
+					{
+						$DB->beginTransaction();
+						$query = "DELETE FROM edges WHERE cid='$cid' AND eid='$e'";
+					
+						$statement = $DB->prepare($query);
+						$statement->execute();
+						$DB->commit();
+					}
+				}
+				if(isset($_POST["dnid"]))
+				{
+					$nid = $_POST["dnid"];
+					
+					//Delete connected2
+					$DB->beginTransaction();
+					$query = "DELETE FROM connected2 WHERE cid='$cid' AND nid='$nid'";
+					
+					$statement = $DB->prepare($query);
+					$statement->execute();
+					$DB->commit();
+					
+					//Delete nodes2
+					$DB->beginTransaction();
+					$query = "DELETE FROM nodes2 WHERE cid='$cid' AND nid='$nid'";
+					
+					$statement = $DB->prepare($query);
+					$statement->execute();
+					$DB->commit();
+					
+					//Delete edges2
+					$DB->beginTransaction();
+					$query = "DELETE FROM edges2 WHERE cid='$cid' AND nid='$nid'";
+					
+					$statement = $DB->prepare($query);
+					$statement->execute();
+					$DB->commit();
+					
+					//Delete node
+					$DB->beginTransaction();
+					$query = "DELETE FROM nodes WHERE cid='$cid' AND nid='$nid'";
+					
+					$statement = $DB->prepare($query);
+					$statement->execute();
+					$DB->commit();
+				}
+			}
+		}
+		catch(PDOException $e)
+		{
+			echo $e->getMessage();
+		}
+	}
 ?>

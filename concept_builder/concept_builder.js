@@ -61,6 +61,11 @@ $( document ).ready(function() {
 			{
 				mngr.HandleMapNodeSelect(e.target);
 			}
+			else if(e.target.id === "deleteNode")
+			{
+				mngr.DeleteNode(e.target.node, 2);
+			}
+
 
 	      	canvas.renderAll();
 	    }

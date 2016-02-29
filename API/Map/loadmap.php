@@ -9,6 +9,7 @@ if(isset($_POST["map"]))
 	//$parent = $_POST["parent"];
 	$cid = $_SESSION["classid"];
 	$level = $_POST["level"];
+	$iduser = $_SESSION["userid"];
 	
 	if($map == 1)
 	{
@@ -43,11 +44,41 @@ if(isset($_POST["map"]))
 			{
 				if($level == 2)
 				{
-					$id = $row['nid2']; 
+					$id = $row['nid2'];
+					$query = "SELECT complete FROM completed where completed.idusers='$iduser' AND completed.cid='$cid' AND completed.nid='$nid' AND completed.nid2='$id'";					
 				}
 				else
 				{
-					$id = $row['nid']; 
+					$id = $row['nid'];
+					$query = "SELECT COUNT(*) as ctotal FROM completed where completed.idusers='$iduser' AND completed.cid='$cid' AND completed.nid='$id'";
+				}
+				
+				$statement = $DB->prepare($query);
+				$statement->execute();
+				$result2 = $statement->fetch(PDO::FETCH_ASSOC);
+				
+				if($level == 2)
+				{
+					//echo $result2['complete'];
+					if($result2['complete'] == 1)
+						$complete = 1;
+					else
+						$complete = 0;
+				}
+				else
+				{
+					$query = "SELECT COUNT(*) as ntotal FROM nodes2 where nodes2.cid='$cid' AND nodes2.nid='$id'";
+					$statement = $DB->prepare($query);
+					$statement->execute();
+					$result3 = $statement->fetch(PDO::FETCH_ASSOC);
+					
+					$ctotal = $result2['ctotal'];
+					$ntotal = $result3['ntotal'];
+					
+					if($ctotal == $ntotal && $ntotal != 0)
+						$complete = 1;
+					else
+						$complete = 0;
 				}
 				
 				$top = $row['top'];
@@ -56,7 +87,7 @@ if(isset($_POST["map"]))
 				$type = $row['type'];
 				$title = $row['title'];
 				$fill = $row['fill'];
-				$nodes[] = array('id' => $id, 'top' => $top, 'left' => $left, 'radius' => $radius, 'type' => $type, 'title' => $title, 'fill' => $fill);
+				$nodes[] = array('id' => $id, 'top' => $top, 'left' => $left, 'radius' => $radius, 'type' => $type, 'title' => $title, 'fill' => $fill, 'complete' => $complete);
 			}
 			
 			echo json_encode($nodes);

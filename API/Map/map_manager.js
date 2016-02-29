@@ -95,7 +95,7 @@ MManager.prototype.GetCurrentId = function(result){
 }
 
 //Draw a node onto the canvas
-MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, fill, mode){
+MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, fill, complete, mode){
 	//Draw the concept node
 	var c = new fabric.Circle({
 			top: top,
@@ -120,6 +120,10 @@ MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, f
 
 	if(mode == 0)
 	{
+		if(complete == 1)
+		{
+			c.fill = 'green';
+		}
 		c.lockMovementX = true;
 		c.lockMovementY = true;
 		
@@ -161,6 +165,27 @@ MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, f
 		c.pnode = pc;
 		
 		canvas.add(pt);
+	}
+	
+	if(mode == 1)
+	{
+		var dt = new fabric.Text("X", {
+			fontFamily: 'arial black',
+			fontSize: 15,
+			left: left,
+			top: top,
+			id: "deleteNode"
+		});
+		
+		c.deletenode = dt;
+		dt.node = c;
+		
+		dt.hasControls = false;
+		dt.hasBorders = false;
+		dt.lockMovementX = true;
+		dt.lockMovementY = true;
+		
+		canvas.add(dt);
 	}
 	
 	//Draw the title text
@@ -524,7 +549,7 @@ MManager.prototype.LoadMap = function(mngr, level, mode){
 		success: function(result){
 			for(var i = 0; i < result.length; i++)
 			{
-				mngr.DrawNode(parseFloat(result[i]["top"]), parseFloat(result[i]["left"]), parseFloat(result[i]["radius"]), result[i]["type"], result[i]["title"], result[i]["id"], result[i]["fill"], mode);
+				mngr.DrawNode(parseFloat(result[i]["top"]), parseFloat(result[i]["left"]), parseFloat(result[i]["radius"]), result[i]["type"], result[i]["title"], result[i]["id"], result[i]["fill"], result[i]["complete"], mode);
 			}
 		}
 	});
@@ -569,15 +594,15 @@ MManager.prototype.SaveMap = function(level){
 	//Grab all the node info
 	for(var i = 0; i < this.nodes.length; i++)
 	{
-		var t = this.nodes[i].node.title.getText();
+		var t = this.nodes[i]title.getText();
 		var temp = {
-			top: this.nodes[i].node.top,
-			left: this.nodes[i].node.left,
-			radius: this.nodes[i].node.radius,
-			fill: this.nodes[i].node.fill,
-			stroke: this.nodes[i].node.stroke,
-			strokeWidth: this.nodes[i].node.strokeWidth,
-			id: this.nodes[i].id,
+			top: this.nodes[i].top,
+			left: this.nodes[i].left,
+			radius: this.nodes[i].radius,
+			fill: this.nodes[i].fill,
+			stroke: this.nodes[i].stroke,
+			strokeWidth: this.nodes[i].strokeWidth,
+			id: this.nodes[i].nid,
 			type: this.nodes[i].type,
 			title: t
 		};
@@ -635,6 +660,104 @@ MManager.prototype.SaveMap = function(level){
 	});
 	
 	return false;
+}
+
+MManager.prototype.DeleteN = function(node, level){
+	var nid = node.nid;
+	
+	var cons = [];
+
+	for(var i = 0; i < this.nodes.length; i++)
+	{
+		if(this.nodes[i].nid != node.nid)
+		{
+			for(var j = 0; j < this.nodes[i].lines.length; j++)
+			{
+				for(var k = 0; k < node.lines.length; k++)
+				{
+					if(this.nodes[i].lines[j].eid == node.lines[k].eid)
+					{
+						var temp = {
+							nid: this.nodes[i].nid,
+							eid: this.nodes[i].lines[j].eid
+						};
+						cons.push(temp);
+						var index = this.nodes[i].lines.indexOf(this.nodes[i].lines[j]);
+						if(index > -1)
+						{
+							this.nodes[i].lines.splice(index, 1);
+						}
+					
+					}
+				}
+			}
+		}
+	}
+	
+	var dedges = [];
+	for(var i = 0; i < node.lines.length; i++)
+	{
+		var temp = {
+			nid: nid,
+			eid: node.lines[i].eid
+		};
+		cons.push(temp);
+		
+		dedges.push(node.lines[i].eid);
+		canvas.remove(node.lines[i]);
+	}
+	
+	var index2 = this.nodes.indexOf(node);
+	if(index2 > -1)
+	{
+		this.nodes.splice(index2, 1);
+	}
+	
+	canvas.remove(node.title);
+	//also need to remove db popup info
+	canvas.remove(node.popupnode);
+	canvas.remove(node.deletenode);
+	canvas.remove(node);
+	
+	$.ajax({
+		async: true, 
+		type: 'POST',
+		url: "../API/Map/mapsave.php",
+		dataType: 'html',
+		data: {deleten: 1, level: level, cons: cons, dedges: dedges, dnid: nid},
+		
+		success: function(result){
+			alert(result); 
+			swal("Completed", "The node has been deleted.", "success");
+		}
+	});
+				
+	return false;
+}
+
+MManager.prototype.DeleteNode = function(node, level){
+	swal({
+		title: "Are you sure you want to delete this node?",
+		text: "Clicking yes will will delete all contents connected to this node.",
+		type: "warning",
+		showCancelButton: true,
+		confirmButtonColor: "#DD6B55",   
+		confirmButtonText: "Yes",   
+		cancelButtonText: "No",   
+		closeOnConfirm: false,   
+		closeOnCancel: false },
+		function(isConfirm){
+			if(isConfirm){
+				
+				mngr.DeleteN(node, level);
+				
+				//$("#dim_div").hide();
+				//$("#custom_container").hide();
+			}
+			else{
+				swal("Cancelled", "The node has not been deleted.", "error");
+			}
+		});
 }
 /* ---------------------------------------- Popup Functions ---------------------------------------- */
 
@@ -731,12 +854,13 @@ MManager.prototype.CheckOffNode = function(){
 		closeOnConfirm: false,   
 		closeOnCancel: false }, 
 		function(isConfirm){   
-			if (isConfirm) {     
+			if (isConfirm) {
+				mngr.CompleteNode(mngr.crrnt.nid);
 				swal("Completed", "The node has been completed.", "success");
 				for(var i = 0; i < mngr.nodes.length; i++){
-					if(mngr.nodes[i].id == mngr.crrnt.nid){
-						mngr.nodes[i].node.setFill("#0d0");
-						mngr.nodes[i].node.setStroke("#0d0");
+					if(mngr.nodes[i].nid == mngr.crrnt.nid){
+						mngr.nodes[i].setFill("#0d0");
+						mngr.nodes[i].setStroke("#0d0");
 
 						$("#dim_div").hide();
 						$("#custom_container").hide();
@@ -747,6 +871,22 @@ MManager.prototype.CheckOffNode = function(){
 				swal("Cancelled", "The node has not been completed.", "error");   
 			} 
 	});
+}
+
+MManager.prototype.CompleteNode = function(nid2){
+	$.ajax({
+		async: true, 
+		type: 'POST',
+		url: "../API/Map/mapsave.php",
+		dataType: 'html',
+		data: {complete: 1, nid2: nid2},
+		
+		success: function(result){
+			alert(result);
+		}
+	});
+	
+	return false;
 }
 
 /*
