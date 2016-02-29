@@ -409,6 +409,10 @@ MManager.prototype.MoveNode = function (node){
 		node.popupnode.set({'top': node.top + node.radius, 'left': node.left + (2 * node.radius) - 10});
 		node.popupnode.setCoords();
 	}
+	if(node.deletenode){
+		node.deletenode.top = node.top;
+		node.deletenode.left = node.left;
+	}
 }
 
 /* ---------------------------------------- Map Misc. Functions ---------------------------------------- */
@@ -594,7 +598,7 @@ MManager.prototype.SaveMap = function(level){
 	//Grab all the node info
 	for(var i = 0; i < this.nodes.length; i++)
 	{
-		var t = this.nodes[i]title.getText();
+		var t = this.nodes[i].title.getText();
 		var temp = {
 			top: this.nodes[i].top,
 			left: this.nodes[i].left,
@@ -727,7 +731,7 @@ MManager.prototype.DeleteN = function(node, level){
 		data: {deleten: 1, level: level, cons: cons, dedges: dedges, dnid: nid},
 		
 		success: function(result){
-			alert(result); 
+			//alert(result); 
 			swal("Completed", "The node has been deleted.", "success");
 		}
 	});
@@ -738,7 +742,7 @@ MManager.prototype.DeleteN = function(node, level){
 MManager.prototype.DeleteNode = function(node, level){
 	swal({
 		title: "Are you sure you want to delete this node?",
-		text: "Clicking yes will will delete all contents connected to this node.",
+		text: "Clicking yes will delete all contents connected to this node.",
 		type: "warning",
 		showCancelButton: true,
 		confirmButtonColor: "#DD6B55",   
@@ -882,7 +886,7 @@ MManager.prototype.CompleteNode = function(nid2){
 		data: {complete: 1, nid2: nid2},
 		
 		success: function(result){
-			alert(result);
+			//alert(result);
 		}
 	});
 	
