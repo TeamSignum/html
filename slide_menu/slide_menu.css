@@ -2,16 +2,16 @@
 
 body {
   font-family: 'Average Sans', sans-serif;
+  background: #424242;
   color: #000;
 }
 
 .center {
   position: fixed;
   width: 300px;
-  height: 600px;
-  right: 0;
-  left: 95%;
-  top: 20%;
+  height: 500px;
+  right: 0px;
+  top: 200px;
   margin-left: -150px;
   margin-top: -150px;
   text-align: center;
@@ -20,11 +20,11 @@ body {
 
 .center .bottom {
   position: relative;
-  right: -120px;
+  right: -300px;
   background: #fff;
   position: relative;
   width: 100%;
-  height: 350px;
+  height: 360px;
   -webkit-transition:  right 0.4s ease-in-out;
   -moz-transition:  right 0.4s ease-in-out;
   -ms-transition:  right 0.4s ease-in-out;
@@ -33,13 +33,13 @@ body {
 }
 
 .bottom.open{
-  right: 100px;
+  right: 10px;
 }
 
 .center .top {
   position: relative;
   width: 100%;
-  top: 10%;
+  right: -120px;
   height: 20%;
 }
 
@@ -63,6 +63,99 @@ body {
   position: relative;
   left: 155px;
   top: -10px;
+  border-radius: 50%;
+  border: 2px solid #FFF;
+  width: 20px;
+  height: 20px;
+  background: #E93B19;
+}
+
+#nots {
+  color: #fff;
+  line-height: 35px;
+  width: 100%;
+  height: 35px;
+  background: #ff4c4c;
+  border-bottom: 1px solid rgba(89, 81, 68, 1);
+}
+
+#info {
+  line-height: 55px;
+  width: 100%;
+  height: 55px;
+  background: rgba(255, 0, 77, 0.8);
+  border-bottom: 2px solid rgba(89, 81, 68, 1);
+}
+
+#feet {
+  color: #fff;
+  width: 100%;
+  height: 35px;
+  background: #ff4c4c;
+}@import url(http://fonts.googleapis.com/css?family=Average+Sans);
+
+body {
+  font-family: 'Average Sans', sans-serif;
+  color: #000;
+}
+
+.center {
+  position: fixed;
+  width: 300px;
+  height: 500px;
+  right: 0px;
+  top: 200px;
+  margin-left: -150px;
+  margin-top: -150px;
+  text-align: center;
+  z-index: 1005;
+}
+
+.center .bottom {
+  position: relative;
+  right: -300px;
+  background: #fff;
+  position: relative;
+  width: 100%;
+  height: 360px;
+  -webkit-transition:  right 0.4s ease-in-out;
+  -moz-transition:  right 0.4s ease-in-out;
+  -ms-transition:  right 0.4s ease-in-out;
+  -o-transition:  right 0.4s ease-in-out;
+  transition:  right 0.4s ease-in-out;
+}
+
+.bottom.open{
+  right: 10px;
+}
+
+.center .top {
+  position: relative;
+  width: 100%;
+  right: -120px;
+  height: 20%;
+}
+
+.center .top #orange {
+  border-radius: 1px;
+  position: relative;
+  top: 25%;
+  left: 50%;
+  margin-left: -20px;
+  width: 40px;
+  height: 40px;
+  background: #FA5D16;
+}
+
+#orange img {
+  width: 40px;
+}
+
+#notification {
+  color: #fff;
+  position: relative;
+  left: 155px;
+  top: -20px;
   border-radius: 50%;
   border: 2px solid #FFF;
   width: 20px;

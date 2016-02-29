@@ -1,0 +1,95 @@
+@import url(http://fonts.googleapis.com/css?family=Average+Sans);
+
+.add-class-style{
+    max-width: 500px;
+    padding: 10px 20px;
+    background: #f4f7f8;
+    margin: 0px auto;
+    padding: 20px;
+    border-radius: 8px;
+    font-family: 'Average Sans', sans-serif;
+}
+.add-class-style fieldset{
+    border: none;
+}
+.add-class-style legend {
+    font-size: 1.4em;
+    margin-bottom: 10px;
+}
+.add-class-style label {
+    display: block;
+    margin-bottom: 8px;
+}
+.add-class-style input[type="text"],
+.add-class-style textarea,
+.add-class-style select {
+    font-family: 'Average Sans', sans-serif;
+    background: rgba(255,255,255,.1);
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    margin: 0;
+    outline: 0;
+    padding: 7px;
+    width: 100%;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    background-color: #FAFAFA;
+    color:#8a97a0;
+    -webkit-box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
+    margin-bottom: 30px;
+}
+.add-class-style input[type="text"]:focus,
+.add-class-style textarea:focus,
+.add-class-style select:focus{
+    background: #FAFAFA;
+}
+.add-class-style select{
+    -webkit-appearance: menulist-button;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    margin-bottom: 20px;
+    width: 100%;
+    box-sizing: border-box;
+    color: #8a97a0;
+    font-size: 18px;
+}
+.add-class-style .number {
+    background: #27AE60;
+    color: #fff;
+    height: 30px;
+    width: 30px;
+    display: inline-block;
+    font-size: 0.8em;
+    margin-right: 4px;
+    line-height: 30px;
+    text-align: center;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.2);
+    border-radius: 15px 15px 15px 0px;
+}
+
+.add-class-style input[type="submit"],
+.add-class-style input[type="button"]
+{
+    position: relative;
+    display: block;
+    padding: 10px 20px 10px 20px;
+    color: #FFF;
+    margin: 0 auto;
+    background: #27AE60;
+    font-size: 18px;
+    text-align: center;
+    font-style: normal;
+    width: 50%;
+    border: #27AE60;
+    border-width: 1px 1px 3px;
+    margin-bottom: 10px;
+}
+.add-class-style input[type="submit"]:hover,
+.add-class-style input[type="button"]:hover
+{
+    background: #109177;
+}

@@ -30,21 +30,20 @@ if(isset($_SESSION['userid'])){
 				echo(json_encode($result[0]));
 				break;
 			case 'getNotifications':
+
 				$query = "SELECT role FROM LU.users WHERE idusers='$userid';";
 				$statement = $DB->prepare($query);
 				$statement->execute();
 				$result = $statement->fetch();
 				$role = $result[0];
 				if($role == 'student'){
-					
-							getGrade($userid, $DB);
-						
-							// getDiscussion($userid, $DB);
-							
-							// getAssignmentNQuiz($userid, $DB);
-							
-					
-					
+					$notifications = array
+						(
+							getGrade($userid, $DB),
+							getDiscussion($userid, $DB),
+							getAssignmentNQuiz($userid, $DB)
+						);
+					echo(json_encode($notifications));
 				}else if($role=='professor'){
 					$notifications = array();
 					$query = "SELECT cid FROM LU.teaching WHERE `idusers` = '$userid' ";
@@ -101,7 +100,7 @@ function getGrade($userid, $DB){
 		$notifications[] = array('title' => $title, 'score' => $score, 'date_entered' => $date_entered ,'classnumber' => $classnumber);
 
 	}
-	echo json_encode($notifications);
+	return $notifications;
 }
 
 function getDiscussion($userid, $DB){
@@ -125,7 +124,8 @@ function getDiscussion($userid, $DB){
 									'content' => $row['content'],
 									'date_entered' => $row['date_entered']);
 	}
-	echo json_encode($notifications);
+	
+	return $notifications;
 }
 
 function getAssignmentNQuiz($userid, $DB){
@@ -150,7 +150,7 @@ function getAssignmentNQuiz($userid, $DB){
 	}
 
 
-	echo json_encode($notifications);
+	return $notifications;
 }
 
 ?>

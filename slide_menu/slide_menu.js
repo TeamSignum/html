@@ -1,4 +1,5 @@
 var role = '';
+var counter = 0;
 
 $(document).ready(function() {
 	getRole();
@@ -7,6 +8,7 @@ $(document).ready(function() {
   	   	var toggle_el = $(this).data("toggle");
     	$(toggle_el).toggleClass("open");
     	//$("#dim_div").show();
+    	counter = 0;
   	});
 });
 
@@ -38,9 +40,10 @@ function getNotifications()
 		data: {'function': 'getNotifications'},
 		success: function(result){
 			if(role == "student"){
-				studentGrade(result);				     
-		        //studentDiscussion(result);				       
-		        //studentAssignmentNQuiz(result);
+				studentGrade(result[0]);				     
+		        studentDiscussion(result[1]);				       
+		        studentAssignmentNQuiz(result[2]);
+		        $('#notification').html(counter);
 				//studentNotification(result);
 				//studentGrade(result);
 				//studentDiscussion(result);
@@ -59,35 +62,38 @@ function getNotifications()
 function studentDiscussion(result){
 	var notification = '';
 	for (var i = 0; i < result.length; i++){
+		counter += 1;
 		notification += '<li><a href="../class_view/class_view.html">New discussion: "'
 						+result[i]['content']+'" is written by '
 						+result[i]['firstname']+' in '
 						+result[i]['classnumber']+ ' at '
 						+result[i]['date_entered'] + '</a></li>';
 	}
-	$('#sidebar').html('<ul>'+notification+'</ul>');
+	$('#discussion').html('<ul>'+notification+'</ul>');
 }
 
 function studentAssignmentNQuiz(result){
 	var notification = '';
 	for (var i = 0; i < result.length; i++){
+		counter += 1;
 		notification += '<li><a href="#">New Assignment: "'
 						+result[i]['title']+'" in '
 						+result[i]['classnumber']+' Due to '
 						+result[i]['duedate']+ '</a></li>';
 	}
-	$('#sidebar').html('<ul>'+notification+'</ul>');
+	$('#assignment').html('<ul>'+notification+'</ul>');
 }
 
 function studentGrade(result){
 	var notification = '';
 	for (var i = 0; i < result.length; i++){
+		counter += 1;
 		notification += '<li><a href="../grades/grades.html">The Score of '
 						+result[i]['title']+' in '
 						+result[i]['classnumber']+' has been posted at '
 						+result[i]['date_entered']+'</a></li>';
 	}
-	$('#sidebar').html('<ul>'+notification+'</ul>');
+	$('#grade').html('<ul>'+notification+'</ul>');
 }
 
 function studentNotification(result){

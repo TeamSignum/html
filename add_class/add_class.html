@@ -13,28 +13,33 @@
 	<link rel="import" href="../imports/import.html">
 	<link rel="stylesheet" type="text/css" href="../imports/import.html">
 	<script type="text/javascript" src="add_class.js"></script>
+	<link rel="stylesheet" type="text/css" href="add_class.css">
 	<title>Add class</title>
 </head>
 <body>
 	<div id="navbar:../"></div>
-	<h1> add class </h1>
+	
+	<div class="add-class-style">
+		<fieldset>
+		<legend><span class="number">1</span> Add Class</legend>
+		<form id="addclass" method="post" action="add_class.php">
+			<label>Select the class: </label>
+			<select id='allclass'>
+			</select>
+			<input id="ekey" type="text" placeholder="type your enrollment key"/>
+			<input id="add" type="button" value="Add"/>
+		</form>
 
-	<form id="addclass" method="post" action="add_class.php">
-		<label>Select the class: </label>
-		<select id='allclass'>
-		</select>
-		<input id="ekey" type="text" placeholder="type your enrollment key"/>
-		<input id="add" type="button" value="add"/>
-	</form>
-
-	<h1> delete class </h1>
-	<form id="deleteclass" method="post" action="add_class.php">
-		<label>Select my class: </label>
-		<select id='myclass'>
-		</select>
-		
-		<input id="delete" type="button" value="delete"/>
-	</form>
-	<a href="../student/student.php">back</a>
+		<legend><span class="number">2</span> Delete Class</legend>
+		<form id="deleteclass" method="post" action="add_class.php">
+			<label>Select my class: </label>
+			<select id='myclass'>
+			</select>
+			
+			<input id="delete" type="button" value="Delete"/>
+		</form>
+		<a href="../student/student.php">back</a>
+		</fieldset>
+	</div>
 </body>
 </html>
