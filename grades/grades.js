@@ -25,7 +25,7 @@ function getSessionInfo(){
 		success: function(result){
 			//alert(result);
 			var parsedResult = JSON.parse(result);
-			userid=parsedResult.uid;
+			userid=parsedResult.userid;
 			getGrades(parsedResult);
 		}
 	});
@@ -86,6 +86,7 @@ function buildDisplayPage(parsedResult){
 			gradeHigh=tempGrade;
 		if(tempGrade < gradeLow)
 			gradeLow = tempGrade;
+		//alert(parsedResult[i].idusers + ' ' + userid);
 		if(parsedResult[i].idusers == userid)
 			studentGrade = tempGrade;
 		
@@ -192,7 +193,8 @@ function bindHtmlElements(){
 	$('.toggle').hide();
 	// Function for toggling the grade displays
 	$(".class-header").click(function(){
-    $(this).next(".toggle").slideToggle("medium");
-  });
+		// Get all headers, and toggle close when another opens
+    	$(this).next(".toggle").slideToggle("medium");
+ 	 });
 }
 	

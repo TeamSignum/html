@@ -112,7 +112,7 @@
 				else{
 					die("Information required for query was not found.");
 				}
-				$query = "SELECT c.classnumber, p.title, g.score
+				$query = "SELECT g.idusers, c.classnumber, p.title, g.score
 						  FROM grades g
 						  INNER JOIN popupassignment p
 						    ON g.idassignment=p.idassignment
