@@ -161,6 +161,27 @@ function drawStudentNode(){
 	// 	id: "mapNode"
 	// });
 	
+	// var studentName = new fabric.Text('Name', {
+	// 	fontSize: '36',
+	// 	fontFamily: 'Arial',
+	// 	fontStyle: 'bold',
+	// 	fill: 'black',
+	// 	originX: 'center',
+	// 	originY: 'center',
+	// 	selectable: false
+	// });
+	// studentName.setText(account_name);
+
+	var classOrbital = new fabric.Circle({
+		radius: classOrbitalRadius,
+		fill: 'transparent',
+		strokeWidth: 2,
+		stroke: "black",
+		left: (canvas.width/2) - classOrbitalRadius,
+		top: (canvas.height/2) - classOrbitalRadius,
+		selectable: false
+	});
+
 	var studentName = new fabric.Text('Name', {
 		fontSize: '36',
 		fontFamily: 'Arial',
@@ -172,31 +193,12 @@ function drawStudentNode(){
 	});
 	studentName.setText(account_name);
 
-	
 	fabric.Image.fromURL(profileimage, function(img) {
-		var classOrbital = new fabric.Circle({
-			radius: classOrbitalRadius,
-			fill: 'transparent',
-			strokeWidth: 5,
-			stroke: "black",
-			left: (canvas.width/2) - classOrbitalRadius,
-			top: (canvas.height/2) - classOrbitalRadius,
-			selectable: false
-		});
-			var studentName = new fabric.Text('Name', {
-			fontSize: '36',
-			fontFamily: 'Arial',
-			fontStyle: 'bold',
-			fill: 'black',
-			originX: 'center',
-			originY: 'center',
-			selectable: false
-		});
-		studentName.setText(account_name);
 		
+
 		var studentNode = img.scale(0.5).set({
-		  	left: 'center',
-			top: 'center',
+		  	originX: 'center',
+			originY: 'center',
 			clipTo: function (ctx) {
 				ctx.arc(0, 0, 200, 0, Math.PI * 2, true);
 			}
@@ -207,7 +209,7 @@ function drawStudentNode(){
 			top: (canvas.height/2) - studentNodeRadius,
 			selectable: false,
 			stroke: 'white',
-			strokeWidth: 5,
+			strokeWidth: 2,
 			id: "accountNode"
 		});
 
