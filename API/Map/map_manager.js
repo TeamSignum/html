@@ -88,6 +88,9 @@ MManager.prototype.HandleMapNodeSelect = function (node){
 		this.ShowPopup(node, $("#popup")); 
 		//this.ShowFiles();
 	}
+	else if(node.id === "mapNode" && node.type === "concept"){
+		this.NavigateToConcept();
+	}
 	else{
 		this.from = node;
 	}
@@ -105,7 +108,7 @@ MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, f
 		imgElement = document.getElementById('my-image1');
 	}
 	else if(type == "assignment"){
-		if(complete){
+		if(complete && mode == 0){
 			imgElement = document.getElementById('my-image4');
 		}
 		else{
