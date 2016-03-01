@@ -47,7 +47,16 @@ MManager.prototype.CopyNode = function(node, new_id, type){
 	var left = node.left; 
 	var id = node.id;
 
-	var imgElement = document.getElementById('my-image1');
+	var imgElement; 
+	if (type == "concept"){
+		imgElement = document.getElementById('my-image1');
+	}
+	else if (type == "assignment"){
+		imgElement = document.getElementById('my-image2');
+	}
+	else if (type == "quiz"){
+		imgElement = document.getElementById('my-image3');
+	}
 	var c = new fabric.Image(imgElement, {
 	  left: left,
 	  top: top,
