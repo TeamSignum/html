@@ -12,7 +12,10 @@ $( document ).ready(function() {
 	var mapNodeId = "mapNode";
 
 	// Create canvas
-	canvas = new fabric.Canvas('map', {backgroundColor: "#99ffff"});
+	canvas = new fabric.Canvas('map');
+
+    canvas.setBackgroundImage('../imports/images/stars.png' , canvas.renderAll.bind(canvas), {
+    });
 
 	// Construct map manager
 	mngr = new MManager(canvas, true, 0);
@@ -23,9 +26,34 @@ $( document ).ready(function() {
 
 	// We manually add Nodes and Edges to toolbar because it will be different for each view. But the dividing line and the lock and upload icon 
 	// should stay the same (added on when we create map manager).
-	mngr.AddToolbarNode(new fabric.Circle({ radius: 50, fill: '#fff', top: 50,  left: 50, stoke: 'white', strokeWidth: 5, id: 'tb_largeCircle' }));
-	mngr.AddToolbarNode(new fabric.Circle({ radius: 40, fill: '#fff', top: 200, left: 55, stoke: 'white', strokeWidth: 5, id: 'tb_mediumCircle' }));
-	mngr.AddToolbarNode(new fabric.Circle({ radius: 30, fill: '#fff', top: 320, left: 60, stoke: 'white', strokeWidth: 5, id: 'tb_smallCircle' }));
+
+	var imgElement = document.getElementById('my-image1');
+	var c = new fabric.Image(imgElement, {
+	  left: 50,
+	  top: 50,
+	  id: "tb_largeCircle"
+	});
+	c.scale(.25);
+	c.hasControls = c.hasBorders = false;
+	canvas.add(c);
+
+	c = new fabric.Image(imgElement, {
+	  left: 55,
+	  top: 200,
+	  id: "tb_mediumCircle"
+	});
+	c.scale(.20);
+	c.hasControls = c.hasBorders = false;
+	canvas.add(c);
+
+	c = new fabric.Image(imgElement, {
+	  left: 60,
+	  top: 320,
+	  id: "tb_smallCircle"
+	});
+	c.scale(.15);
+	c.hasControls = c.hasBorders = false;
+	canvas.add(c);
 
 	mngr.AddToolbarEdge(new fabric.Line([60, 400, 120, 500], { fill: 'red', stroke: 'red', strokeWidth: 3, id: 'tb_lineSolid' }));
 	mngr.AddToolbarEdge(new fabric.Line([60, 525, 120, 625], { fill: 'red', stroke: 'red', strokeWidth: 3, strokeDashArray: [5, 5], id: 'tb_lineDotted' }));

@@ -43,28 +43,20 @@ var MManager = function(_canvas, builder, classOrConcept){
  * Copies a node from toolbar to canvas
  */
 MManager.prototype.CopyNode = function(node, new_id, type){
-	var radius = node.radius; 
-	var fill = node.fill; 
 	var top = node.top;
 	var left = node.left; 
 	var id = node.id;
-	var stroke = node.stroke;
-	var strokeWidth = node.strokeWidth;
 
-	var n = new fabric.Circle({
-		radius: radius, 
-		fill : fill, 
-		top : top, 
-		left : left,
-		stroke: stroke,
-		strokeWidth: strokeWidth,		
-		id: id
-	}); 
-
-	n.hasControls = false; 
-	n.hasBorders  = false; 
-	n.title;
-	this.canvas.add(n);  
+	var imgElement = document.getElementById('my-image1');
+	var c = new fabric.Image(imgElement, {
+	  left: left,
+	  top: top,
+	  id: id 
+	});
+	c.scale(node.scaleX);
+	c.hasBorders = c.hasControls = false;
+	c.title;
+	this.canvas.add(c);
 
 	node.id = new_id;
 	node.nid = this.nid;
@@ -97,27 +89,33 @@ MManager.prototype.GetCurrentId = function(result){
 
 //Draw a node onto the canvas
 MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, fill, complete, mode){
-	//Draw the concept node
-	var c = new fabric.Circle({
-			top: top,
-			left: left,
-			radius: radius,
-			fill: fill,
-			stroke: 'white',
-			strokeWidth: 5,
-			id: "mapNode"
+
+	var imgElement;
+	if(type == "concept"){
+		imgElement = document.getElementById('my-image1');
+	}
+	else if(type == "assignment"){
+		imgElement = document.getElementById('my-image2');
+	}
+	else if(type == "quiz"){
+		imgElement = document.getElementById('my-image3');
+	}
+
+	var c = new fabric.Image(imgElement, {
+	  left: left,
+	  top: top,
+	  id: "mapNode"
 	});
+	c.scale(.25);
+	c.hasBorders = c.hasControls = false;
+	canvas.add(c);
 
 	c.nid = nodeID;
 	c.type = type;
 	c.lines = []; 
 
-	c.hasControls = false;
-	c.hasBorders = false;
-
-	canvas.add(c);
 	this.LoadNodePopup(c, nodeID, type);
-	this.nodes.push(c); 
+	this.nodes.push(c);
 
 	if(mode == 0)
 	{
@@ -130,8 +128,7 @@ MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, f
 		{
 			c.compl = 0;
 		}
-		c.lockMovementX = true;
-		c.lockMovementY = true;
+		c.lockMovementX = c.lockMovementY = true;
 		
 		var pc = new fabric.Circle({
 				top: top + radius,
@@ -196,11 +193,12 @@ MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, f
 	
 	//Draw the title text
 	var t = new fabric.Text(title, {
-			fontFamily: 'arial black',
-			fontSize: 25,
-			left: left,
-			top: top,
-			id: "nodeText"
+		fontFamily: 'arial black',
+		fill: 'white',
+		fontSize: 25,
+		left: left,
+		top: top - 20,
+		id: "nodeText"
 	});
 	
 	c.title = t;
@@ -212,7 +210,7 @@ MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, f
 	t.lockMovementX = true;
 	t.lockMovementY = true;
 			
-	canvas.add(t);
+	mngr.canvas.add(t);
 }
 
 /* ---------------------------------------- Map Edge Functions ---------------------------------------- */
@@ -245,16 +243,17 @@ MManager.prototype.LineEditor = function(edge, solid){
  * Moves all the edges linked to a node when the node moves.
  */ 
 MManager.prototype.MoveEdges = function (node){
+	var radius = node.width * node.scaleX * .5;
 	if(node){
 		if(node.lines.length != 0)
 		{
 			for(var j = 0; j < node.lines.length; j++)
 			{
-				if(node.left+2*node.radius > node.lines[j].x1 && node.left < node.lines[j].x1 && node.top+2*node.radius > node.lines[j].y1 && node.top < node.lines[j].y1)
+				if(node.left+2*radius > node.lines[j].x1 && node.left < node.lines[j].x1 && node.top+2*radius > node.lines[j].y1 && node.top < node.lines[j].y1)
 				{
 					node.lines[j].set({'x1': node.getCenterPoint().x, 'y1': node.getCenterPoint().y});
 				}
-				if(node.left+2*node.radius > node.lines[j].x2 && node.left < node.lines[j].x2 && node.top+2*node.radius > node.lines[j].y2 && node.top < node.lines[j].y2)
+				if(node.left+2*radius > node.lines[j].x2 && node.left < node.lines[j].x2 && node.top+2*radius > node.lines[j].y2 && node.top < node.lines[j].y2)
 				{
 					node.lines[j].set({'x2': node.getCenterPoint().x, 'y2': node.getCenterPoint().y});	
 				}
@@ -275,8 +274,8 @@ MManager.prototype.DrawEdgeBetweenNodes = function(node){
 		if(this.solid === true)
 		{
 			line = new fabric.Line([this.from.getCenterPoint().x, this.from.getCenterPoint().y, this.to.getCenterPoint().x, this.to.getCenterPoint().y], {
-				fill: 'black',
-				stroke: 'black',
+				fill: 'white',
+				stroke: 'white',
 				strokeWidth: 5,
 				selectable: false,
 				id: "solid"
@@ -285,8 +284,8 @@ MManager.prototype.DrawEdgeBetweenNodes = function(node){
 		else
 		{
 			line = new fabric.Line([this.from.getCenterPoint().x, this.from.getCenterPoint().y, this.to.getCenterPoint().x, this.to.getCenterPoint().y], {
-				fill: 'black',
-				stroke: 'black',
+				fill: 'white',
+				stroke: 'white',
 				strokeWidth: 5,
 				strokeDashArray: [5, 5],
 				selectable: false,
@@ -322,8 +321,8 @@ MManager.prototype.DrawEdge = function(eid, x1, y1, x2, y2, type, mode){
 	if(type === "solid")
 	{
 		l = new fabric.Line([x1, y1, x2, y2], {
-			fill: 'black',
-			stroke: 'black',
+			fill: 'gray',
+			stroke: 'gray',
 			strokeWidth: 5,
 			id: "solid"
 		});
@@ -331,8 +330,8 @@ MManager.prototype.DrawEdge = function(eid, x1, y1, x2, y2, type, mode){
 	if(type === "dotted")
 	{
 		l = new fabric.Line([x1, y1, x2, y2], {
-			fill: 'black',
-			stroke: 'black',
+			fill: 'gray',
+			stroke: 'gray',
 			strokeWidth: 5,
 			strokeDashArray: [5, 5],
 			id: "dotted"
@@ -380,9 +379,10 @@ MManager.prototype.GenText = function(node){
 	if(!node.title){
 		var title = new fabric.IText('Name', {
 			fontFamily: 'arial black',
+			fill: 'white',
 			fontSize: 25,
 			left: node.left,
-			top: node.top,
+			top: node.top - 20,
 			id: "nodeText"
 		});
 	
@@ -425,12 +425,13 @@ MManager.prototype.GenText = function(node){
  */
 MManager.prototype.MoveNode = function (node){
 	if (node.title){
-		node.title.set({'top': node.top, 'left': (node.getCenterPoint().x - node.title.getWidth()/2)});
+		node.title.set({'top': node.top - 20, 'left': (node.getCenterPoint().x - node.title.getWidth()/2)});
 		node.title.setCoords();
 	}
 
 	if (node.popupnode){
-		node.popupnode.set({'top': node.top + node.radius, 'left': node.left + (2 * node.radius) - 10});
+		var radius = node.width * node.scaleX * .5;
+		node.popupnode.set({'top': node.top + radius, 'left': node.left + (2 * radius) - 10});
 		node.popupnode.setCoords();
 	}
 	if(node.deletenode){
@@ -796,19 +797,17 @@ MManager.prototype.CreatePopupNode = function(node, popup, docreate){
 		var type = node.type;
 		var popup = popup;
 
-		var radius = node.radius; 
+		var radius = node.width * node.scaleX * .5; 
 		var top = node.top;
 		var left = node.left; 
 
-		var popupnode = new fabric.Circle({
-			radius: 15, 
-			fill : '#009ACD', 
+		var imgElement = document.getElementById('my-image-page');
+		var popupnode = new fabric.Image(imgElement, {
 			top : top + radius, 
 			left : left + (2 * radius) - 10,
-			stroke: 'white',
-			strokeWidth: 2,		
-			id: 'popupnode'
+			id: "popupnode"
 		});
+		popupnode.scale(.3);
 
 		popupnode.title = node.title;
 		
@@ -1235,7 +1234,7 @@ MManager.prototype.SavePopup = function(){
  */ 
 MManager.prototype.AddToolbar = function(){
 	// Vertical divider
-	var div = new fabric.Line([180, 0, 180, 1000], { fill: 'black', stroke: 'black', strokeWidth: 4 });
+	var div = new fabric.Line([180, 0, 180, 1000], { fill: 'black', stroke: 'gray', strokeWidth: 4 });
 	this.canvas.add(div);
 	div.lockMovementX = div.lockMovementY = true;
 	div.selectable = div.hasControls = div.hasBorders = false;

@@ -5,7 +5,9 @@ var mngr;
 
 $( document ).ready(function() {
 
-	canvas = new fabric.Canvas('map', {backgroundColor: "#99ffff"});
+	canvas = new fabric.Canvas('map');
+    canvas.setBackgroundImage('../imports/images/stars.png' , canvas.renderAll.bind(canvas), {
+    });
 
 	// Construct map manager
 	mngr = new MManager(canvas, false, 0);

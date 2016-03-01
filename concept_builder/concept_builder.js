@@ -10,7 +10,10 @@ $( document ).ready(function() {
 
 	var mapNodeId = "mapNode"; // Id for all nodes that end up on the map
 
-	canvas = new fabric.Canvas('map', {backgroundColor: "#99ffff"}); // Create Canvas
+	canvas = new fabric.Canvas('map');
+	canvas.setBackgroundImage('../imports/images/stars.png' , canvas.renderAll.bind(canvas), {
+    });
+
 
 	mngr = new MManager(canvas, true, 1); // Construct map manager
 	mngr.LoadIds(2); // Get the last id from the node table
@@ -20,9 +23,35 @@ $( document ).ready(function() {
 
 	// We manually add Nodes and Edges to toolbar because it will be different for each view. But the dividing line and the lock and upload icon 
 	// should stay the same (added on when we create map manager).
-	mngr.AddToolbarNode(new fabric.Circle({ radius: 50, fill: '#fff', top: 50,  left: 50, stoke: '#fff', strokeWidth: 5, id: 'tb_concept' }));
-	mngr.AddToolbarNode(new fabric.Circle({ radius: 50, fill: '#fdf5e6', top: 185, left: 50, stoke: '#fdf5e6', strokeWidth: 5, id: 'tb_assignment' }));
-	mngr.AddToolbarNode(new fabric.Circle({ radius: 50, fill: '#faf0e6', top: 320, left: 50, stoke: '#faf0e6', strokeWidth: 5, id: 'tb_quiz' }));
+	var imgElement = document.getElementById('my-image1');
+	var c = new fabric.Image(imgElement, {
+	  left: 50,
+	  top: 50,
+	  id: "tb_concept"
+	});
+	c.scale(.25);
+	c.hasControls = c.hasBorders = false;
+	canvas.add(c);
+
+	imgElement = document.getElementById('my-image2');
+	c = new fabric.Image(imgElement, {
+	  left: 48,
+	  top: 185,
+	  id: "tb_assignment"
+	});
+	c.scale(.25);
+	c.hasControls = c.hasBorders = false;
+	canvas.add(c);
+
+	imgElement = document.getElementById('my-image3');
+	c = new fabric.Image(imgElement, {
+	  left: 48,
+	  top: 320,
+	  id: "tb_quiz"
+	});
+	c.scale(.25);
+	c.hasControls = c.hasBorders = false;
+	canvas.add(c);
 
 	mngr.AddToolbarEdge(new fabric.Line([60, 450, 120, 550], { fill: 'red', stroke: 'red', strokeWidth: 3, id: 'tb_lineSolid' }));
 	mngr.AddToolbarEdge(new fabric.Line([60, 575, 120, 675], { fill: 'red', stroke: 'red', strokeWidth: 3, strokeDashArray: [5, 5], id: 'tb_lineDotted' }));
