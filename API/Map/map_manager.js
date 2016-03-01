@@ -89,7 +89,9 @@ MManager.prototype.HandleMapNodeSelect = function (node){
 		//this.ShowFiles();
 	}
 	else if(node.id === "mapNode" && node.type === "concept"){
-		this.NavigateToConcept();
+		if(!this.classOrConcept){
+			this.NavigateToConcept();
+		}
 	}
 	else{
 		this.from = node;
