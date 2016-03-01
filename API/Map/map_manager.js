@@ -105,7 +105,12 @@ MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, f
 		imgElement = document.getElementById('my-image1');
 	}
 	else if(type == "assignment"){
-		imgElement = document.getElementById('my-image2');
+		if(complete){
+			imgElement = document.getElementById('my-image4');
+		}
+		else{
+			imgElement = document.getElementById('my-image2');
+		}
 	}
 	else if(type == "quiz"){
 		imgElement = document.getElementById('my-image3');
