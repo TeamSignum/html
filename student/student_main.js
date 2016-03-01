@@ -7,6 +7,8 @@ var account_name = "";
 var acc_role;
 var canvas;
 
+var profileimage;
+
 $( document ).ready(function() {
 
 	canvas = new fabric.Canvas('student_main', 
@@ -31,7 +33,8 @@ $( document ).ready(function() {
 	// Function calls to the database, which in turn call
 	// functions to draw the page.  Is it possible to have one
 	// DB query to speed up the response?
-	getName();
+	getPic(); // made by namgi
+	getName();	
 	getClassNumbers();
 	
 	canvas.hoverCursor = 'pointer';
@@ -106,6 +109,27 @@ $( document ).ready(function() {
 	});
 });
 
+// made by namgi: get pic url;
+function getPic(){
+	$.ajax({
+		type: 'POST',
+		url: "../profile/getProfile.php",
+		dataType: 'json',
+		async: true,
+		success: function(result){
+			if(result[0].profilepic === null){
+				profileimage = "../profile_images/default.jpg";
+			}
+			else{
+				profileimage = "../profile_images/" + result[0].profilepic;
+			}
+		},
+		error:function(request,status,error){
+        	alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+       	}
+	});
+}
+
 function getName()
 {
 	$.ajax({
@@ -127,25 +151,15 @@ function getName()
 }
 
 function drawStudentNode(){
-	var classOrbital = new fabric.Circle({
-		radius: classOrbitalRadius,
-		fill: 'transparent',
-		strokeWidth: 5,
-		stroke: "black",
-		left: (canvas.width/2) - classOrbitalRadius,
-		top: (canvas.height/2) - classOrbitalRadius,
-		selectable: false
-	});
-
-	var studentNode= new fabric.Circle({
-		radius: studentNodeRadius,
-		fill: 'white',
-		originX: 'center',
-		originY: 'center',
-		stroke: 'white',
-		strokeWidth: 5,
-		id: "mapNode"
-	});
+	// var studentNode= new fabric.Circle({
+	// 	radius: studentNodeRadius,
+	// 	fill: 'white',
+	// 	originX: 'center',
+	// 	originY: 'center',
+	// 	stroke: 'white',
+	// 	strokeWidth: 5,
+	// 	id: "mapNode"
+	// });
 	
 	var studentName = new fabric.Text('Name', {
 		fontSize: '36',
@@ -158,22 +172,54 @@ function drawStudentNode(){
 	});
 	studentName.setText(account_name);
 
-	var studentNodeGroup = new fabric.Group([studentNode, studentName], {
-		left: (canvas.width/2) - studentNodeRadius,
-		top: (canvas.height/2) - studentNodeRadius,
-		selectable: false,
-		stroke: 'white',
-		strokeWidth: 5,
-		id: "accountNode"
-	});
 	
-	studentNodeGroup.on('selected', function() {
-  		alert("Clicked");
+	fabric.Image.fromURL(profileimage, function(img) {
+		var classOrbital = new fabric.Circle({
+			radius: classOrbitalRadius,
+			fill: 'transparent',
+			strokeWidth: 5,
+			stroke: "black",
+			left: (canvas.width/2) - classOrbitalRadius,
+			top: (canvas.height/2) - classOrbitalRadius,
+			selectable: false
+		});
+			var studentName = new fabric.Text('Name', {
+			fontSize: '36',
+			fontFamily: 'Arial',
+			fontStyle: 'bold',
+			fill: 'black',
+			originX: 'center',
+			originY: 'center',
+			selectable: false
+		});
+		studentName.setText(account_name);
+		
+		var studentNode = img.scale(0.5).set({
+		  	left: 'center',
+			top: 'center',
+			clipTo: function (ctx) {
+				ctx.arc(0, 0, 200, 0, Math.PI * 2, true);
+			}
+		});
+
+		var studentNodeGroup = new fabric.Group([studentNode, studentName], {
+			left: (canvas.width/2) - studentNodeRadius,
+			top: (canvas.height/2) - studentNodeRadius,
+			selectable: false,
+			stroke: 'white',
+			strokeWidth: 5,
+			id: "accountNode"
+		});
+
+		studentNodeGroup.on('selected', function() {
+	  		alert("Clicked");
+		});
+
+		canvas.add(classOrbital, studentNodeGroup);
+		canvas.sendToBack(classOrbital);
 	});
 
-	canvas.add(classOrbital, studentNodeGroup);
-	canvas.sendToBack(classOrbital);
-	canvas.sendToBack(studentNodeGroup);
+	//canvas.sendToBack(studentNodeGroup);
 }
 
 function getClassNumbers(){
