@@ -3,6 +3,7 @@
 include '../../imports/ChromePhp.php';
 
 $nid         = $_POST['nid'];
+$cid         = $_SESSION['classid'];
 $fileName    = $_FILES['file']['name'];
 $fileType    = $_FILES['file']['type'];
 $fileSize    = $_FILES['file']['size'];
@@ -16,14 +17,15 @@ try {
     $DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $DB->beginTransaction();
 
-    $query = "INSERT `lecturenotes` (`nid`, `name`, `type`, `size`, `content`) values (?,?,?,?,?)";
+    $query = "INSERT `lecturenotes` (`nid`, `cid`, `name`, `type`, `size`, `content`) values (?,?,?,?,?,?)";
     $statement = $DB->prepare($query);
 
     $statement->bindValue (1, $nid);
-    $statement->bindValue (2, $fileName);
-    $statement->bindValue (3, $fileType);
-    $statement->bindValue (4, $fileSize);
-    $statement->bindValue (5, $fileContent);
+    $statement->bindValue (2, $cid);
+    $statement->bindValue (3, $fileName);
+    $statement->bindValue (4, $fileType);
+    $statement->bindValue (5, $fileSize);
+    $statement->bindValue (6, $fileContent);
 
     // Execute query
     $statement->execute();

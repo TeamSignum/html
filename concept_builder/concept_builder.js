@@ -29,6 +29,8 @@ $( document ).ready(function() {
 	  top: 50,
 	  id: "tb_concept"
 	});
+	c.width = 463;
+	c.height = 455;
 	c.scale(.25);
 	c.hasControls = c.hasBorders = false;
 	canvas.add(c);
@@ -39,6 +41,8 @@ $( document ).ready(function() {
 	  top: 185,
 	  id: "tb_assignment"
 	});
+	c.width = 463;
+	c.height = 455;
 	c.scale(.25);
 	c.hasControls = c.hasBorders = false;
 	canvas.add(c);
@@ -49,6 +53,8 @@ $( document ).ready(function() {
 	  top: 320,
 	  id: "tb_quiz"
 	});
+	c.width = 463;
+	c.height = 455;
 	c.scale(.25);
 	c.hasControls = c.hasBorders = false;
 	canvas.add(c);
