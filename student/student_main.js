@@ -199,14 +199,16 @@ function drawStudentNode(){
 		var studentNode = img.scale(0.5).set({
 		  	originX: 'center',
 			originY: 'center',
+			width:500,
+			height:500,
 			clipTo: function (ctx) {
 				ctx.arc(0, 0, 200, 0, Math.PI * 2, true);
 			}
 		});
 
 		var studentNodeGroup = new fabric.Group([studentNode, studentName], {
-			left: (canvas.width/2) - studentNodeRadius,
-			top: (canvas.height/2) - studentNodeRadius,
+			left: (canvas.width/2)-120,
+			top: (canvas.height/2)-120,
 			selectable: false,
 			stroke: 'white',
 			strokeWidth: 2,
