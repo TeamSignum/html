@@ -62,9 +62,16 @@ function evaluateSessionInfo(parsedResult){
 		// 	html+='</li>';
 		// }
 		//else 
-			if(document.title=='Class View'){
+		if(document.title=='Class View'){
 			html+='<li>';
 			html+='<a href="../grades/grades.html" style="margin-top: 12px; font-size:14pt;">Grades</a>';
+			html+='</li>';
+		}
+
+		if(document.title=='Grades'){
+			html+='<li>';
+			html+='<a href="../class_view/class_view.html" style="margin-top: 12px; font-size:14pt;">Back to ' +
+			parsedResult.className +'</a>';
 			html+='</li>';
 		}
 

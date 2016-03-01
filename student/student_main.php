@@ -79,6 +79,7 @@ if(isset($_POST["name"]))
 if(isset($_POST['direct']))
 {
 	$_SESSION['classid'] = $_POST['direct'];
+	$_SESSION['className'] = $_POST['className'];
 	echo "1";
 }
 

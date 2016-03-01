@@ -46,10 +46,10 @@ $( document ).ready(function() {
 			{
 				if (e.target.id === "classNode") 
 				{
-					//alert(e.target.cid);
+					//alert(e.target.item(1).text);
 					//loadNodePopup(e.target);
 					//redirect();
-					directToClass(e.target.cid);
+					directToClass(e.target);
 				}
 				if(e.target.id === "addNode")
 				{
@@ -333,11 +333,14 @@ function redirect(){
 
 function directToClass(c)
 {
+	var cid = c.cid;
+	var className = c.item(1).text;
 	$.ajax({
 		type: 'POST',
 		url: "student_main.php",
 		dataType: 'html',
-		data: {direct: c},
+		data: {direct: cid,
+			   className: className},
 		//async: false,
 		
 		success: function(result){
