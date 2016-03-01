@@ -33,6 +33,8 @@ $( document ).ready(function() {
 	  top: 50,
 	  id: "tb_largeCircle"
 	});
+	c.width = 463;
+	c.height = 455;
 	c.scale(.25);
 	c.hasControls = c.hasBorders = false;
 	canvas.add(c);
@@ -42,6 +44,8 @@ $( document ).ready(function() {
 	  top: 200,
 	  id: "tb_mediumCircle"
 	});
+	c.width = 463;
+	c.height = 455;
 	c.scale(.20);
 	c.hasControls = c.hasBorders = false;
 	canvas.add(c);
@@ -51,6 +55,8 @@ $( document ).ready(function() {
 	  top: 320,
 	  id: "tb_smallCircle"
 	});
+	c.width = 463;
+	c.height = 455;
 	c.scale(.15);
 	c.hasControls = c.hasBorders = false;
 	canvas.add(c);

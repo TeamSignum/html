@@ -86,6 +86,7 @@ MManager.prototype.HandleMapNodeSelect = function (node){
 
 	if(node.id === "popupnode"){
 		this.ShowPopup(node, $("#popup")); 
+		//this.ShowFiles();
 	}
 	else{
 		this.from = node;
@@ -115,6 +116,9 @@ MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, f
 	  top: top,
 	  id: "mapNode"
 	});
+
+	c.width = 463;
+	c.height = 455;
 	c.scale(.25);
 	c.hasBorders = c.hasControls = false;
 	canvas.add(c);
@@ -183,9 +187,10 @@ MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, f
 	{
 		var dt = new fabric.Text("X", {
 			fontFamily: 'arial black',
+			fill: 'white',
 			fontSize: 15,
 			left: left,
-			top: top,
+			top: top + 10,
 			id: "deleteNode"
 		});
 		
@@ -330,8 +335,8 @@ MManager.prototype.DrawEdge = function(eid, x1, y1, x2, y2, type, mode){
 	if(type === "solid")
 	{
 		l = new fabric.Line([x1, y1, x2, y2], {
-			fill: 'gray',
-			stroke: 'gray',
+			fill: 'white',
+			stroke: 'white',
 			strokeWidth: 5,
 			id: "solid"
 		});
@@ -339,8 +344,8 @@ MManager.prototype.DrawEdge = function(eid, x1, y1, x2, y2, type, mode){
 	if(type === "dotted")
 	{
 		l = new fabric.Line([x1, y1, x2, y2], {
-			fill: 'gray',
-			stroke: 'gray',
+			fill: 'white',
+			stroke: 'white',
 			strokeWidth: 5,
 			strokeDashArray: [5, 5],
 			id: "dotted"
@@ -411,9 +416,10 @@ MManager.prototype.GenText = function(node){
 		
 		var dt = new fabric.Text("X", {
 			fontFamily: 'arial black',
+			fill: 'white',
 			fontSize: 15,
 			left: node.left,
-			top: node.top,
+			top: node.top + 10,
 			id: "deleteNode"
 		});
 		
@@ -816,6 +822,8 @@ MManager.prototype.CreatePopupNode = function(node, popup, docreate){
 			left : left + (2 * radius) - 10,
 			id: "popupnode"
 		});
+		popupnode.width = 68;
+		popupnode.height = 77;
 		popupnode.scale(.3);
 
 		popupnode.title = node.title;
@@ -985,6 +993,31 @@ MManager.prototype.UploadFile = function(){
 	});
 }
 
+MManager.prototype.ShowFiles = function(){
+
+	$.ajax({
+		async: true,
+		type: 'POST',
+		url: "../API/Map/download.php",
+		dataType: 'json',
+		data: {nid: this.crrnt.nid},
+		success: function(result){
+			$("#lecturenotes").html($("#lecturenotes").html() + '<h3 style="margin-top:50px;">Lecture Notes</h3>');
+
+			for(var i = 0; i < result.length; i++)
+			{
+				var html = `
+				<div style="margin-left:60px;float:left;"><h4>` + result[0]["name"] + `</h4></div></br></br>
+				`;
+
+				$("#lecturenotes").html($("#lecturenotes").html() + html);
+			}
+		}
+	});
+	
+	return false;
+}
+
 MManager.prototype.CreateConceptPopup = function(title, description, due_date, notes){ 
 	var ids = [];
 	var innerHtml; 
@@ -1002,11 +1035,21 @@ MManager.prototype.CreateConceptPopup = function(title, description, due_date, n
  	"<div>" +
 		" 	 <div class=\"form-style-2\" style=\"width: 90%;\">" + 
 		"    <div class=\"form-style-2-heading\" style=\"width: 110%;\">Concept Node Details</div>" + 
-		"			 <form style=\"margin-left: 13%;\">"+ 
+		"			 <form style=\"margin-left: 13%;\">";
+		if (this.mode ==  1){
+			innerHtml +=
 		"    			<label for=\"field1\"><span>Title <span class=\"required\">*</span></span><input class=\"input-field\" id=\"title\" name=\"title\" type=\"text\" value=\""+ title +"\" placeholder=\"Title\"/></label>"+
 		"				<label for=\"field2\"><span>Description <span class=\"required\">*</span></span><input class=\"input-field\" id=\"description\" name=\"description\" type=\"text\" value=\""+ description +"\" placeholder=\"Description\"/></label>"+
 		"				<label for=\"field5\"><span>Notes <span class=\"\"></span></span><textarea name=\"notes\" id=\"notes\" class=\"textarea-field\">"+ notes +"</textarea></label>"+
 		"				<label for=\"field2\"><span>Due Date<span class=\"\"></span></span><input class=\"input-field\" id=\"due_date\" name=\"due_date\" type=\"text\" value=\""+ due_date +"\" placeholder=\"Due date\"/></label>";
+		}
+		else{
+			innerHtml +=
+		"    			<label for=\"field1\"><span>Title <span class=\"required\">*</span></span><input readonly class=\"input-field\" id=\"title\" name=\"title\" type=\"text\" value=\""+ title +"\" placeholder=\"Title\"/></label>"+
+		"				<label for=\"field2\"><span>Description <span class=\"required\">*</span></span><input readonly class=\"input-field\" id=\"description\" name=\"description\" type=\"text\" value=\""+ description +"\" placeholder=\"Description\"/></label>"+
+		"				<label for=\"field5\"><span>Notes <span class=\"\"></span></span><textarea readonly name=\"notes\" id=\"notes\" class=\"textarea-field\">"+ notes +"</textarea></label>"+
+		"				<label for=\"field2\"><span>Due Date<span class=\"\"></span></span><input readonly class=\"input-field\" id=\"due_date\" name=\"due_date\" type=\"text\" value=\""+ due_date +"\" placeholder=\"Due date\"/></label>";
+		}
 
 		if (this.mode ==  1){
 			innerHtml +=
