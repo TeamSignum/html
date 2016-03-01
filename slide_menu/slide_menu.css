@@ -168,7 +168,7 @@ body {
   line-height: 35px;
   width: 100%;
   height: 35px;
-  background: #ff4c4c;
+  background: #FF4C0C;
   border-bottom: 1px solid rgba(89, 81, 68, 1);
 }
 
@@ -184,5 +184,34 @@ body {
   color: #fff;
   width: 100%;
   height: 35px;
-  background: #ff4c4c;
+  background: #FF4C0C;
+}
+
+#sidebar label{
+  color: #ffffff;
+  background-color: #FA5D16;
+  display: block;
+  width: auto;
+}
+
+#sidebar ul {
+ list-style: none;
+    padding:0;
+    margin:0;
+}
+ 
+#sidebar li {
+   padding-left: 1em; 
+    text-indent: -.7em;
+}
+
+#sidebar li a {
+  text-decoration: none;
+  color: #000;
+  display: block;
+  width: 270px;
+}
+ 
+#sidebar li a:hover {  
+  background: #f6f6f6;
 }

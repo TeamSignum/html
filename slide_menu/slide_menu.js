@@ -63,7 +63,7 @@ function studentDiscussion(result){
 	var notification = '';
 	for (var i = 0; i < result.length; i++){
 		counter += 1;
-		notification += '<li><a href="../class_view/class_view.html">New discussion: "'
+		notification += '<li><a href="#">New discussion: "'
 						+result[i]['content']+'" is written by '
 						+result[i]['firstname']+' in '
 						+result[i]['classnumber']+ ' at '
@@ -88,7 +88,7 @@ function studentGrade(result){
 	var notification = '';
 	for (var i = 0; i < result.length; i++){
 		counter += 1;
-		notification += '<li><a href="../grades/grades.html">The Score of '
+		notification += '<li><a href="#">The Score of '
 						+result[i]['title']+' in '
 						+result[i]['classnumber']+' has been posted at '
 						+result[i]['date_entered']+'</a></li>';
@@ -99,7 +99,7 @@ function studentGrade(result){
 function studentNotification(result){
 	var notification = '';
 	for (var i = 0; i < result.length; i++){
-		notification += '<li><a href="../grades/grade_charts.html">Your grade is '+result[i]['score']+'</a></li>';
+		notification += '<li><a href="#">Your grade is '+result[i]['score']+'</a></li>';
 	}
 	$('#sidebar').html('<ul>'+notification+'</ul>');
 }
