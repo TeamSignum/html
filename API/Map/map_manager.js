@@ -70,6 +70,7 @@ MManager.prototype.CopyNode = function(node, new_id, type){
 	node.nid = this.nid;
 	node.type = type;
 	node.lines = [];
+	node.perPixelTargetFind = true;
 
 	this.nodes.push(node);
 	this.nid++;
@@ -123,6 +124,11 @@ MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, f
 		if(complete == 1)
 		{
 			c.fill = 'green';
+			c.compl = 1;
+		}
+		else
+		{
+			c.compl = 0;
 		}
 		c.lockMovementX = true;
 		c.lockMovementY = true;
@@ -393,6 +399,24 @@ MManager.prototype.GenText = function(node){
 		node.title = title;
 		
 		this.canvas.add(title);
+		
+		var dt = new fabric.Text("X", {
+			fontFamily: 'arial black',
+			fontSize: 15,
+			left: node.left,
+			top: node.top,
+			id: "deleteNode"
+		});
+		
+	node.deletenode = dt;
+	dt.node = node;
+		
+	dt.hasControls = false;
+	dt.hasBorders = false;
+	dt.lockMovementX = true;
+	dt.lockMovementY = true;
+		
+	this.canvas.add(dt);
 	}
 }
 
@@ -731,7 +755,7 @@ MManager.prototype.DeleteN = function(node, level){
 		data: {deleten: 1, level: level, cons: cons, dedges: dedges, dnid: nid},
 		
 		success: function(result){
-			//alert(result); 
+			alert(result); 
 			swal("Completed", "The node has been deleted.", "success");
 		}
 	});
@@ -796,6 +820,7 @@ MManager.prototype.CreatePopupNode = function(node, popup, docreate){
 		popupnode.type = type;
 		popupnode. popup = popup; 
 		node.popupnode = popupnode;
+		popupnode.node = node;
 		this.canvas.add(popupnode);  
 		this.popupnodes.push(popupnode);
 	}
@@ -865,6 +890,7 @@ MManager.prototype.CheckOffNode = function(){
 					if(mngr.nodes[i].nid == mngr.crrnt.nid){
 						mngr.nodes[i].setFill("#0d0");
 						mngr.nodes[i].setStroke("#0d0");
+						mngr.nodes[i].compl = 1;
 
 						$("#dim_div").hide();
 						$("#custom_container").hide();
@@ -905,6 +931,15 @@ MManager.prototype.ShowPopup = function(node, popup){
 		LoadDiscussion(node.nid, this.classOrConcept); // From API/Discussion/discussion.js
 	}
 	$("#custom_container").show();
+	if(node.node.compl == 1)
+	{
+		//alert("h");
+		$("#checkoff").hide();
+	}
+	else
+	{
+		$("#checkoff").show();
+	}
 	$("#dim_div").show();
 }
 
