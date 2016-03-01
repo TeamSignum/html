@@ -13,16 +13,20 @@ $( document ).ready(function() {
 
 	canvas = new fabric.Canvas('student_main', 
 					{width: window.innerWidth,
-					 height: window.innerHeight - 120,
+					 height: window.innerHeight,
 					 backgroundColor: "#99ffff",
 					 // This flag should help render faster
 					 renderOnAddRemove: false});
 
+	canvas.setBackgroundImage('../maxresdefault.jpg' , canvas.renderAll.bind(canvas), {
+    });
 	window.addEventListener('resize', resizeCanvas, false);
 
 	function resizeCanvas(){
-		canvas.width = window.innerWidth;
-		canvas.height = window.innerHeight - 120;
+		// canvas.width = window.innerWidth;
+		// canvas.height = window.innerHeight;
+		canvas.width = 1920;
+		canvas.height = 1080
 		// I think there is an easier way to do this, but
 		// this works for now.
 		canvas.clear();
@@ -176,7 +180,7 @@ function drawStudentNode(){
 		radius: classOrbitalRadius,
 		fill: 'transparent',
 		strokeWidth: 2,
-		stroke: "black",
+		stroke: "white",
 		left: (canvas.width/2) - classOrbitalRadius,
 		top: (canvas.height/2) - classOrbitalRadius,
 		selectable: false
