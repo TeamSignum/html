@@ -56,7 +56,11 @@ $( document ).ready(function()
 			// Need to get parameters from the html document
 			professorOneClassAllAssignments(cid);
 			break;
-			
+
+		case 'singleGradeStatistics':
+			professorOneClassOneAssignment(cid, idassignment);
+			break;
+
 		default:
 			// Don't do anything
 			break;
@@ -239,7 +243,7 @@ function parseGradeData(gradeData){
 			gradeTotal += parseInt(gradeData[i].score);
 			gradeCount++;
 		}
-		
+		//alert(gradeInfo);
 		// Need this check to make sure we dont' try to access outside the array
 		if(i < gradeData.length-1){
 			// A new class number is coming, calculate and build the gradeData POJO
@@ -302,6 +306,7 @@ function buildGoogleChart(gradeChartDataArray){
         // Create the data tables.
         for(var i = 0; i < gradeChartDataArray.length; i++){
         	var data = google.visualization.arrayToDataTable(gradeChartDataArray[i].gradeInfo);
+        	alert(gradeChartDataArray[i].gradeInfo);
         
 	        // Set chart options
 	        var options = {

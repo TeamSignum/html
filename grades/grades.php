@@ -67,8 +67,8 @@
 			// Query all grades for a class	
 			case 'studentAllGradesOneClass': 
 				// Set up required variables
-				if(isset($_POST['classid'])){
-					$classid = $_POST['classid'];
+				if(isset($_POST['cid'])){
+					$cid = $_POST['cid'];
 				}
 				else{
 					die("Information required for query was not found.");
@@ -85,12 +85,12 @@
 				
 				$statement = $DB->prepare($query);
 				$statement->bindValue(1, $userid);
-				$statement->bindValue(2, $classid);
+				$statement->bindValue(2, $cid);
 				break;
 			
 			// Query all grades for all classes
 			case 'studentAllGradesAllClasses': 
-				$query = "SELECT c.cid, c.classnumber, p.title, g.score
+				$query = "SELECT g.idusers, c.cid, c.classnumber, p.title, g.score
 						  FROM grades g
 						  INNER JOIN popupassignment p
 							  ON g.idassignment=p.idassignment
@@ -101,6 +101,29 @@
 									
 				$statement = $DB->prepare($query);
 				$statement->bindValue(1, $userid);		
+				break;
+
+			// Get class statistics for student view
+			case 'studentClassGradeStats':
+				// Set up required variables
+				if(isset($_POST['cid'])){
+					$cid = $_POST['cid'];
+				}
+				else{
+					die("Information required for query was not found.");
+				}
+				$query = "SELECT c.classnumber, p.title, g.score
+						  FROM grades g
+						  INNER JOIN popupassignment p
+						    ON g.idassignment=p.idassignment
+						  INNER JOIN classes c
+						    ON p.cid=c.cid
+						  WHERE c.cid=?
+						  ORDER BY p.title ASC";
+									
+				$statement = $DB->prepare($query);
+				$statement->bindValue (1, $cid);
+
 				break;
 			
 			// #### Professor requests ####

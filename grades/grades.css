@@ -6,26 +6,13 @@ body{
 }
 
 header{
-	display: flex;
-	justify-content: center;
 	align-items: center;
 	width: 100vw;
 	height: 60px;
+	line-height: 60px;
 	background-color: black;
 	color: white;
 	font-size: 40px;
-}
-
-#gradeContainer{
-	width: 75vw;
-	height: 100vh;
-	background-color: #F0F0F0;
-	text-align: center;
-	margin: auto;
-}
-
-#classheader{
-	display: flex;
 }
 
 /* Used to pad text within other elements */
@@ -33,47 +20,25 @@ span.textPadding{
   margin: 20px;
 }
 
-.trigger{
-  display: flex; /* CSS Flexbox */
-  height: 5vh;
+.class-header{
+  	height: 5vh;
+  	line-height: 5vh;
+  	min-height: 15px;
 	width: 40vw;
+	min-width: 350px;
 	background-color: #980000;
 	border-radius: 5px;
-  margin:10px auto 10px auto;
+  	margin:10px auto 10px auto;
  	
 	/*Text properties*/
 	color: white;
-	align-items: center; /* Flexbox property to center vertically */
-  justify-content: left; /* Flexbox property */
 	font-size: xx-large;
-	box-shadow: 0 2px 0 #1b383b;
-	text-shadow: 0 1px 1px rgba(255, 255, 255, 0.2);
 }
 
-/* A 'panel' that can be toggled in and out */
+/* A 'panel' that can be toggled in and out, contains the google chart */
 .toggle{
-	display: none; /* Default the panel to be hidden */
+	display: inline-block;
+	width: 25vw;
+	margin: 0 auto;
 }
 
-/* A'row' in the toggle panel */
-.assignment{
-  display: flex; /* CSS Flexbox */
-  height: 4vh;
-	width: 30vw;
-	background-color: #B0B0B0;
-	border-radius: 5px;
-  margin:5px auto 5px auto;
- 	
-	/*Text properties*/
-	color: white;
-	align-items: center;
-  justify-content: left;
-	font-size: xx-large;
-	box-shadow: 0 2px 0 #1b383b;
-	text-shadow: 0 1px 1px rgba(255, 255, 255, 0.2);
-}
-
-.plus_icon{
-	height: 7vh;
-	width: vh;
-}
