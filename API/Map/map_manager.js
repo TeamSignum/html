@@ -89,7 +89,7 @@ MManager.prototype.HandleMapNodeSelect = function (node){
 		//this.ShowFiles();
 	}
 	else if(node.id === "mapNode" && node.type === "concept"){
-		if(!this.classOrConcept){
+		if(!this.classOrConcept && mode == 0){
 			this.NavigateToConcept();
 		}
 	}
@@ -460,7 +460,7 @@ MManager.prototype.MoveNode = function (node){
 		node.popupnode.setCoords();
 	}
 	if(node.deletenode){
-		node.deletenode.top = node.top;
+		node.deletenode.top = node.top + 10;
 		node.deletenode.left = node.left;
 	}
 }
@@ -1305,7 +1305,7 @@ MManager.prototype.AddToolbar = function(){
 
 	//Upload tool
 	fabric.Image.fromURL('../imports/images/upload.png', function(oImg) {
-		oImg.scale(.4); 
+		oImg.scale(.1); 
 		oImg.set({left: 190, top: 10, id: 'toolbarUpload'}); 
 		oImg.lockMovementX = oImg.lockMovementY = true; 
 		oImg.hasControls = oImg.hasBorders = false; 
