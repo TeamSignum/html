@@ -393,20 +393,22 @@ function HidePopup(){
 }
 
 function GenPopup(result){
-	var html = `
-	<div class="form-style-2">
-		<div class="form-style-2-heading" style="width: 100%;">`+result["name"]+`</div>
-			<div style="font-size:16px; font-weight:bold; text-align: left;">
-				<p style="float:left; margin-left: 15px;">Number: `+ result["number"] +`</p>
-				</br></br>
-				<p style="float:left; margin-left: 15px;">Section: `+ result["section"] +`</p>
-				</br></br>
-				<p style="float:left; margin-left: 15px;">Description: `+ result["description"] +`</p>
+	var html = "";
+	if (result["name"] != null){
+		var html = `
+		<div class="form-style-2">
+			<div class="form-style-2-heading" style="width: 100%;">`+result["name"]+`</div>
+				<div style="font-size:16px; font-weight:bold; text-align: left;">
+					<p style="float:left; margin-left: 15px;">Number: `+ result["number"] +`</p>
+					</br></br>
+					<p style="float:left; margin-left: 15px;">Section: `+ result["section"] +`</p>
+					</br></br>
+					<p style="float:left; margin-left: 15px;">Description: `+ result["description"] +`</p>
+				</div>
 			</div>
 		</div>
-	</div>
-	`;
-
+		`;
+	}
 	return html;
 }
 
