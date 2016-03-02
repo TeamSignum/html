@@ -880,15 +880,36 @@ MManager.prototype.NavigateToConcept = function(){
 MManager.prototype.NavigateToQuiz = function(){
 	var nid = this.crrnt.nid;
 	var mode = this.mode;
-
-	if(mode == 0){
-		window.location = '../quiz_view/quiz_view.html'
-	}
-	else{
-		window.location = '../quiz_builder/quiz_builder.html'
-	}
+	
+	$.ajax({
+		async: true, 
+		type: 'POST',
+		url: "../API/Map/mapsave.php",
+		dataType: 'html',
+		data: {directq: nid},
+		
+		success: function(result){
+			if(result === "1")
+			{
+				window.location = '../quiz_builder/quiz_builder.html'
+			}
+			if(result === "2")
+			{
+				window.location = '../quiz_view/quiz_view.html'
+			}
+		}
+	});
 	
 	return false;
+
+	//if(mode == 0){
+	//	window.location = '../quiz_view/quiz_view.html'
+	//}
+	//else{
+	//	window.location = '../quiz_builder/quiz_builder.html'
+	//}
+	
+	//return false;
 }
 
 

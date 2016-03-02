@@ -504,4 +504,18 @@
 			echo $e->getMessage();
 		}
 	}
+	
+	if(isset($_POST["directq"]))
+	{
+		$_SESSION["nid2q"] = $_POST["directq"];
+		$role = $_SESSION["role"];
+		if(strcmp($role, "professor") == 0)
+		{
+			echo 1;
+		}
+		else
+		{
+			echo 2;
+		}
+	}
 ?>

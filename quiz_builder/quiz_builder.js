@@ -26,7 +26,7 @@ $(function () {
     $("#TFQXX").remove();
 	$("#SAQXX").remove();
 	
-	//loadQuiz();
+	loadQuiz();
 });
 
 function addmc(q)
@@ -220,6 +220,7 @@ function saveQuiz()
 			{
 				var temp = $("#MCQ" + index.toString()).clone(true);
 				var t = {
+					qnum: index,
 					type: "mc",
 					question: temp.find("#M" + index.toString()).val(),
 					answer: temp.find("input[name=MC" + index.toString() + "]:checked").val(),
@@ -233,12 +234,13 @@ function saveQuiz()
 			{
 				var temp = $("#TFQ" + index.toString()).clone(true);
 				var t = {
+					qnum: index,
 					type: "tf",
 					question: temp.find("#TF" + index.toString()).val(),
 					answer: temp.find("input[name=TFC" + index.toString() + "]:checked").val(),
-					a: "n",
-					b: "n",
-					c: "n"
+					a: "",
+					b: "",
+					c: ""
 				};
 				questions.push(t);
 			}
@@ -246,12 +248,13 @@ function saveQuiz()
 			{
 				var temp = $("#SAQ" + index.toString()).clone(true);
 				var t = {
+					qnum: index,
 					type: "sa",
 					question: temp.find("#SA" + index.toString()).val(),
-					answer: "n",
-					a: "n",
-					b: "n",
-					c: "n"
+					answer: "",
+					a: "",
+					b: "",
+					c: ""
 				};
 				questions.push(t);
 			}

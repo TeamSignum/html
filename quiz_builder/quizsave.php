@@ -3,7 +3,8 @@
 session_start();
 
 $cid = $_SESSION['classid'];
-$nid = 1;
+$nid = $_SESSION['nid'];
+$nid2 = $_SESSION['nid2q'];
 
 
 if(isset($_POST["questions"]))
@@ -16,7 +17,7 @@ if(isset($_POST["questions"]))
 		$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$DB->beginTransaction();
 		
-		$query = "DELETE from `questions` WHERE cid='$cid' AND nid='$nid'";
+		$query = "DELETE from `questions` WHERE cid='$cid' AND nid='$nid' AND nid2='$nid2'";
 		
 		$statement = $DB->prepare($query);
 		$statement->execute();
@@ -29,6 +30,7 @@ if(isset($_POST["questions"]))
 	
 	foreach($questions as $q)
 	{
+		$qnum = $q["qnum"];
 		$type = $q["type"];
 		$question = $q["question"];
 		$answer = $q["answer"];
@@ -42,18 +44,20 @@ if(isset($_POST["questions"]))
 			$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			$DB->beginTransaction();
 			
-			$query = "INSERT into `questions` (`cid`, `nid`, `type`, `question`, `answer`, `a`, `b`, `c`) values (?,?,?,?,?,?,?,?)";
+			$query = "INSERT into `questions` (`cid`, `nid`, `nid2`, `qnum`, `type`, `question`, `answer`, `a`, `b`, `c`) values (?,?,?,?,?,?,?,?,?,?)";
 
 			$statement = $DB->prepare($query);
 			
 			$statement->bindValue (1, $cid);
 			$statement->bindValue (2, $nid);
-			$statement->bindValue (3, $type);
-			$statement->bindValue (4, $question);
-			$statement->bindValue (5, $answer);
-			$statement->bindValue (6, $a);
-			$statement->bindValue (7, $b);
-			$statement->bindValue (8, $c);
+			$statement->bindValue (3, $nid2);
+			$statement->bindValue (4, $qnum);
+			$statement->bindValue (5, $type);
+			$statement->bindValue (6, $question);
+			$statement->bindValue (7, $answer);
+			$statement->bindValue (8, $a);
+			$statement->bindValue (9, $b);
+			$statement->bindValue (10, $c);
 			
 			$statement->execute();
 			$DB->commit();
@@ -73,7 +77,7 @@ if(isset($_POST['load']))
 		$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$DB->beginTransaction();
 			
-		$query = "SELECT * FROM questions";
+		$query = "SELECT * FROM questions WHERE cid='$cid' AND nid='$nid' AND nid2='$nid2'";
 		
 		$statement = $DB->prepare($query);
 		$statement->execute();

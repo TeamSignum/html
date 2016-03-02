@@ -2,6 +2,7 @@ var qmc;
 var qtf;
 var qsa;
 var num = 1;
+var qtype = [];
 
 $( document ).ready(function () {
     qmc = $("#MCQXX").clone(true);
@@ -9,7 +10,7 @@ $( document ).ready(function () {
 	qsa = $("#SAQXX").clone(true);
 
 	$("#savequiz").click(
-       function() { swal("Saved"); 
+       function() { submitQuiz(); 
     });			
     
     $("#MCQXX").remove();
@@ -65,6 +66,7 @@ function createQuiz(q)
 			
 			$("#Quiz").append(temp);
 			num++;
+			qtype.push("mc");
 		}
 		if(type === "tf")
 		{
@@ -79,6 +81,7 @@ function createQuiz(q)
 			
 			$("#Quiz").append(temp);
 			num++;
+			qtype.push("tf");
 		}
 		if(type === "sa")
 		{
@@ -92,6 +95,77 @@ function createQuiz(q)
 			
 			$("#Quiz").append(temp);
 			num++;
+			qtype.push("sa");
 		}
 	}
+}
+
+function answerCheck()
+{
+	var empty = false
+	$('input[type=radio]').each(function(){
+		var name = $(this).attr("name");
+		
+        if($("input:radio[name="+ name +"]:checked").length == 0) {
+           empty = true;
+       } 
+    })
+	
+	return empty;
+}
+
+function submitQuiz()
+{
+	var c1 = answerCheck();
+	if(c1 == true)
+	{
+		alert("Fill in all answers.");
+	}
+	
+	if(c1 == false)
+	{
+		var answers = [];
+		for(var i = 0; i < qtype.length; i++)
+		{
+			var index = i+1;
+			if(qtype[i] === "mc")
+			{
+				var temp = $("#MCQ" + index.toString()).clone(true);
+				var a = {
+					qnum: index,
+					answer: temp.find("input[name=MC" + index.toString() + "]:checked").val()
+				};
+				answers.push(a);
+			}
+			if(qtype[i] === "tf")
+			{
+				var temp = $("#TFQ" + index.toString()).clone(true);
+				var a = {
+					qnum: index,
+					answer: temp.find("input[name=TFC" + index.toString() + "]:checked").val()
+				};
+				answers.push(a);
+			}
+			if(qtype[i] === "sa")
+			{
+				var temp = $("#SAQ" + index.toString()).clone(true);
+				//var answer = temp.find("input[name=TFC" + index.toString() + "]:checked").val()
+			}
+			
+		}
+		
+		$.ajax({
+			//async: true, 
+			type: 'POST',
+			url: "quizload.php",
+			dataType: 'html',
+			data: {answers: answers},
+		
+			success: function(result){
+				alert(result);
+				//swal("Saved"); 
+			}
+		});
+	}
+	return false;
 }
