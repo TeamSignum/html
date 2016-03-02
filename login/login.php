@@ -13,9 +13,15 @@ if (isset($_POST["submit"])){
     // empty check
     if(empty($email)){
     	$error[] = "Please enter your email";
+		$errm = "Please enter your email";
+		require "../login/login.html";
+		exit();
     }
     if(empty($password)){
     	$error[] = "Please enter your password";
+		$errm = "Please enter your password";
+		require "../login/login.html";
+		exit();
     }
     
     // no error then
@@ -44,6 +50,9 @@ if (isset($_POST["submit"])){
         }
         else{
             $error[] = "Email and password are no found <br>";
+			$errm = "Wrong email or password.";
+			require "../login/login.html";
+			exit();
         }
 
     }
