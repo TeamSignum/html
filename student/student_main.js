@@ -13,8 +13,7 @@ $( document ).ready(function() {
 
 	canvas = new fabric.Canvas('student_main', 
 					{width: window.innerWidth,
-					 height: window.innerHeight,
-					 backgroundColor: "#99ffff",
+					 height: window.innerHeight-120,
 					 // This flag should help render faster
 					 renderOnAddRemove: false});
 
@@ -23,10 +22,8 @@ $( document ).ready(function() {
 	window.addEventListener('resize', resizeCanvas, false);
 
 	function resizeCanvas(){
-		// canvas.width = window.innerWidth;
-		// canvas.height = window.innerHeight;
-		canvas.width = 1920;
-		canvas.height = 1080
+		canvas.width = window.innerWidth;
+		canvas.height = window.innerHeight-120;
 		// I think there is an easier way to do this, but
 		// this works for now.
 		canvas.clear();
