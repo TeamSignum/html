@@ -1,6 +1,8 @@
 
 <?php
 
+session_start();
+
 if (isset($_POST["submit"])){
 	
 	$uid = strip_tags($_POST["uid"]);
@@ -68,7 +70,22 @@ if (isset($_POST["submit"])){
         try{
             // Execute the database query
             $stmt->execute();
-            header("location: ../index.html");
+            
+            // Log the user in(need to query the db to get idusers/userid for the session)
+
+            $stmt = $DB->prepare("SELECT  email,idusers,uid,role 
+                                  FROM LU.users WHERE email = '$email'");
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            $_SESSION['email'] = $result['email'];
+            $_SESSION['userid'] = $result['idusers'];
+            $_SESSION['uid'] = $result['uid'];
+            $_SESSION['role'] = $result['role'];
+            
+            //Navigate to account home
+            header("location: ../student/student.php");
+
         }catch  (PDOException $e){
             echo $e->getMessage();
         }
