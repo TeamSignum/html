@@ -21,7 +21,7 @@ function getPHPSessionInfo(){
 		datatpye: "json",
 		data: {'GETINFO': 'SESSION'},
 		success: function(result){
-			alert(result);
+			//alert(result);
 			var parsedResult = JSON.parse(result);
 			//alert(parsedResult.role);
 			evaluateSessionInfo(parsedResult);
