@@ -11,6 +11,11 @@ if (isset($_POST["submit"])){
     $fname = strip_tags($_POST["firstname"]);
     $lname = strip_tags($_POST["lastname"]);
 
+    // Hash the password for storage in the DB
+    // Set the bcrypt cost
+    $options=['cost' => 12,];
+    $passwordHash = password_hash($password1, PASSWORD_BCRYPT, $options);
+    
     // $target_dir = "profile_images/";
     // $target_file = $target_dir . basename($_FILES["upload"]["name"]);
 
@@ -56,7 +61,8 @@ if (isset($_POST["submit"])){
     if($result['count(*)'] == 1){
         echo "already";
     }else{
-        $query = "INSERT INTO LU.users (email, password, uid, firstname, lastname, role) values ('$email', '$password1', '$uid','$fname', '$lname', '$usertype')";
+        $query = "INSERT INTO LU.users (email, password, uid, firstname, lastname, role) 
+                  values ('$email', '$passwordHash', '$uid','$fname', '$lname', '$usertype')";
         $stmt = $DB->prepare($query);
 
         try{

@@ -39,7 +39,8 @@ if (isset($_POST["submit"])){
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if(count($result) > 0 && $password == $result['password']){
+        // Use php's password_verify function to authenicate the user provided password
+        if (count($result) > 0 && password_verify($password, $result['password'])){
             $_SESSION['email'] = $result['email'];
 			$_SESSION['userid'] = $result['idusers'];
 			$_SESSION['uid'] = $result['uid'];
