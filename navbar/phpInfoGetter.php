@@ -13,7 +13,7 @@
 	//session_destroy();
 	
 	// Check that uid is set in the Session
-	if(!isset($_SESSION['uid'])){	
+	if(!isset($_SESSION['email'])){	
 		echo json_encode('Login');
 	}
 	else	
