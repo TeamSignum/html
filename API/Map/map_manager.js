@@ -71,6 +71,7 @@ MManager.prototype.CopyNode = function(node, new_id, type){
 	node.nid = this.nid;
 	node.type = type;
 	node.lines = [];
+	node.lines2 = [];
 	node.perPixelTargetFind = true;
 
 	this.nodes.push(node);
@@ -88,12 +89,10 @@ MManager.prototype.HandleMapNodeSelect = function (node){
 		this.ShowPopup(node, $("#popup")); 
 		//this.ShowFiles();
 	}
-	else if(node.id === "mapNode" && node.type === "concept"){
-		if(!this.classOrConcept && mode == 0){
-			this.NavigateToConcept();
-		}
+	if(node.id === "mapNode" && node.type === "concept" && this.classOrConcept == 0 && this.mode == 0){
+		this.NavigateToConcept();
 	}
-	else{
+	if(node.id === "mapNode" && this.mode == 1){
 		this.from = node;
 	}
 }
@@ -135,7 +134,8 @@ MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, f
 
 	c.nid = nodeID;
 	c.type = type;
-	c.lines = []; 
+	c.lines = [];
+	c.lines2 = [];
 
 	this.LoadNodePopup(c, nodeID, type);
 	this.nodes.push(c);
@@ -275,11 +275,19 @@ MManager.prototype.MoveEdges = function (node){
 			{
 				if(node.left+2*radius > node.lines[j].x1 && node.left < node.lines[j].x1 && node.top+2*radius > node.lines[j].y1 && node.top < node.lines[j].y1)
 				{
-					node.lines[j].set({'x1': node.getCenterPoint().x, 'y1': node.getCenterPoint().y});
+					//node.lines[j].set({'x1': node.getCenterPoint().x, 'y1': node.getCenterPoint().y});
 				}
 				if(node.left+2*radius > node.lines[j].x2 && node.left < node.lines[j].x2 && node.top+2*radius > node.lines[j].y2 && node.top < node.lines[j].y2)
 				{
-					node.lines[j].set({'x2': node.getCenterPoint().x, 'y2': node.getCenterPoint().y});	
+					//node.lines[j].set({'x2': node.getCenterPoint().x, 'y2': node.getCenterPoint().y});	
+				}
+				if(node.lines2[j] == 1)
+				{
+					node.lines[j].set({'x1': node.getCenterPoint().x, 'y1': node.getCenterPoint().y});
+				}
+				if(node.lines2[j] == 2)
+				{
+					node.lines[j].set({'x2': node.getCenterPoint().x, 'y2': node.getCenterPoint().y});
 				}
 			}
 		}
@@ -323,7 +331,9 @@ MManager.prototype.DrawEdgeBetweenNodes = function(node){
 		line.perPixelTargetFind = true;
 
 		this.from.lines.push(line);
+		this.from.lines2.push(1);
 		this.to.lines.push(line);
+		this.to.lines2.push(2);
 		
 		var temp = {
 			line: line,
@@ -538,6 +548,7 @@ MManager.prototype.updateCon = function(result)
 					if(this.edges[k].id == result[i].eid)
 					{
 						this.nodes[j].lines.push(this.edges[k].line);
+						this.nodes[j].lines2.push(result[i].side);
 					}
 				}
 			}
@@ -684,14 +695,20 @@ MManager.prototype.SaveMap = function(level){
 	for(var i = 0; i < this.nodes.length; i++)
 	{
 		var n = this.nodes[i];
-		var nid = n.id;
+		var nid = n.nid;
 		if(n.lines.length != 0)
 		{
 			var con = [];
 			for(var j = 0; j < n.lines.length; j++)
 			{
 				var eid = n.lines[j].eid;
-				con.push(eid);
+				var side = n.lines2[j];
+				var t = {
+					eid: eid,
+					side: side
+				}
+				con.push(t);
+				//con.push(eid);
 			}
 			var temp = {
 				nid: nid,
@@ -740,6 +757,7 @@ MManager.prototype.DeleteN = function(node, level){
 						if(index > -1)
 						{
 							this.nodes[i].lines.splice(index, 1);
+							this.nodes[i].lines2.splice(index, 1);
 						}
 					
 					}

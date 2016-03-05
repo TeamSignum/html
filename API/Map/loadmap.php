@@ -179,14 +179,16 @@ if(isset($_POST["map"]))
 				{
 					$nid = $row['nid2'];
 					$eid = $row['eid2'];
+					$side = $row['side'];
 				}
 				else
 				{
 					$nid = $row['nid'];
 					$eid = $row['eid'];
+					$side = $row['side'];
 				}
 				
-				$connections[] = array('nid' => $nid, 'eid' => $eid);
+				$connections[] = array('nid' => $nid, 'eid' => $eid, 'side' => $side);
 			}
 			
 			echo json_encode($connections);

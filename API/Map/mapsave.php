@@ -200,7 +200,8 @@
 			$con = $connection['con'];
 			foreach($con as $c)
 			{
-				$eid = $c;
+				$eid = $c['eid'];
+				$side = $c['side'];
 				
 				try
 				{
@@ -210,7 +211,7 @@
 					
 					if($level == 2)
 					{
-						$query = "REPLACE into `connected2` (`cid`, `nid`, `nid2`, `eid2`) values (?,?,?,?)";
+						$query = "REPLACE into `connected2` (`cid`, `nid`, `nid2`, `eid2`, `side`) values (?,?,?,?,?)";
 					
 						$statement = $DB->prepare($query);
 						
@@ -220,19 +221,21 @@
 						$statement->bindValue (2, $nid);
 						$statement->bindValue (3, $id);
 						$statement->bindValue (4, $eid);
+						$statement->bindValue (5, $side);
 					
 						$statement->execute();
 						$DB->commit();
 					}
 					else
 					{
-						$query = "REPLACE into `connected` (`cid`, `nid`, `eid`) values (?,?,?)";
+						$query = "REPLACE into `connected` (`cid`, `nid`, `eid`, `side`) values (?,?,?,?)";
 					
 						$statement = $DB->prepare($query);
 				
 						$statement->bindValue (1, $cid);
 						$statement->bindValue (2, $id);
 						$statement->bindValue (3, $eid);
+						$statement->bindValue (4, $side);
 					
 						$statement->execute();
 						$DB->commit();
