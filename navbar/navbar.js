@@ -104,9 +104,9 @@ function evaluateSessionInfo(parsedResult){
 		html+='<a href="../profile/profile.html" style="margin-top: 12px; font-size:14pt;">Profile</a>';
 		html+='</li>';
 		// Class View link
-		html+='<li>';
-		html+='<a href="../class_view/class_view.html" style="margin-top: 12px; font-size:14pt;">Class View</a>';
-		html+='</li>';	
+		//html+='<li>';
+		//html+='<a href="../class_view/class_view.html" style="margin-top: 12px; font-size:14pt;">Class View</a>';
+		//html+='</li>';	
 		// Professor Class View
 		html+='<li>';
 		html+='<a href="../prof_class_view/prof_class_view.html" style="margin-top: 12px; font-size:14pt;">Professor Class View</a>';

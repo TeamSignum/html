@@ -154,7 +154,7 @@ MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, f
 		c.lockMovementX = c.lockMovementY = true;
 		
 		var pc = new fabric.Circle({
-				top: top + radius,
+				top: top + 20,
 				left: left - 20,
 				radius: 15,
 				fill: 'green',
@@ -173,7 +173,7 @@ MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, f
 				fontFamily: 'arial black',
 				fontSize: 12,
 				left: left - 18,
-				top: top + radius + 8,
+				top: top + 20 + 8,
 				id: "partText"
 		});
 		

@@ -115,7 +115,7 @@ function drawPercents(nid, count, total)
 		fontFamily: 'arial black',
 		fontSize: 20,
 		left: temp.left,
-		top: temp.top + temp.radius
+		top: temp.top + temp.getHeight()/2
 	});
 	
 	t.lockMovementX = t.lockMovementY = true;

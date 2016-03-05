@@ -255,7 +255,7 @@ function drawPercents(nid, count)
 			fontFamily: 'arial black',
 			fontSize: 20,
 			left: temp.left,
-			top: temp.top + temp.radius - 10
+			top: temp.top + temp.getHeight()/2 - 10
 	});
 	
 	var len = t.getWidth()/2;
