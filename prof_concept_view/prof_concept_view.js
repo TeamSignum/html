@@ -133,12 +133,12 @@ function buildChart(result, title)
 {
 	var data = new google.visualization.DataTable();
 	data.addColumn('string', 'Date');
-    data.addColumn('number', 'Total');
+   // data.addColumn('number', 'Total');
 	data.addColumn('number', 'Count');
 		
 	for(var i = 0; i < result.length-1; i++)
 	{
-		data.addRow([result[i].cdate, etotal, parseInt(result[i].ctotal)]);
+		data.addRow([result[i].cdate, parseInt(result[i].ctotal)]);
 	}
 		
 	if(result.length > 0)
