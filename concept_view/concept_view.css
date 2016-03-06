@@ -32,12 +32,11 @@
     margin-right: 25px;
 }
 
-
 #checkorx{
-    margin-top: 50px;
     background-color: #fbfbfb; 
-    width: 100%;
-    text-align: center; 
+    float: right;
+    margin-right: 4%;
+    margin-top: -20px;
     z-index: 999;
 }
 

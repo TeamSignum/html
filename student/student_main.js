@@ -17,7 +17,7 @@ $( document ).ready(function() {
 					 // This flag should help render faster
 					 renderOnAddRemove: false});
 
-	canvas.setBackgroundImage('../maxresdefault.jpg' , canvas.renderAll.bind(canvas), {
+	canvas.setBackgroundImage('../imports/images/maxresdefault.jpg' , canvas.renderAll.bind(canvas), {
     });
 	window.addEventListener('resize', resizeCanvas, false);
 

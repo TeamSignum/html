@@ -29,6 +29,7 @@ var MManager = function(_canvas, builder, classOrConcept){
 
  	this.mode = 0;
  	this.classOrConcept = classOrConcept;
+ 	this.popuped;
 
  	if(builder){
  		this.mode = 1;
@@ -87,6 +88,7 @@ MManager.prototype.HandleMapNodeSelect = function (node){
 
 	if(node.id === "popupnode"){
 		this.ShowPopup(node, $("#popup")); 
+		this.popuped = true;
 		//this.ShowFiles();
 	}
 	if(node.id === "mapNode" && node.type === "concept" && this.classOrConcept == 0 && this.mode == 0){
@@ -1249,21 +1251,10 @@ MManager.prototype.CreateQuizPopup = function(title, description, due_date, note
  * Hides the popup. 
  */
 MManager.prototype.HidePopup = function(){
- 	//$("#popup").hide();
  	$("#popup").html("");
- 	//$("#cancelorsave").hide();
  	$("#dim_div").hide();
  	$("#custom_container").hide();
-}
-
-/*
- * Hides the popup. 
- */
-MManager.prototype.HidePopup2 = function(){
- 	//$("#popup").hide();
- 	//$("#checkorx").hide();
- 	$("#custom_container").hide();
- 	$("#dim_div").hide();
+ 	this.popuped = false;
 }
 
 /* 
@@ -1370,3 +1361,18 @@ MManager.prototype.AddToolbarEdge = function(_edge){
 	_edge.lockMovementX = _edge.lockMovementY = true;
 	_edge.selectable = false;
 }
+
+/****************************** KEY BINDINGS ************************************/ 
+$(document).keyup(function(e) {
+	// Enter
+  	if (e.keyCode == 13){
+  		//mngr.SaveMap();
+	} 
+
+  	// Esc
+  	if (e.keyCode == 27){
+  		if(mngr.popuped){
+  			mngr.HidePopup();
+  		}
+  	}
+});

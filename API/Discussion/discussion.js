@@ -5,6 +5,7 @@
  var dnid = 0;
  var did  = 0;
  var classOrConcept;
+ var myname = "";
 
 function LoadDiscussion(nid, _classOrConcept){
 
@@ -12,6 +13,16 @@ function LoadDiscussion(nid, _classOrConcept){
 
 	dnid = nid;
 	lvl0.innerHTML = "";
+
+	$.ajax({
+		async: true, 
+		type: 'POST', 
+		url: "../API/Discussion/getname.php",
+		dataType: 'json',
+		success: function(result){
+			myname = result["firstname"] + " " + result["lastname"];
+		}
+	}); 
 
 	$.ajax({
 		async: true, 
@@ -34,11 +45,12 @@ function UseLoadData(result){
 	
 	for(var i = 0; i < result.length; i++){
 		if(result[i]["level"] == 0){
-			AddTextContainer(result[i]["content"], lvl0, result[i]["id"]);
+			AddTextContainer(result[i]["content"], lvl0, result[i]["id"], result[i]["firstname"] + " " + result[i]["lastname"]);
 		}
 		else if(result[i]["level"] == 1){
 			var container = "#rtext" + result[i]["parent"];
-			AddTextContainer2(result[i]["content"], $(container), result[i]["id"]);
+			AddTextContainer2(result[i]["content"], $(container), result[i]["id"], 
+				result[i]["firstname"] + " " + result[i]["lastname"]);
 		}
 	}
 }
@@ -57,7 +69,8 @@ function SubmitReply(textarea, containerid, parentid){
 		data: {action: "save", nid: dnid, level: level, content: content, parent: parentid, classOrConcept: classOrConcept}, 
 		success: function(result){
 			textarea.value = "";
-			AddTextContainer2(content, $(container), did);
+			AddTextContainer2(content, $(container), did, myname);
+			ClearReplyContainer(containerid);
 		}
 	}); 
 
@@ -79,7 +92,7 @@ function SubmitNewQuestion(textarea, nid, level, container){
 		data: {action: "save", nid: nid, level: level, content: content, classOrConcept: classOrConcept}, 
 		success: function(result){
 			textarea.value = "";
-			AddTextContainer(content, container, did);
+			AddTextContainer(content, container, did, myname);
 		}
 	}); 
 
@@ -108,10 +121,10 @@ function ClearReplyContainer(containerid){
 	$('*[id^="reply"]').html("");
 }
 
-function AddTextContainer(content, container, id){
+function AddTextContainer(content, container, id, name){
 	var html = `
 	  <div class="textcontainer" id="d` + id + `">
-	    <span>` + content + `</span>
+	    <span>[` + name + `]: ` + content + `</span>
 	    <img src="../imports/images/reply.png" alt="Reply" style="width:16px;height:16px;float:right;" onclick="AddReplyContainer(reply`+id+`,`+id+`)">
 	  	<div id="reply` + id + `"></div>
 	  	<div id="rtext` + id + `" style="margin: 25px 0px 0px 10%;"></div>
@@ -122,10 +135,10 @@ function AddTextContainer(content, container, id){
 	container.innerHTML = container.innerHTML + html;
 }
 
-function AddTextContainer2(content, container, id){
+function AddTextContainer2(content, container, id, name){
 	var html = `
 	  <div class="textcontainer" id="d` + id + `" style="font-weight: bold; margin-bottom: 20px; font-size: 14px;">
-	    <span>` + content + `</span>
+	    <span>[` + name + `]: ` + content + `</span>
 	  </div>
 	`;
 

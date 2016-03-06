@@ -14,7 +14,7 @@ $( document ).ready(function() {
 	// Create canvas
 	canvas = new fabric.Canvas('map');
 
-    canvas.setBackgroundImage('../imports/images/stars.png' , canvas.renderAll.bind(canvas), {
+    canvas.setBackgroundImage('../imports/images/maxresdefault.jpg' , canvas.renderAll.bind(canvas), {
     });
 
 	// Construct map manager

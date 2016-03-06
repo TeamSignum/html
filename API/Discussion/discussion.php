@@ -27,10 +27,10 @@ function LoadDiscussion(){
 
 		$query = "";
 		if($classOrConcept){
-			$query = "SELECT * FROM discussions2 WHERE discussions2.nid = ? AND discussions2.cid = ? ORDER BY discussions2.level";
+			$query = "SELECT * FROM discussions2 LEFT JOIN users ON discussions2.idusers = users.idusers WHERE discussions2.nid = ? AND discussions2.cid = ? ORDER BY discussions2.level";
 		}
 		else{
-			$query = "SELECT * FROM discussions WHERE discussions.nid = ? AND discussions.cid = ? ORDER BY discussions.level";
+			$query = "SELECT * FROM discussions LEFT JOIN users ON discussions.idusers = users.idusers WHERE discussions.nid = ? AND discussions.cid = ? ORDER BY discussions.level";
 		}
 
 		$statement = $DB->prepare($query);
@@ -50,9 +50,11 @@ function LoadDiscussion(){
 			$level   = $row['level'];
 			$content = $row['content'];
 			$parent  = $row['parent'];
+			$firstname = $row['firstname'];
+			$lastname = $row['lastname'];
 
-			$discussions[] = array('id' => $id, 'nid' => $nid, 'idusers' => $idusers, 'level' => $level, 'content' => $content,
-				'parent' => $parent);
+			$discussions[] = array('id' => $id, 'nid' => $nid, 'idusers' => $idusers, 'level' => $level, 'content' =>
+				$content, 'parent' => $parent, 'firstname' => $firstname, 'lastname' => $lastname);
 		}
 		
 		echo json_encode($discussions);
