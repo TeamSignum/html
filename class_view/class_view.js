@@ -115,7 +115,7 @@ function drawPercents(nid, count, total)
 		fontFamily: 'arial black',
 		fontSize: 20,
 		left: temp.left,
-		top: temp.top + temp.getHeight()/2
+		top: temp.top
 	});
 	
 	t.lockMovementX = t.lockMovementY = true;
@@ -124,6 +124,10 @@ function drawPercents(nid, count, total)
 	var len = t.getWidth()/2;
 	var cenX = temp.getCenterPoint().x;
 	t.left = cenX - len;
+	
+	var len2 = t.getHeight()/2;
+	var cenY = temp.getCenterPoint().y;
+	t.top = cenY - len2;
 	
 	canvas.add(t);
 }

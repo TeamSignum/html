@@ -145,7 +145,7 @@ function drawPercents(nid, count, total)
 	var cenX = temp.getCenterPoint().x;
 	t.left = cenX - len;
 	
-	canvas.add(t);
+	//canvas.add(t);
 }
 
 function setParticipant(nid)

@@ -66,7 +66,7 @@ if(isset($_POST["answers"]))
 			
 			$DB->beginTransaction();
 			
-			$query = "INSERT into `answers` (`cid`, `nid`, `nid2`, `idusers`, `qnum`, `answer`) values (?,?,?,?,?,?)";
+			$query = "REPLACE into `answers` (`cid`, `nid`, `nid2`, `idusers`, `qnum`, `answer`) values (?,?,?,?,?,?)";
 			$statement = $DB->prepare($query);
 			
 			$statement->bindValue (1, $cid);
@@ -79,6 +79,24 @@ if(isset($_POST["answers"]))
 			$statement->execute();
 			$DB->commit();
 		}
+		
+		$DB->beginTransaction();
+		
+		$date = date("Y-m-d H:i:s", time());
+		
+		$query = "REPLACE into completed (idusers,cid,nid,nid2,complete,cdate) values (?,?,?,?,?,?)";
+		
+		$statement = $DB->prepare($query);
+					
+		$statement->bindValue (1, $iduser);
+		$statement->bindValue (2, $cid);
+		$statement->bindValue (3, $nid);
+		$statement->bindValue (4, $nid2);
+		$statement->bindValue (5, 1);
+		$statement->bindValue (6, $date);
+		
+		$statement->execute();
+		$DB->commit();
 	}
 	catch(PDOException $e)
 	{

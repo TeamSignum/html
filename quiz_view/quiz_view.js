@@ -162,7 +162,8 @@ function submitQuiz()
 			data: {answers: answers},
 		
 			success: function(result){
-				alert(result);
+				//alert(result);
+				window.location = '../concept_view/concept_view.html';
 				//swal("Saved"); 
 			}
 		});
