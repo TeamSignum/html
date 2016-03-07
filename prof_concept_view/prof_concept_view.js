@@ -51,21 +51,21 @@ $( document ).ready(function() {
 		'mouse:over': function(e){
 			if(e.target.id === "mapNode" || e.target.id === "cmapNode")
 			{
-				e.target.setStroke('yellow');
-				canvas.renderAll();
+				//e.target.setStroke('yellow');
+				//canvas.renderAll();
 			}
 		},
 	
 		'mouse:out': function(e){
 			if(e.target.id === "mapNode")
 			{
-				e.target.setStroke('white');
+				//e.target.setStroke('white');
 			}
 			if(e.target.id === "cmapNode")
 			{
-				e.target.setStroke("#0d0");
+				//e.target.setStroke("#0d0");
 			}
-			canvas.renderAll();
+			//canvas.renderAll();
 		}
 	});
 

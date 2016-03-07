@@ -128,8 +128,8 @@ $( document ).ready(function() {
 		if(e.target.id === mapNodeId)
 		{
 			//Highlight node
-			e.target.setStroke('yellow');
-			canvas.renderAll();
+			//e.target.setStroke('yellow');
+			//canvas.renderAll();
 		}
 	  },
 	
@@ -137,8 +137,8 @@ $( document ).ready(function() {
 		if(e.target.id === mapNodeId)
 		{
 			//De-Highlight node
-			e.target.setStroke('white');
-			canvas.renderAll();
+			//e.target.setStroke('white');
+			//canvas.renderAll();
 		}
 	  },
 	
