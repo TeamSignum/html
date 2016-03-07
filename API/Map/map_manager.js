@@ -108,18 +108,28 @@ MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, f
 
 	var imgElement;
 	if(type == "concept"){
-		imgElement = document.getElementById('my-image1');
+		if(complete && mode == 0){
+			imgElement = document.getElementById('my-image4');
+		}
+		else{
+			imgElement = document.getElementById('my-image1');
+		}
 	}
 	else if(type == "assignment"){
 		if(complete && mode == 0){
-			imgElement = document.getElementById('my-image4');
+			imgElement = document.getElementById('my-image5');
 		}
 		else{
 			imgElement = document.getElementById('my-image2');
 		}
 	}
 	else if(type == "quiz"){
-		imgElement = document.getElementById('my-image3');
+		if(complete && mode == 0){
+			imgElement = document.getElementById('my-image6');
+		}
+		else{
+			imgElement = document.getElementById('my-image3');
+		}
 	}
 
 	var c = new fabric.Image(imgElement, {
@@ -146,7 +156,6 @@ MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, f
 	{
 		if(complete == 1)
 		{
-			c.fill = 'green';
 			c.compl = 1;
 		}
 		else
@@ -951,18 +960,12 @@ MManager.prototype.CheckOffNode = function(){
 		closeOnCancel: false }, 
 		function(isConfirm){   
 			if (isConfirm) {
-				mngr.CompleteNode(mngr.crrnt.nid);
 				swal("Completed", "The node has been completed.", "success");
-				for(var i = 0; i < mngr.nodes.length; i++){
-					if(mngr.nodes[i].nid == mngr.crrnt.nid){
-						mngr.nodes[i].setFill("#0d0");
-						mngr.nodes[i].setStroke("#0d0");
-						mngr.nodes[i].compl = 1;
+				mngr.CompleteNode(mngr.crrnt.nid);
+				mngr.crrnt.compl = 1;
 
-						$("#dim_div").hide();
-						$("#custom_container").hide();
-					}
-				}   
+				$("#dim_div").hide();
+				$("#custom_container").hide();
 			} 
 			else {     
 				swal("Cancelled", "The node has not been completed.", "error");   
