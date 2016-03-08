@@ -810,7 +810,6 @@ MManager.prototype.DeleteN = function(node, level){
 		data: {deleten: 1, level: level, cons: cons, dedges: dedges, dnid: nid},
 		
 		success: function(result){
-			alert(result); 
 			swal("Completed", "The node has been deleted.", "success");
 		}
 	});
@@ -1224,7 +1223,7 @@ MManager.prototype.CreateQuizPopup = function(title, description, due_date, note
 		}
 		else{
 			innerHtml +=
-		"	        	Quiz Taker";
+		"	        	Take Quiz";
 		}
 		innerHtml +=
 		"				</button>" +
