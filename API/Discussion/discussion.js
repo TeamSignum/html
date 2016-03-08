@@ -12,7 +12,7 @@ function LoadDiscussion(nid, _classOrConcept){
 	classOrConcept = _classOrConcept;
 
 	dnid = nid;
-	lvl0.innerHTML = "";
+	$("#lvl0").html("");
 
 	$.ajax({
 		async: true, 
