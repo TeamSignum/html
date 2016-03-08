@@ -37,7 +37,6 @@ if(isset($_SESSION['userid'])){
 				echo(json_encode($result[0]));
 				break;
 			case 'getNotifications':
-
 				$query = "SELECT role FROM LU.users WHERE idusers='$userid';";
 				$statement = $DB->prepare($query);
 				$statement->execute();

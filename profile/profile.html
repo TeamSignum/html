@@ -10,23 +10,32 @@
 <body>
 
 	<div id="navbar:../"></div>
-    
-    <div class="row" style="text-align:center;background-color: #000; color: #fff;"> 
-		
-		<div style="text-align:center;">
-			<h1 style="font-weight: bold;">User Profile</h1>
-		</div>
-	</div>
 
   <br>
   <br>
   <br>
-
   <div class="col-md-3"></div>
-
-  <!-- Email Form -->
+  <!-- Profile Picture Form -->
   <div class="col-md-6">
-    <form class="form-horizontal" role="form" id="email-form" method="post" enctype="multipart/form-data">
+  <form class="form-horizontal" method="post" enctype="multipart/form-data" id="picture-form">
+    <div class="form-group">
+      <div class="col-md-1"></div>
+      <label for="picture" class="col-md-2 control-label">Profile Picture:</label>
+      <div class="col-md-6">
+        <p id="browse-picture" hidden><input type="file" name="imageToUpload" id="imageToUpload" accept="image/*"></p>
+        <p><img src="" id="profileimage"><p>
+      </div>
+      <div class="col-md-1 extra-button-padding edit-button">
+        <button type="submit" id="edit-picture-button"></button>
+      </div>
+      <div class="col-md-1 extra-button-padding">
+        <button type="button" id="cancel-edit-picture-button" class="btn btn-danger btn-sm cancel-button">CANCEL</button>
+      </div>
+      <div class="col-md-3"></div>
+    </div>
+  </form>
+  <!-- Email Form -->
+    <form class="form-horizontal" id="email-form" method="post" enctype="multipart/form-data">
       <div class="form-group">
         <div class="col-md-1"></div>
         <label for="email" class="col-md-2 control-label">Email Address:</label>
@@ -83,24 +92,7 @@
         </div>
       <hr>
     </form>
-  <!-- Profile Picture Form -->
-  <form class="form-horizontal" role="form" id="picture-form">
-    <div class="form-group">
-      <div class="col-md-1"></div>
-      <label for="picture" class="col-md-2 control-label">Profile Picture:</label>
-      <div class="col-md-6">
-        <p id="browse-picture" hidden><input type="file" name="imageToUpload" id="imageToUpload" accept="image/*"></p>
-        <p><img src="" id="profileimage"><p>
-      </div>
-      <div class="col-md-1 extra-button-padding edit-button">
-        <button type="submit" id="edit-picture-button"></button>
-      </div>
-      <div class="col-md-1 extra-button-padding">
-        <button type="button" id="cancel-edit-picture-button" class="btn btn-danger btn-sm cancel-button">CANCEL</button>
-      </div>
-      <div class="col-md-3"></div>
-    </div>
-  </form>
+  
   
   <div class="col-md-3"></div>
   

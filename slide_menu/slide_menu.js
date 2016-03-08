@@ -12,7 +12,7 @@ $(document).ready(function() {
   	});
 
   	$("#send").click(function(){
-  		sendMessage();
+  		//sendMessage();
   	});
 });
 
@@ -43,7 +43,7 @@ function getProfClass(){
 		data:{'function': 'getProfClass'},
 		success: function (result){
 
-			$('#feet').html(setFeet(result));	
+			//$('#feet').html(setFeet(result));	
 		},
 		error:function(request,status,error){
         	alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
@@ -94,8 +94,8 @@ function getNotifications()
 		        studentAssignmentNQuiz(result[2]);
 		        $('#notification').html(counter);
 			}else if(role == 'professor'){
-				getProfClass();
-				professorNotification(result);
+				//getProfClass();
+				//professorNotification(result);
 			}
 		},
 		error:function(request,status,error){

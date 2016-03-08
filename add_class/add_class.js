@@ -85,23 +85,34 @@ function enroll(ekeyVal, addclassVal){
 }
 
 function deleteMyClass(deleteclassVal){
-	var check = confirm("Are you sure?");
-
-	if(check == true){
-		$.ajax({
-			async: true,
-			type: 'POST',
-			url: "add_class.php",
-			datatype: 'json',
-			data: {'function': 'deleteMyClass', 'cid': deleteclassVal},
-			success: function(result){
-				 window.location='../student/student.php';	
-			},
-			error:function(request,status,error){
-	        	alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-	       	}
-		});
-	}else{
-		alert('You pressed Cancel!');
-	}
+	swal({   
+		title: "Are you sure?",   
+		type: "warning",   
+		showCancelButton: true,   
+		confirmButtonColor: "#DD6B55",   
+		confirmButtonText: "Yes",   
+		cancelButtonText: "No",   
+		closeOnConfirm: false,   
+		closeOnCancel: false }, 
+		function(isConfirm){   
+			if (isConfirm) {
+				swal("Completed", "The class has been unenrolled.", "success");
+				$.ajax({
+					async: true,
+					type: 'POST',
+					url: "add_class.php",
+					datatype: 'json',
+					data: {'function': 'deleteMyClass', 'cid': deleteclassVal},
+					success: function(result){
+						 window.location='../student/student.php';	
+					},
+					error:function(request,status,error){
+			        	alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+			       	}
+				});
+			} 
+			else {     
+				swal("Cancelled", "", "error");   
+			} 
+	});
 }
