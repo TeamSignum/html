@@ -21,6 +21,13 @@ if(isset($_SESSION['userid'])){
 
 		switch($fun)
 		{
+			case 'getProfClass':
+				$query = "SELECT teaching.cid, classes.classnumber FROM LU.teaching INNER JOIN LU.classes ON teaching.cid = classes.cid WHERE idusers = '$userid';";
+				$statement = $DB->prepare($query);
+				$statement->execute();
+				$result = $statement->fetchAll(PDO::FETCH_ASSOC);
+				echo json_encode($result);
+				break;
 			case 'getRole':
 				$query = "SELECT role FROM LU.users WHERE idusers='$userid';";
 				$statement = $DB->prepare($query);

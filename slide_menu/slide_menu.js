@@ -3,18 +3,67 @@ var counter = 0;
 
 $(document).ready(function() {
 	getRole();
-  	$("[data-toggle]").click(function() {
-  		getNotifications();
+	getNotifications();
+  	$("[data-toggle]").click(function() {  		
   	   	var toggle_el = $(this).data("toggle");
     	$(toggle_el).toggleClass("open");
     	//$("#dim_div").show();
     	counter = 0;
   	});
+
+  	$("#send").click(function(){
+  		sendMessage();
+  	});
 });
 
+function sendMessage(){
+	alert("Your message was sent successfully!");
+
+	$.ajax({
+        type: "POST",
+        url: "addEntryAjaxPdo.php",
+        dataType: "html",
+        data: {
+          message: $("#message").val()
+        },
+
+        success: function(result) {
+          $("#result").html(result);
+        }
+    });
+}
+
+function getProfClass(){
+
+	$.ajax({
+		async: true,
+		type: 'POST',
+		url: "../slide_menu/slide_menu.php",
+		dataType: 'json',
+		data:{'function': 'getProfClass'},
+		success: function (result){
+
+			$('#feet').html(setFeet(result));	
+		},
+		error:function(request,status,error){
+        	alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+       	}
+	});
+}
+
+function setFeet(classes){
+	var html = '';
+	for(var i = 0 ; i <classes.length; i++){
+		html += '<select><option value="'+classes[i].cid+'">'
+								+classes[i].classnumber+'</option></select>'; 
+	}
+
+	html+='<input type="text" id="message" name="message"><input type="button" id="send" name="send" value="Send">';
+
+	return html;
+}
 
 function getRole(){
-	$path = 
 	$.ajax({
 		async: true,
 		type: 'POST',
@@ -44,10 +93,8 @@ function getNotifications()
 		        studentDiscussion(result[1]);				       
 		        studentAssignmentNQuiz(result[2]);
 		        $('#notification').html(counter);
-				//studentNotification(result);
-				//studentGrade(result);
-				//studentDiscussion(result);
 			}else if(role == 'professor'){
+				getProfClass();
 				professorNotification(result);
 			}
 		},
@@ -88,7 +135,7 @@ function studentGrade(result){
 	var notification = '';
 	for (var i = 0; i < result.length; i++){
 		counter += 1;
-		notification += '<li><a href="#">The Score of '
+		notification += '<li><a href="../grades/">The Score of '
 						+result[i]['title']+' in '
 						+result[i]['classnumber']+' has been posted at '
 						+result[i]['date_entered']+'</a></li>';

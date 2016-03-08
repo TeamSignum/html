@@ -24,31 +24,26 @@
 
 	<!--DIV FOR SITE WIDE NAV BAR-->
 	<div id="navbar:../"></div>
-    
-	<header>CREATE A NEW CLASS</header>
-	
+
   <!--SECTION FOR ALL GRADE INFORMATION-->
+  <div class="add-class-style" style="margin-top: 100px;">
+    <h1 align='center'>Create New Class</h1>
   <section id="createClassContainer">
-    <form id="createForm" method="post" enctype="multipart/form-data">
-        <div class="col-md-4"></div>
-           <div class="col-md-4">
-              <label for="classname">Class Name</label>
-                <input type="text" name="classname" class="form-control" id="userid"
-                   placeholder="Introduction to Object-Oriented Programming" required>
-              <label for="description">Description</label>
-                <input type="text" name="description" class="form-control" id="description" placeholder="The second course required for students intending..." required>
-              <label for="classnumber">Class Number</label>
-                <input type="text" name="classnumber" class="form-control" id="classnumber" placeholder="CS 1410" required>  
-              <label for="section">Section</label>
-                <input type="text" name="section" class="form-control" id="section" placeholder="2" required>
-              <label for="ekey">Enrollment Key</label>
-                <input type="text" name="ekey" class="form-control" id="ekey" placeholder="infinity" required>
-              <br>
-            
-              <p id="buttonregion"><button onclick="createClass()" class="btn btn-primary btn-lg btn-block">Create Class</button></p>
-            </div>
-        <div class="col-md-4"></div>  
+    <form id="createForm" method="post" enctype="multipart/form-data">        
+        <legend><span class="number">1</span>Class Name</legend>
+        <input type="text" name="classname" id="userid"
+        placeholder="Introduction to Object-Oriented Programming" required>        
+        <legend><span class="number">2</span>ClassNumber</legend>
+        <input type="text" name="classnumber" id="classnumber" placeholder="CS 1410" required>  
+        <legend><span class="number">3</span>Section</legend>
+        <input type="text" name="section" id="section" placeholder="2" required>
+        <legend><span class="number">4</span>Enrollment Key</legend>
+        <input type="text" name="ekey" id="ekey" placeholder="infinity" required>
+        <legend><span class="number">5</span>Description</legend>
+        <textarea rows="4" cols="50" name="description" id="description" placeholder="The second course required for students intending..." required></textarea>
+        <p id="buttonregion"><button onclick="createClass()">Create Class</button></p>          
     </form>
   </section>
+  </div>
  </body>
 </html>

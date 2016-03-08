@@ -7,6 +7,7 @@ var account_name = "";
 var acc_role;
 var canvas;
 
+
 var profileimage;
 
 $( document ).ready(function() {
@@ -187,7 +188,9 @@ function drawStudentNode(){
 		fontSize: '36',
 		fontFamily: 'Arial',
 		fontStyle: 'bold',
-		fill: 'black',
+		fill: 'white',
+		left: 0,
+		top: -130,
 		originX: 'center',
 		originY: 'center',
 		selectable: false
@@ -209,7 +212,7 @@ function drawStudentNode(){
 
 		var studentNodeGroup = new fabric.Group([studentNode, studentName], {
 			left: (canvas.width/2)-120,
-			top: (canvas.height/2)-120,
+			top: (canvas.height/2)-150,
 			selectable: false,
 			stroke: 'white',
 			strokeWidth: 2,
