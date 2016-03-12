@@ -1,21 +1,33 @@
+
+<!-- Bootstrap 3 already has responsive stuff.  This style sheet is causing funky behavior
+     on the nav bar
 <link rel="stylesheet" type="text/css" href="../navbar/navbar-responsive.css">
+-->
+
+<!-- Using the imports file to get bootstrap instead -->
+<link rel="import" href="../imports/import.html">
 <script src="../navbar/navbar.js" type="text/javascript"></script>
+
 <nav class="navbar navbar-default navbar-fixed-top">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+   <div class="container-fluid">
+      <div class="navbar-header">
+         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#collapsibleNav">
+            <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
-      </a>
-      <a class="navbar-brand" href="/index.html">
-        <!-- Set image path in helper.js -->
-        <img id="navbar-image" alt="Brand" src="../navbar/images/Navbar.png" style="width: 290px; height:45px;">
-      </a>
-    </div>
-    <div id="navbarlinks" style="float:right;">
-      
-    </div>
-  </div>
+         </button>
+         <a class="navbar-brand" href="/index.html">
+            <!-- Set image path in helper.js -->
+            <img id="navbar-image" alt="Brand" src="../navbar/images/Navbar.png" style="width: 290px; height:45px;">
+         </a>
+      </div>
+
+      <div class="collapse navbar-collapse" id="collapsibleNav">
+         <div class="nav navbar-nav navbar-right" id="navBarLinks">
+         
+         </div>
+      </div>
+   </div>
 </nav>
     

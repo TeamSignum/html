@@ -128,5 +128,5 @@ function evaluateSessionInfo(parsedResult){
 }
 
 function insertNavBarHtml(html){
-	$('#navbarlinks').html(html);
+	$('#navBarLinks').html(html);
 }
