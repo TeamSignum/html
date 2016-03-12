@@ -131,6 +131,10 @@ $( document ).ready(function() {
 			//e.target.setStroke('yellow');
 			//canvas.renderAll();
 		}
+		if(e.target.id === "tb_largeCircle" || e.target.id === "tb_mediumCircle" || e.target.id === "tb_smallCircle" || e.target.id === "tb_lineSolid" || e.target.id === "tb_lineDotted")
+		{
+			showTooltip(e.target.id, e.target.top, e.target.left);
+		}
 	  },
 	
 	  'mouse:out': function(e){
@@ -139,6 +143,10 @@ $( document ).ready(function() {
 			//De-Highlight node
 			//e.target.setStroke('white');
 			//canvas.renderAll();
+		}
+		if(e.target.id === "tb_largeCircle" || e.target.id === "tb_mediumCircle" || e.target.id === "tb_smallCircle" || e.target.id === "tb_lineSolid" || e.target.id === "tb_lineDotted")
+		{
+			hideTootltip(e.target.id);
 		}
 	  },
 	
@@ -160,3 +168,16 @@ $( document ).ready(function() {
 		mngr.HidePopup();
 	});
 });
+
+function showTooltip(type, top, left)
+{
+	var ttid = type + "tt";
+	$("#" + ttid).show();
+    $("#" + ttid).css({"position": "absolute", "top": top, "left": left, "color": "white"});
+}
+
+function hideTootltip(type)
+{
+	var ttid = type + "tt";
+	$("#" + ttid).hide();
+}
