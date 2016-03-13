@@ -1334,11 +1334,24 @@ MManager.prototype.AddToolbar = function(){
 	div.selectable = div.hasControls = div.hasBorders = false;
 
 	var canvas = this.canvas;
+	
+	var savet = new fabric.Text("Save", {
+		fontFamily: 'arial black',
+		fontSize: 17,
+		fill: 'white',
+		top: 20,
+		left: 75
+	});
+	savet.hasControls = false;
+	savet.hasBorders = false;
+	savet.lockMovementX = true;
+	savet.lockMovementY = true;
+	canvas.add(savet);
 
 	//Upload tool
 	fabric.Image.fromURL('../imports/images/upload.png', function(oImg) {
 		oImg.scale(.1); 
-		oImg.set({left: 190, top: 10, id: 'toolbarUpload'}); 
+		oImg.set({left: 80, top: 45, id: 'toolbarUpload'}); 
 		oImg.lockMovementX = oImg.lockMovementY = true; 
 		oImg.hasControls = oImg.hasBorders = false; 
 		oImg.selectable = false;

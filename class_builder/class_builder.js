@@ -26,11 +26,24 @@ $( document ).ready(function() {
 
 	// We manually add Nodes and Edges to toolbar because it will be different for each view. But the dividing line and the lock and upload icon 
 	// should stay the same (added on when we create map manager).
+	
+	var ctext = new fabric.Text("Concept Nodes", {
+		fontFamily: 'arial black',
+		fontSize: 17,
+		fill: 'white',
+		top: 110,
+		left: 25
+	});
+	ctext.hasControls = false;
+	ctext.hasBorders = false;
+	ctext.lockMovementX = true;
+	ctext.lockMovementY = true;
+	canvas.add(ctext);
 
 	var imgElement = document.getElementById('my-image1');
 	var c = new fabric.Image(imgElement, {
-	  left: 50,
-	  top: 50,
+	  left: 45,
+	  top: 135,
 	  id: "tb_largeCircle"
 	});
 	c.width = 463;
@@ -41,7 +54,7 @@ $( document ).ready(function() {
 
 	c = new fabric.Image(imgElement, {
 	  left: 55,
-	  top: 200,
+	  top: 265,
 	  id: "tb_mediumCircle"
 	});
 	c.width = 463;
@@ -51,8 +64,8 @@ $( document ).ready(function() {
 	canvas.add(c);
 
 	c = new fabric.Image(imgElement, {
-	  left: 60,
-	  top: 320,
+	  left: 65,
+	  top: 380,
 	  id: "tb_smallCircle"
 	});
 	c.width = 463;
@@ -60,9 +73,22 @@ $( document ).ready(function() {
 	c.scale(.15);
 	c.hasControls = c.hasBorders = false;
 	canvas.add(c);
+	
+	var ltext = new fabric.Text("Line Editors", {
+		fontFamily: 'arial black',
+		fontSize: 17,
+		fill: 'white',
+		top: 470,
+		left: 40
+	});
+	ltext.hasControls = false;
+	ltext.hasBorders = false;
+	ltext.lockMovementX = true;
+	ltext.lockMovementY = true;
+	canvas.add(ltext);
 
-	mngr.AddToolbarEdge(new fabric.Line([60, 400, 120, 500], { fill: 'red', stroke: 'red', strokeWidth: 3, id: 'tb_lineSolid' }));
-	mngr.AddToolbarEdge(new fabric.Line([60, 525, 120, 625], { fill: 'red', stroke: 'red', strokeWidth: 3, strokeDashArray: [5, 5], id: 'tb_lineDotted' }));
+	mngr.AddToolbarEdge(new fabric.Line([60, 500, 120, 600], { fill: 'red', stroke: 'red', strokeWidth: 3, id: 'tb_lineSolid' }));
+	mngr.AddToolbarEdge(new fabric.Line([60, 625, 120, 725], { fill: 'red', stroke: 'red', strokeWidth: 3, strokeDashArray: [5, 5], id: 'tb_lineDotted' }));
 
 	canvas.hoverCursor = 'pointer';
 	
@@ -173,7 +199,7 @@ function showTooltip(type, top, left)
 {
 	var ttid = type + "tt";
 	$("#" + ttid).show();
-    $("#" + ttid).css({"position": "absolute", "top": top, "left": left, "color": "white"});
+    $("#" + ttid).css({"position": "absolute", "top": top, "left": left, "background-color": "white", "width": "250px"});
 }
 
 function hideTootltip(type)

@@ -23,10 +23,24 @@ $( document ).ready(function() {
 
 	// We manually add Nodes and Edges to toolbar because it will be different for each view. But the dividing line and the lock and upload icon 
 	// should stay the same (added on when we create map manager).
+	
+	var ctext = new fabric.Text("Concept Node", {
+		fontFamily: 'arial black',
+		fontSize: 17,
+		fill: 'white',
+		top: 110,
+		left: 30
+	});
+	ctext.hasControls = false;
+	ctext.hasBorders = false;
+	ctext.lockMovementX = true;
+	ctext.lockMovementY = true;
+	canvas.add(ctext);
+	
 	var imgElement = document.getElementById('my-image1');
 	var c = new fabric.Image(imgElement, {
-	  left: 50,
-	  top: 50,
+	  left: 45,
+	  top: 135,
 	  id: "tb_concept"
 	});
 	c.width = 463;
@@ -34,11 +48,24 @@ $( document ).ready(function() {
 	c.scale(.25);
 	c.hasControls = c.hasBorders = false;
 	canvas.add(c);
+	
+	var atext = new fabric.Text("Assignment Node", {
+		fontFamily: 'arial black',
+		fontSize: 16,
+		fill: 'white',
+		top: 255,
+		left: 20
+	});
+	atext.hasControls = false;
+	atext.hasBorders = false;
+	atext.lockMovementX = true;
+	atext.lockMovementY = true;
+	canvas.add(atext);
 
 	imgElement = document.getElementById('my-image2');
 	c = new fabric.Image(imgElement, {
-	  left: 48,
-	  top: 185,
+	  left: 45,
+	  top: 275,
 	  id: "tb_assignment"
 	});
 	c.width = 463;
@@ -46,11 +73,24 @@ $( document ).ready(function() {
 	c.scale(.25);
 	c.hasControls = c.hasBorders = false;
 	canvas.add(c);
+	
+	var qtext = new fabric.Text("Quiz Node", {
+		fontFamily: 'arial black',
+		fontSize: 17,
+		fill: 'white',
+		top: 395,
+		left: 55
+	});
+	qtext.hasControls = false;
+	qtext.hasBorders = false;
+	qtext.lockMovementX = true;
+	qtext.lockMovementY = true;
+	canvas.add(qtext);
 
 	imgElement = document.getElementById('my-image3');
 	c = new fabric.Image(imgElement, {
-	  left: 48,
-	  top: 320,
+	  left: 45,
+	  top: 415,
 	  id: "tb_quiz"
 	});
 	c.width = 463;
@@ -58,9 +98,22 @@ $( document ).ready(function() {
 	c.scale(.25);
 	c.hasControls = c.hasBorders = false;
 	canvas.add(c);
+	
+	var ltext = new fabric.Text("Line Editors", {
+		fontFamily: 'arial black',
+		fontSize: 17,
+		fill: 'white',
+		top: 540,
+		left: 40
+	});
+	ltext.hasControls = false;
+	ltext.hasBorders = false;
+	ltext.lockMovementX = true;
+	ltext.lockMovementY = true;
+	canvas.add(ltext);
 
-	mngr.AddToolbarEdge(new fabric.Line([60, 450, 120, 550], { fill: 'red', stroke: 'red', strokeWidth: 3, id: 'tb_lineSolid' }));
-	mngr.AddToolbarEdge(new fabric.Line([60, 575, 120, 675], { fill: 'red', stroke: 'red', strokeWidth: 3, strokeDashArray: [5, 5], id: 'tb_lineDotted' }));
+	mngr.AddToolbarEdge(new fabric.Line([60, 570, 120, 670], { fill: 'red', stroke: 'red', strokeWidth: 3, id: 'tb_lineSolid' }));
+	mngr.AddToolbarEdge(new fabric.Line([60, 695, 120, 795], { fill: 'red', stroke: 'red', strokeWidth: 3, strokeDashArray: [5, 5], id: 'tb_lineDotted' }));
 
 	canvas.hoverCursor = 'pointer';
 	
@@ -139,6 +192,10 @@ $( document ).ready(function() {
 			//e.target.setStroke('yellow');
 			//canvas.renderAll();
 		}
+		if(e.target.id === "tb_concept" || e.target.id === "tb_assignment" || e.target.id === "tb_quiz" || e.target.id === "tb_lineSolid" || e.target.id === "tb_lineDotted")
+		{
+			showTooltip(e.target.id, e.target.top, e.target.left);
+		}
 	  },
 	
 	  'mouse:out': function(e){
@@ -147,6 +204,10 @@ $( document ).ready(function() {
 			//De-Highlight node
 			//e.target.setStroke('white');
 			//canvas.renderAll();
+		}
+		if(e.target.id === "tb_concept" || e.target.id === "tb_assignment" || e.target.id === "tb_quiz" || e.target.id === "tb_lineSolid" || e.target.id === "tb_lineDotted")
+		{
+			hideTootltip(e.target.id);
 		}
 	  },
 	
@@ -168,3 +229,16 @@ $( document ).ready(function() {
 		mngr.HidePopup();
 	});
 });
+
+function showTooltip(type, top, left)
+{
+	var ttid = type + "tt";
+	$("#" + ttid).show();
+    $("#" + ttid).css({"position": "absolute", "top": top, "left": left, "background-color": "white", "width": "250px"});
+}
+
+function hideTootltip(type)
+{
+	var ttid = type + "tt";
+	$("#" + ttid).hide();
+}
