@@ -483,6 +483,7 @@ MManager.prototype.MoveNode = function (node){
 	if(node.deletenode){
 		node.deletenode.top = node.top + 10;
 		node.deletenode.left = node.left;
+		node.deletenode.setCoords();
 	}
 }
 
