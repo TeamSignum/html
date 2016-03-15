@@ -1,9 +1,8 @@
 <?php
 
 	/* 
-	 * Author: Joseph Cottongim
+	 * Author: LearningUniverse
 	 * Date: January 31, 2016
-	 * Last Edited: February 1, 2016
 	 *
 	 * PHP file for queries relating to grades on the Learning Universe website
 	 *

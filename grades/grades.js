@@ -1,5 +1,5 @@
 /*           
- * Author: Joseph Cottongim                         
+ * Author: LearningUniverse                         
  * Created: February 1, 2016  
  *            
  * Javascript file for handling the interaction between                                                        
@@ -11,8 +11,7 @@ var userid ='';
  
 $( document ).ready(function() 
 {
-	getSessionInfo();
-	
+	getSessionInfo();	
 });
 
 function getSessionInfo(){
