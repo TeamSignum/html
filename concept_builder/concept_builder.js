@@ -5,6 +5,9 @@
 
  var mngr;
  var canvas;
+ var isDown = false;
+ var cline;
+ var fromn;
 
 $( document ).ready(function() {
 
@@ -125,27 +128,93 @@ $( document ).ready(function() {
 
 	    	mngr.LockOrUpload(e.target, 2); 
 
-	    	if(e.target.id === "tb_concept")
+	    	if(mngr.lineEdit == false && e.target.id === "tb_concept")
 	    	{
+				$("#tb_concepttt").hide();
+			
 		    	mngr.CopyNode(e.target, mapNodeId, "concept"); // copy an assignment node over with id mapNodeId and type concept
 		    }
-		    else if(e.target.id === "tb_assignment")
+		    else if(mngr.lineEdit == false && e.target.id === "tb_assignment")
 		    {
+				$("#tb_assignmenttt").hide();
+			
 		    	mngr.CopyNode(e.target, mapNodeId, "assignment");
 		    }
-		    else if(e.target.id === "tb_quiz")
+		    else if(mngr.lineEdit == false && e.target.id === "tb_quiz")
 		    {
+				$("#tb_quiztt").hide();
+			
 		    	mngr.CopyNode(e.target, mapNodeId, "quiz");
 		    }
 			else if(e.target.id === "tb_lineSolid")
 			{
 				mngr.LineEditor(e.target, true);
+				if(mngr.lineEdit == true)
+				{
+					var cobjs = canvas.getObjects();
+					for(var i = 0; i < cobjs.length; i++)
+					{
+						if(cobjs[i].id)
+						{
+							if(cobjs[i].id === "tb_concept" || cobjs[i].id === "tb_assignment" || cobjs[i].id === "tb_quiz")
+							{
+								cobjs[i].lockMovementX = true;
+								cobjs[i].lockMovementY = true;
+							}
+						}
+					}
+				}
+				else
+				{
+					var cobjs = canvas.getObjects();
+					for(var i = 0; i < cobjs.length; i++)
+					{
+						if(cobjs[i].id)
+						{
+							if(cobjs[i].id === "tb_concept" || cobjs[i].id === "tb_assignment" || cobjs[i].id === "tb_quiz")
+							{
+								cobjs[i].lockMovementX = false;
+								cobjs[i].lockMovementY = false;
+							}
+						}
+					}
+				}
 			}
 			else if(e.target.id === "tb_lineDotted")
 			{
 				mngr.LineEditor(e.target, false);
+				if(mngr.lineEdit == true)
+				{
+					var cobjs = canvas.getObjects();
+					for(var i = 0; i < cobjs.length; i++)
+					{
+						if(cobjs[i].id)
+						{
+							if(cobjs[i].id === "tb_concept" || cobjs[i].id === "tb_assignment" || cobjs[i].id === "tb_quiz")
+							{
+								cobjs[i].lockMovementX = true;
+								cobjs[i].lockMovementY = true;
+							}
+						}
+					}
+				}
+				else
+				{
+					var cobjs = canvas.getObjects();
+					for(var i = 0; i < cobjs.length; i++)
+					{
+						if(cobjs[i].id)
+						{
+							if(cobjs[i].id === "tb_concept" || cobjs[i].id === "tb_assignment" || cobjs[i].id === "tb_quiz")
+							{
+								cobjs[i].lockMovementX = false;
+								cobjs[i].lockMovementY = false;
+							}
+						}
+					}
+				}
 			}
-			else if(e.target.id === mapNodeId || e.target.id === "popupnode")
+			else if(mngr.lineEdit == false && (e.target.id === mapNodeId || e.target.id === "popupnode"))
 			{
 				mngr.HandleMapNodeSelect(e.target);
 			}
@@ -153,18 +222,140 @@ $( document ).ready(function() {
 			{
 				mngr.DeleteNode(e.target.node, 2);
 			}
+			else if(mngr.lineEdit == true)
+			{
+				if(e.target.id === "mapNode")
+				{
+					fromn = e.target;
+					isDown = true;
+					var x = e.target.getCenterPoint().x;
+					var y = e.target.getCenterPoint().y;
+					var points = [x, y, x, y];
+					if(mngr.solid == true)
+					{
+						cline = new fabric.Line(points, {
+							fill: 'white',
+							stroke: 'white',
+							strokeWidth: 5,
+							selectable: false,
+							id: "solid"
+						});
+					}
+					else
+					{
+						cline = new fabric.Line(points, {
+							fill: 'white',
+							stroke: 'white',
+							strokeWidth: 5,
+							strokeDashArray: [5, 5],
+							selectable: false,
+							id: "dotted"
+						});
+					}
+					canvas.add(cline);
+				}
+			}
 
 
 	      	canvas.renderAll();
 	    }
 	  },
+	  
+	  'mouse:move': function(e) {
+		if(isDown == false)
+		{
+			return;
+		}
+		else
+		{
+			if(e.target)
+			{
+				var temp;
+				if(e.target.id === "mapNode")
+				{
+					temp = e.target;
+				}
+				if(e.target.id === "nodeText")
+				{
+					temp = e.target.node;
+				}
+				if(e.target.id === "popupnode")
+				{
+					temp = e.target.node;
+				}
+				if(e.target.id === "deleteNode")
+				{
+					temp = e.target.node;
+				}
+				var x = temp.getCenterPoint().x;
+				var y = temp.getCenterPoint().y;
+				cline.set({ x2: x, y2: y });
+			}
+			else
+			{
+				var pointer = canvas.getPointer(e.target);
+				cline.set({ x2: pointer.x, y2: pointer.y });
+			}
+			canvas.renderAll();
+		}
+	  },
 
 	  'mouse:up': function(e) {
+		if(isDown)
+		{
+			if(e.target)
+			{
+				var temp;
+				if(e.target.id === "mapNode")
+				{
+					temp = e.target;
+				}
+				if(e.target.id === "nodeText")
+				{
+					temp = e.target.node;
+				}
+				if(e.target.id === "popupnode")
+				{
+					temp = e.target.node;
+				}
+				if(e.target.id === "deleteNode")
+				{
+					temp = e.target.node;
+				}
+				
+				if(temp.nid != fromn.nid)
+				{
+					cline.eid = mngr.eid;
+					cline.hasControls = cline.hasBorders = false;
+					cline.lockMovementX = cline.lockMovementY = true;
+					cline.perPixelTargetFind = true;
+				
+					fromn.lines.push(cline);
+					fromn.lines2.push(1);
+					temp.lines.push(cline);
+					temp.lines2.push(2);
+				
+					var linetemp = {
+						line: cline,
+						id: mngr.eid
+					};
+				
+					mngr.eid++;
+					mngr.edges.push(linetemp);
+					canvas.sendToBack(cline);
+				}
+			}
+			else
+			{
+				canvas.remove(cline);
+			}
+			isDown = false;
+		}
 	  	if (e.target) {
 	  		if (e.target.id === "mapNode"){
 				mngr.AddNodeToCanvas(e.target);
 	  		}
-			mngr.DrawEdgeBetweenNodes(e.target);
+			//mngr.DrawEdgeBetweenNodes(e.target);
 			canvas.renderAll();
 		}
 	  },

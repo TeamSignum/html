@@ -771,7 +771,8 @@ MManager.prototype.DeleteN = function(node, level){
 							this.nodes[i].lines.splice(index, 1);
 							this.nodes[i].lines2.splice(index, 1);
 						}
-					
+						break;
+			
 					}
 				}
 			}

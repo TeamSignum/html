@@ -103,16 +103,86 @@ $( document ).ready(function() {
 
 	    	mngr.LockOrUpload(e.target, 1); 
 
-	    	if(e.target.id === "tb_largeCircle" || e.target.id === "tb_mediumCircle" || e.target.id === "tb_smallCircle" )
+	    	if(mngr.lineEdit == false && (e.target.id === "tb_largeCircle" || e.target.id === "tb_mediumCircle" || e.target.id === "tb_smallCircle" ))
 	    	{
+				if(e.target.id === "tb_largeCircle")
+					$("#tb_largeCirclett").hide();
+					
+				if(e.target.id === "tb_mediumCircle")
+					$("#tb_mediumCirclett").hide();
+					
+				if(e.target.id === "tb_smallCircle")
+					$("#tb_smallCirclett").hide();
+					
 		    	mngr.CopyNode(e.target, mapNodeId, "concept");
 		    }
 			else if(e.target.id === "tb_lineSolid")
 			{
 				mngr.LineEditor(e.target, true);
+				if(mngr.lineEdit == true)
+				{
+					var cobjs = canvas.getObjects();
+					for(var i = 0; i < cobjs.length; i++)
+					{
+						if(cobjs[i].id)
+						{
+							if(cobjs[i].id === "tb_largeCircle" || cobjs[i].id === "tb_mediumCircle" || cobjs[i].id === "tb_smallCircle")
+							{
+								cobjs[i].lockMovementX = true;
+								cobjs[i].lockMovementY = true;
+							}
+						}
+					}
+				}
+				else
+				{
+					var cobjs = canvas.getObjects();
+					for(var i = 0; i < cobjs.length; i++)
+					{
+						if(cobjs[i].id)
+						{
+							if(cobjs[i].id === "tb_largeCircle" || cobjs[i].id === "tb_mediumCircle" || cobjs[i].id === "tb_smallCircle")
+							{
+								cobjs[i].lockMovementX = false;
+								cobjs[i].lockMovementY = false;
+							}
+						}
+					}
+				}
+				
 			}
 			else if(e.target.id === "tb_lineDotted"){
 				mngr.LineEditor(e.target, false);
+				if(mngr.lineEdit == true)
+				{
+					var cobjs = canvas.getObjects();
+					for(var i = 0; i < cobjs.length; i++)
+					{
+						if(cobjs[i].id)
+						{
+							if(cobjs[i].id === "tb_largeCircle" || cobjs[i].id === "tb_mediumCircle" || cobjs[i].id === "tb_smallCircle")
+							{
+								cobjs[i].lockMovementX = true;
+								cobjs[i].lockMovementY = true;
+							}
+						}
+					}
+				}
+				else
+				{
+					var cobjs = canvas.getObjects();
+					for(var i = 0; i < cobjs.length; i++)
+					{
+						if(cobjs[i].id)
+						{
+							if(cobjs[i].id === "tb_largeCircle" || cobjs[i].id === "tb_mediumCircle" || cobjs[i].id === "tb_smallCircle")
+							{
+								cobjs[i].lockMovementX = false;
+								cobjs[i].lockMovementY = false;
+							}
+						}
+					}
+				}
 			}
 			else if(mngr.lineEdit == false && (e.target.id === mapNodeId || e.target.id === "popupnode"))
 			{
@@ -182,6 +252,10 @@ $( document ).ready(function() {
 				{
 					temp = e.target.node;
 				}
+				if(e.target.id === "deleteNode")
+				{
+					temp = e.target.node;
+				}
 				var x = temp.getCenterPoint().x;
 				var y = temp.getCenterPoint().y;
 				cline.set({ x2: x, y2: y });
@@ -213,25 +287,32 @@ $( document ).ready(function() {
 				{
 					temp = e.target.node;
 				}
+				if(e.target.id === "deleteNode")
+				{
+					temp = e.target.node;
+				}
 				
-				cline.eid = mngr.eid;
-				cline.hasControls = cline.hasBorders = false;
-				cline.lockMovementX = cline.lockMovementY = true;
-				cline.perPixelTargetFind = true;
+				if(temp.nid != fromn.nid)
+				{
+					cline.eid = mngr.eid;
+					cline.hasControls = cline.hasBorders = false;
+					cline.lockMovementX = cline.lockMovementY = true;
+					cline.perPixelTargetFind = true;
 				
-				fromn.lines.push(cline);
-				fromn.lines2.push(1);
-				temp.lines.push(cline);
-				temp.lines2.push(2);
+					fromn.lines.push(cline);
+					fromn.lines2.push(1);
+					temp.lines.push(cline);
+					temp.lines2.push(2);
 				
-				var linetemp = {
-					line: cline,
-					id: mngr.eid
-				};
+					var linetemp = {
+						line: cline,
+						id: mngr.eid
+					};
 				
-				mngr.eid++;
-				mngr.edges.push(linetemp);
-				canvas.sendToBack(cline);
+					mngr.eid++;
+					mngr.edges.push(linetemp);
+					canvas.sendToBack(cline);
+				}
 			}
 			else
 			{
@@ -267,8 +348,8 @@ $( document ).ready(function() {
 	  'mouse:over': function(e){
 		if(e.target.id === mapNodeId)
 		{
-			//Highlight node
-			//e.target.setStroke('yellow');
+			//e.target.scale(.26);
+			//e.target.setCoords();
 			//canvas.renderAll();
 		}
 		if(e.target.id === "tb_largeCircle" || e.target.id === "tb_mediumCircle" || e.target.id === "tb_smallCircle" || e.target.id === "tb_lineSolid" || e.target.id === "tb_lineDotted")
@@ -280,8 +361,8 @@ $( document ).ready(function() {
 	  'mouse:out': function(e){
 		if(e.target.id === mapNodeId)
 		{
-			//De-Highlight node
-			//e.target.setStroke('white');
+			//e.target.scale(.25);
+			//e.target.setCoords();
 			//canvas.renderAll();
 		}
 		if(e.target.id === "tb_largeCircle" || e.target.id === "tb_mediumCircle" || e.target.id === "tb_smallCircle" || e.target.id === "tb_lineSolid" || e.target.id === "tb_lineDotted")
