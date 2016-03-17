@@ -2,9 +2,12 @@
 
 include '../../imports/ChromePhp.php';
 
+session_start();
+
 try{
 
 	$nid = $_POST["nid"];
+	$cid = $_SESSION["classid"];
 	$type = $_POST["type"];
 	$classOrConcept = $_POST["classOrConcept"];
 
@@ -14,21 +17,22 @@ try{
 
 	if($type == "concept"){
 		if($classOrConcept == 0){
-			$query = "SELECT * FROM `popupconcept` WHERE `nid` = ?";
+			$query = "SELECT * FROM `popupconcept` WHERE `nid` = ? AND `cid` = ?";
 		}
 		else{
-			$query = "SELECT * FROM `popupconcept2` WHERE `nid` = ?";
+			$query = "SELECT * FROM `popupconcept2` WHERE `nid` = ? AND `cid` = ?";
 		}
 	}
 	else if($type == "assignment"){
-		$query = "SELECT * FROM `popupassignment` WHERE `nid` = ?";
+		$query = "SELECT * FROM `popupassignment` WHERE `nid` = ? AND `cid` = ?";
 	}
 	else{
-		$query = "SELECT * FROM `popupquiz` WHERE `nid` = ?";
+		$query = "SELECT * FROM `popupquiz` WHERE `nid` = ? AND `cid` = ?";
 	}
 
 	$statement = $DB->prepare($query);
 	$statement->bindParam(1, $nid);
+	$statement->bindParam(2, $cid);
 
 	$statement->execute();
 
