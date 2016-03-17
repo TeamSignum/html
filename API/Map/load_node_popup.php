@@ -18,21 +18,45 @@ try{
 	if($type == "concept"){
 		if($classOrConcept == 0){
 			$query = "SELECT * FROM `popupconcept` WHERE `nid` = ? AND `cid` = ?";
+			
+			$statement = $DB->prepare($query);
+			$statement->bindParam(1, $nid);
+			$statement->bindParam(2, $cid);
 		}
 		else{
-			$query = "SELECT * FROM `popupconcept2` WHERE `nid` = ? AND `cid` = ?";
+			$nidd = $_SESSION['nid'];
+			$nid2 = $nid;
+			
+			$query = "SELECT * FROM `popupconcept2` WHERE `nid` = ? AND `nid2` = ? AND `cid` = ?";
+			
+			$statement = $DB->prepare($query);
+			$statement->bindParam(1, $nidd);
+			$statement->bindParam(2, $nid2);
+			$statement->bindParam(3, $cid);
 		}
 	}
 	else if($type == "assignment"){
-		$query = "SELECT * FROM `popupassignment` WHERE `nid` = ? AND `cid` = ?";
+		$nidd = $_SESSION['nid'];
+		$nid2 = $nid;
+	
+		$query = "SELECT * FROM `popupassignment` WHERE `nid` = ? AND `nid2` = ? AND `cid` = ?";
+		
+		$statement = $DB->prepare($query);
+		$statement->bindParam(1, $nidd);
+		$statement->bindParam(2, $nid2);
+		$statement->bindParam(3, $cid);
 	}
 	else{
-		$query = "SELECT * FROM `popupquiz` WHERE `nid` = ? AND `cid` = ?";
+		$nidd = $_SESSION['nid'];
+		$nid2 = $nid;
+		
+		$query = "SELECT * FROM `popupquiz` WHERE `nid` = ? AND `nid2` = ? AND `cid` = ?";
+		
+		$statement = $DB->prepare($query);
+		$statement->bindParam(1, $nidd);
+		$statement->bindParam(2, $nid2);
+		$statement->bindParam(3, $cid);
 	}
-
-	$statement = $DB->prepare($query);
-	$statement->bindParam(1, $nid);
-	$statement->bindParam(2, $cid);
 
 	$statement->execute();
 

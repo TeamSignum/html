@@ -40,22 +40,41 @@ function SaveConceptPopup(){
 		// Create query 
 		if($classOrConcept == 0){
 			$query = "REPLACE INTO `popupconcept` (`nid`, `cid`, `title`, `description`, `duedate`, `notes`) values (?,?,?,?,?,?)";
+			
+			$statement = $DB->prepare($query);
+
+			$statement->bindValue (1, $nid);
+			$statement->bindValue (2, $cid);
+			$statement->bindValue (3, $title);
+			$statement->bindValue (4, $description);
+			$statement->bindValue (5, $duedate);
+			$statement->bindValue (6, $notes);
+
+			// Execute query
+			$statement->execute();
+			$DB->commit();
 		}
 		else{
-			$query = "REPLACE INTO `popupconcept2` (`nid`, `cid`, `title`, `description`, `duedate`, `notes`) values (?,?,?,?,?,?)";
+			$nidd = $_SESSION['nid'];
+			$nid2 = $nid;
+		
+			$query = "REPLACE INTO `popupconcept2` (`nid`, `nid2`, `cid`, `title`, `description`, `duedate`, `notes`) values (?,?,?,?,?,?,?)";
+			
+			$statement = $DB->prepare($query);
+
+			$statement->bindValue (1, $nidd);
+			$statement->bindValue (2, $nid2);
+			$statement->bindValue (3, $cid);
+			$statement->bindValue (4, $title);
+			$statement->bindValue (5, $description);
+			$statement->bindValue (6, $duedate);
+			$statement->bindValue (7, $notes);
+
+			// Execute query
+			$statement->execute();
+			$DB->commit();
 		}
-		$statement = $DB->prepare($query);
-
-		$statement->bindValue (1, $nid);
-		$statement->bindValue (2, $cid);
-		$statement->bindValue (3, $title);
-		$statement->bindValue (4, $description);
-		$statement->bindValue (5, $duedate);
-		$statement->bindValue (6, $notes);
-
-		// Execute query
-		$statement->execute();
-		$DB->commit();
+		
 	}
 
 	catch(PDOException $e)
@@ -81,16 +100,20 @@ function SaveAssignmentPopup(){
 
 		$duedate = strtotime($duedate);
 		$duedate = date("Y-m-d H:i:s", $duedate);
+		
+		$nidd = $_SESSION['nid'];
+		$nid2 = $nid;
 
-		$query = "REPLACE INTO `popupassignment` (`nid`, `cid`, `title`, `description`, `duedate`, `notes`) values (?,?,?,?,?,?)";
+		$query = "REPLACE INTO `popupassignment` (`nid`, `nid2`, `cid`, `title`, `description`, `duedate`, `notes`) values (?,?,?,?,?,?,?)";
 		$statement = $DB->prepare($query);
 
-		$statement->bindValue (1, $nid);
-		$statement->bindValue (2, $cid);
-		$statement->bindValue (3, $title);
-		$statement->bindValue (4, $description);
-		$statement->bindValue (5, $duedate);
-		$statement->bindValue (6, $notes);
+		$statement->bindValue (1, $nidd);
+		$statement->bindValue (2, $nid2);
+		$statement->bindValue (3, $cid);
+		$statement->bindValue (4, $title);
+		$statement->bindValue (5, $description);
+		$statement->bindValue (6, $duedate);
+		$statement->bindValue (7, $notes);
 
 		// Execute query
 		$statement->execute();
@@ -120,17 +143,21 @@ function SaveQuizPopup(){
 
 		$duedate = strtotime($duedate);
 		$duedate = date("Y-m-d H:i:s", $duedate);
+		
+		$nidd = $_SESSION['nid'];
+		$nid2 = $nid;
 
 		// Create query 
-		$query = "REPLACE INTO `popupquiz` (`nid`, `cid`, `title`, `description`, `duedate`, `notes`) values (?,?,?,?,?,?)";
+		$query = "REPLACE INTO `popupquiz` (`nid`, `nid2`, `cid`, `title`, `description`, `duedate`, `notes`) values (?,?,?,?,?,?,?)";
 		$statement = $DB->prepare($query);
 
-		$statement->bindValue (1, $nid);
-		$statement->bindValue (2, $cid);
-		$statement->bindValue (3, $title);
-		$statement->bindValue (4, $description);
-		$statement->bindValue (5, $duedate);
-		$statement->bindValue (6, $notes);
+		$statement->bindValue (1, $nidd);
+		$statement->bindValue (2, $nid2);
+		$statement->bindValue (3, $cid);
+		$statement->bindValue (4, $title);
+		$statement->bindValue (5, $description);
+		$statement->bindValue (6, $duedate);
+		$statement->bindValue (7, $notes);
 
 		// Execute query
 		$statement->execute();
