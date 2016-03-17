@@ -2,6 +2,8 @@
 
 include '../../imports/ChromePhp.php';
 
+session_start();
+
 $nid         = $_POST['nid'];
 $cid         = $_SESSION['classid'];
 $fileName    = $_FILES['file']['name'];

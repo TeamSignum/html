@@ -13,6 +13,9 @@ try{
 	$DB = new PDO("mysql:host=ec2-52-33-118-140.us-west-2.compute.amazonaws.com;dbname=LU", 'Signum', 'signumDB4');
 	$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+	ChromePhp::log($cid);
+	ChromePhp::log($nid);
+
 	$query = "SELECT lecturenotes.name FROM `lecturenotes` WHERE lecturenotes.cid = ? AND lecturenotes.nid = ?";
 
 	$statement = $DB->prepare($query);
@@ -20,6 +23,8 @@ try{
 	$statement->bindParam(2, $nid);
 	$statement->execute();
 	$result = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+	ChromePhp::log($result);
 
 	$lecturenotes = array();
 
