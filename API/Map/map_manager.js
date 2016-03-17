@@ -1347,7 +1347,7 @@ MManager.prototype.SavePopup = function(){
  */ 
 MManager.prototype.AddToolbar = function(){
 	// Vertical divider
-	var div = new fabric.Line([180, 0, 180, 1000], { fill: 'black', stroke: 'gray', strokeWidth: 4 });
+	var div = new fabric.Line([180, 0, 180, 1600], { fill: 'black', stroke: 'gray', strokeWidth: 4 });
 	this.canvas.add(div);
 	div.lockMovementX = div.lockMovementY = true;
 	div.selectable = div.hasControls = div.hasBorders = false;

@@ -126,8 +126,8 @@ function AddTextContainer(content, container, id, name){
 	  <div class="textcontainer" id="d` + id + `">
 	    <span>[` + name + `]: ` + content + `</span>
 	    <img src="../imports/images/reply.png" alt="Reply" style="width:16px;height:16px;float:right;" onclick="AddReplyContainer(reply`+id+`,`+id+`)">
-	  	<div id="reply` + id + `"></div>
 	  	<div id="rtext` + id + `" style="margin: 25px 0px 0px 10%;"></div>
+	  	<div id="reply` + id + `"></div>
 	    <hr>
 	  </div>
 	`;
