@@ -12,6 +12,8 @@
    
   <!--CSS FILES-->
   <link rel="stylesheet" type="text/css" href="professor_grading.css">
+  <link rel="stylesheet" type="text/css" href="../class_builder/class_builder.css"> 
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.11/css/dataTables.bootstrap.min.css">
   
   <!--JAVASCRIPT FILES-->
   <script src="professor_grading.js" type="text/javascript"></script>
@@ -23,6 +25,27 @@
 
 </head>
 <body>
+
+  <!-- DIVS for popup-->
+  <div id="custom_container" style="display: none;">
+      <div id="checkorx" style="text-align:right;"> 
+        <img src="../imports/images/x_mark.gif" width="40" height="40" id="xmark" style="display: inline-block;"/>
+      </div>
+      
+      <div id="popup">I'm the popup!
+      </div>
+
+      <div id="cancelorsave"> 
+        <button type="button" class="btn btn-primary" id="p_Save" style="margin-top:25px;">
+        Submit Grade
+        </button>
+        <button type="button" class="btn btn-primary" id="p_Cancel" style="margin-top:25px;">
+        Cancel
+        </button>
+      </div>
+    </div>
+
+  <div id="dim_div"></div>
 
 	<!--DIV FOR SITE WIDE NAV BAR-->
 	<div id="navbar:../"></div>

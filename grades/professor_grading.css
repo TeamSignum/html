@@ -3,10 +3,40 @@
  */ 
 
 th{
-	
+	/*border-radius: 10px;*/
 	background-color: white;
 }
 
 tr{
 	background-color: white;
+}
+
+#assignments_length{
+	color: white;
+}
+
+#assignments_filter{
+	color: white;
+}
+
+.graded{
+	background-color: #4CC417;
+}
+
+.ungraded{
+	background-color: #F62817;
+}
+
+
+
+/* Pop up stuff */
+
+#dim_div{
+    background-color: rgba(100, 100, 100, .6);
+    display: none;
+    position: fixed;
+    width: 100%;
+    top: 0px;
+    height: 1200px;
+    z-index: 997;
 }
