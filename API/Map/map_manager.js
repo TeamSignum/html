@@ -1035,12 +1035,8 @@ MManager.prototype.CreatePopupWithData = function(type, title, description, due_
 MManager.prototype.UploadFile = function(){
 	var formData = new FormData();
 	formData.append('nid', this.crrnt.nid);
+	formData.append('level', this.classOrConcept);
 	formData.append('file', $('#filechooser')[0].files[0]);
-
-	// var innerHtml = $("#filelist").html();
-	// innerHtml += `<div><span class="glyphicon glyphicon-download" aria-hidden="true"></span> &nbsp;&nbsp;`
-	// innerHtml += $("#filechooser")[0].files[0].name + "</div>";
-	// $("#filelist").html(innerHtml);
 
 	$.ajax({
        url : '../API/Map/upload.php',
@@ -1060,14 +1056,18 @@ MManager.prototype.ShowFiles = function(){
 		type: 'POST',
 		url: "../API/Map/lecturenotes.php",
 		dataType: 'json',
-		data: {nid: this.crrnt.nid},
+		data: {nid: this.crrnt.nid, level: this.classOrConcept},
 		success: function(result){
-			$("#lecturenotes").html('<hr><h4 style="margin-top:20px;margin-bottom:15px;text-align:left;">Lecture Notes</h4>');
+
+			if(result.length > 0){
+				$("#lecturenotes").html('<hr><h4 style="margin-top:20px;margin-bottom:15px;text-align:left;">Lecture Notes</h4>');
+			}
 
 			for(var i = 0; i < result.length; i++)
 			{
+				var path = result[i]["path"];
 				var innerHtml = $("#lecturenotes").html();
-				innerHtml += `<div style="margin-bottom:10px;"><span class="glyphicon glyphicon-download" aria-hidden="true"></span> &nbsp;&nbsp;`
+				innerHtml += `<div style="margin-bottom:10px;"><span onclick="mngr.downloadfile('`+path+`')" class="glyphicon glyphicon-download" aria-hidden="true"></span> &nbsp;&nbsp;`
 				innerHtml += result[i]["name"] + "</div>";
 
 				$("#lecturenotes").html(innerHtml);
@@ -1076,6 +1076,10 @@ MManager.prototype.ShowFiles = function(){
 	});
 	
 	return false;
+}
+
+MManager.prototype.downloadfile = function(filepath) {
+	window.location="../API/Map/download.php?filename=" + filepath;
 }
 
 MManager.prototype.CreateConceptPopup = function(title, description, due_date, notes){ 
@@ -1119,6 +1123,14 @@ MManager.prototype.CreateConceptPopup = function(title, description, due_date, n
 			innerHtml += `
 			</br>
 			<input type="file" id="filechooser" onchange="mngr.UploadFile();">
+			<div id="lecturenotes" style="text-align:left;font-size:16px;"></div>
+			<hr>
+			</br>
+			`;
+		}
+		else{
+			innerHtml += `
+			</br>
 			<div id="lecturenotes" style="text-align:left;font-size:16px;"></div>
 			<hr>
 			</br>
@@ -1376,6 +1388,16 @@ MManager.prototype.AddToolbar = function(){
 		oImg.selectable = false;
 		canvas.add(oImg); 
 	}); 
+
+	// // Navigation Back
+	// var nav1 = new fabric.Line([200, 75, 215, 90], { fill: 'black', stroke: 'white', strokeWidth: 6 });
+	// var nav2 = new fabric.Line([200, 79, 215, 64], { fill: 'black', stroke: 'white', strokeWidth: 6 });
+	// var navgroup = new fabric.Group([nav1, nav2], {
+	// 	id: "navleft"
+	// });
+	// navgroup.lockMovementX = navgroup.lockMovementY = true;
+	// navgroup.hasControls = navgroup.hasBorders = false;
+	// this.canvas.add(navgroup);
 }
 
 /*

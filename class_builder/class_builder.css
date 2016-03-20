@@ -11,12 +11,12 @@
     text-align: center; 
 }
 
+#map {
+  overflow: hidden;
+}
+
 #canvas {
-	width: 101%; 
-	height: 800px;
-	text-align: center; 
-	background-color: #99ffff; 
-	position: absolute;
+  position: absolute;
 }
 
 #lvl0{

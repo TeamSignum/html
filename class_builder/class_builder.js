@@ -20,6 +20,8 @@ $( document ).ready(function() {
     canvas.setBackgroundImage('../imports/images/maxresdefault.jpg' , canvas.renderAll.bind(canvas), {
     });
 
+    canvas.selection = false;
+
 	// Construct map manager
 	mngr = new MManager(canvas, true, 0);
 	mngr.LoadIds(1);
@@ -95,10 +97,12 @@ $( document ).ready(function() {
 
 	canvas.hoverCursor = 'pointer';
 	
+	var panning = false;
+
 	//Canvas events
 	canvas.on({
-
 	  'mouse:down': function(e) {
+	  	panning = true
 	    if (e.target) {
 
 	    	mngr.LockOrUpload(e.target, 1); 
@@ -231,6 +235,12 @@ $( document ).ready(function() {
 	  },
 	  
 	  'mouse:move': function(e) {
+	  	// if (panning && e && e.e) {
+	   //      var units = 10;
+	   //      var delta = new fabric.Point(e.e.movementX, e.e.movementY);
+	   //      canvas.relativePan(delta);
+    	//}
+
 		if(isDown == false)
 		{
 			return;
@@ -270,6 +280,7 @@ $( document ).ready(function() {
 	  },
 
 	  'mouse:up': function(e) {
+	  	panning = false;
 		if(isDown)
 		{
 			if(e.target)

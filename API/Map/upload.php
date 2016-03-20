@@ -6,11 +6,39 @@ session_start();
 
 $nid         = $_POST['nid'];
 $cid         = $_SESSION['classid'];
+$level       = $_POST['level'];
 $fileName    = $_FILES['file']['name'];
 $fileType    = $_FILES['file']['type'];
 $fileSize    = $_FILES['file']['size'];
 $fileError   = $_FILES['file']['error'];
-$fileContent = file_get_contents($_FILES['file']['tmp_name']);
+
+$target_dir = "../../lecturenotes/";
+$target_file = $target_dir . basename($_FILES["file"]["name"]);
+$uploadOk = 1;
+
+// Check if file already exists
+if (file_exists($target_file)) {
+    echo "Sorry, file already exists.";
+    $uploadOk = 0;
+}
+// Check file size
+if ($_FILES["file"]["size"] > 500000) {
+    echo "Sorry, your file is too large.";
+    $uploadOk = 0;
+}
+
+// Check if $uploadOk is set to 0 by an error
+if ($uploadOk == 0) {
+    echo "Sorry, your file was not uploaded.";
+
+// if everything is ok, try to upload file
+} else {
+    if (move_uploaded_file($_FILES["file"]["tmp_name"], $target_file)) {
+        echo "The file ". basename( $_FILES["file"]["name"]). " has been uploaded.";
+    } else {
+        echo "Sorry, there was an error uploading your file.";
+    }
+}
 
 try {
 
@@ -19,15 +47,16 @@ try {
     $DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $DB->beginTransaction();
 
-    $query = "INSERT `lecturenotes` (`nid`, `cid`, `name`, `type`, `size`, `content`) values (?,?,?,?,?,?)";
+    $query = "INSERT `lecturenotes` (`nid`, `cid`, `level`, `name`, `type`, `size`, `path`) values (?,?,?,?,?,?,?)";
     $statement = $DB->prepare($query);
 
     $statement->bindValue (1, $nid);
     $statement->bindValue (2, $cid);
-    $statement->bindValue (3, $fileName);
-    $statement->bindValue (4, $fileType);
-    $statement->bindValue (5, $fileSize);
-    $statement->bindValue (6, $fileContent);
+    $statement->bindValue (3, $level);
+    $statement->bindValue (4, $fileName);
+    $statement->bindValue (5, $fileType);
+    $statement->bindValue (6, $fileSize);
+    $statement->bindValue (7, $target_file);
 
     // Execute query
     $statement->execute();
