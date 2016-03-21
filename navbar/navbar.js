@@ -56,7 +56,7 @@ function evaluateSessionInfo(parsedResult){
 		html+='<a href="../registration/registration.html" style="margin-top: 12px; font-size:14pt;">Register</a>';
 		html+='</li>';
 		
-		html+='</ul>';				
+		//html+='</ul>';				
 		
 	}
 	
@@ -114,7 +114,7 @@ function evaluateSessionInfo(parsedResult){
 		html+='<a href="../logout.php" style="margin-top: 12px; font-size:14pt;">Logout</a>';
 		html+='</li>';	
 
-		html+='</ul>';
+		//html+='</ul>';
 	}
 	// Navbar if professor is logged in and on account home page
 	// **Currently contains all existing links for ease of testing other site features**
@@ -173,8 +173,14 @@ function evaluateSessionInfo(parsedResult){
 		html+='<a href="../logout.php" style="margin-top: 12px; font-size:14pt;">Logout</a>';
 		html+='</li>';	
 
-		html+='</ul>';	
+		//html+='</ul>';	
 	}
+	
+
+	html+='<li>';
+	html+='<a href="../user_feedback/user_feedback.html" style="margin-top: 12px; font-size:14pt;">User Feedback</a>';
+	html+='</li>';	
+	html+='</ul>';	
 
 	insertNavBarHtml(html);
 }
