@@ -44,6 +44,7 @@ $( document ).ready(function() {
 	ctext.hasBorders = false;
 	ctext.lockMovementX = true;
 	ctext.lockMovementY = true;
+	ctext.selectable = false;
 	canvas.add(ctext);
 
 	var imgElement = document.getElementById('my-image1');
@@ -91,6 +92,7 @@ $( document ).ready(function() {
 	ltext.hasBorders = false;
 	ltext.lockMovementX = true;
 	ltext.lockMovementY = true;
+	ltext.selectable = false;
 	canvas.add(ltext);
 
 	mngr.AddToolbarEdge(new fabric.Line([60, 500, 120, 600], { fill: 'red', stroke: 'red', strokeWidth: 3, id: 'tb_lineSolid' }));

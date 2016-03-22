@@ -193,7 +193,7 @@ function drawStudentNode(){
 		top: -130,
 		originX: 'center',
 		originY: 'center',
-		selectable: false
+		selectable: true
 	});
 	studentName.setText(account_name);
 
@@ -213,7 +213,7 @@ function drawStudentNode(){
 		var studentNodeGroup = new fabric.Group([studentNode, studentName], {
 			left: (canvas.width/2)-120,
 			top: (canvas.height/2)-150,
-			selectable: false,
+			selectable: true,
 			stroke: 'white',
 			strokeWidth: 2,
 			id: "accountNode"

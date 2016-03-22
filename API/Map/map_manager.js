@@ -1423,6 +1423,7 @@ MManager.prototype.AddToolbar = function(){
 	savet.hasBorders = false;
 	savet.lockMovementX = true;
 	savet.lockMovementY = true;
+	savet.selectable = false;
 	canvas.add(savet);
 
 	//Upload tool
