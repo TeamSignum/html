@@ -226,6 +226,7 @@ $( document ).ready(function() {
 							id: "dotted"
 						});
 					}
+
 					canvas.add(cline);
 				}
 			}
@@ -323,6 +324,7 @@ $( document ).ready(function() {
 					mngr.eid++;
 					mngr.edges.push(linetemp);
 					canvas.sendToBack(cline);
+
 				}
 			}
 			else

@@ -335,11 +335,20 @@ MManager.prototype.DrawEdgeBetweenNodes = function(node){
 				id: "dotted"
 			});
 		}
+
+		var triangle = new fabric.Triangle({
+  			width: 20,
+  			height: 30, 
+  			fill: 'white', 
+  			left: this.to.getCenterPoint().x, 
+  			top: this.to.top
+		});
 		
 		line.eid = this.eid;
 		line.hasControls = line.hasBorders = false;
 		line.lockMovementX = line.lockMovementY = true;
 		line.perPixelTargetFind = true;
+		line.arrow = triangle;
 
 		this.from.lines.push(line);
 		this.from.lines2.push(1);
@@ -354,6 +363,7 @@ MManager.prototype.DrawEdgeBetweenNodes = function(node){
 		this.eid++;
 		this.edges.push(temp);
 		this.canvas.add(line);
+		this.canvas.add(triangle);
 		this.canvas.sendToBack(line);
 	}
 }
@@ -1050,6 +1060,23 @@ MManager.prototype.UploadFile = function(){
 	});
 }
 
+MManager.prototype.UploadAssignment = function(){
+	var formData = new FormData();
+	formData.append('nid2', this.crrnt.nid);
+	formData.append('file', $('#filechooser2')[0].files[0]);
+
+	$.ajax({
+       url : '../API/Map/uploadassignment.php',
+       type : 'POST',
+       data : formData,
+       processData: false,  // tell jQuery not to process the data
+       contentType: false,  // tell jQuery not to set contentType
+       success : function(data) {
+			swal("Submitted"); 
+       }
+	});
+}
+
 MManager.prototype.ShowFiles = function(){
 	$.ajax({
 		async: true,
@@ -1191,11 +1218,15 @@ MManager.prototype.CreateAssignmentPopup = function(title, description, due_date
 		"    			<label for=\"field1\"><span>Title <span class=\"required\">*</span></span><input class=\"input-field\" id=\"title\" name=\"title\" type=\"text\" value=\""+ title +"\" placeholder=\"Title\"/></label>"+
 		"				<label for=\"field2\"><span>Description <span class=\"required\">*</span></span><input class=\"input-field\" id=\"description\" name=\"description\" type=\"text\" value=\""+ description +"\" placeholder=\"Description\"/></label>"+
 		"				<label for=\"field5\"><span>Notes <span class=\"\"></span></span><textarea name=\"notes\" id=\"notes\" class=\"textarea-field\">"+ notes +"</textarea></label>"+
-		"				<label for=\"field2\"><span>Due Date<span class=\"\"></span></span><input class=\"input-field\" id=\"due_date\" name=\"due_date\" type=\"text\" value=\""+ due_date +"\" placeholder=\"Due date\"/></label>"+
-		"	        	<button id=\"jnotebook\" style=\"float:left; font-size:12pt;\" onclick=\"mngr.NavigateToJupyterNotebook();\" type=\"button\" class=\"btn btn-default btn-md\">" +
-		"	        	Jupyter Notebook Link" +
-		"				</button>" +
-		"               </br></br></br>";
+		"				<label for=\"field2\"><span>Due Date<span class=\"\"></span></span><input class=\"input-field\" id=\"due_date\" name=\"due_date\" type=\"text\" value=\""+ due_date +"\" placeholder=\"Due date\"/></label>";
+		innerHtml += `
+			</br>
+			<label for="field1">Submit Assignment<label>
+			<input type="file" id="filechooser2" onchange="mngr.UploadAssignment();">
+			<div id="assgnmentsubmission" style="text-align:left;font-size:16px;"></div>
+			<hr>
+			</br>
+			`;
 		if (this.classOrConcept == 0){
 			innerHtml +=
 			"	        	<button id=\"concept_navigate\" onclick=\"mngr.NavigateToConcept();\" style=\"float:left; font-size:12pt;\" type=\"button\" class=\"btn btn-default btn-md\">" +
