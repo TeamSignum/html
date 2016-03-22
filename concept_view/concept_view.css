@@ -40,6 +40,12 @@
     z-index: 999;
 }
 
+#checkorx2{
+    background-color: #fbfbfb; 
+    margin-top: -20px;
+    z-index: 999;
+}
+
 #dim_div{
     background-color: rgba(100, 100, 100, .6);
     display: none;
