@@ -1431,7 +1431,7 @@ MManager.prototype.AddToolbar = function(){
 		oImg.set({left: 80, top: 45, id: 'toolbarUpload'}); 
 		oImg.lockMovementX = oImg.lockMovementY = true; 
 		oImg.hasControls = oImg.hasBorders = false; 
-		oImg.selectable = false;
+		oImg.selectable = true;
 		canvas.add(oImg); 
 	}); 
 
@@ -1461,7 +1461,7 @@ MManager.prototype.AddToolbarEdge = function(_edge){
 	this.canvas.add(_edge);
 	_edge.hasControls = _edge.hasBorders = false;
 	_edge.lockMovementX = _edge.lockMovementY = true;
-	_edge.selectable = false;
+	_edge.selectable = true;
 }
 
 /****************************** KEY BINDINGS ************************************/ 
