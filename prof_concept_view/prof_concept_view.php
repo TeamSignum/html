@@ -148,4 +148,10 @@ if(isset($_POST['nstats']))
 		echo $e->getMessage();
 	}
 }
+
+if(isset($_POST["directa"]))
+{
+	$_SESSION["nid2a"] = $_POST["directa"];
+	echo 1;
+}
 ?>

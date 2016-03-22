@@ -45,6 +45,10 @@ $( document ).ready(function() {
 				{
 					getStats(e.target.nid, e.target.title.text);
 				}
+				if(e.target.type === "assignment")
+				{
+					navToAssign(e.target.nid);
+				}
 			}
 	    },
 	
@@ -79,6 +83,26 @@ $( document ).ready(function() {
 	});
 
 });
+
+function navToAssign(nid)
+{
+	$.ajax({
+		type: 'POST',
+		url: "prof_concept_view.php",
+		dataType: 'html',
+		data: {directa: nid},
+		async: false,
+		
+		success: function(result){
+			if(result == 1)
+			{
+				window.location = '../grades/professor_grading.html';
+			}
+		}
+	});
+	
+	return false;
+}
 
 function getEnrolled()
 {
