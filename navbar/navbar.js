@@ -175,7 +175,12 @@ function evaluateSessionInfo(parsedResult){
 
 		//html+='</ul>';	
 	}
-	
+
+	if(document.title=='Concept Builder' || document.title=='Concept View'){
+		html+='<li>';
+		html+='<a href="../class_view/class_view.html" style="margin-top: 12px; font-size:14pt;">Back To Class</a>';
+		html+='</li>';	
+	}
 
 	html+='<li>';
 	html+='<a href="../user_feedback/user_feedback.html" style="margin-top: 12px; font-size:14pt;">User Feedback</a>';
