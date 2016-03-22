@@ -1,0 +1,43 @@
+@charset "utf-8";
+/* CSS Document */
+
+body{
+	text-align: center;
+}
+
+header{
+	align-items: center;
+	width: 100vw;
+	height: 60px;
+	line-height: 60px;
+	background-color: black;
+	color: white;
+	font-size: 40px;
+}
+
+/* Used to pad text within other elements */
+span.textPadding{
+  margin: 20px;
+}
+
+.class-header{
+  	height: 5vh;
+  	line-height: 5vh;
+  	min-height: 15px;
+	width: 40vw;
+	min-width: 350px;
+	background-color: #980000;
+	border-radius: 5px;
+  	margin:10px auto 10px auto;
+ 	
+	/*Text properties*/
+	color: white;
+	font-size: xx-large;
+}
+
+/* A 'panel' that can be toggled in and out, contains the google chart */
+.toggle{
+	display: inline-block;
+	width: 25vw;
+	margin: 0 auto;
+}
