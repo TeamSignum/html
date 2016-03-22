@@ -114,6 +114,12 @@ function evaluateSessionInfo(parsedResult){
 		html+='<a href="../logout.php" style="margin-top: 12px; font-size:14pt;">Logout</a>';
 		html+='</li>';	
 
+		if(document.title=='Concept Builder' || document.title=='Concept View'){
+			html+='<li>';
+			html+='<a href="../class_view/class_view.html" style="margin-top: 12px; font-size:14pt;">Back To Class</a>';
+			html+='</li>';	
+		}
+
 		//html+='</ul>';
 	}
 	// Navbar if professor is logged in and on account home page
@@ -173,13 +179,13 @@ function evaluateSessionInfo(parsedResult){
 		html+='<a href="../logout.php" style="margin-top: 12px; font-size:14pt;">Logout</a>';
 		html+='</li>';	
 
-		//html+='</ul>';	
-	}
+		if(document.title=='Concept Builder' || document.title=='Concept View'){
+			html+='<li>';
+			html+='<a href="../class_builder/class_builder.html" style="margin-top: 12px; font-size:14pt;">Back To Class</a>';
+			html+='</li>';	
+		}
 
-	if(document.title=='Concept Builder' || document.title=='Concept View'){
-		html+='<li>';
-		html+='<a href="../class_view/class_view.html" style="margin-top: 12px; font-size:14pt;">Back To Class</a>';
-		html+='</li>';	
+		//html+='</ul>';	
 	}
 
 	html+='<li>';

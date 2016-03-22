@@ -128,6 +128,7 @@ $( document ).ready(function() {
 				mngr.LineEditor(e.target, true);
 				if(mngr.lineEdit == true)
 				{
+					e.target.opacity = .5;
 					var cobjs = canvas.getObjects();
 					for(var i = 0; i < cobjs.length; i++)
 					{
@@ -143,6 +144,7 @@ $( document ).ready(function() {
 				}
 				else
 				{
+					e.target.opacity = 1;
 					var cobjs = canvas.getObjects();
 					for(var i = 0; i < cobjs.length; i++)
 					{
@@ -162,6 +164,7 @@ $( document ).ready(function() {
 				mngr.LineEditor(e.target, false);
 				if(mngr.lineEdit == true)
 				{
+					e.target.opacity = .5;
 					var cobjs = canvas.getObjects();
 					for(var i = 0; i < cobjs.length; i++)
 					{
@@ -177,6 +180,7 @@ $( document ).ready(function() {
 				}
 				else
 				{
+					e.target.opacity = 1;
 					var cobjs = canvas.getObjects();
 					for(var i = 0; i < cobjs.length; i++)
 					{
@@ -346,11 +350,11 @@ $( document ).ready(function() {
 	  },
 
 	  'object:moved': function(e) {
-	    e.target.opacity = 0.5;
+	    //e.target.opacity = 0.5;
 	  },
 
 	  'object:modified': function(e) {
-	   	e.target.opacity = 1;
+	   	//e.target.opacity = 1;
 	  },
 	  
 	  'text:changed': function(e) {
