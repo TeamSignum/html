@@ -1196,7 +1196,8 @@ MManager.prototype.CreateConceptPopup = function(title, description, due_date, n
 }
 
 MManager.prototype.CreateAssignmentPopup = function(title, description, due_date, notes){ 
-	var ids = [];
+
+  	var ids = [];
 	var innerHtml; 
 
 	if(title == null)
@@ -1208,17 +1209,30 @@ MManager.prototype.CreateAssignmentPopup = function(title, description, due_date
 	if(notes == null)
 		notes = "";
 
-	innerHtml = "" + 
- 	"<div class=\"row\">" +
-	 	"<div class=\"col-md-2\"></div>" +
-		"    <div class=\"col-md-8\">" +
-		"    <div class=\"form-style-2-heading\">Assignment Node Details</div>" + 
-		" 	 <div class=\"form-style-2\">" + 
-		"			 <form>"+ 
-		"    			<label for=\"field1\"><span>Title <span class=\"required\">*</span></span><input class=\"input-field\" id=\"title\" name=\"title\" type=\"text\" value=\""+ title +"\" placeholder=\"Title\"/></label>"+
-		"				<label for=\"field2\"><span>Description <span class=\"required\">*</span></span><input class=\"input-field\" id=\"description\" name=\"description\" type=\"text\" value=\""+ description +"\" placeholder=\"Description\"/></label>"+
-		"				<label for=\"field5\"><span>Notes <span class=\"\"></span></span><textarea name=\"notes\" id=\"notes\" class=\"textarea-field\">"+ notes +"</textarea></label>"+
-		"				<label for=\"field2\"><span>Due Date<span class=\"\"></span></span><input class=\"input-field\" id=\"due_date\" name=\"due_date\" type=\"text\" value=\""+ due_date +"\" placeholder=\"Due date\"/></label>";
+	innerHtml = `
+ 	<div> 
+		<div class="form-style-2" style="width: 90%;">
+		<div class="form-style-2-heading" style="width: 110%;">Assignment Node Details</div>
+		<form style="margin-left: 13%;">
+	`;
+
+		if (this.mode ==  1){
+			innerHtml += `
+			<label for="field1"><span>Title <span class="required">*</span></span><input class="input-field" id="title" name="title" type="text" value="`+ title +`"placeholder="Title"/></label>
+			<label for="field2"><span>Description <span class="required">*</span></span><input class="input-field" id="description" name="description" type="text" value="`+ description +`" placeholder="Description"/></label>
+			<label for="field5"><span>Notes <span class=""></span></span><textarea name="notes" id="notes" class="textarea-field">`+ notes +`</textarea></label>
+			<label for="field2"><span>Due Date<span class=""></span></span><input class="input-field" id="due_date" name="due_date" type="text" value="`+ due_date +`" placeholder="Due date"/></label>
+			`;
+		}
+		else{
+			innerHtml += `
+			<label for="field1"><span>Title <span class="required">*</span></span><input readonly class="input-field" id="title" name="title" type="text" value="`+ title +`" placeholder="Title"/></label>
+			<label for="field2"><span>Description <span class="required">*</span></span><input readonly class="input-field" id="description" name="description" type="text" value="`+ description +`" placeholder="Description"/></label>
+			<label for="field5"><span>Notes <span class=""></span></span><textarea readonly name="notes" id="notes" class="textarea-field">`+ notes +`</textarea></label>
+			<label for="field2"><span>Due Date<span class=""></span></span><input readonly class="input-field" id="due_date" name="due_date" type="text" value="`+ due_date +`" placeholder="Due date"/></label>
+			`;
+		}
+
 		innerHtml += `
 			</br>
 			<label for="field1">Submit Assignment<label>
@@ -1227,24 +1241,25 @@ MManager.prototype.CreateAssignmentPopup = function(title, description, due_date
 			<hr>
 			</br>
 			`;
+
 		if (this.classOrConcept == 0){
-			innerHtml +=
-			"	        	<button id=\"concept_navigate\" onclick=\"mngr.NavigateToConcept();\" style=\"float:left; font-size:12pt;\" type=\"button\" class=\"btn btn-default btn-md\">" +
-			"	        	Concept Page" +
-			"				</button>";
+			innerHtml += `
+			<button id="concept_navigate" onclick="mngr.NavigateToConcept();" style="float:left; font-size:12pt; margin-top:10px;" type="button" class="btn btn-default btn-md">
+			Concept Page
+			</button>
+			`;
 		}
-		innerHtml +=
-		"			 </form>"+
-		"		</div>"+
-		"    </div>" +
-		"    </div>" +
-	 	"<div class=\"col-md-2\"></div>" +
-  	"</div> " +
-  	"";
+		innerHtml += `
+		</form>
+		</div>
+		</div>
+  		</div>
+  		`;
 
   	ids.push("title");
   	ids.push("description");
   	ids.push("due_date");
+  	ids.push("lecture_notes");
 
   	var popup = {
   		ids: ids,
