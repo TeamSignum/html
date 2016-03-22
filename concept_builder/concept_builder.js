@@ -8,6 +8,7 @@
  var isDown = false;
  var cline;
  var fromn;
+ var timeOut;
 
 $( document ).ready(function() {
 
@@ -385,7 +386,10 @@ $( document ).ready(function() {
 		}
 		if(e.target.id === "tb_concept" || e.target.id === "tb_assignment" || e.target.id === "tb_quiz" || e.target.id === "tb_lineSolid" || e.target.id === "tb_lineDotted")
 		{
-			showTooltip(e.target.id, e.target.top, e.target.left);
+			timeOut = setTimeout(function(){
+				showTooltip(e.target.id, e.target.top, e.target.left);
+			}, 1000);
+			//showTooltip(e.target.id, e.target.top, e.target.left);
 		}
 	  },
 	
@@ -398,6 +402,7 @@ $( document ).ready(function() {
 		}
 		if(e.target.id === "tb_concept" || e.target.id === "tb_assignment" || e.target.id === "tb_quiz" || e.target.id === "tb_lineSolid" || e.target.id === "tb_lineDotted")
 		{
+			clearTimeout(timeOut);
 			hideTootltip(e.target.id);
 		}
 	  },
