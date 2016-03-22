@@ -50,6 +50,7 @@ function submitGrade(){
 	var formData = $('#grade-form').serializeArray();
 	// Add the gradeQuery
 	formData.push({name:'gradeQuery', value:'submitGrade'});
+	formData.push({name:'userid', value: currentStudent.userid});
 	//alert(formData);
 
 	$.ajax({
@@ -59,10 +60,22 @@ function submitGrade(){
 		data: formData,
 		success: function(result){
 			alert(result);
-			$("#custom_container").hide();
-			$("#popup").html("");
-			$("#canvas").show(); 
-			$("#dim_div").hide();
+
+			if(result=='Success'){
+				// Update the row
+				$('#'+currentStudent.userid).removeClass('ungraded');
+				$('#'+currentStudent.userid).addClass('graded');
+				$('#'+currentStudent.userid+' td').eq(3).children("button").html("EDIT GRADE");
+
+				// Close the popup
+				$("#custom_container").hide();
+				$("#popup").html("");
+				$("#canvas").show(); 
+				$("#dim_div").hide();
+			}
+			else{
+				alert("Grade was not submitted.  Please try again.");
+			}
 		}
 	});
 }
@@ -85,21 +98,20 @@ function gradeData(userid, firstName, lastName, cid, nid, nid2, tdate, file, gra
 }
 
 function buildAssignmentGradingPage(parsedResult){
-	var html = '';
+	var html;
 
 	// Build table header
-	html+='<thead>';
-	html+='<tr>';
-	html+='<th>First Name</th>';
-	html+='<th>Last Name</th>';
-	html+='<th>Assignment Submission</th>';
-	html+='<th>Turn In Date</th>';
-	html+='<th>Grade</th>';
-	html+='<th>Edit</th>';
-	html+='</tr>';
-	html+='</thead>';
+	html=`	<thead>
+			<tr>
+				<th>First Name</th>
+				<th>Last Name</th>
+				<th>Grade</th>
+				<th>Edit</th>
+			</tr>
+			</thead>
+		`;
 	// DataTable tag
-	html+='<tbody>';
+	html+=`<tbody>`;
 	// Build the gradeData POJOs then create the html
 	for(var i = 0; i < parsedResult.length; i++){
 		var userid = parsedResult[i].idusers;
@@ -110,7 +122,14 @@ function buildAssignmentGradingPage(parsedResult){
 		var nid2 = parsedResult[i].nid2;
 		var tdate = parsedResult[i].tdate;
 		var file = parsedResult[i].file;
-		var grade = parsedResult[i].grade;
+
+		var grade;
+		if(parsedResult[i].grade==null){
+			grade = 0;
+		}
+		else{
+			grade = parseFloat(parsedResult[i].grade);
+		}
 		var studentComments;
 		if(parsedResult[i].student_comments != null){
 			studentComments = parsedResult[i].student_comments;
@@ -125,38 +144,29 @@ function buildAssignmentGradingPage(parsedResult){
 		gradeDataArray[userid] = tempGradeData;
 
 		// Check to set row color to show graded vs ungraded
-		if(grade==null){
-			html+='<tr id="'+userid+'" class="ungraded">';
+		if(grade==0){
+			html+=`<tr id="`+userid+`" class="ungraded">`;
 		}
 		else{
-			html+='<tr id="'+userid+'" class="graded">';
+			html+=`<tr id="`+userid+`" class="graded">`;
 		}
 		
-		html+='<td>'+firstName+'</td>';
-		html+='<td>'+lastName+'</td>';
+		html+=`<td>`+firstName+`</td>`;
+		html+=`<td>`+lastName+`</td>`;
 		
-		if(file==null){
-			html+='<td>No Submission</td>';
-			html+='<td>N/A</td>';
+		if(grade==0){
+			html+=`<td>`+grade+`</td>`;
+			html+=`<td><button type="button" onclick="createGradeForm(`+userid+`)">GRADE</td>`;
 		}
 		else{
-			html+='<td>Link to File</td>';
-			html+='<td>'+tdate+'</td>';
-		}
-
-		if(grade==null){
-			html+='<td>--</td>';
-			html+='<td><button type="button" onclick="createGradeForm('+userid+')">GRADE</td>';
-		}
-		else{
-			html+='<td>'+grade+'</td>';
-			html+='<td><button type="button" onclick="createGradeForm('+userid+')">EDIT GRADE</td>';
+			html+=`<td>`+grade+`</td>`;
+			html+=`<td><button type="button" onclick="createGradeForm(`+userid+`)">EDIT GRADE</td>`;
 		}
 		
-		html+='</tr>';
+		html+=`</tr>`;
 	}
 
-	html+='</tbody>';
+	html+=`</tbody>`;
 	
 	insertTable(html);
 }	
@@ -185,15 +195,17 @@ function createGradeForm(userid){
 	innerHtml = `
 	<div>
 		<div class="form-style-2" style="width: 90%;">
-			<div class="form-style-2-heading" style="width: 110%;">Grading for student: `+currentStudent.firstName+`</div>
+			<div class="form-style-2-heading" style="width: 110%;">Assignment: Assignment 1 &nbsp&nbsp&nbsp&nbsp 
+			Student: `+currentStudent.firstName+` `+currentStudent.lastName+`</div>
+			
 				
-			<label for="assignment-submission">
+			<label for="assignment-submission" style="margin-left: 13%;">
 				<span>Assignment Submission</span>
-				<object id="assignment-submission" data="testPDF.pdf#page=1&zoom=75" type="application/pdf" width="100%" height="500px">
-			 	 	<p>Alternative text - include a link <a href="myfile.pdf">to the PDF!</a></p>
+				<object id="assignment-submission" data="http://ec2-52-33-118-140.us-west-2.compute.amazonaws.com/assignmentsub/1_Ganesh Notes.pdf#page=1&zoom=75" type="application/pdf" width="70%" height="500px">
+			 	 	<p>If pdf view fails, download file here<a href="http://ec2-52-33-118-140.us-west-2.compute.amazonaws.com/assignmentsub/1_Ganesh Notes.pdf">Download PDF</a></p>
 				</object>
 			</label>
-			<label for="student-comments">
+			<label for="student-comments" style="margin-left: 13%;">
 				<span>Student Comments</span></span>
 				<textarea name="student-comments" id="student-comments" class="textarea-field" readonly>`+currentStudent.studentComments+`</textarea>
 			</label>
@@ -201,11 +213,11 @@ function createGradeForm(userid){
 			<form style="margin-left: 13%;" id="grade-form">
 				<label for="grader-comments">
 					<span>Grader Comments</span>
-					<input class="textarea-field" id="grader-comments" name="grader-comments" type="text">
+					<textarea name="grader-comments" id="grader-comments" name="grader-comments" class="textarea-field" type="text"></textarea>
 				</label>
 				<label for="grade">
 					<span>Grade</span>
-					<input class="input-field" id="grade" name="grade" type="text" required>
+					<input class="input-field" id="grade" name="grade" type="number" required>
 				</label>
 			</form>
 		</div>
