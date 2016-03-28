@@ -21,6 +21,13 @@ $( document ).ready(function() {
 	
 	canvas.hoverCursor = 'pointer';
 	
+	drawOrbitals();
+	
+	for(var i = 0; i < mngr.nodes.length; i++)
+	{
+		animateNode(mngr.nodes[i], i);
+	}
+	
 	//Canvas events
 	canvas.on({
 
@@ -64,6 +71,83 @@ $( document ).ready(function() {
 	});
 
 });
+
+function drawOrbitals()
+{
+	for(var i = 0; i < mngr.nodes.length; i++)
+	{
+		var o = new fabric.Circle({
+			radius: 100,
+			top: mngr.nodes[i].top,
+			left: mngr.nodes[i].left,
+			fill: '',
+			stroke: 'white',
+			hasBorders: false,
+			hasControls: false,
+			lockMovementX: true,
+			lockMovementY: true,
+			selectable: false
+		});
+		
+		var width = o.getWidth()/2;
+		var centerx = mngr.nodes[i].getCenterPoint().x;
+		o.left = centerx - width;
+	
+		var height = o.getHeight()/2;
+		var centery = mngr.nodes[i].getCenterPoint().y
+		o.top = centery - height;
+		
+		canvas.add(o);
+		canvas.sendToBack(o);
+	}
+}
+
+function animateNode(n, ind){
+	var radius = 100;
+	
+	var cx = n.getCenterPoint().x;
+	var cy = n.getCenterPoint().y;
+	
+	var duration = 7000;
+	
+	var startAngle = fabric.util.getRandomInt(-180, 0);
+	var endAngle = startAngle + 359;
+	
+	(function animate() {
+		fabric.util.animate({
+			startValue: startAngle,
+			endValue: endAngle,
+			duration: duration,
+			
+			easing: function(t, b, c, d) { return c*t/d + b; },
+			
+			onChange: function(angle) {
+				angle = fabric.util.degreesToRadians(angle);
+				
+				var x = cx + radius * Math.cos(angle);
+				var y = cy + radius * Math.sin(angle);
+				
+				n.pnode.originX = 'center';
+				n.pnode.originY = 'center';
+				
+				n.pnode.set({left: x, top: y}).setCoords();
+				
+				n.pnode.ptext.originX = 'center';
+				n.pnode.ptext.originY = 'center';
+				
+				n.pnode.ptext.top = y;
+				n.pnode.ptext.left = x;
+				
+				
+				if(ind == mngr.nodes.length-1)
+				{
+					canvas.renderAll();
+				}
+			},
+			onComplete: animate
+		});
+	})();
+}
 
 function getPercents()
 {
