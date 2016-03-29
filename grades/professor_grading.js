@@ -121,7 +121,15 @@ function buildAssignmentGradingPage(parsedResult){
 		var nid = parsedResult[i].nid;
 		var nid2 = parsedResult[i].nid2;
 		var tdate = parsedResult[i].tdate;
-		var file = parsedResult[i].file;
+
+		var file;
+
+		if(parsedResult[i].file==null){
+			file = "No Submission";
+		}
+		else{
+			file = parsedResult[i].file;
+		}
 
 		var grade;
 		if(parsedResult[i].grade==null){
@@ -187,6 +195,7 @@ function initDataTable(){
 function createGradeForm(userid){
 	// Get the gradeData object for the userid selected
 	currentStudent = gradeDataArray[userid];
+	alert(currentStudent.file);
 	
 	// Build the popup
 	var innerHtml;
@@ -201,7 +210,7 @@ function createGradeForm(userid){
 				
 			<label for="assignment-submission" style="margin-left: 13%;">
 				<span>Assignment Submission</span>
-				<object id="assignment-submission" data="http://ec2-52-33-118-140.us-west-2.compute.amazonaws.com/assignmentsub/1_Ganesh Notes.pdf#page=1&zoom=75" type="application/pdf" width="70%" height="500px">
+				<object id="assignment-submission" data="http://ec2-52-33-118-140.us-west-2.compute.amazonaws.com/assignmentsub/`+currentStudent.file+`#page=1&zoom=75" type="application/pdf" width="70%" height="500px">
 			 	 	<embed src="http://ec2-52-33-118-140.us-west-2.compute.amazonaws.com/assignmentsub/1_Ganesh Notes.pdf" type="application/pdf" />
 				</object>
 			</label>
