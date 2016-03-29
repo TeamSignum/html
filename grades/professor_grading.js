@@ -30,6 +30,14 @@ $( document ).ready(function()
 	
 });
 
+$(document).keyup(function(e) {
+  	// Esc
+  	if (e.keyCode == 27){
+  		$("#custom_container").hide();
+  		$("#dim_div").hide();
+  	}
+});
+
 function getAssignments(){
 	$.ajax({
 		async: true,
