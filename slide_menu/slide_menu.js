@@ -26,7 +26,8 @@ function sendMessage(){
         data: {'classid': $('#selectedClass').val(), 'message': $('#message').val()},
         success: function(result) {
           //$("#result").html(result);
-          alert(result);
+          alert("Send the message");
+          $('#message').test("haha");
         },
         error:function(request,status,error){
         	alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
@@ -150,7 +151,8 @@ var notification = '';
 	for (var i = 0; i < result.length; i++){
 		counter += 1;
 		notification += '<li><a href="../grades/">'
-						+result[i]['author_name']+' send \''
+						+result[i]['author_name']+' in '
+						+result[i]['class_number']+' send \''
 						+result[i]['message']+'\' at '
 						+result[i]['send_date']+'</a></li>';
 	}

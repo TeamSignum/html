@@ -17,6 +17,4 @@ $query = "INSERT INTO `LU`.`professor_notification` (`idusers`, `cid`, `message`
 $statement = $DB->prepare($query);
 $statement->execute();
 
-// Send the message to your students
-
 ?>

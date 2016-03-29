@@ -162,9 +162,10 @@ function getAssignmentNQuiz($userid, $DB){
 
 function getProfMessage($userid, $DB){
 	$notifications = array();
-	$query = "select users.firstname, professor_notification.message, professor_notification.date_entered from LU.enrolled 
+	$query = "select users.firstname, classes.classnumber, professor_notification.message, professor_notification.date_entered from LU.enrolled 
 				inner join LU.professor_notification on LU.enrolled.cid = LU.professor_notification.cid
 				inner join LU.users on professor_notification.idusers = users.idusers
+				inner join LU.classes on classes.cid = professor_notification.cid
 				where LU.enrolled.idusers = ? ;
 				AND
 					LU.popupassignment.duedate >= DATE(now())
@@ -176,7 +177,8 @@ function getProfMessage($userid, $DB){
 	$result = $statement->fetchAll(PDO::FETCH_ASSOC);
 
 	foreach ($result as $row) {
-		$notifications[] = array(	'author_name' => $row['firstname'], 
+		$notifications[] = array(	'author_name' => $row['firstname'],
+									'class_number' => $row['classnumber'],
 									'message' => $row['message'],
 									'send_date' => $row['date_entered']);
 	}
