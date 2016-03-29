@@ -247,7 +247,7 @@ $( document ).ready(function() {
 	   //      var units = 10;
 	   //      var delta = new fabric.Point(e.e.movementX, e.e.movementY);
 	   //      canvas.relativePan(delta);
-    	//}
+    // 	}
 
 		if(isDown == false)
 		{

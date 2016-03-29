@@ -163,13 +163,24 @@ MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, f
 			c.compl = 0;
 		}
 		c.lockMovementX = c.lockMovementY = true;
-		
+
+		// var imgElement = document.getElementById('my-image-moon');
+		// var pc = new fabric.Image(imgElement, {
+		// 	top : top + 20, 
+		// 	left : left - 20,
+		// 	id: "partnode"
+		// });
+		// pc.width = 80;
+		// pc.height = 80;
+		// pc.scale(.4);
+
 		var pc = new fabric.Circle({
 				top: top + 20,
 				left: left - 20,
 				radius: 15,
 				fill: 'green',
 				stroke: 'white',
+				strokeWidth: 3, 
 				id: "partNode"
 		});
 		
@@ -184,7 +195,7 @@ MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, f
 				fontFamily: 'arial black',
 				fontSize: 12,
 				left: left - 18,
-				top: top + 20 + 8,
+				top: top + 20 + 10,
 				id: "partText"
 		});
 		
@@ -866,15 +877,26 @@ MManager.prototype.CreatePopupNode = function(node, popup, docreate){
 		var top = node.top;
 		var left = node.left; 
 
-		var imgElement = document.getElementById('my-image-page');
-		var popupnode = new fabric.Image(imgElement, {
-			top : top + radius, 
-			left : left + (2 * radius) - 10,
-			id: "popupnode"
+		// var imgElement = document.getElementById('my-image-page');
+		// var popupnode = new fabric.Image(imgElement, {
+		// 	top : top + radius, 
+		// 	left : left + (2 * radius) - 10,
+		// 	id: "popupnode"
+		// });
+
+		var popupnode = new fabric.Circle({
+				top: top + 10,
+				left: left + (2 * radius) - 20,
+				radius: 15,
+				fill: '#009ACD',
+				stroke: 'white',
+				strokeWidth: 3, 
+				id: "popupnode"
 		});
-		popupnode.width = 68;
-		popupnode.height = 77;
-		popupnode.scale(.3);
+
+		// popupnode.width = 68;
+		// popupnode.height = 77;
+		// popupnode.scale(.3);
 
 		popupnode.title = node.title;
 		
@@ -884,7 +906,7 @@ MManager.prototype.CreatePopupNode = function(node, popup, docreate){
 		popupnode.hasBorders  = false; 
 		popupnode.nid = nid;
 		popupnode.type = type;
-		popupnode. popup = popup; 
+		popupnode.popup = popup; 
 		node.popupnode = popupnode;
 		popupnode.node = node;
 		this.canvas.add(popupnode);  
