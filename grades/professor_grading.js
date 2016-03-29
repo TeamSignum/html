@@ -59,7 +59,7 @@ function submitGrade(){
 		url: "professor_grading.php",
 		data: formData,
 		success: function(result){
-			alert(result);
+			//alert(result);
 
 			if(result=='Success'){
 				// Update the row
@@ -195,8 +195,7 @@ function initDataTable(){
 function createGradeForm(userid){
 	// Get the gradeData object for the userid selected
 	currentStudent = gradeDataArray[userid];
-	alert(currentStudent.file);
-	
+		
 	// Build the popup
 	var innerHtml;
 
