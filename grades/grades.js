@@ -70,7 +70,7 @@ function buildDisplayPage(parsedResult){
 
 	for(var i = 0; i < parsedResult.length; i++){
 		if(currentAssignment !== parsedResult[i].title){
-			gradeInfo.push(['Assignment', 'Score']); // This is the header information for the Google Chart
+			gradeInfo.push(['Assignment', 'Grade']); // This is the header information for the Google Chart
 			currentAssignment = parsedResult[i].title;
 			// Build the trigger header for the assignment
 			html +='<div class = "class-header"><span class="textPadding"> + ' + currentAssignment + ' - PLACEHOLDER%</span></div>';
@@ -78,7 +78,13 @@ function buildDisplayPage(parsedResult){
 		}
 
 		// Calculate the the stats for the assignment
-		var tempGrade = parseInt(parsedResult[i].score)
+		var tempGrade;
+		if(parsedResult[i].grade==null){
+			tempGrade = 0;
+		}
+		else{
+			tempGrade = parseInt(parsedResult[i].grade);
+		}
 		gradeTotal += tempGrade;
 		gradeCount++;
 		if(tempGrade > gradeHigh)

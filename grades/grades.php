@@ -111,14 +111,10 @@
 				else{
 					die("Information required for query was not found.");
 				}
-				$query = "SELECT g.idusers, c.classnumber, p.title, g.score
-						  FROM grades g
-						  INNER JOIN popupassignment p
-						    ON g.idassignment=p.idassignment
-						  INNER JOIN classes c
-						    ON p.cid=c.cid
-						  WHERE c.cid=?
-						  ORDER BY p.title ASC";
+				$query="SELECT a.idusers, p.title, a.grade
+						FROM users u, assignments a, popupassignment p
+						WHERE u.idusers = a.idusers AND a.cid=p.cid AND a.cid=?
+						ORDER BY p.title ASC";
 									
 				$statement = $DB->prepare($query);
 				$statement->bindValue (1, $cid);
