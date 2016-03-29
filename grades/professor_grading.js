@@ -202,7 +202,7 @@ function createGradeForm(userid){
 			<label for="assignment-submission" style="margin-left: 13%;">
 				<span>Assignment Submission</span>
 				<object id="assignment-submission" data="http://ec2-52-33-118-140.us-west-2.compute.amazonaws.com/assignmentsub/1_Ganesh Notes.pdf#page=1&zoom=75" type="application/pdf" width="70%" height="500px">
-			 	 	<p>If pdf view fails, download file here<a href="http://ec2-52-33-118-140.us-west-2.compute.amazonaws.com/assignmentsub/1_Ganesh Notes.pdf">Download PDF</a></p>
+			 	 	<embed src="http://ec2-52-33-118-140.us-west-2.compute.amazonaws.com/assignmentsub/1_Ganesh Notes.pdf" type="application/pdf" />
 				</object>
 			</label>
 			<label for="student-comments" style="margin-left: 13%;">
