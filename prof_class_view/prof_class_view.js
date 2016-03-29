@@ -65,15 +65,18 @@ $( document ).ready(function() {
 		}
 	});
 
-	$( "#checkoff" ).click(function() {
-		//mngr.CheckOffNode();
-	});
-
-	$( "#p_Cancel" ).click(function() {
-		//mngr.HidePopup2();
+	$( "#xmark" ).click(function() {
 		closePopup();
 	});
 
+});
+
+$(document).keyup(function(e) {
+
+  	// Esc
+  	if (e.keyCode == 27){
+  		closePopup();
+  	}
 });
 
 function navigate(nid)
