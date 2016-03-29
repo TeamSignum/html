@@ -21,7 +21,7 @@ $( document ).ready(function() {
 	
 	canvas.hoverCursor = 'pointer';
 	
-	drawOrbitals();
+	//drawOrbitals();
 	
 	for(var i = 0; i < mngr.nodes.length; i++)
 	{
