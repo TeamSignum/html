@@ -3,33 +3,34 @@ var counter = 0;
 
 $(document).ready(function() {
 	getRole();
-	getNotifications();
+	getNotifications();	
   	$("[data-toggle]").click(function() {  		
   	   	var toggle_el = $(this).data("toggle");
     	$(toggle_el).toggleClass("open");
     	//$("#dim_div").show();
     	counter = 0;
-  	});
 
-  	$("#send").click(function(){
-  		//sendMessage();
+    	 	//namgi
+	  	$("#sendMessage").click(function(){ 
+	  		sendMessage();
+	  		
+	  	});
   	});
 });
 
 function sendMessage(){
-	alert("Your message was sent successfully!");
-
 	$.ajax({
         type: "POST",
-        url: "addEntryAjaxPdo.php",
+        url: "../slide_menu/send_message.php",
         dataType: "html",
-        data: {
-          message: $("#message").val()
-        },
-
+        data: {'classid': $('#selectedClass').val(), 'message': $('#message').val()},
         success: function(result) {
-          $("#result").html(result);
-        }
+          //$("#result").html(result);
+          alert(result);
+        },
+        error:function(request,status,error){
+        	alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+       	}
     });
 }
 
@@ -43,7 +44,7 @@ function getProfClass(){
 		data:{'function': 'getProfClass'},
 		success: function (result){
 
-			//$('#feet').html(setFeet(result));	
+			$('#feet').html(setFeet(result));	
 		},
 		error:function(request,status,error){
         	alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
@@ -52,13 +53,13 @@ function getProfClass(){
 }
 
 function setFeet(classes){
-	var html = '';
+	var html = '<select id="selectedClass">';
 	for(var i = 0 ; i <classes.length; i++){
-		html += '<select><option value="'+classes[i].cid+'">'
-								+classes[i].classnumber+'</option></select>'; 
+		html += '<option value="'+classes[i].cid+'">'
+								+classes[i].classnumber+'</option>'; 
 	}
 
-	html+='<input type="text" id="message" name="message"><input type="button" id="send" name="send" value="Send">';
+	html+='</select><input type="text" id="message" name="message"> <input type="button" value="Send" id="sendMessage" name="sendMessage">';
 
 	return html;
 }
@@ -92,10 +93,11 @@ function getNotifications()
 				studentGrade(result[0]);				     
 		        studentDiscussion(result[1]);				       
 		        studentAssignmentNQuiz(result[2]);
+		        studentProfMessage(result[3]);
 		        $('#notification').html(counter);
 			}else if(role == 'professor'){
-				//getProfClass();
-				//professorNotification(result);
+				getProfClass();
+				professorNotification(result);
 			}
 		},
 		error:function(request,status,error){
@@ -141,6 +143,18 @@ function studentGrade(result){
 						+result[i]['date_entered']+'</a></li>';
 	}
 	$('#grade').html('<ul>'+notification+'</ul>');
+}
+
+function studentProfMessage(result){
+var notification = '';
+	for (var i = 0; i < result.length; i++){
+		counter += 1;
+		notification += '<li><a href="../grades/">'
+						+result[i]['author_name']+' send \''
+						+result[i]['message']+'\' at '
+						+result[i]['send_date']+'</a></li>';
+	}
+	$('#message').html('<ul>'+notification+'</ul>');
 }
 
 function studentNotification(result){

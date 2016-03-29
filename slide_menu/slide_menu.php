@@ -47,7 +47,8 @@ if(isset($_SESSION['userid'])){
 						(
 							getGrade($userid, $DB),
 							getDiscussion($userid, $DB),
-							getAssignmentNQuiz($userid, $DB)
+							getAssignmentNQuiz($userid, $DB),
+							getProfMessage($userid, $DB)
 						);
 					echo(json_encode($notifications));
 				}else if($role=='professor'){
@@ -63,7 +64,7 @@ if(isset($_SESSION['userid'])){
 						$statement->bindValue(1, $cid['cid']);
 						$statement->execute();
 						$students = $statement->fetch();
-						$notifications[] = array('students' => $students['count(*)']);						
+						$notifications[] = array('students' => $students['count(*)']);
 					}
 					echo(json_encode($notifications));	
 				}
@@ -159,4 +160,28 @@ function getAssignmentNQuiz($userid, $DB){
 	return $notifications;
 }
 
+function getProfMessage($userid, $DB){
+	$notifications = array();
+	$query = "select users.firstname, professor_notification.message, professor_notification.date_entered from LU.enrolled 
+				inner join LU.professor_notification on LU.enrolled.cid = LU.professor_notification.cid
+				inner join LU.users on professor_notification.idusers = users.idusers
+				where LU.enrolled.idusers = ? ;
+				AND
+					LU.popupassignment.duedate >= DATE(now())
+				AND
+				    LU.popupassignment.duedate <= DATE_ADD(DATE(now()), INTERVAL 2 WEEK);";
+	$statement = $DB->prepare($query);
+	$statement->bindValue(1, $userid);	
+	$statement->execute();
+	$result = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+	foreach ($result as $row) {
+		$notifications[] = array(	'author_name' => $row['firstname'], 
+									'message' => $row['message'],
+									'send_date' => $row['date_entered']);
+	}
+
+
+	return $notifications;
+}
 ?>

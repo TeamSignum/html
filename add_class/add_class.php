@@ -66,8 +66,6 @@ if(isset($_POST['function'])){
 			$query = "delete from LU.enrolled where idusers = '$userid' and cid = '$cid';";
 			$statement = $DB->prepare($query);
 			$statement->execute();
-
-			
 		default:
 			# code...
 			break;

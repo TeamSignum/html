@@ -15,7 +15,7 @@ Last change	: 2016/01/12
 5. Mic
 -------------------------------------------------------------------*/
 /*custom font*/
-@import url(http://fonts.googleapis.com/css?family=Montserrat);
+@import url(http://fonts.googleapis.com/css?family=Average+Sans);
 
 /*basic reset*/
 * {margin: 0; padding: 0;}
@@ -24,7 +24,6 @@ Last change	: 2016/01/12
 html,
 body {
   padding: 1px;
-  font-family: 'Varela Round';
 }
 /*=== 2. Form Styles ===*/
 #msform {
@@ -61,7 +60,7 @@ body {
 	margin-bottom: 10px;
 	width: 49%;
 	box-sizing: border-box;
-	font-family: montserrat;
+	font-family: 'Average Sans', sans-serif;
   	font-size: 13px;
 }
 #msform select{
@@ -72,7 +71,7 @@ body {
 	margin-bottom: 10px;
 	width: 100%;
 	box-sizing: border-box;
-	font-family: montserrat;
+	font-family: 'Average Sans', sans-serif;
 	font-size: 13px;
 }
 
@@ -95,7 +94,7 @@ body {
 	margin-bottom: 10px;
 	width: 100%;
 	box-sizing: border-box;
-	font-family: montserrat;
+	font-family: 'Average Sans', sans-serif;
 	color: #2C3E50;
 	font-size: 13px;
 }
@@ -164,6 +163,3 @@ body {
 	background: #27AE60;
 	color: white;
 }
-
-
-
