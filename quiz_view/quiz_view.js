@@ -119,7 +119,7 @@ function submitQuiz()
 	var c1 = answerCheck();
 	if(c1 == true)
 	{
-		alert("Fill in all answers.");
+		swal("Fill in all answers.");
 	}
 	
 	if(c1 == false)
@@ -163,7 +163,18 @@ function submitQuiz()
 		
 			success: function(result){
 				//alert(result);
-				window.location = '../concept_view/concept_view.html';
+				swal({
+					title: "Quiz",
+					text: "You have successfully completed the quiz.",
+					confirmButtonText: "Ok",
+					closeOnConfirm: true},
+					function(isConfirm){
+						if(isConfirm)
+						{
+							window.location = '../concept_view/concept_view.html';
+						}
+					}
+				);
 				//swal("Saved"); 
 			}
 		});
