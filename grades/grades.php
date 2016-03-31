@@ -111,13 +111,18 @@
 				else{
 					die("Information required for query was not found.");
 				}
-				$query="SELECT a.idusers, p.title, a.grade
+				$query="SELECT a.idusers, p.title, a.grade, p.duedate
 						FROM users u, assignments a, popupassignment p
 						WHERE u.idusers = a.idusers AND a.cid=p.cid AND a.cid=?
-						ORDER BY p.title ASC";
+						UNION
+						SELECT q.idusers, p.title, q.grade, p.duedate
+						FROM users u, quizzes q, popupquiz p
+						WHERE u.idusers = q.idusers AND q.cid=p.cid AND q.cid=?
+						ORDER BY duedate ASC";
 									
 				$statement = $DB->prepare($query);
 				$statement->bindValue (1, $cid);
+				$statement->bindValue (2, $cid);
 
 				break;
 			
