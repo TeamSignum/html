@@ -26,13 +26,18 @@ span.textPadding{
   	min-height: 15px;
 	width: 40vw;
 	min-width: 350px;
-	background-color: #980000;
+	background-color: DarkGray;
 	border-radius: 5px;
   	margin:10px auto 10px auto;
  	
 	/*Text properties*/
 	color: white;
 	font-size: xx-large;
+	
+}
+
+.class-header:hover{
+	cursor: pointer;
 }
 
 /* A 'panel' that can be toggled in and out, contains the google chart */
