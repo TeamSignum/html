@@ -1056,6 +1056,14 @@ MManager.prototype.ShowPopup = function(node, popup){
 			}
 		}
 	}
+	else
+	{
+		if(node.node.type === "quiz")
+		{
+			$("#quizcompl").hide();
+		}
+	}
+	
 	$("#custom_container").show();
 	if(node.node.compl == 1)
 	{
