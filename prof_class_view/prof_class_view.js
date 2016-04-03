@@ -157,12 +157,12 @@ function buildChart(result, title)
 {
 		var data = new google.visualization.DataTable();
 		data.addColumn('string', 'Node');
-        data.addColumn('number', 'Total students');
+        //data.addColumn('number', 'Total students');
 		data.addColumn('number', 'Completed');
 		
 		for(var i = 0; i < result.length-1; i++)
 		{
-			data.addRow([result[i].title, etotal, parseInt(result[i].ctotal)]);
+			data.addRow([result[i].title, parseInt(result[i].ctotal)]);
 		}
 		
 		if(result.length > 0)
@@ -177,12 +177,14 @@ function buildChart(result, title)
 			//vAxis: { textPosition: 'none' },
 			//chartArea:{left:0,top:0,width:"70%",height:"70%"},
 			height: 450,
-			width: 600
+			width: 600,
+			bar: {groupWidth: "30%"},
+			vAxis: {viewWindow: {max: etotal}}
 		};
 		
 		var chart = new google.charts.Bar(document.getElementById('stat_chart'));
 
-        chart.draw(data, options);
+        chart.draw(data, google.charts.Bar.convertOptions(options));
 }
 
 function getParticipants()

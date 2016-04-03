@@ -149,6 +149,32 @@ if(isset($_POST['nstats']))
 	}
 }
 
+if(isset($_POST["nquizstats"]))
+{
+	$cid = $_SESSION['classid'];
+	$nid = $_SESSION['nid'];
+	
+	try
+	{
+		$nid2 = $_POST['nquizstats'];
+		
+		$DB = new PDO("mysql:host=ec2-52-33-118-140.us-west-2.compute.amazonaws.com;dbname=LU", 'Signum', 'signumDB4');
+		$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		
+		$query = "SELECT grade FROM quizzes WHERE quizzes.cid='$cid' AND quizzes.nid='$nid' AND quizzes.nid2='$nid2'";
+		
+		$statement = $DB->prepare($query);
+		$statement->execute();
+		$result = $statement->fetchAll(PDO::FETCH_ASSOC);
+		
+		echo json_encode($result);
+	}
+	catch(PDOException $e)
+	{
+		echo $e->getMessage();
+	}
+}
+
 if(isset($_POST["directa"]))
 {
 	$_SESSION["nid2a"] = $_POST["directa"];

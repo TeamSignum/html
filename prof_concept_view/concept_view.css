@@ -56,6 +56,11 @@
 	margin: 0 auto;
 }
 
+#quizstat_chart{
+	display: inline-block;
+	margin: 0 auto;
+}
+
 .form-style-2{
     padding: 20px 12px 10px 20px;
     font: 13px Arial, Helvetica, sans-serif;
