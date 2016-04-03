@@ -995,7 +995,16 @@ MManager.prototype.CheckOffNode = function(){
 			if (isConfirm) {
 				swal("Completed", "The node has been completed.", "success");
 				mngr.CompleteNode(mngr.crrnt.nid);
-				mngr.crrnt.compl = 1;
+				mngr.crrnt.node.compl = 1;
+				
+				var imgEle;
+				if(mngr.crrnt.node.type === "concept")
+				{
+					imgEle = document.getElementById('my-image4');
+					
+					mngr.crrnt.node.setElement(imgEle);
+				}
+				
 
 				$("#dim_div").hide();
 				$("#custom_container").hide();
@@ -1032,6 +1041,20 @@ MManager.prototype.ShowPopup = function(node, popup){
 
 	if (this.mode == 0){
 		LoadDiscussion(node.nid, this.classOrConcept); // From API/Discussion/discussion.js
+		
+		if(node.node.type === "quiz")
+		{
+			if(node.node.compl == 1)
+			{
+				$("#quiz_navigate").hide();
+				$("#quizcompl").show();
+			}
+			else
+			{
+				$("#quiz_navigate").show();
+				$("#quizcompl").hide();
+			}
+		}
 	}
 	$("#custom_container").show();
 	if(node.node.compl == 1)
@@ -1041,7 +1064,14 @@ MManager.prototype.ShowPopup = function(node, popup){
 	}
 	else
 	{
-		$("#checkoff").show();
+		if(node.node.type === "concept")
+		{
+			$("#checkoff").show();
+		}
+		else
+		{
+			$("#checkoff").hide();
+		}
 	}
 	$("#dim_div").show();
 }
@@ -1326,6 +1356,7 @@ MManager.prototype.CreateQuizPopup = function(title, description, due_date, note
 		}
 		innerHtml +=
 		"				</button>" +
+		"<div id=\"quizcompl\">You have already completed this quiz.<\div>" +
 		"               </br></br></br>" +
 		"               </br></br></br>" +
 		"			 </form>"+
