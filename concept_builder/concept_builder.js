@@ -430,6 +430,10 @@ $( document ).ready(function() {
 	});
 });
 
+function HelpMessageHelper(){
+	DisplayHelpMessage("concept_builder");
+}
+
 function showTooltip(type, top, left)
 {
 	var ttid = type + "tt";

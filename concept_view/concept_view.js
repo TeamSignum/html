@@ -148,6 +148,10 @@ function drawPercents(nid, count, total)
 	//canvas.add(t);
 }
 
+function HelpMessageHelper(){
+	DisplayHelpMessage("concept_view");
+}
+
 function setParticipant(nid)
 {
 	$.ajax({

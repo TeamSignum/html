@@ -412,7 +412,12 @@ $( document ).ready(function() {
 	$( "#p_Cancel" ).click(function() {
 		mngr.HidePopup();
 	});
+
 });
+
+function HelpMessageHelper(){
+	DisplayHelpMessage("class_builder");
+}
 
 function showTooltip(type, top, left)
 {

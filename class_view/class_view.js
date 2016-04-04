@@ -72,6 +72,10 @@ $( document ).ready(function() {
 
 });
 
+function HelpMessageHelper(){
+	DisplayHelpMessage("class_view");
+}
+
 function drawOrbitals()
 {
 	for(var i = 0; i < mngr.nodes.length; i++)

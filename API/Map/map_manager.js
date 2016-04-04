@@ -877,26 +877,16 @@ MManager.prototype.CreatePopupNode = function(node, popup, docreate){
 		var top = node.top;
 		var left = node.left; 
 
-		// var imgElement = document.getElementById('my-image-page');
-		// var popupnode = new fabric.Image(imgElement, {
-		// 	top : top + radius, 
-		// 	left : left + (2 * radius) - 10,
-		// 	id: "popupnode"
-		// });
-
-		var popupnode = new fabric.Circle({
-				top: top + 10,
-				left: left + (2 * radius) - 20,
-				radius: 15,
-				fill: '#009ACD',
-				stroke: 'white',
-				strokeWidth: 3, 
-				id: "popupnode"
+		var imgElement = document.getElementById('my-image-page');
+		var popupnode = new fabric.Image(imgElement, {
+			top : top + 10,
+			left : left + (2 * radius) - 10,
+			id: "popupnode"
 		});
 
-		// popupnode.width = 68;
-		// popupnode.height = 77;
-		// popupnode.scale(.3);
+		popupnode.height = 96;
+		popupnode.width = 96;
+		popupnode.scale(.30);
 
 		popupnode.title = node.title;
 		
