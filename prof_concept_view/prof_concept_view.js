@@ -51,7 +51,7 @@ $( document ).ready(function() {
 					crntnid2 = e.target.nid;
 					getStats(e.target.nid, e.target.title.text, e.target.node.type);
 				}
-				if(e.target.id === "mapNode" && e.target.type === "assignment")
+				if((e.target.id === "mapNode" && e.target.type === "assignment") || (e.target.id === "percNode" && e.target.type === "assignment"))
 				{
 					navToAssign(e.target.nid);
 				}
@@ -437,16 +437,27 @@ function drawPercents(nid, count)
 			fontFamily: 'arial black',
 			fontSize: 20,
 			left: temp.left,
-			top: temp.top
+			top: temp.top,
+			id: "percNode",
+			type: temp.type
 	});
 	
-	var len = t.getWidth()/2;
-	var cenX = temp.getCenterPoint().x;
-	t.left = cenX - len;
+	t.originX = 'center';
+	t.originY = 'center';
 	
-	var len2 = t.getHeight()/2;
-	var cenY = temp.getCenterPoint().y;
-	t.top = cenY - len2;
+	t.left = temp.getCenterPoint().x;
+	t.top = temp.getCenterPoint().y;
+	t.setCoords();
+	
+	t.nid = temp.nid;
+	
+	//var len = t.getWidth()/2;
+	//var cenX = temp.getCenterPoint().x;
+	//t.left = cenX - len;
+	
+	//var len2 = t.getHeight()/2;
+	//var cenY = temp.getCenterPoint().y;
+	//t.top = cenY - len2;
 	
 	t.hasControls = false;
 	t.hasBorders = false;

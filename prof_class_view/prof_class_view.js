@@ -31,7 +31,7 @@ $( document ).ready(function() {
 		'mouse:down': function(e) {
 			if(e.target)
 			{
-				if (e.target.id === "mapNode") 
+				if (e.target.id === "mapNode" || e.target.id === "percNode") 
 				{
 					//mngr.HandleMapNodeSelect(e.target);
 					navigate(e.target.nid);
@@ -143,10 +143,8 @@ function getStats(nid, title)
 		
 		success: function(result){
 			//alert(result);
-			//drawChart(result);
 			buildChart(result, ntitle);
 			showPopup();
-			//alert(result[0].nid + " " + result[0].count);
 		}
 	});
 	
@@ -288,13 +286,22 @@ function drawPercents(nid, count)
 			id: "percNode"
 	});
 	
-	var len = t.getWidth()/2;
-	var cenX = temp.getCenterPoint().x;
-	t.left = cenX - len;
+	t.originX = 'center';
+	t.originY = 'center';
 	
-	var len2 = t.getHeight()/2;
-	var cenY = temp.getCenterPoint().y;
-	t.top = cenY - len2;
+	t.left = temp.getCenterPoint().x;
+	t.top = temp.getCenterPoint().y;
+	t.setCoords();
+	
+	t.nid = temp.nid;
+	
+	//var len = t.getWidth()/2;
+	//var cenX = temp.getCenterPoint().x;
+	//t.left = cenX - len;
+	
+	//var len2 = t.getHeight()/2;
+	//var cenY = temp.getCenterPoint().y;
+	//t.top = cenY - len2;
 	
 	t.hasControls = false;
 	t.hasBorders = false;
