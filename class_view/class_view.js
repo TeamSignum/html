@@ -2,6 +2,7 @@ var canvas;
 var nid; 
 var checked_off;
 var mngr;
+var timeOut;
 
 $( document ).ready(function() {
 
@@ -37,6 +38,10 @@ $( document ).ready(function() {
 				if (e.target.id === "mapNode" || e.target.id === "popupnode") 
 				{
 					mngr.HandleMapNodeSelect(e.target);
+				}
+				if(e.target.id === "percNode")
+				{
+					mngr.HandleMapNodeSelect(e.target.node);
 				}
 			}
 	    },
@@ -162,7 +167,7 @@ function getPercents()
 	}
 	$.ajax({
 		async: true,
-		type: 'POST',
+		type: 'GET',
 		url: "class_view.php",
 		dataType: 'json',
 		data: {userperc: temp},
@@ -203,11 +208,14 @@ function drawPercents(nid, count, total)
 		fontFamily: 'arial black',
 		fontSize: 20,
 		left: temp.left,
-		top: temp.top
+		top: temp.top,
+		id: "percNode"
 	});
 	
+	t.node = temp;
+	
 	t.lockMovementX = t.lockMovementY = true;
-	t.selectable = t.hasControls = t.hasBorders = false;
+	t.hasControls = t.hasBorders = false;
 
 	var len = t.getWidth()/2;
 	var cenX = temp.getCenterPoint().x;
@@ -229,7 +237,7 @@ function getParticipants()
 	}
 	$.ajax({
 		async: true,
-		type: 'POST',
+		type: 'GET',
 		url: "class_view.php",
 		dataType: 'json',
 		data: {pnodes: temp},
@@ -242,6 +250,10 @@ function getParticipants()
 					drawParticipants(result[i].nid, result[i].count);
 				}
 			}
+			canvas.renderAll();
+			timeOut = setTimeout(function(){
+				getParticipants();
+			}, 15000);
 		}
 	});
 	

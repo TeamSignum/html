@@ -2,11 +2,11 @@
 
 session_start();
 
-if(isset($_POST['pnodes']))
+if(isset($_GET['pnodes']))
 {
 	$cid = $_SESSION['classid'];
 	
-	$nids = $_POST['pnodes'];
+	$nids = $_GET['pnodes'];
 	
 	$participants = array();
 	
@@ -37,12 +37,12 @@ if(isset($_POST['pnodes']))
 	echo json_encode($participants);
 }
 
-if(isset($_POST['userperc']))
+if(isset($_GET['userperc']))
 {
 	$cid = $_SESSION['classid'];
 	$idusers = $_SESSION['userid'];
 	
-	$nids = $_POST['userperc'];
+	$nids = $_GET['userperc'];
 	
 	$percents = array();
 	

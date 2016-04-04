@@ -2,12 +2,12 @@
 
 session_start();
 
-if(isset($_POST['pnodes']))
+if(isset($_GET['pnodes']))
 {
 	$cid = $_SESSION['classid'];
 	$nid = $_SESSION['nid'];
 	
-	$nid2s = $_POST['pnodes'];
+	$nid2s = $_GET['pnodes'];
 	
 	$participants = array();
 	

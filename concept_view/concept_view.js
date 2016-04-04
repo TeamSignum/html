@@ -2,6 +2,7 @@ var canvas;
 var nid; 
 var checked_off;
 var mngr;
+var timeOut;
 
 $( document ).ready(function() {
 
@@ -18,7 +19,7 @@ $( document ).ready(function() {
 	
 	getParticipants();
 	
-	var timer = setInterval(function() {getParticipants()}, 10000);
+	//var timer = setInterval(function() {getParticipants()}, 10000);
 	
 	canvas.hoverCursor = 'pointer';
 	
@@ -30,6 +31,7 @@ $( document ).ready(function() {
 			{
 				if (e.target.id === "mapNode" || e.target.id === "popupnode") 
 				{
+					clearTimeout(timeOut);
 					setParticipant(e.target.nid);
 					getParticipants();
 					mngr.HandleMapNodeSelect(e.target);
@@ -176,12 +178,13 @@ function getParticipants()
 	}
 	$.ajax({
 		async: true,
-		type: 'POST',
+		type: 'GET',
 		url: "concept_view.php",
 		dataType: 'json',
 		data: {pnodes: temp},
 		
 		success: function(result){
+			//alert(result);
 			for(var i = 0; i < result.length; i++)
 			{
 				if(result[i].count != null)
@@ -189,6 +192,10 @@ function getParticipants()
 					drawParticipants(result[i].nid, result[i].count);
 				}
 			}
+			canvas.renderAll();
+			timeOut = setTimeout(function(){
+				getParticipants();
+			}, 15000);
 		}
 	});
 	
