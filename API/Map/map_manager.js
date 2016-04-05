@@ -1144,7 +1144,7 @@ MManager.prototype.ShowFiles = function(){
 			{
 				var path = result[i]["path"];
 				var innerHtml = $("#lecturenotes").html();
-				innerHtml += `<div style="margin-bottom:10px;"><span onclick="mngr.downloadfile('`+path+`')" class="glyphicon glyphicon-download" aria-hidden="true"></span> &nbsp;&nbsp;`
+				innerHtml += `<div style="margin-bottom:10px;"><i class="material-icons" style="cursor:pointer;" onclick="mngr.downloadfile('`+path+`')">get_app</i>&nbsp;&nbsp;`
 				innerHtml += result[i]["name"] + "</div>";
 
 				$("#lecturenotes").html(innerHtml);
@@ -1172,52 +1172,27 @@ MManager.prototype.CreateConceptPopup = function(title, description, due_date, n
 	if(notes == null)
 		notes = "";
 
+
 	innerHtml = `
  	<div> 
-		<div class="form-style-2" style="width: 90%;">
-		<div class="form-style-2-heading" style="width: 110%;">Concept Node Details</div>
-		<form style="margin-left: 13%;">
-	`;
+		<div class="form-style-2" style="width: 90%;">`;
 
-		if (this.mode ==  1){
-			innerHtml += `
-			<label for="field1"><span>Title <span class="required">*</span></span><input class="input-field" id="title" name="title" type="text" value="`+ title +`"placeholder="Title"/></label>
-			<label for="field2"><span>Description <span class="required">*</span></span><input class="input-field" id="description" name="description" type="text" value="`+ description +`" placeholder="Description"/></label>
-			<label for="field5"><span>Notes <span class=""></span></span><textarea name="notes" id="notes" class="textarea-field">`+ notes +`</textarea></label>
-			<label for="field2"><span>Due Date<span class=""></span></span><input class="input-field" id="due_date" name="due_date" type="text" value="`+ due_date +`" placeholder="Due date"/></label>
-			`;
-		}
-		else{
-			innerHtml += `
-			<label for="field1"><span>Title <span class="required">*</span></span><input readonly class="input-field" id="title" name="title" type="text" value="`+ title +`" placeholder="Title"/></label>
-			<label for="field2"><span>Description <span class="required">*</span></span><input readonly class="input-field" id="description" name="description" type="text" value="`+ description +`" placeholder="Description"/></label>
-			<label for="field5"><span>Notes <span class=""></span></span><textarea readonly name="notes" id="notes" class="textarea-field">`+ notes +`</textarea></label>
-			<label for="field2"><span>Due Date<span class=""></span></span><input readonly class="input-field" id="due_date" name="due_date" type="text" value="`+ due_date +`" placeholder="Due date"/></label>
-			`;
-		}
-
-		if (this.mode ==  1){
-			innerHtml += `
-			</br>
-			<input type="file" id="filechooser" onchange="mngr.UploadFile();">
-			<div id="lecturenotes" style="text-align:left;font-size:16px;"></div>
-			<hr>
-			</br>
-			`;
-		}
-		else{
-			innerHtml += `
-			</br>
-			<div id="lecturenotes" style="text-align:left;font-size:16px;"></div>
-			<hr>
-			</br>
-			`;
-		}
-		
-		innerHtml += `
-			</br>
+	if (this.mode == 0){
+		innerHtml += `<div class="form-style-2-heading" style="width: 110%;">` + title + `</div>
+		<div class="popup-div">
+		<h4><b>Due Date:</b> ` + due_date + `</h4>
+		</br>
+		<h4><b>Description</b></h4>
+		<p>` + description + `</p>
+		</br>
+		<h4><b>Notes</b></h4>
+		<p>` + notes + `</p>
+		</br>
+		<div id="lecturenotes" style="text-align:left;font-size:16px;"></div>
+		<hr>
+		</br>
 		`;
-		
+
 		if (this.classOrConcept == 0){
 			innerHtml += `
 			<button id="concept_navigate" onclick="mngr.NavigateToConcept();" style="float:left; font-size:12pt; margin-top:10px;" type="button" class="btn btn-default btn-md">
@@ -1225,12 +1200,43 @@ MManager.prototype.CreateConceptPopup = function(title, description, due_date, n
 			</button>
 			`;
 		}
+
+		innerHtml += `
+		</div>
+		</div>
+		</div>
+  		</div>
+  		`;
+	}
+	else{
+		innerHtml += `<div class="form-style-2-heading" style="width: 110%;">Concept Node Details</div>
+		<form style="margin-left: 13%;">
+		<label for="field1"><span>Title <span class="required">*</span></span><input class="input-field" id="title" name="title" type="text" value="`+ title +`"placeholder="Title"/></label>
+		<label for="field2"><span>Description <span class="required">*</span></span><input class="input-field" id="description" name="description" type="text" value="`+ description +`" placeholder="Description"/></label>
+		<label for="field5"><span>Notes <span class=""></span></span><textarea name="notes" id="notes" class="textarea-field">`+ notes +`</textarea></label>
+		<label for="field2"><span>Due Date<span class=""></span></span><input class="input-field" id="due_date" name="due_date" type="text" value="`+ due_date +`" placeholder="Due date"/></label>
+		</br>
+		<input type="file" id="filechooser" onchange="mngr.UploadFile();">
+		<div id="lecturenotes" style="text-align:left;font-size:16px;"></div>
+		<hr>
+		</br>
+		`;
+
+		if (this.classOrConcept == 0){
+			innerHtml += `
+			<button id="concept_navigate" onclick="mngr.NavigateToConcept();" style="float:left; font-size:12pt; margin-top:10px;" type="button" class="btn btn-default btn-md">
+			Concept Page
+			</button>
+			`;
+		}
+
 		innerHtml += `
 		</form>
 		</div>
 		</div>
   		</div>
   		`;
+	}
 
   	ids.push("title");
   	ids.push("description");
@@ -1247,7 +1253,7 @@ MManager.prototype.CreateConceptPopup = function(title, description, due_date, n
 
 MManager.prototype.CreateAssignmentPopup = function(title, description, due_date, notes){ 
 
-  	var ids = [];
+	var ids = [];
 	var innerHtml; 
 
 	if(title == null)
@@ -1259,38 +1265,31 @@ MManager.prototype.CreateAssignmentPopup = function(title, description, due_date
 	if(notes == null)
 		notes = "";
 
+
 	innerHtml = `
  	<div> 
-		<div class="form-style-2" style="width: 90%;">
-		<div class="form-style-2-heading" style="width: 110%;">Assignment Node Details</div>
-		<form style="margin-left: 13%;">
-	`;
+		<div class="form-style-2" style="width: 90%;">`;
 
-		if (this.mode ==  1){
-			innerHtml += `
-			<label for="field1"><span>Title <span class="required">*</span></span><input class="input-field" id="title" name="title" type="text" value="`+ title +`"placeholder="Title"/></label>
-			<label for="field2"><span>Description <span class="required">*</span></span><input class="input-field" id="description" name="description" type="text" value="`+ description +`" placeholder="Description"/></label>
-			<label for="field5"><span>Notes <span class=""></span></span><textarea name="notes" id="notes" class="textarea-field">`+ notes +`</textarea></label>
-			<label for="field2"><span>Due Date<span class=""></span></span><input class="input-field" id="due_date" name="due_date" type="text" value="`+ due_date +`" placeholder="Due date"/></label>
-			`;
-		}
-		else{
-			innerHtml += `
-			<label for="field1"><span>Title <span class="required">*</span></span><input readonly class="input-field" id="title" name="title" type="text" value="`+ title +`" placeholder="Title"/></label>
-			<label for="field2"><span>Description <span class="required">*</span></span><input readonly class="input-field" id="description" name="description" type="text" value="`+ description +`" placeholder="Description"/></label>
-			<label for="field5"><span>Notes <span class=""></span></span><textarea readonly name="notes" id="notes" class="textarea-field">`+ notes +`</textarea></label>
-			<label for="field2"><span>Due Date<span class=""></span></span><input readonly class="input-field" id="due_date" name="due_date" type="text" value="`+ due_date +`" placeholder="Due date"/></label>
-			`;
-		}
-
-		innerHtml += `
-			</br>
-			<label for="field1">Submit Assignment<label>
-			<input type="file" id="filechooser2" onchange="mngr.UploadAssignment();">
-			<div id="assgnmentsubmission" style="text-align:left;font-size:16px;"></div>
-			<hr>
-			</br>
-			`;
+	if (this.mode == 0){
+		innerHtml += `<div class="form-style-2-heading" style="width: 110%;">` + title + `</div>
+		<div class="popup-div">
+		<h4><b>Due Date:</b> ` + due_date + `</h4>
+		</br>
+		<h4><b>Description</b></h4>
+		<p>` + description + `</p>
+		</br>
+		<h4><b>Notes</b></h4>
+		<p>` + notes + `</p>
+		</br>
+		<div id="lecturenotes" style="text-align:left;font-size:16px;"></div>
+		<hr>
+		</br>
+		<label for="field1">Submit Assignment<label>
+		<input type="file" id="filechooser2" onchange="mngr.UploadAssignment();">
+		<div id="assgnmentsubmission" style="text-align:left;font-size:16px;"></div>
+		<hr>
+		</br>
+		`;
 
 		if (this.classOrConcept == 0){
 			innerHtml += `
@@ -1299,12 +1298,44 @@ MManager.prototype.CreateAssignmentPopup = function(title, description, due_date
 			</button>
 			`;
 		}
+
+		innerHtml += `
+		</div>
+		</div>
+		</div>
+  		</div>
+  		`;
+	}
+	else{
+		innerHtml += `
+		<div class="form-style-2-heading" style="width: 110%;">Assignment Node Details</div>
+		<form style="margin-left: 13%;">
+		<label for="field1"><span>Title <span class="required">*</span></span><input class="input-field" id="title" name="title" type="text" value="`+ title +`"placeholder="Title"/></label>
+		<label for="field2"><span>Description <span class="required">*</span></span><input class="input-field" id="description" name="description" type="text" value="`+ description +`" placeholder="Description"/></label>
+		<label for="field5"><span>Notes <span class=""></span></span><textarea name="notes" id="notes" class="textarea-field">`+ notes +`</textarea></label>
+		<label for="field2"><span>Due Date<span class=""></span></span><input class="input-field" id="due_date" name="due_date" type="text" value="`+ due_date +`" placeholder="Due date"/></label>
+		</br>
+		<input type="file" id="filechooser" onchange="mngr.UploadFile();">
+		<div id="lecturenotes" style="text-align:left;font-size:16px;"></div>
+		<hr>
+		</br>
+		`;
+
+		if (this.classOrConcept == 0){
+			innerHtml += `
+			<button id="concept_navigate" onclick="mngr.NavigateToConcept();" style="float:left; font-size:12pt; margin-top:10px;" type="button" class="btn btn-default btn-md">
+			Concept Page
+			</button>
+			`;
+		}
+
 		innerHtml += `
 		</form>
 		</div>
 		</div>
   		</div>
   		`;
+	}
 
   	ids.push("title");
   	ids.push("description");
@@ -1332,42 +1363,85 @@ MManager.prototype.CreateQuizPopup = function(title, description, due_date, note
 	if(notes == null)
 		notes = "";
 
-	innerHtml = "" + 
- 	"<div class=\"row\">" +
-	 	"<div class=\"col-md-2\"></div>" +
-		"    <div class=\"col-md-8\">" +
-		" 	 <div class=\"form-style-2\">" + 
-		"    	<div class=\"form-style-2-heading\">Quiz Node Details</div>" + 
-		"			 <form>"+ 
-		"    			<label for=\"field1\"><span>Title <span class=\"required\">*</span></span><input class=\"input-field\" id=\"title\" name=\"title\" type=\"text\" value=\""+ title +"\" placeholder=\"Title\"/></label>"+
-		"				<label for=\"field2\"><span>Description <span class=\"required\">*</span></span><input class=\"input-field\" id=\"description\" name=\"description\" type=\"text\" value=\""+ description +"\" placeholder=\"Description\"/></label>"+
-		"				<label for=\"field5\"><span>Notes <span class=\"\"></span></span><textarea name=\"notes\" id=\"notes\" class=\"textarea-field\">"+ notes +"</textarea></label>"+
-		"				<label for=\"field2\"><span>Due Date<span class=\"\"></span></span><input class=\"input-field\" id=\"due_date\" name=\"due_date\" type=\"text\" value=\""+ due_date +"\" placeholder=\"Due date\"/></label>"+
-		"	        	<button id=\"quiz_navigate\" onclick=\"mngr.NavigateToQuiz();\" style=\"float:left; font-size:12pt;\" type=\"button\" class=\"btn btn-default btn-md\">";
-		if (this.mode ==  1){
-			innerHtml +=
-		"	        	Quiz Builder";
+	innerHtml = `
+ 	<div> 
+		<div class="form-style-2" style="width: 90%;">`;
+
+	if (this.mode == 0){
+		innerHtml += `<div class="form-style-2-heading" style="width: 110%;">` + title + `</div>
+		<div class="popup-div">
+		<h4><b>Due Date:</b> ` + due_date + `</h4>
+		</br>
+		<h4><b>Description</b></h4>
+		<p>` + description + `</p>
+		</br>
+		<h4><b>Notes</b></h4>
+		<p>` + notes + `</p>
+		</br>
+		<button id="quiz_navigate" onclick="mngr.NavigateToQuiz();" style="float:left; font-size:12pt;" type="button" class="btn btn-default btn-md">
+		Take Quiz
+		</button>
+		</br>
+		<div id="quizcompl">You have already completed this quiz.</div>
+		</br></br>
+		<div id="lecturenotes" style="text-align:left;font-size:16px;"></div>
+		<hr>
+		</br>
+		`;
+
+		if (this.classOrConcept == 0){
+			innerHtml += `
+			<button id="concept_navigate" onclick="mngr.NavigateToConcept();" style="float:left; font-size:12pt; margin-top:10px;" type="button" class="btn btn-default btn-md">
+			Concept Page
+			</button>
+			`;
 		}
-		else{
-			innerHtml +=
-		"	        	Take Quiz";
+
+		innerHtml += `
+		</div>
+		</div>
+		</div>
+  		</div>
+  		`;
+	}
+	else{
+		innerHtml += `<div class="form-style-2-heading" style="width: 110%;">Quiz Node Details</div>
+		<form style="margin-left: 13%;">
+		<label for="field1"><span>Title <span class="required">*</span></span><input class="input-field" id="title" name="title" type="text" value="`+ title +`"placeholder="Title"/></label>
+		<label for="field2"><span>Description <span class="required">*</span></span><input class="input-field" id="description" name="description" type="text" value="`+ description +`" placeholder="Description"/></label>
+		<label for="field5"><span>Notes <span class=""></span></span><textarea name="notes" id="notes" class="textarea-field">`+ notes +`</textarea></label>
+		<label for="field2"><span>Due Date<span class=""></span></span><input class="input-field" id="due_date" name="due_date" type="text" value="`+ due_date +`" placeholder="Due date"/></label>
+		</br>
+		<button id="quiz_navigate" onclick="mngr.NavigateToQuiz();" style="float:left; font-size:12pt;" type="button" class="btn btn-default btn-md">
+		Build Quiz
+		</button>
+		</br></br></br></br>
+		<input type="file" id="filechooser" onchange="mngr.UploadFile();">
+		<div id="lecturenotes" style="text-align:left;font-size:16px;"></div>
+		<hr>
+		</br>
+		`;
+
+		if (this.classOrConcept == 0){
+			innerHtml += `
+			<button id="concept_navigate" onclick="mngr.NavigateToConcept();" style="float:left; font-size:12pt; margin-top:10px;" type="button" class="btn btn-default btn-md">
+			Concept Page
+			</button>
+			`;
 		}
-		innerHtml +=
-		"				</button>" +
-		"<div id=\"quizcompl\">You have already completed this quiz.<\div>" +
-		"               </br></br></br>" +
-		"               </br></br></br>" +
-		"			 </form>"+
-		"		</div>"+
-		"    </div>" +
-		"    </div>" +
-	 	"<div class=\"col-md-2\"></div>" +
-  	"</div> " +
-  	"";
+
+		innerHtml += `
+		</form>
+		</div>
+		</div>
+  		</div>
+  		`;
+	}
 
   	ids.push("title");
   	ids.push("description");
   	ids.push("due_date");
+  	ids.push("lecture_notes");
 
   	var popup = {
   		ids: ids,

@@ -99,7 +99,12 @@ function evaluateSessionInfo(parsedResult){
 			html+='</li>';
 		}	
 
-		if(document.title=='Concept Builder' || document.title=='Concept View'){
+		if(document.title=='Concept Builder'){
+			html+='<li>';
+			html+='<a href="../class_view/class_builder.html" style="margin-top: 12px; font-size:14pt;"><i class="material-icons">arrow_back</i></a>';
+			html+='</li>';	
+		}
+		else if(document.title=='Concept View'){
 			html+='<li>';
 			html+='<a href="../class_view/class_view.html" style="margin-top: 12px; font-size:14pt;"><i class="material-icons">arrow_back</i></a>';
 			html+='</li>';	
@@ -165,9 +170,14 @@ function evaluateSessionInfo(parsedResult){
 			html+='</li>';
 		}	
 
-		if(document.title=='Concept Builder' || document.title=='Concept View'){
+		if(document.title=='Concept Builder'){
 			html+='<li>';
-			html+='<a href="../class_builder/class_builder.html" style="margin-top: 12px; font-size:14pt;"><i class="material-icons">arrow_back</i></a>';
+			html+='<a href="../class_view/class_builder.html" style="margin-top: 12px; font-size:14pt;"><i class="material-icons">arrow_back</i></a>';
+			html+='</li>';	
+		}
+		else if(document.title=='Concept View'){
+			html+='<li>';
+			html+='<a href="../class_view/class_view.html" style="margin-top: 12px; font-size:14pt;"><i class="material-icons">arrow_back</i></a>';
 			html+='</li>';	
 		}
 
