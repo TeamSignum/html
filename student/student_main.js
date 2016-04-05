@@ -76,19 +76,19 @@ $( document ).ready(function() {
 			}
 	    },
 		
-		'mouse:over': function(e){
-			if(e.target.id === "classNode" || e.target.id === "addNode" || e.target.id === "accountNode")
-			{
-				//e.target.studentNode.setStroke('yellow');
-				e.target.forEachObject(function(object,i){
-					if(object.id === "mapNode")
-					{
-						object.setStroke('yellow');
-					}
-				});
-				canvas.renderAll();
-			}
-		},
+		// 'mouse:over': function(e){
+		// 	if(e.target.id === "classNode" || e.target.id === "addNode" || e.target.id === "accountNode")
+		// 	{
+		// 		//e.target.studentNode.setStroke('yellow');
+		// 		e.target.forEachObject(function(object,i){
+		// 			if(object.id === "mapNode")
+		// 			{
+		// 				object.setStroke('yellow');
+		// 			}
+		// 		});
+		// 		canvas.renderAll();
+		// 	}
+		// },
 	
 		'mouse:out': function(e){
 			if(e.target.id === "classNode" || e.target.id === "addNode" || e.target.id === "accountNode")
