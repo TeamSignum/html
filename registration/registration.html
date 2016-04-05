@@ -33,13 +33,14 @@
   <!-- Main fieldSet -->
   <fieldset>
     <h2 class="fs-title">Create Account</h2>
-    <h3 class="fs-subtitle">Umail can be allowed</h3>
+      <div id="email-error" class="error"></div>
       <input id="email" type="email" name="email" placeholder="Email"/>
+      <div id="pass-error" class="error"></div>
       <input id = "pass" type="password" name="pass" placeholder="Password" />
       <input id = "pass-check" type="password" name="cpass" placeholder="Confirm Password" />
       <input type="button" name="Next" class="next action-button" value="Next" />
     <div class="etc-login-form">
-        <p>already have an account? <a href="../login/login.html">login here</a></p>
+        <p>Already have an account? <a href="../login/login.html">login here</a></p>
     </div>
   </fieldset>
   <!-- end: Main fieldSet -->
@@ -56,9 +57,11 @@
       };
     </script>
   -->
-    <input id = "uofuid" type="text" name="uid" placeholder="U Id" />
+    <div id="uid-error" class="error"></div>
+    <input id = "uid" type="text" name="uid" placeholder="User ID" />
     <input id= "firstname" type="text" name="firstname" placeholder="First Name" />
     <input id = "lastname" type="text" name="lastname" placeholder="Last Name" />
+    <div id="usertype-error" class="error"></div>
     <select id = "usertype" name="identity">
          <option value="0" disabled selected>I'm A ..</option>
          <option value="student">Student</option>

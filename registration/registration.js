@@ -16,14 +16,15 @@ $(".next").click(function(){
      // Email check
      if(emailVal == ""){
         $('#email').addClass('warning');
-        $('#email').attr("placeholder", "Empty, type your Umail address");
+        $('#email-error').html("Email address is required");
         error = 1;
      }else if(!emailReg.test(emailVal)){
         $('#email').addClass('warning');
-        $('#email').attr("placeholder", "Type your correct @utah.edu");
+        $('#email-error').html("Email format was not recognized");
         error = 1;
      }else{
       $('#email').removeClass('warning');
+      $('#email-error').html("");
      }
 
     // password check
@@ -33,43 +34,49 @@ $(".next").click(function(){
     if(passVal1 == "" && passVal2 == ""){
       $('#pass').addClass('warning');
       $('#pass-check').addClass('warning');
-      $('#pass').attr("placeholder", "Empty, type your password");
-      $('#pass-check').attr("placeholder", "Empty, type your password");
+      $('#pass-error').html("Plase enter your password");
+      //$('#pass-check').attr("placeholder", "Empty, type your password");
       error = 1;
     }else if(passVal1 != passVal2){
       $('#pass').addClass('warning');
       $('#pass-check').addClass('warning');
-      $('#pass').attr("placeholder", "Password does not match");
-      $('#pass-check').attr("placeholder", "Password does not match");
+      $('#pass-error').html("Passwords do not match");
+      //$('#pass').attr("placeholder", "Password does not match");
+      //$('#pass-check').attr("placeholder", "Password does not match");
       error = 1;
-    }else if(passVal1.length < 5){
+    }else if(passVal1.length < 6){
       $('#pass').addClass('warning');
       $('#pass-check').addClass('warning');
-      $('#pass').attr("placeholder", "Password has to be at least 6 character");
-      $('#pass-check').attr("placeholder", "Password has to be at least 6 character");
+      $('#pass-error').html("Password must be at least 6 characters");
+      //$('#pass').attr("placeholder", "Password must be at least 6 characters");
+      //$('#pass-check').attr("placeholder", "Password must be at least 6 characters");
       error = 1;
     }else{
       $('#pass').removeClass('warning');
       $('#pass-check').removeClass('warning');
+      $('#pass-error').html('');
     }
 
   }
   //step 2
   else if(fieldsetn == 2){
 
-    var uidVal = $('#uofuid').val();
-    var uidReg = /^([a-zA-Z0-9_-]){3,}$/;
+    var uidVal = $('#uid').val();
+    var uidReg = /^([a-zA-Z0-9_-]){6,}$/;
      // uid check
      if(uidVal == ""){
-        $('#uofuid').addClass('warning');
-        $('#uofuid').attr("placeholder", "Empty, type your Uid");
+        $('#uid').addClass('warning');
+        $('#uid-error').html('Please enter a User ID');
+        //$('#uid').attr("placeholder", "Empty, type your Uid");
         error = 1;
      }else if(!uidReg.test(uidVal)){
-        $('#uofuid').addClass('warning');
-        $('#uofuid').attr("placeholder", "User ID is too short");
+        $('#uid').addClass('warning');
+        $('#uid-error').html('User ID must be at least 6 characters');
+        //$('#uid').attr("placeholder", "User ID must be at least 6 characters");
         error = 1;
      }else{
-        $('#uofuid').removeClass('warning');
+        $('#uid').removeClass('warning');
+        $('#uid-error').html('');
      }
 
      var firstnameVal = $('#firstname').val();
@@ -93,7 +100,11 @@ $(".next").click(function(){
      var usertypeVal = $('#usertype').val();
      if(usertypeVal == null){
         $('#usertype').addClass('warning');
+        $('#usertype-error').html('Please select a user type');
         error = 1;
+     }
+     else{
+        $('#usertype').removeClass('warning');
      }
   }
   
