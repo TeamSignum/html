@@ -164,25 +164,25 @@ MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, f
 		}
 		c.lockMovementX = c.lockMovementY = true;
 
-		// var imgElement = document.getElementById('my-image-moon');
-		// var pc = new fabric.Image(imgElement, {
-		// 	top : top + 20, 
-		// 	left : left - 20,
-		// 	id: "partnode"
-		// });
+		var imgElement = document.getElementById('my-image-moon');
+		var pc = new fabric.Image(imgElement, {
+			top : top + 20, 
+			left : left - 20,
+			id: "partnode"
+		});
 		// pc.width = 80;
 		// pc.height = 80;
-		// pc.scale(.4);
+		pc.scale(.25);
 
-		var pc = new fabric.Circle({
-				top: top + 20,
-				left: left - 20,
-				radius: 15,
-				fill: 'green',
-				stroke: 'white',
-				strokeWidth: 3, 
-				id: "partNode"
-		});
+		// var pc = new fabric.Circle({
+		// 		top: top + 20,
+		// 		left: left - 20,
+		// 		radius: 15,
+		// 		fill: 'green',
+		// 		stroke: 'white',
+		// 		strokeWidth: 3, 
+		// 		id: "partNode"
+		// });
 		
 		pc.hasControls = false;
 		pc.hasBorders = false;

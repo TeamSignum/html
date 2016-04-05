@@ -144,7 +144,7 @@ function animateNode(n, ind){
 				n.pnode.ptext.originX = 'center';
 				n.pnode.ptext.originY = 'center';
 				
-				n.pnode.ptext.top = y;
+				n.pnode.ptext.top = y + 2;
 				n.pnode.ptext.left = x;
 				
 				
