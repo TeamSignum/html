@@ -11,7 +11,7 @@ $(".next").click(function(){
   //step 1
   if(fieldsetn == 1){
     var emailVal = $('#email').val();
-    var emailReg = /^([\w-\.]+@utah.edu)?$/;
+    var emailReg = /[^\s@]+@[^\s@]+\.[^\s@]+/;
 
      // Email check
      if(emailVal == ""){
@@ -58,7 +58,7 @@ $(".next").click(function(){
   else if(fieldsetn == 2){
 
     var uidVal = $('#uofuid').val();
-    var uidReg = /^u[0-9]{7}$/;
+    var uidReg = /^([a-zA-Z0-9_-]){3,}$/;
      // uid check
      if(uidVal == ""){
         $('#uofuid').addClass('warning');
@@ -66,7 +66,7 @@ $(".next").click(function(){
         error = 1;
      }else if(!uidReg.test(uidVal)){
         $('#uofuid').addClass('warning');
-        $('#uofuid').attr("placeholder", "Type correctly (ex. u0xxxxxx)");
+        $('#uofuid').attr("placeholder", "User ID is too short");
         error = 1;
      }else{
         $('#uofuid').removeClass('warning');
