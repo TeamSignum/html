@@ -302,9 +302,14 @@ function drawClassNode(){
 		var node_group = new fabric.Group([classCircle,className], {
 			left: canvas.width/2 + Math.cos(currentAngle)*classOrbitalRadius - classNodeRadius,
 			top: canvas.height/2 + Math.sin(currentAngle)*classOrbitalRadius - classNodeRadius,
-			selectable: false,
+			
 			id: idname
 		});
+
+		node_group.hasControls = false;
+		node_group.hasBorders = false;
+		node_group.lockMovementX = true;
+		node_group.lockMovementY = true;
 		
 		node_group.cid = classIdArray[i];
 
