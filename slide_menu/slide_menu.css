@@ -17,6 +17,7 @@ body {
   z-index: 1005;
 }
 
+
 .center .bottom {
   position: relative;
   right: -300px;
@@ -45,12 +46,22 @@ body {
 .center .top #orange {
   border-radius: 1px;
   position: relative;
-  top: 25%;
+  top: -5%;
   left: 50%;
   margin-left: -20px;
   width: 40px;
   height: 40px;
   background: #FA5D16;
+}
+
+.center .top #messagebutton{
+  border-radius: 1px;
+  position: relative;
+  top: 35%;
+  left: 30%;
+  margin-left: -20px;
+  width: 40px;
+  height: 40px;
 }
 
 #orange img {
@@ -61,7 +72,7 @@ body {
   color: #fff;
   position: relative;
   left: 155px;
-  top: -20px;
+  top: -52px;
   border-radius: 50%;
   border: 2px solid #FFF;
   width: 20px;
@@ -120,4 +131,12 @@ body {
  
 #sidebar li a:hover {  
   background: #f6f6f6;
+}
+
+.sweet-alert input[name=message],
+ {
+   display: initial;
+   width: auto;
+   height: auto;
+   margin: auto;
 }

@@ -3,18 +3,30 @@ var counter = 0;
 
 $(document).ready(function() {
 	getRole();
-	getNotifications();	
+	getNotifications();
   	$("[data-toggle]").click(function() {  		
   	   	var toggle_el = $(this).data("toggle");
     	$(toggle_el).toggleClass("open");
     	//$("#dim_div").show();
     	counter = 0;
+    	//namgi
+	  	// $("#sendMessage").click(function(){ 
+	  	// 	sendMessage();
+	  		
+	  	// });
+  	});
 
-    	 	//namgi
-	  	$("#sendMessage").click(function(){ 
-	  		sendMessage();
+  	$('#messageImg').click( function(){
+  		var test = getProfClass();
+
+  		swal({
+  			title: "select class",
+  			html: true,
+  			text: test
+  		}, function(){   
 	  		
 	  	});
+
   	});
 });
 
@@ -36,31 +48,34 @@ function sendMessage(){
 }
 
 function getProfClass(){
-
+	var profClass;
 	$.ajax({
-		async: true,
+		async: false,
 		type: 'POST',
 		url: "../slide_menu/slide_menu.php",
 		dataType: 'json',
 		data:{'function': 'getProfClass'},
 		success: function (result){
-
-			$('#feet').html(setFeet(result));	
+			//setProfClass(result);	
+			//callback(result);
+			profClass = setProfClass(result);
 		},
 		error:function(request,status,error){
         	alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
        	}
 	});
+
+	return profClass;
 }
 
-function setFeet(classes){
+function setProfClass(classes){
 	var html = '<select id="selectedClass">';
 	for(var i = 0 ; i <classes.length; i++){
 		html += '<option value="'+classes[i].cid+'">'
 								+classes[i].classnumber+'</option>'; 
 	}
 
-	html+='</select><input type="text" id="message" name="message"> <input type="button" value="Send" id="sendMessage" name="sendMessage">';
+	html+='</select> <input type="text" id="message" name="message"> <input type="button" value="Send" id="sendMessage" name="sendMessage">';
 
 	return html;
 }
@@ -91,13 +106,15 @@ function getNotifications()
 		data: {'function': 'getNotifications'},
 		success: function(result){
 			if(role == "student"){
+				hideMessageButton();
 				studentGrade(result[0]);				     
 		        studentDiscussion(result[1]);				       
 		        studentAssignmentNQuiz(result[2]);
 		        studentProfMessage(result[3]);
 		        $('#notification').html(counter);
 			}else if(role == 'professor'){
-				getProfClass();
+				//getProfClass();
+				showMessageButton();
 				professorNotification(result);
 			}
 		},
@@ -107,6 +124,12 @@ function getNotifications()
 	});
 
 	return false;
+}
+function hideMessageButton(){
+	$('#messageImg').hide();
+}
+function showMessageButton(){
+	$('#messageImg').show();	
 }
 
 function studentDiscussion(result){
