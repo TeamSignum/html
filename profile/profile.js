@@ -39,10 +39,10 @@ function getProfileData(){
 			_lastName = parsedResult[0].lastname;
 
 			if(parsedResult[0].profilepic === null){
-				_profileimage = "../profile_images/default.jpg";
+				_profileimage = "http://ec2-52-33-118-140.us-west-2.compute.amazonaws.com/profile_images/default.jpg";
 			}
 			else{
-				_profileimage="../profile_images/" + parsedResult[0].profilepic;
+				_profileimage="http://ec2-52-33-118-140.us-west-2.compute.amazonaws.com/profile_images/" + parsedResult[0].profilepic;
 				//alert(_profileimage);
 			}
 
@@ -65,10 +65,12 @@ function getProfileData(){
 // Logic for individual profile forms
 function emailDefaultView(){
 	// Set up 'CHANGE' button
+
 	$('#edit-email-button').off().on('click', emailEditView);
 	$('#edit-email-button').attr('class', 'btn btn-primary btn-sm');
 	$('#edit-email-button').text('CHANGE');
 	// Set up 'CANCEL' button
+	$('#cancel-edit-email-button').attr('class', 'btn btn-danger btn-sm');
 	$('#cancel-edit-email-button').hide();
 	$('#cancel-edit-email-button').off().on('click', emailDefaultView);
 	$('#email').val(_email);
@@ -143,6 +145,7 @@ function userIdDefaultView(){
 	$('#edit-userid-button').attr('class', 'btn btn-primary btn-sm');
 	$('#edit-userid-button').text('CHANGE');
 	// Set up 'CANCEL' button
+	$('#cancel-edit-userid-button').attr('class', 'btn btn-danger btn-sm');
 	$('#cancel-edit-userid-button').hide();
 	$('#cancel-edit-userid-button').off().on('click', userIdDefaultView);
 	$('#userid').val(_userid);
@@ -219,6 +222,7 @@ function nameDefaultView(){
 	$('#edit-name-button').attr('class', 'btn btn-primary btn-sm');
 	$('#edit-name-button').text('CHANGE');
 	// Set up 'CANCEL' button
+	$('#cancel-edit-name-button').attr('class', 'btn btn-danger btn-sm');
 	$('#cancel-edit-name-button').hide();
 	$('#cancel-edit-name-button').off().on('click', nameDefaultView);
 	$('#firstname').val(_firstName);
@@ -288,10 +292,12 @@ function submitNameChange(){
 
 function pictureDefaultView(){
 	// Set up 'CHANGE' button
+	$('#edit-picture-button').show();
 	$('#edit-picture-button').off().on('click', pictureEditView);
 	$('#edit-picture-button').attr('class', 'btn btn-primary btn-sm');
 	$('#edit-picture-button').text('CHANGE');
 	// Set up 'CANCEL' button
+	$('#cancel-edit-picture-button').attr('class', 'btn btn-danger btn-sm');
 	$('#cancel-edit-picture-button').hide();
 	$('#cancel-edit-picture-button').off().on('click', pictureDefaultView);
 	$('#profileimage').attr('src', _profileimage);

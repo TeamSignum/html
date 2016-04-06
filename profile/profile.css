@@ -8,7 +8,8 @@
 }
 
 body {
-	background-color: white;	
+	background-color: white;
+	color: white;
 }
 
 img#profileimage{
@@ -20,9 +21,11 @@ label{
 	color: #ffffff;
 }
 
-
 .extra-button-padding{
 	margin: 0 10px 0 0px;
 }
 
+button{
+	display: none; 
+}
 
