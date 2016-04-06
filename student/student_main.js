@@ -120,10 +120,10 @@ function getPic(){
 		async: true,
 		success: function(result){
 			if(result[0].profilepic === null){
-				profileimage = "../profile_images/default.jpg";
+				profileimage = "http://ec2-52-33-118-140.us-west-2.compute.amazonaws.com/profile_images/default.jpg";
 			}
 			else{
-				profileimage = "../profile_images/" + result[0].profilepic;
+				profileimage = "http://ec2-52-33-118-140.us-west-2.compute.amazonaws.com/profile_images/" + result[0].profilepic;
 			}
 		},
 		error:function(request,status,error){
@@ -193,18 +193,18 @@ function drawStudentNode(){
 		top: -130,
 		originX: 'center',
 		originY: 'center',
-		selectable: true
+		selectable: false
 	});
 	studentName.setText(account_name);
 
 	fabric.Image.fromURL(profileimage, function(img) {
 		
-
 		var studentNode = img.scale(0.5).set({
 		  	originX: 'center',
 			originY: 'center',
 			width:500,
 			height:500,
+			selectable: false,
 			clipTo: function (ctx) {
 				ctx.arc(0, 0, 200, 0, Math.PI * 2, true);
 			}
@@ -218,6 +218,11 @@ function drawStudentNode(){
 			strokeWidth: 2,
 			id: "accountNode"
 		});
+
+		studentNodeGroup.hasControls = false;
+		studentNodeGroup.hasBorders = false;
+		studentNodeGroup.lockMovementX = true;
+		studentNodeGroup.lockMovementY = true;
 
 		studentNodeGroup.on('selected', function() {
 	  		alert("Clicked");
