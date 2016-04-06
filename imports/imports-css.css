@@ -1,0 +1,14 @@
+@charset "utf-8";
+
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+@import url('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css');
+@import url('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css');
+@import url('dist/sweetalert.css');
+@import url('main.css');
+
+
+/* Do not put anything above the @import statements except the charset statement.
+ * Otherwise this will fail to load the css files */
+
+/* head.js won't load the google material icons file, so I am keeping all CSS
+ * imports in this file */
