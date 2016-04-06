@@ -39,10 +39,10 @@ function getProfileData(){
 			_lastName = parsedResult[0].lastname;
 
 			if(parsedResult[0].profilepic === null){
-				_profileimage = "http://ec2-52-33-118-140.us-west-2.compute.amazonaws.com/profile_images/default.jpg";
+				_profileimage = "../profile_images/default.jpg";
 			}
 			else{
-				_profileimage="http://ec2-52-33-118-140.us-west-2.compute.amazonaws.com/profile_images/" + parsedResult[0].profilepic;
+				_profileimage="../profile_images/" + parsedResult[0].profilepic;
 				//alert(_profileimage);
 			}
 

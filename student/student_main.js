@@ -120,10 +120,10 @@ function getPic(){
 		async: true,
 		success: function(result){
 			if(result[0].profilepic === null){
-				profileimage = "http://ec2-52-33-118-140.us-west-2.compute.amazonaws.com/profile_images/default.jpg";
+				profileimage = "../profile_images/default.jpg";
 			}
 			else{
-				profileimage = "http://ec2-52-33-118-140.us-west-2.compute.amazonaws.com/profile_images/" + result[0].profilepic;
+				profileimage = "../profile_images/" + result[0].profilepic;
 			}
 		},
 		error:function(request,status,error){
