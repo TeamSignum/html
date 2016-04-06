@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <!-- META -->
   <meta charset="utf-8">
 
   <!-- COMMON CSS IMPORTS -->
@@ -10,7 +11,7 @@
 
   <!-- HEAD.JS, Calls imports-js.js after loading -->
   <script src="../imports/head.js" data-headjs-load="../imports/imports-js.js"></script>
-  <!-- AS SOON AS JQUERY, BOOTSTRAP.JS, and FABRIC.JS are loaded, proceed loading page specific JS files. -->
+  <!-- Once sitewide JS files are loaded, head JS will call this function, which loads page specific JS files. -->
   <script>
     function loadPageFiles(){
       head.load("profile.js");
