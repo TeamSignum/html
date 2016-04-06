@@ -3,12 +3,15 @@
  * Date: 1/26/16 
  */ 
 
- var mngr;
- var canvas;
- var isDown = false;
- var cline;
- var fromn;
- var timeOut;
+var mngr;
+var canvas;
+var isDown = false;
+var cline;
+var fromn;
+var timeOut;
+var drag = false;
+var xpos;
+var ypos;
 
 $( document ).ready(function() {
 
@@ -18,7 +21,8 @@ $( document ).ready(function() {
 	canvas.setBackgroundImage('../imports/images/maxresdefault.jpg' , canvas.renderAll.bind(canvas), {
     });
 
-
+	canvas.selection = false;
+	
 	mngr = new MManager(canvas, true, 1); // Construct map manager
 	mngr.LoadIds(2); // Get the last id from the node table
 	mngr.LoadMap(mngr, 2, 1);
@@ -124,6 +128,20 @@ $( document ).ready(function() {
 	mngr.AddToolbarEdge(new fabric.Line([60, 695, 120, 795], { fill: 'red', stroke: 'red', strokeWidth: 3, strokeDashArray: [5, 5], id: 'tb_lineDotted' }));
 
 	canvas.hoverCursor = 'pointer';
+	
+	$(window).on('mousewheel', function(e){
+		e.preventDefault();
+		e.stopPropagation();
+		
+		if(e.originalEvent.wheelDelta / 120 > 0) 
+		{
+			mngr.zoomIn();
+		} 
+		else 
+		{
+			mngr.zoomOut();
+		}
+	});
 	
 	//Canvas events
 	canvas.on({
@@ -264,9 +282,27 @@ $( document ).ready(function() {
 
 	      	canvas.renderAll();
 	    }
+		else
+		{
+			var mpointer = canvas.getPointer(e.e);
+			xpos = mpointer.x;
+			ypos = mpointer.y;
+			drag = true;
+		}
 	  },
 	  
 	  'mouse:move': function(e) {
+		if(drag == true)
+		{
+			var mpointer = canvas.getPointer(e.e);
+			var newxpos = mpointer.x;
+			var newypos = mpointer.y;
+				
+			//window.scrollTo(document.body.scrollLeft + (xpos - e.pageX), document.body.scrollTop + (ypos - e.pageY));
+			$(window).scrollTop($(window).scrollTop() + (ypos - newypos));
+			$(window).scrollLeft($(window).scrollLeft() + (xpos - newxpos));
+		}
+		
 		if(isDown == false)
 		{
 			return;
@@ -306,6 +342,8 @@ $( document ).ready(function() {
 	  },
 
 	  'mouse:up': function(e) {
+		drag = false;
+		
 		if(isDown)
 		{
 			if(e.target)
@@ -366,11 +404,11 @@ $( document ).ready(function() {
 	  },
 
 	  'object:moved': function(e) {
-	    e.target.opacity = 0.5;
+	    //e.target.opacity = 0.5;
 	  },
 
 	  'object:modified': function(e) {
-	   	e.target.opacity = 1;
+	   	//e.target.opacity = 1;
 	  },
 	  
 	  'text:changed': function(e) {

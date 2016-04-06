@@ -120,7 +120,6 @@ $( document ).ready(function() {
 	//Canvas events
 	canvas.on({
 	  'mouse:down': function(e) {
-	  	panning = true
 	    if (e.target) {
 
 	    	mngr.LockOrUpload(e.target, 1); 
