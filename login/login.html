@@ -1,11 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head> 
-
+  <!-- META -->
   <meta charset="utf-8">
-  
-  <link rel="import" href="../imports/import.html">
+
+  <!-- COMMON CSS IMPORTS -->
+  <link rel="stylesheet" type="text/css" href="../imports/imports-css.css">
+  <!-- PAGE CSS IMPORTS -->
   <link rel="stylesheet" type="text/css" href="login.css"> 
+
+  <!-- HEAD.JS, Calls imports-js.js after loading -->
+  <script src="../imports/head.js" data-headjs-load="../imports/imports-js.js"></script>
+  <!-- Once sitewide JS files are loaded, head JS will call this function, which loads page specific JS files. -->
+  <script>
+    function loadPageFiles(){
+      // no page specific javascript files
+      //head.load("../API/Map/map_manager.js");
+    }
+  </script>
+  
   <title> Login </title>  
 </head> 
 <body>

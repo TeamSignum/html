@@ -1,15 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head> 
-
+  <!-- META -->
   <meta charset="utf-8">
+
+  <!-- COMMON CSS IMPORTS -->
+  <link rel="stylesheet" type="text/css" href="../imports/imports-css.css">
+  <!-- PAGE CSS IMPORTS -->
+  <link rel="stylesheet" type="text/css" href="../slide_menu/slide_menu.css">
+  <link rel="stylesheet" type="text/css" href="student_main.css"> 
+
+  <!-- HEAD.JS, Calls imports-js.js after loading -->
+  <script src="../imports/head.js" data-headjs-load="../imports/imports-js.js"></script>
+  <!-- Once sitewide JS files are loaded, head JS will call this function, which loads page specific JS files. -->
+  <script>
+    function loadPageFiles(){
+      head.load("../slide_menu/slide_menu.js",
+            "../API/Notifications/notifications.js",
+            "student_main.js"
+            );
+    }
+  </script>
   
-  <link rel="import" href="../imports/import.html">
-  <link href="../slide_menu/slide_menu.css" rel="stylesheet">
-  <script src="../slide_menu/slide_menu.js" type="text/JavaScript"></script>
-  <script src="../API/Notifications/notifications.js" type="text/javascript"></script>
-  <link rel="stylesheet" type="text/css" href="student_main.css">
-  <script src="student_main.js" type="text/javascript"></script>
   <title> Account Home </title>  
 </head> 
 <body>

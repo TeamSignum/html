@@ -10,10 +10,21 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<link rel="import" href="../imports/import.html">
-	<link rel="stylesheet" type="text/css" href="../imports/import.html">
-	<script type="text/javascript" src="add_class.js"></script>
-	<link rel="stylesheet" type="text/css" href="add_class.css">
+
+    <!-- COMMON CSS IMPORTS -->
+    <link rel="stylesheet" type="text/css" href="../imports/imports-css.css">
+    <!-- PAGE CSS IMPORTS -->
+    <link rel="stylesheet" type="text/css" href="add_class.css"> 
+
+  	<!-- HEAD.JS, Calls imports-js.js after loading -->
+  	<script src="../imports/head.js" data-headjs-load="../imports/imports-js.js"></script>
+  	<!-- Once sitewide JS files are loaded, head JS will call this function, which loads page specific JS files. -->
+  	<script>
+    	function loadPageFiles(){
+      		head.load("add_class.js");
+    	}
+  	</script>
+	
 	<title>Add class</title>
 </head>
 <body>
