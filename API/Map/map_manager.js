@@ -30,6 +30,8 @@ var MManager = function(_canvas, builder, classOrConcept){
  	this.mode = 0;
  	this.classOrConcept = classOrConcept;
  	this.popuped;
+	
+	this.canvasScale = 1;
 
  	if(builder){
  		this.mode = 1;
@@ -255,6 +257,7 @@ MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, f
 	t.hasBorders = false;
 	t.lockMovementX = true;
 	t.lockMovementY = true;
+	t.selectable = false;
 			
 	mngr.canvas.add(t);
 }
@@ -306,10 +309,12 @@ MManager.prototype.MoveEdges = function (node){
 				if(node.lines2[j] == 1)
 				{
 					node.lines[j].set({'x1': node.getCenterPoint().x, 'y1': node.getCenterPoint().y});
+					node.lines[j].setCoords();
 				}
 				if(node.lines2[j] == 2)
 				{
 					node.lines[j].set({'x2': node.getCenterPoint().x, 'y2': node.getCenterPoint().y});
+					node.lines[j].setCoords();
 				}
 			}
 		}
@@ -389,7 +394,7 @@ MManager.prototype.DrawEdge = function(eid, x1, y1, x2, y2, type, mode){
 		l = new fabric.Line([x1, y1, x2, y2], {
 			fill: 'white',
 			stroke: 'white',
-			strokeWidth: 5,
+			strokeWidth: 3,
 			id: "solid"
 		});
 	}
@@ -398,7 +403,7 @@ MManager.prototype.DrawEdge = function(eid, x1, y1, x2, y2, type, mode){
 		l = new fabric.Line([x1, y1, x2, y2], {
 			fill: 'white',
 			stroke: 'white',
-			strokeWidth: 5,
+			strokeWidth: 3,
 			strokeDashArray: [5, 5],
 			id: "dotted"
 		});
@@ -408,6 +413,7 @@ MManager.prototype.DrawEdge = function(eid, x1, y1, x2, y2, type, mode){
 	l.hasControls = l.hasBorders = false;
 	l.lockMovementX = l.lockMovementY = true;
 	l.perPixelTargetFind = true;
+	l.selectable = false;
 	
 	var temp = {
 		line: l,
@@ -427,11 +433,11 @@ MManager.prototype.DrawEdge = function(eid, x1, y1, x2, y2, type, mode){
  */
 MManager.prototype.AddNodeToCanvas = function(node){
 	if(!this.lineEdit){
-		if(node.left < 180 && node.id === "mapNode"){
+		if(node.left < (180*this.canvasScale) && node.id === "mapNode"){
 				this.canvas.remove(node.title);
 				this.canvas.remove(node); 
 		}
-		else if(node.left > 180 && node.id === "mapNode"){
+		else if(node.left > (180*this.canvasScale) && node.id === "mapNode"){
 			this.CreatePopupNode(node, this.CreatePopup(node.type), !node.title); 
 			this.GenText(node);
 		}
@@ -451,16 +457,22 @@ MManager.prototype.GenText = function(node){
 			top: node.top - 20,
 			id: "nodeText"
 		});
+		
+		title.scaleX = title.scaleX * this.canvasScale;
+		title.scaleY = title.scaleY * this.canvasScale;
+		title.top = node.top - (20 * this.canvasScale);
 	
 		title.node = node;
 
 		var len = title.getWidth()/2;
 		var cenX = node.getCenterPoint().x;
 		title.left = cenX - len;
+		title.setCoords();
 		
 		title.hasControls = false;
 		title.lockMovementX = true;
 		title.lockMovementY = true;
+		title.selectable = false;
 		
 		node.title = title;
 		
@@ -475,15 +487,20 @@ MManager.prototype.GenText = function(node){
 			id: "deleteNode"
 		});
 		
-	node.deletenode = dt;
-	dt.node = node;
+		dt.scaleX = dt.scaleX * this.canvasScale;
+		dt.scaleY = dt.scaleY * this.canvasScale;
+		dt.top = node.top + (10 * this.canvasScale);
+		dt.setCoords();
 		
-	dt.hasControls = false;
-	dt.hasBorders = false;
-	dt.lockMovementX = true;
-	dt.lockMovementY = true;
+		node.deletenode = dt;
+		dt.node = node;
 		
-	this.canvas.add(dt);
+		dt.hasControls = false;
+		dt.hasBorders = false;
+		dt.lockMovementX = true;
+		dt.lockMovementY = true;
+		
+		this.canvas.add(dt);
 	}
 }
 
@@ -491,14 +508,17 @@ MManager.prototype.GenText = function(node){
  * Moves the node title when a node moves
  */
 MManager.prototype.MoveNode = function (node){
+	if(node)
+	{
+		node.setCoords();
+	}
 	if (node.title){
-		node.title.set({'top': node.top - 20, 'left': (node.getCenterPoint().x - node.title.getWidth()/2)});
+		node.title.set({'top': node.top - (20*this.canvasScale), 'left': (node.getCenterPoint().x - node.title.getWidth()/2)});
 		node.title.setCoords();
 	}
-
 	if (node.popupnode){
 		var radius = node.width * node.scaleX * .5;
-		node.popupnode.set({'top': node.top + radius, 'left': node.left + (2 * radius) - 10});
+		node.popupnode.set({'top': node.top + 10, 'left': node.left + (2 * radius) - 10});
 		node.popupnode.setCoords();
 	}
 	if(node.deletenode){
@@ -887,6 +907,9 @@ MManager.prototype.CreatePopupNode = function(node, popup, docreate){
 		popupnode.height = 96;
 		popupnode.width = 96;
 		popupnode.scale(.30);
+		
+		popupnode.scaleX = popupnode.scaleX * this.canvasScale;
+		popupnode.scaleY = popupnode.scaleY * this.canvasScale;
 
 		popupnode.title = node.title;
 		
@@ -1027,6 +1050,8 @@ MManager.prototype.CompleteNode = function(nid2){
  * @param node  - node that was selected e.g e.target
  */ 
 MManager.prototype.ShowPopup = function(node, popup){
+	$(window).unbind('mousewheel');
+
 	popup.html(node.popup.innerHtml);
 
 	if (this.mode == 0){
@@ -1451,6 +1476,91 @@ MManager.prototype.CreateQuizPopup = function(title, description, due_date, note
   	return popup;
 }
 
+MManager.prototype.zoomIn = function(){
+	sf = 1.04;
+
+	if(this.canvasScale < 1.41)
+	{
+		this.canvasScale = this.canvasScale * sf;
+	
+		var objs = this.canvas.getObjects();
+	
+		this.canvas.setHeight(this.canvas.getHeight() * sf);
+		this.canvas.setWidth(this.canvas.getWidth() * sf);
+	
+		for(var i = 0; i < objs.length; i++)
+		{
+			if(objs[i].id != "solid" && objs[i].id != "dotted")
+			{
+				var scaleX = objs[i].scaleX;
+				var scaleY = objs[i].scaleY;
+				var left = objs[i].left;
+				var top = objs[i].top;
+		
+				var tscaleX = scaleX * sf;
+				var tscaleY = scaleY * sf;
+				var tleft = left * sf;
+				var ttop = top * sf;
+		
+				objs[i].scaleX = tscaleX;
+				objs[i].scaleY = tscaleY;
+				objs[i].left = tleft;
+				objs[i].top = ttop;
+			
+				objs[i].setCoords();
+			}
+		}
+		for(var i = 0; i < this.nodes.length; i++)
+		{
+			this.MoveEdges(this.nodes[i]);
+		}
+		this.canvas.renderAll();
+	}
+}
+
+MManager.prototype.zoomOut = function()
+{
+	sf = 1.04;
+	
+	if(this.canvasScale > 0.66)
+	{
+		this.canvasScale = this.canvasScale / sf;
+		
+		var objs = this.canvas.getObjects();
+		
+		this.canvas.setHeight(this.canvas.getHeight() * (1/sf));
+		this.canvas.setWidth(this.canvas.getWidth() * (1/sf));
+	
+		for(var i = 0; i < objs.length; i++)
+		{
+			if(objs[i].id != "solid" && objs[i].id != "dotted")
+			{
+				var scaleX = objs[i].scaleX;
+				var scaleY = objs[i].scaleY;
+				var left = objs[i].left;
+				var top = objs[i].top;
+		
+				var tscaleX = scaleX * (1/sf);
+				var tscaleY = scaleY * (1/sf);
+				var tleft = left * (1/sf);
+				var ttop = top * (1/sf);
+		
+				objs[i].scaleX = tscaleX;
+				objs[i].scaleY = tscaleY;
+				objs[i].left = tleft;
+				objs[i].top = ttop;
+		
+				objs[i].setCoords();
+			}
+		}
+		for(var i = 0; i < this.nodes.length; i++)
+		{
+			this.MoveEdges(this.nodes[i]);
+		}
+		this.canvas.renderAll();
+	}
+}
+
 /*
  * Hides the popup. 
  */
@@ -1459,6 +1569,19 @@ MManager.prototype.HidePopup = function(){
  	$("#dim_div").hide();
  	$("#custom_container").hide();
  	this.popuped = false;
+	
+	$(window).on('mousewheel', function(e){
+		e.preventDefault();
+		e.stopPropagation();
+		if(e.originalEvent.wheelDelta / 120 > 0) 
+		{
+			mngr.zoomIn();
+		} 
+		else 
+		{
+			mngr.zoomOut();
+		}
+	});
 }
 
 /* 

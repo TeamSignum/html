@@ -4,12 +4,15 @@
  * Date: 1/17/16 
  */ 
 
- var mngr;
- var canvas;
- var isDown = false;
- var cline;
- var fromn;
-  var timeOut;
+var mngr;
+var canvas;
+var isDown = false;
+var cline;
+var fromn;
+var timeOut;
+var drag = false;
+var xpos;
+var ypos;
 
 $( document ).ready(function() {
 
@@ -100,7 +103,19 @@ $( document ).ready(function() {
 
 	canvas.hoverCursor = 'pointer';
 	
-	var panning = false;
+	$(window).on('mousewheel', function(e){
+		e.preventDefault();
+		e.stopPropagation();
+		
+		if(e.originalEvent.wheelDelta / 120 > 0) 
+		{
+			mngr.zoomIn();
+		} 
+		else 
+		{
+			mngr.zoomOut();
+		}
+	});
 
 	//Canvas events
 	canvas.on({
@@ -217,7 +232,7 @@ $( document ).ready(function() {
 						cline = new fabric.Line(points, {
 							fill: 'white',
 							stroke: 'white',
-							strokeWidth: 5,
+							strokeWidth: 3,
 							selectable: false,
 							id: "solid"
 						});
@@ -227,7 +242,7 @@ $( document ).ready(function() {
 						cline = new fabric.Line(points, {
 							fill: 'white',
 							stroke: 'white',
-							strokeWidth: 5,
+							strokeWidth: 3,
 							strokeDashArray: [5, 5],
 							selectable: false,
 							id: "dotted"
@@ -240,14 +255,26 @@ $( document ).ready(function() {
 
 	      	canvas.renderAll();
 	    }
+		else
+		{
+			var mpointer = canvas.getPointer(e.e);
+			xpos = mpointer.x;
+			ypos = mpointer.y;
+			drag = true;
+		}
 	  },
 	  
 	  'mouse:move': function(e) {
-	  	// if (panning && e && e.e) {
-	   //      var units = 10;
-	   //      var delta = new fabric.Point(e.e.movementX, e.e.movementY);
-	   //      canvas.relativePan(delta);
-    // 	}
+		if(drag == true)
+		{
+			var mpointer = canvas.getPointer(e.e);
+			var newxpos = mpointer.x;
+			var newypos = mpointer.y;
+				
+			//window.scrollTo(document.body.scrollLeft + (xpos - e.pageX), document.body.scrollTop + (ypos - e.pageY));
+			$(window).scrollTop($(window).scrollTop() + (ypos - newypos));
+			$(window).scrollLeft($(window).scrollLeft() + (xpos - newxpos));
+		}
 
 		if(isDown == false)
 		{
@@ -288,7 +315,8 @@ $( document ).ready(function() {
 	  },
 
 	  'mouse:up': function(e) {
-	  	panning = false;
+	  	drag = false;
+		
 		if(isDown)
 		{
 			if(e.target)

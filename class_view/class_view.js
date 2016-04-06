@@ -3,12 +3,17 @@ var nid;
 var checked_off;
 var mngr;
 var timeOut;
+var drag = false;
+var xpos;
+var ypos;
 
 $( document ).ready(function() {
 
 	canvas = new fabric.Canvas('map');
     canvas.setBackgroundImage('../imports/images/maxresdefault.jpg' , canvas.renderAll.bind(canvas), {
     });
+	
+	canvas.selection = false;
 
 	// Construct map manager
 	mngr = new MManager(canvas, false, 0);
@@ -16,6 +21,7 @@ $( document ).ready(function() {
 	//Load the learning map from the DB
 	mngr.LoadMap(mngr, 1, 0);
 	mngr.LoadEdges(mngr, 1, 0);
+	mngr.LoadConnections(1);
 	
 	getParticipants();
 	getPercents();
@@ -28,6 +34,20 @@ $( document ).ready(function() {
 	{
 		animateNode(mngr.nodes[i], i);
 	}
+	
+	$(window).on('mousewheel', function(e){
+		e.preventDefault();
+		e.stopPropagation();
+		
+		if(e.originalEvent.wheelDelta / 120 > 0) 
+		{
+			mngr.zoomIn();
+		} 
+		else 
+		{
+			mngr.zoomOut();
+		}
+	});
 	
 	//Canvas events
 	canvas.on({
@@ -44,7 +64,31 @@ $( document ).ready(function() {
 					mngr.HandleMapNodeSelect(e.target.node);
 				}
 			}
+			else
+			{
+				var mpointer = canvas.getPointer(e.e);
+				xpos = mpointer.x;
+				ypos = mpointer.y;
+				drag = true;
+			}
 	    },
+		
+		'mouse:move': function(e){
+			if(drag == true)
+			{
+				var mpointer = canvas.getPointer(e.e);
+				var newxpos = mpointer.x;
+				var newypos = mpointer.y;
+				
+				//window.scrollTo(document.body.scrollLeft + (xpos - e.pageX), document.body.scrollTop + (ypos - e.pageY));
+				$(window).scrollTop($(window).scrollTop() + (ypos - newypos));
+				$(window).scrollLeft($(window).scrollLeft() + (xpos - newxpos));
+			}
+		},
+		
+		'mouse:up': function(e){
+			drag = false;
+		},
 	
 		'mouse:over': function(e){
 			if(e.target.id === "mapNode" || e.target.id === "cmapNode")
@@ -112,12 +156,7 @@ function drawOrbitals()
 }
 
 function animateNode(n, ind){
-	var radius = 100;
-	
-	var cx = n.getCenterPoint().x;
-	var cy = n.getCenterPoint().y;
-	
-	var duration = 7000;
+	var duration = 10000;
 	
 	var startAngle = fabric.util.getRandomInt(-180, 0);
 	var endAngle = startAngle + 359;
@@ -132,6 +171,12 @@ function animateNode(n, ind){
 			
 			onChange: function(angle) {
 				angle = fabric.util.degreesToRadians(angle);
+				
+				var radius = 100;
+				radius = radius * mngr.canvasScale;
+				
+				var cx = n.getCenterPoint().x;
+				var cy = n.getCenterPoint().y;
 				
 				var x = cx + radius * Math.cos(angle);
 				var y = cy + radius * Math.sin(angle);

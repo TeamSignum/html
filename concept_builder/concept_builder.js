@@ -241,7 +241,7 @@ $( document ).ready(function() {
 						cline = new fabric.Line(points, {
 							fill: 'white',
 							stroke: 'white',
-							strokeWidth: 5,
+							strokeWidth: 3,
 							selectable: false,
 							id: "solid"
 						});
@@ -251,7 +251,7 @@ $( document ).ready(function() {
 						cline = new fabric.Line(points, {
 							fill: 'white',
 							stroke: 'white',
-							strokeWidth: 5,
+							strokeWidth: 3,
 							strokeDashArray: [5, 5],
 							selectable: false,
 							id: "dotted"
