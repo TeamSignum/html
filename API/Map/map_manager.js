@@ -313,8 +313,25 @@ MManager.prototype.MoveEdges = function (node){
 				}
 				if(node.lines2[j] == 2)
 				{
-					node.lines[j].set({'x2': node.getCenterPoint().x, 'y2': node.getCenterPoint().y});
+					node.lines[j].set({'x2': node.getCenterPoint().x, 'y2': node.title.top});
 					node.lines[j].setCoords();
+					
+					var x1 = node.lines[j].x1;
+					var y1 = node.lines[j].y1;
+					var x2 = node.lines[j].x2;
+					var y2 = node.lines[j].y2;
+					
+					var dx = x2 - x1;
+					var dy = y2 - y1;
+
+					var angle = Math.atan2(dy, dx);
+					
+					angle *= 180 / Math.PI;
+					angle += 90;
+					
+					node.lines[j].trian.angle = angle;
+					node.lines[j].trian.top = y2;
+					node.lines[j].trian.left = x2;
 				}
 			}
 		}
@@ -419,10 +436,46 @@ MManager.prototype.DrawEdge = function(eid, x1, y1, x2, y2, type, mode){
 		line: l,
 		id: eid
 	};
+	
+	var headLength = 15;
+	
+	//var x1 = l.x1;
+	//var y1 = l.y1;
+	//var x2 = l.x2;
+	//var y2 = l.y2;
+					
+	var dx = x2 - x1;
+	var dy = y2 - y1;
+
+	var angle = Math.atan2(dy, dx);
+					
+	angle *= 180 / Math.PI;
+	angle += 90;
+	
+	var triangle = new fabric.Triangle({
+		angle: angle,
+		fill: 'white',
+		top: y2,
+		left: x2,
+		height: headLength,
+		width: headLength,
+		id: "arrowhead",
+		originX: 'center',
+		originY: 'center',
+		selectable: false
+	});
+	
+	triangle.hasBorders = false;
+	triangle.hasControls = false;
+	triangle.lockMovementX = true;
+	triangle.lockMovementY = true;
+	
+	l.trian = triangle;
 		
 	this.edges.push(temp);
 	canvas.add(l);
 	canvas.sendToBack(l);
+	canvas.add(triangle);
 }
 
 
@@ -1490,7 +1543,7 @@ MManager.prototype.zoomIn = function(){
 	
 		for(var i = 0; i < objs.length; i++)
 		{
-			if(objs[i].id != "solid" && objs[i].id != "dotted")
+			if(objs[i].id != "solid" && objs[i].id != "dotted" && objs[i].id != "arrowhead")
 			{
 				var scaleX = objs[i].scaleX;
 				var scaleY = objs[i].scaleY;
@@ -1533,7 +1586,7 @@ MManager.prototype.zoomOut = function()
 	
 		for(var i = 0; i < objs.length; i++)
 		{
-			if(objs[i].id != "solid" && objs[i].id != "dotted")
+			if(objs[i].id != "solid" && objs[i].id != "dotted" && objs[i].id != "arrowhead")
 			{
 				var scaleX = objs[i].scaleX;
 				var scaleY = objs[i].scaleY;

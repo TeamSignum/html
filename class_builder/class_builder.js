@@ -247,8 +247,39 @@ $( document ).ready(function() {
 							id: "dotted"
 						});
 					}
+					
+					var headLength = 15;
+					
+					var x1 = x;
+					var y1 = y;
+					var x2 = x;
+					var y2 = y;
+					
+					var dx = x2 - x1;
+					var dy = y2 - y1;
 
+					var angle = Math.atan2(dy, dx);
+					
+					angle *= 180 / Math.PI;
+					angle += 90;
+					
+					var triangle = new fabric.Triangle({
+						angle: angle,
+						fill: 'white',
+						top: y2,
+						left: x2,
+						height: headLength,
+						width: headLength,
+						id: "arrowhead",
+						originX: 'center',
+						originY: 'center',
+						selectable: false
+					});
+					
+					cline.trian = triangle;
+					
 					canvas.add(cline);
+					canvas.add(triangle);
 				}
 			}
 
@@ -301,13 +332,48 @@ $( document ).ready(function() {
 					temp = e.target.node;
 				}
 				var x = temp.getCenterPoint().x;
-				var y = temp.getCenterPoint().y;
+				//var y = temp.getCenterPoint().y;
+				var y = temp.title.top;
 				cline.set({ x2: x, y2: y });
+				
+				var x1 = cline.x1;
+				var y1 = cline.y1;
+				var x2 = x;
+				var y2 = y;
+					
+				var dx = x2 - x1;
+				var dy = y2 - y1;
+
+				var angle = Math.atan2(dy, dx);
+					
+				angle *= 180 / Math.PI;
+				angle += 90;
+				
+				cline.trian.angle = angle;
+				cline.trian.top = y2;
+				cline.trian.left = x2;
 			}
 			else
 			{
 				var pointer = canvas.getPointer(e.target);
 				cline.set({ x2: pointer.x, y2: pointer.y });
+				
+				var x1 = cline.x1;
+				var y1 = cline.y1;
+				var x2 = pointer.x;
+				var y2 = pointer.y;
+					
+				var dx = x2 - x1;
+				var dy = y2 - y1;
+
+				var angle = Math.atan2(dy, dx);
+					
+				angle *= 180 / Math.PI;
+				angle += 90;
+				
+				cline.trian.angle = angle;
+				cline.trian.top = y2;
+				cline.trian.left = x2;
 			}
 			canvas.renderAll();
 		}
@@ -344,6 +410,11 @@ $( document ).ready(function() {
 					cline.hasControls = cline.hasBorders = false;
 					cline.lockMovementX = cline.lockMovementY = true;
 					cline.perPixelTargetFind = true;
+					
+					cline.trian.hasControls = false;
+					cline.trian.hasBorders = false;
+					cline.trian.lockMovementX = true;
+					cline.trian.lockMovementY = true;
 				
 					fromn.lines.push(cline);
 					fromn.lines2.push(1);
@@ -364,6 +435,8 @@ $( document ).ready(function() {
 			else
 			{
 				canvas.remove(cline);
+				canvas.remove(cline.trian);
+				
 			}
 			isDown = false;
 		}
