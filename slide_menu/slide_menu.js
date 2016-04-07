@@ -18,13 +18,17 @@ $(document).ready(function() {
 
   	$('#messageImg').click( function(){
   		var test = getProfClass();
-
   		swal({
-  			title: "select class",
+  			title: "Send A Message",
   			html: true,
-  			text: test
-  		}, function(){   
-	  		
+  			text: test,
+  			showCancelButton: true,
+  			confirmButtonText: "Send",
+			closeOnConfirm: false,
+			allowOutsideClick: false
+  		}, function(){
+  			sendMessage();   
+	  		swal("Send This Message", "Your students will be notified", "success");
 	  	});
 
   	});
@@ -37,9 +41,7 @@ function sendMessage(){
         dataType: "html",
         data: {'classid': $('#selectedClass').val(), 'message': $('#message').val()},
         success: function(result) {
-          //$("#result").html(result);
-          alert("Send the message");
-          $('#message').test("haha");
+          
         },
         error:function(request,status,error){
         	alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
@@ -75,7 +77,7 @@ function setProfClass(classes){
 								+classes[i].classnumber+'</option>'; 
 	}
 
-	html+='</select> <input type="text" id="message" name="message"> <input type="button" value="Send" id="sendMessage" name="sendMessage">';
+	html+='</select><br><br><textarea id="message" name="message" cols="30" rows="5" style="width:630; height:200px;" value="write a message" ></textarea>';
 
 	return html;
 }

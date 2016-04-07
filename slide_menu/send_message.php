@@ -4,6 +4,7 @@ $uid = $_SESSION['userid'];
 $cid = $_POST['classid'];
 $mid = $_POST['message'];
 
+print($mid);
 
 // Set include path and require appropriate files
 set_include_path( "../");
