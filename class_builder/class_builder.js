@@ -464,11 +464,10 @@ $( document ).ready(function() {
 	  },
 	  
 	  'mouse:over': function(e){
-		if(e.target.id === mapNodeId)
+		if(e.target.id === "deleteNode")
 		{
-			//e.target.scale(.26);
-			//e.target.setCoords();
-			//canvas.renderAll();
+			e.target.fill = 'red';
+			canvas.renderAll();
 		}
 		if(e.target.id === "tb_largeCircle" || e.target.id === "tb_mediumCircle" || e.target.id === "tb_smallCircle" || e.target.id === "tb_lineSolid" || e.target.id === "tb_lineDotted")
 		{
@@ -480,11 +479,10 @@ $( document ).ready(function() {
 	  },
 	
 	  'mouse:out': function(e){
-		if(e.target.id === mapNodeId)
+		if(e.target.id === "deleteNode")
 		{
-			//e.target.scale(.25);
-			//e.target.setCoords();
-			//canvas.renderAll();
+			e.target.fill = 'white';
+			canvas.renderAll();
 		}
 		if(e.target.id === "tb_largeCircle" || e.target.id === "tb_mediumCircle" || e.target.id === "tb_smallCircle" || e.target.id === "tb_lineSolid" || e.target.id === "tb_lineDotted")
 		{

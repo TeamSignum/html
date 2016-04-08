@@ -492,11 +492,10 @@ $( document ).ready(function() {
 	  },
 	  
 	  'mouse:over': function(e){
-		if(e.target.id === mapNodeId)
+		if(e.target.id === "deleteNode")
 		{
-			//Highlight node
-			//e.target.setStroke('yellow');
-			//canvas.renderAll();
+			e.target.fill = 'red';
+			canvas.renderAll();
 		}
 		if(e.target.id === "tb_concept" || e.target.id === "tb_assignment" || e.target.id === "tb_quiz" || e.target.id === "tb_lineSolid" || e.target.id === "tb_lineDotted")
 		{
@@ -508,11 +507,10 @@ $( document ).ready(function() {
 	  },
 	
 	  'mouse:out': function(e){
-		if(e.target.id === mapNodeId)
+		if(e.target.id === "deleteNode")
 		{
-			//De-Highlight node
-			//e.target.setStroke('white');
-			//canvas.renderAll();
+			e.target.fill = 'white';
+			canvas.renderAll();
 		}
 		if(e.target.id === "tb_concept" || e.target.id === "tb_assignment" || e.target.id === "tb_quiz" || e.target.id === "tb_lineSolid" || e.target.id === "tb_lineDotted")
 		{
