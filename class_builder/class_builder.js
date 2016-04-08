@@ -333,7 +333,7 @@ $( document ).ready(function() {
 				}
 				var x = temp.getCenterPoint().x;
 				//var y = temp.getCenterPoint().y;
-				var y = temp.title.top;
+				var y = temp.title.top - 5;
 				cline.set({ x2: x, y2: y });
 				
 				var x1 = cline.x1;
@@ -429,14 +429,12 @@ $( document ).ready(function() {
 					mngr.eid++;
 					mngr.edges.push(linetemp);
 					canvas.sendToBack(cline);
-
 				}
 			}
 			else
 			{
 				canvas.remove(cline);
 				canvas.remove(cline.trian);
-				
 			}
 			isDown = false;
 		}

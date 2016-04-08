@@ -313,26 +313,25 @@ MManager.prototype.MoveEdges = function (node){
 				}
 				if(node.lines2[j] == 2)
 				{
-					node.lines[j].set({'x2': node.getCenterPoint().x, 'y2': node.title.top});
+					node.lines[j].set({'x2': node.getCenterPoint().x, 'y2': node.title.top-5});
 					node.lines[j].setCoords();
-					
-					var x1 = node.lines[j].x1;
-					var y1 = node.lines[j].y1;
-					var x2 = node.lines[j].x2;
-					var y2 = node.lines[j].y2;
-					
-					var dx = x2 - x1;
-					var dy = y2 - y1;
-
-					var angle = Math.atan2(dy, dx);
-					
-					angle *= 180 / Math.PI;
-					angle += 90;
-					
-					node.lines[j].trian.angle = angle;
-					node.lines[j].trian.top = y2;
-					node.lines[j].trian.left = x2;
 				}
+				var x1 = node.lines[j].x1;
+				var y1 = node.lines[j].y1;
+				var x2 = node.lines[j].x2;
+				var y2 = node.lines[j].y2;
+					
+				var dx = x2 - x1;
+				var dy = y2 - y1;
+
+				var angle = Math.atan2(dy, dx);
+					
+				angle *= 180 / Math.PI;
+				angle += 90;
+					
+				node.lines[j].trian.angle = angle;
+				node.lines[j].trian.top = y2;
+				node.lines[j].trian.left = x2;
 			}
 		}
 	}
