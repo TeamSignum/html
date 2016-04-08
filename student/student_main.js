@@ -76,7 +76,7 @@ $( document ).ready(function() {
 			}
 	    },
 		
-		// 'mouse:over': function(e){
+		 'mouse:over': function(e){
 		// 	if(e.target.id === "classNode" || e.target.id === "addNode" || e.target.id === "accountNode")
 		// 	{
 		// 		//e.target.studentNode.setStroke('yellow');
@@ -88,20 +88,20 @@ $( document ).ready(function() {
 		// 		});
 		// 		canvas.renderAll();
 		// 	}
-		// },
+		 },
 	
 		'mouse:out': function(e){
-			if(e.target.id === "classNode" || e.target.id === "addNode" || e.target.id === "accountNode")
-			{
+			//if(e.target.id === "classNode" || e.target.id === "addNode" || e.target.id === "accountNode")
+			//{
 				//e.target.setStroke('white');
-				e.target.forEachObject(function(object,i){
-					if(object.id === "mapNode")
-					{
-						object.setStroke('white');
-					}
-				});
-				canvas.renderAll();
-			}
+			//	e.target.forEachObject(function(object,i){
+			//		if(object.id === "mapNode")
+			//		{
+			//			object.setStroke('white');
+			//		}
+			//	});
+			//	canvas.renderAll();
+			//}
 		}
 		
 	});
@@ -290,8 +290,23 @@ function drawClassNode(){
 			originY: 'center',
 			fill: 'white',
 			stroke: 'white',
-			strokeWidth: 5,
+			//strokeWidth: 5,
 			id: "mapNode"
+		});
+		
+		classCircle.setGradient('fill', {
+			x1: 0,
+			y1: 0,
+			x2: classCircle.width,
+			y2: classCircle.heigh,
+			colorStops: {
+				0: '#8c8c8c',
+				0.2: '#b3b3b3',
+				0.4: 'white',
+				0.6: 'white',
+				0.8: '#b3b3b3',
+				1: '#8c8c8c'
+			}
 		});
 
 		//draw the text
