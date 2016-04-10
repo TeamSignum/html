@@ -768,10 +768,10 @@ MManager.prototype.SaveMap = function(level){
 		var temp = {
 			top: this.nodes[i].top,
 			left: this.nodes[i].left,
-			radius: this.nodes[i].radius,
-			fill: this.nodes[i].fill,
-			stroke: this.nodes[i].stroke,
-			strokeWidth: this.nodes[i].strokeWidth,
+			//radius: this.nodes[i].radius,
+			//fill: this.nodes[i].fill,
+			//stroke: this.nodes[i].stroke,
+			//strokeWidth: this.nodes[i].strokeWidth,
 			id: this.nodes[i].nid,
 			type: this.nodes[i].type,
 			title: t

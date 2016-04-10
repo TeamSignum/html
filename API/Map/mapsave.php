@@ -17,10 +17,10 @@
 		{
 			$top = $node["top"];
 			$left = $node["left"];
-			$radius = $node["radius"];
-			$fill = $node["fill"];
-			$stroke = $node["stroke"];
-			$strokeWidth = $node["strokeWidth"];
+			//$radius = $node["radius"];
+			//$fill = $node["fill"];
+			//$stroke = $node["stroke"];
+			//$strokeWidth = $node["strokeWidth"];
 			$id = $node["id"];
 			$type = $node["type"];
 			$title = $node["title"];
@@ -35,7 +35,8 @@
 			
 				if($level == 2)
 				{
-					$query = "REPLACE into `nodes2` (`cid`, `nid`, `nid2`, `top`, `left`, `radius`, `fill`, `stroke`, `strokeWidth`, `type`, `title`) values (?,?,?,?,?,?,?,?,?,?,?)";
+					//$query = "REPLACE into `nodes2` (`cid`, `nid`, `nid2`, `top`, `left`, `radius`, `fill`, `stroke`, `strokeWidth`, `type`, `title`) values (?,?,?,?,?,?,?,?,?,?,?)";
+					$query = "REPLACE into `nodes2` (`cid`, `nid`, `nid2`, `top`, `left`, `type`, `title`) values (?,?,?,?,?,?,?)";
 					
 					$statement = $DB->prepare($query);
 				
@@ -47,19 +48,20 @@
 					$statement->bindValue (3, $id);
 					$statement->bindValue (4, $top);
 					$statement->bindValue (5, $left);
-					$statement->bindValue (6, $radius);
-					$statement->bindValue (7, $fill);
-					$statement->bindValue (8, $stroke);
-					$statement->bindValue (9, $strokeWidth);
-					$statement->bindValue (10, $type);
-					$statement->bindValue (11, $title);
+					//$statement->bindValue (6, $radius);
+					//$statement->bindValue (7, $fill);
+					//$statement->bindValue (8, $stroke);
+					//$statement->bindValue (9, $strokeWidth);
+					$statement->bindValue (6, $type);
+					$statement->bindValue (7, $title);
 				
 					$statement->execute();
 					$DB->commit();
 				}
 				else
 				{
-					$query = "REPLACE into `nodes` (`cid`, `nid`, `top`, `left`, `radius`, `fill`, `stroke`, `strokeWidth`, `type`, `title`) values (?,?,?,?,?,?,?,?,?,?)";
+					//$query = "REPLACE into `nodes` (`cid`, `nid`, `top`, `left`, `radius`, `fill`, `stroke`, `strokeWidth`, `type`, `title`) values (?,?,?,?,?,?,?,?,?,?)";
+					$query = "REPLACE into `nodes` (`cid`, `nid`, `top`, `left`, `type`, `title`) values (?,?,?,?,?,?)";
 					
 					$statement = $DB->prepare($query);
 				
@@ -67,12 +69,12 @@
 					$statement->bindValue (2, $id);
 					$statement->bindValue (3, $top);
 					$statement->bindValue (4, $left);
-					$statement->bindValue (5, $radius);
-					$statement->bindValue (6, $fill);
-					$statement->bindValue (7, $stroke);
-					$statement->bindValue (8, $strokeWidth);
-					$statement->bindValue (9, $type);
-					$statement->bindValue (10, $title);
+					//$statement->bindValue (5, $radius);
+					//$statement->bindValue (6, $fill);
+					//$statement->bindValue (7, $stroke);
+					//$statement->bindValue (8, $strokeWidth);
+					$statement->bindValue (5, $type);
+					$statement->bindValue (6, $title);
 				
 					$statement->execute();
 					$DB->commit();
