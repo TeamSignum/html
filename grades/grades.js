@@ -104,6 +104,7 @@ function buildDisplayPage(parsedResult){
 				html = html.replace("PLACEHOLDER", studentGrade);
 
 				// Create the data array for the gradeChartData object
+				gradeInfo.push(["You", studentGrade]);
 				gradeInfo.push(["Low", gradeLow]);
 				gradeInfo.push(["Average", gradeAverage]);
 				gradeInfo.push(["High", gradeHigh]);
@@ -131,6 +132,7 @@ function buildDisplayPage(parsedResult){
 			html = html.replace("PLACEHOLDER", studentGrade);
 
 			// Create the data array for the gradeChartData object
+			gradeInfo.push(["You", studentGrade]);
 			gradeInfo.push(["Low", gradeLow]);
 			gradeInfo.push(["Average", gradeAverage]);
 			gradeInfo.push(["High", gradeHigh]);
