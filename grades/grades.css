@@ -3,16 +3,27 @@
 
 body{
 	text-align: center;
+	font-family: 'PT Sans', sans-serif;
+	font-size: 13pt
 }
 
 header{
 	align-items: center;
-	width: 100vw;
 	height: 60px;
 	line-height: 60px;
-	background-color: black;
-	color: white;
-	font-size: 40px;
+	color: black;
+	font-family: 'PT Sans', sans-serif;
+	font-size: 24pt;
+}
+
+.container{
+	margin: 120px auto 20px auto;
+	width: 80%;
+	background-color: white;
+	color: black;
+	border-radius: 20px;
+	font-family: 'PT Sans', sans-serif;
+	font-size: 13pt
 }
 
 /* Used to pad text within other elements */
@@ -22,17 +33,19 @@ span.textPadding{
 
 .class-header{
   	height: 5vh;
-  	line-height: 5vh;
+  	line-height: 10px;
   	min-height: 15px;
-	width: 40vw;
+	width: 100%;
 	min-width: 350px;
-	background-color: DarkGray;
-	border-radius: 5px;
-  	margin:10px auto 10px auto;
- 	
+	background-color: #00E5E5;
+  	margin: 20px auto;
+  	border: 1px solid gray;
+  	padding: 30px 0;
+
 	/*Text properties*/
-	color: white;
-	font-size: xx-large;
+	color: black;
+	font-family: 'PT Sans', sans-serif;
+	font-size: 20pt;
 	
 }
 
@@ -40,9 +53,25 @@ span.textPadding{
 	cursor: pointer;
 }
 
+.class-header .left{
+	float: left;
+	width: 10%;
+}
+
+.class-header .center{
+	float: left;
+	text-align: center;
+	width: 80%;
+}
+
+.class-header .righ{
+	float: right;
+	text-align: right;
+	width: 10%;
+}
+
 /* A 'panel' that can be toggled in and out, contains the google chart */
 .toggle{
 	display: inline-block;
-	width: 25vw;
 	margin: 0 auto;
 }

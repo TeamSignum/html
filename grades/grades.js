@@ -73,7 +73,7 @@ function buildDisplayPage(parsedResult){
 			gradeInfo.push(['Assignment', 'Grade']); // This is the header information for the Google Chart
 			currentAssignment = parsedResult[i].title;
 			// Build the trigger header for the assignment
-			html +='<div class = "class-header"><span class="textPadding"> + ' + currentAssignment + ' - PLACEHOLDER%</span></div>';
+			html +='<div class = "class-header"><div class="left">+</div><div class="center"><span class="textPadding">' + currentAssignment + '</span></div><div class="right">PLACEHOLDER%</div></div>';
 			html +='<div id = "chart'+divCount+'" class = "toggle"></div>';
 		}
 
@@ -173,6 +173,8 @@ function buildGoogleChart(gradeChartDataArray){
 	        var options = {
 	        	title: gradeChartDataArray[i].assignmentId,
 	        	legend: 'none',
+	        	width: 600,
+	        	height: 250,
 	        	
 	        	bar: {
 	        		groupWidth: 30
