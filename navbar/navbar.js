@@ -99,17 +99,6 @@ function evaluateSessionInfo(parsedResult){
 			html+='</li>';
 		}	
 
-		if(document.title=='Concept Builder'){
-			html+='<li>';
-			html+='<a href="../class_view/class_builder.html" style="margin-top: 12px; font-size:14pt;"><i class="material-icons">arrow_back</i></a>';
-			html+='</li>';	
-		}
-		else if(document.title=='Concept View'){
-			html+='<li>';
-			html+='<a href="../class_view/class_view.html" style="margin-top: 12px; font-size:14pt;"><i class="material-icons">arrow_back</i></a>';
-			html+='</li>';	
-		}
-
 		// Account home link
 		if(document.title=='Account Home'){ 
 			html+='<li class="active">';
@@ -170,17 +159,6 @@ function evaluateSessionInfo(parsedResult){
 			html+='</li>';
 		}	
 
-		if(document.title=='Concept Builder'){
-			html+='<li>';
-			html+='<a href="../class_view/class_builder.html" style="margin-top: 12px; font-size:14pt;"><i class="material-icons">arrow_back</i></a>';
-			html+='</li>';	
-		}
-		else if(document.title=='Concept View'){
-			html+='<li>';
-			html+='<a href="../class_view/class_view.html" style="margin-top: 12px; font-size:14pt;"><i class="material-icons">arrow_back</i></a>';
-			html+='</li>';	
-		}
-
 		// Account home link
 		if(document.title=='Account Home'){ 
 			html+='<li class="active">';
@@ -199,8 +177,30 @@ function evaluateSessionInfo(parsedResult){
 		//html+='</ul>';	
 	}
 
+	if(document.title=='Concept Builder'){
+		html+='<li>';
+		html+='<a href="../class_view/class_builder.html" style="margin-top: 12px; font-size:14pt;"><i class="material-icons">arrow_back</i></a>';
+		html+='</li>';	
+	}
+	else if(document.title=='Concept View'){
+		html+='<li>';
+		html+='<a href="../class_view/class_view.html" style="margin-top: 12px; font-size:14pt;"><i class="material-icons">arrow_back</i></a>';
+		html+='</li>';	
+	}
+
+	else if(document.title=='Professor Concept View'){
+		html+='<li>';
+		html+='<a href="../prof_class_view/prof_class_view.html" style="margin-top: 12px; font-size:14pt;"><i class="material-icons">arrow_back</i></a>';
+		html+='</li>';	
+	}
+
 	html+='<li>';
 	html+='<a href="../user_feedback/user_feedback.html" style="margin-top: 12px; font-size:14pt;"><i class="material-icons">feedback</i></a>';
+	html+='</li>';	
+	html+='</ul>';	
+
+	html+='<li>';
+	html+='<a href="../about/about.html" style="margin-top: 12px; font-size:14pt;"><i class="material-icons">info</i></a>';
 	html+='</li>';	
 	html+='</ul>';	
 
