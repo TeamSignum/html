@@ -1,15 +1,79 @@
-@charset "utf-8";
-/* CSS Document */
-#canvas {
-	width: 100%; 
-	height: 100%;
-	text-align: center;
-	background-color: white; 
+/*custom font*/
+@import url(http://fonts.googleapis.com/css?family=Average+Sans);
+/*basic reset*/
+* {margin: 0; padding: 0;}
+
+/*=== 1. General Structure ===*/
+html,
+body {
+  padding: 1px;
 }
 
-body {
-	background-color: white;
-	color: white;
+#pf-form
+{
+	width: 400px;
+	margin: 50px auto;
+	text-align: center;
+	background: white;
+	border: 0 none;
+	border-radius: 3px;
+	box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+	padding: 20px 30px;	
+	box-sizing: border-box;
+	width: 40%;
+	margin: 0 30%;
+	
+	/*stacking fieldsets above each other*/
+	position: absolute;
+
+}
+
+#pf-form input{
+	padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: 'Average Sans', sans-serif;
+    color: #2349E8;
+    font-size: 15px;
+}
+
+#pf-form button[type='submit']{
+	position: relative;
+    display: block;
+    padding: 10px 20px 10px 20px;
+    color: #FFF;
+    margin: 0 auto;
+    background: #27AE60;
+    font-size: 18px;
+    text-align: center;
+    font-style: normal;
+    width: 50%;
+    border: #27AE60;
+    border-width: 1px 1px 3px;
+    margin-bottom: 10px;
+}
+
+#pf-form legend{
+    font-size: 15px;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+#pf-form .number{
+	background: #27AE60;
+    color: #fff;
+    height: 20px;
+    width: 20px;
+    display: inline-block;
+    font-size: 0.6em;
+    margin-right: 4px;
+    line-height: 20px;
+    text-align: center;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.2);
+    border-radius: 15px 15px 15px 0px;
 }
 
 img#profileimage{
@@ -18,14 +82,9 @@ img#profileimage{
 }
 
 label{
-	color: #ffffff;
+	display: block;
+    margin-bottom: 8px;
 }
 
-.extra-button-padding{
-	margin: 0 10px 0 0px;
-}
 
-button{
-	display: none; 
-}
 

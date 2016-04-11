@@ -26,9 +26,14 @@ $(document).ready(function() {
   			confirmButtonText: "Send",
 			closeOnConfirm: false,
 			allowOutsideClick: false
-  		}, function(){
-  			sendMessage();   
-	  		swal("Send This Message", "Your students will be notified", "success");
+  		}, function(isConfirm){
+  			if(isConfirm == true){
+	  			sendMessage();
+	  			swal("Send This Message", "Your students will be notified", "success");
+	  		}else{
+	  			
+	  		}
+
 	  	});
 
   	});
@@ -163,7 +168,7 @@ function studentGrade(result){
 	var notification = '';
 	for (var i = 0; i < result.length; i++){
 		counter += 1;
-		notification += '<li><a href="../grades/">The Score of '
+		notification += '<li><a href="../grades/grades.html">The Score of '
 						+result[i]['title']+' in '
 						+result[i]['classnumber']+' has been posted at '
 						+result[i]['date_entered']+'</a></li>';
@@ -175,7 +180,7 @@ function studentProfMessage(result){
 var notification = '';
 	for (var i = 0; i < result.length; i++){
 		counter += 1;
-		notification += '<li><a href="../grades/">'
+		notification += '<li><a href="#">'
 						+result[i]['author_name']+' in '
 						+result[i]['class_number']+' send \''
 						+result[i]['message']+'\' at '
