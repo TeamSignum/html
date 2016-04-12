@@ -28,6 +28,7 @@ $(document).ready(function() {
 			allowOutsideClick: false
   		}, function(isConfirm){
   			if(isConfirm == true){
+  				real_time_notification();
 	  			sendMessage();
 	  			swal("Send This Message", "Your students will be notified", "success");
 	  		}else{
@@ -38,6 +39,36 @@ $(document).ready(function() {
 
   	});
 });
+
+function real_time_notification() {
+  if (!("Notification" in window)) {
+    alert("This browser does not support desktop notification");
+  }
+  else if (Notification.permission === "granted") {
+        var options = {
+                body: "This is the notification",
+                icon: "icon.jpg",
+                dir : "ltr"
+             };
+          var notification = new Notification("Hi there",options);
+  }
+  else if (Notification.permission !== 'denied') {
+    Notification.requestPermission(function (permission) {
+      if (!('permission' in Notification)) {
+        Notification.permission = permission;
+      }
+    
+      if (permission === "granted") {
+        var options = {
+              body: "This is the body of the notification",
+              icon: "icon.jpg",
+              dir : "ltr"
+          };
+        var notification = new Notification("Hi there",options);
+      }
+    });
+  }
+}
 
 function sendMessage(){
 	$.ajax({
