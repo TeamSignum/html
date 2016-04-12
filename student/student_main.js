@@ -336,22 +336,23 @@ function drawClassNode(){
 		canvas.add(node_group);
 		canvas.bringToFront(node_group);
 
-		// Draw popup
-		var popupCircle = new fabric.Circle({
-			radius: 15,
+		var imgElement = document.getElementById('my-image-page');
+		var popupnode = new fabric.Image(imgElement, {
 			left: canvas.width/2 + Math.cos(currentAngle)*classOrbitalRadius + classNodeRadius - 30,
-			top: canvas.height/2 + Math.sin(currentAngle)*classOrbitalRadius - classNodeRadius - 5,
-			fill: '#009ACD',
-			stroke: 'white',
-			strokeWidth: 5,
+			top: canvas.height/2 + Math.sin(currentAngle)*classOrbitalRadius - classNodeRadius - 5,			
 			id: "popupnode"
 		});
-		popupCircle.cid = classIdArray[i];
-		popupCircle.popup = "";
-		popupCircle.lockMovementX = popupCircle.lockMovementY = true;
-		popupCircle.hasControls = popupCircle.hasBorders = false;
-		canvas.bringToFront(popupCircle);
-		canvas.add(popupCircle);
+
+		popupnode.height = 96;
+		popupnode.width = 96;
+		popupnode.scale(.30);
+		popupnode.lockMovementX = popupnode.lockMovementY = true;
+		popupnode.hasControls = false; 
+		popupnode.hasBorders  = false; 
+		popupnode.cid = classIdArray[i];
+		popupnode.popup = "";
+		canvas.bringToFront(popupnode);
+		canvas.add(popupnode);
 
 	};
 }
