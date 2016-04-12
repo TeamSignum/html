@@ -3,7 +3,7 @@ var counter = 0;
 
 $(document).ready(function() {
 	getRole();
-	getNotifications();
+	
   	$("[data-toggle]").click(function() {  		
   	   	var toggle_el = $(this).data("toggle");
     	$(toggle_el).toggleClass("open");
@@ -38,6 +38,8 @@ $(document).ready(function() {
 	  	});
 
   	});
+  	
+  	getNotifications();
 });
 
 function real_time_notification() {

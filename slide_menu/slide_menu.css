@@ -69,15 +69,15 @@ body {
 }
 
 #notification {
-  color: #fff;
-  position: relative;
-  left: 155px;
-  top: -52px;
-  border-radius: 50%;
-  border: 2px solid #FFF;
-  width: 20px;
-  height: 20px;
-  background: #E93B19;
+ color: #fff;
+    position: relative;
+    left: 155px;
+    top: -57px;
+    border-radius: 50%;
+    border: 2px solid #FFF;
+    width: 25px;
+    height: 25px;
+    background: #E93B19;
 }
 
 #nots {
