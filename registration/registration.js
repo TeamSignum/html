@@ -5,6 +5,14 @@ var animating; //flag to prevent quick multi-click glitches
 
 var fieldsetn = 1;
 
+$("#msform").bind("keypress", function(e){
+
+  if(e.keyCode == 13){
+    e.preventDefault();
+  }
+
+});
+
 $(".next").click(function(){
   var error = 0;
 
@@ -183,4 +191,4 @@ $(".previous").click(function(){
 
 $(".submit").click(function(){
   return false;
-})
+});
