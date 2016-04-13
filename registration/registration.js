@@ -8,7 +8,7 @@ var fieldsetn = 1;
 $(".next").click(function(){
   var error = 0;
 
-  //step 1
+  //step 100
   if(fieldsetn == 1){
     var emailVal = $('#email').val();
     var emailReg = /[^\s@]+@[^\s@]+\.[^\s@]+/;
@@ -105,6 +105,7 @@ $(".next").click(function(){
      }
      else{
         $('#usertype').removeClass('warning');
+        $('#usertype-error').html('');
      }
   }
   

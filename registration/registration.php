@@ -84,7 +84,7 @@ if (isset($_POST["submit"])){
             $_SESSION['role'] = $result['role'];
             
             //Navigate to account home
-            header("location: ../student/student.php");
+            header("location: ../student/student_main.html");
 
         }catch  (PDOException $e){
             echo $e->getMessage();
