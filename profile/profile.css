@@ -60,6 +60,7 @@ body {
     font-size: 15px;
     margin-bottom: 10px;
     text-align: left;
+    border-bottom-width: 0px;
 }
 
 #pf-form .number{

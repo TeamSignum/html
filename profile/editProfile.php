@@ -48,44 +48,6 @@ if(!isset($_FILES['imageToUpload'])){
 	die("No picture found.");
 }
 
-try{
-	// Login to the database	
-	$DB=openDB();
-
-	$query = "UPDATE users
-			  SET email=?, uid=?, firstname=?, lastname=?, profilepic=?
-			  WHERE uid=?";
-					
-	$statement = $DB->prepare($query);
-	$statement->bindValue(1, $email);
-	$statement->bindValue(2, $userid);
-	$statement->bindValue(3, $firstname);
-	$statement->bindValue(4, $lastname);					
-	$statement->bindValue(5, $profile);
-	$statement->bindValue(6, $uid);
-
-	$statement->execute();
-
-	// Update the email session variable
-	$_SESSION['email']=$email;
-	$_SESSION['uid']=$userid;
-	$_SESSION['firstname']=$firstname;
-	$_SESSION['lastname']=$lastname;
-}
-catch(PDOException $ex){
-	if($ex->getCode()=="23000"){
-		echo("Email address already taken.");
-		echo("User ID already taken.");
-	}
-	else{
-	  	echo
-	     "<p>oops</p>
-	      <p> Code: {$ex->getCode()} </p>
-	      <pre>$ex</pre>";
-	}
-	die();
-}
-
 // $check if the file is an image.
 $check = getimagesize($_FILES["imageToUpload"]["tmp_name"]);
 if($check === false) {
@@ -110,33 +72,46 @@ if (move_uploaded_file($_FILES['imageToUpload']['tmp_name'], $destinationFileNam
     // Strip the file path to store the image name in the database
     $databaseFileName=basename($destinationFileName);
     //echo($databaseFileName);
-    // File uploaded successfully, add reference to the database
-    print_r("expression");
-    try{
-	// Login to the database	
+    // File uploaded successfully, add reference to the database 
+	try{
+		// Login to the database	
 		$DB=openDB();
 
 		$query = "UPDATE users
-				  SET profilepic=?
+				  SET email=?, uid=?, firstname=?, lastname=?, profilepic=?
 				  WHERE uid=?";
 						
 		$statement = $DB->prepare($query);
-		$statement->bindValue(1, $databaseFileName);	
-		$statement->bindValue(2, $uid);
-		
+		$statement->bindValue(1, $email);
+		$statement->bindValue(2, $userid);
+		$statement->bindValue(3, $firstname);
+		$statement->bindValue(4, $lastname);					
+		$statement->bindValue(5, $databaseFileName);
+		$statement->bindValue(6, $uid);
+
 		$statement->execute();
 
-		echo("Success: " . $databaseFileName);
+		// Update the email session variable
+		$_SESSION['email']=$email;
+		$_SESSION['uid']=$userid;
+		$_SESSION['firstname']=$firstname;
+		$_SESSION['lastname']=$lastname;
 
-		// TODO:  Need to delete the old file...
+		echo("Success: " . $databaseFileName);
 	}
 	catch(PDOException $ex){
-		echo
-		     "<p>oops</p>
-		      <p> Code: {$ex->getCode()} </p>
-		      <pre>$ex</pre>";
-	die();
+		if($ex->getCode()=="23000"){
+			echo("Email address already taken.");
+			echo("User ID already taken.");
 	}
+	else{
+	  	echo
+	     "<p>oops</p>
+	      <p> Code: {$ex->getCode()} </p>
+	      <pre>$ex</pre>";
+	}
+	die();
+}
 
 } 
 else {

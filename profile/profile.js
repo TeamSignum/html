@@ -10,12 +10,16 @@ var _profileimage;
 $( document ).ready(function() 
 {
 	getProfileData();
-	
+
 	// Prevent default action of forms submitting
-	$('pf-form').submit(function(e){
+	$('#pf-form').submit(function(e){
+		//alert("0");
+    	e.preventDefault();
     	ProfileChange();
+    	window.location = "../student/student_main.html";
     });
 
+	
 	//emailDefaultView();
 	//userIdDefaultView();
 	//nameDefaultView();
@@ -206,6 +210,7 @@ function submitNameChange(){
 }
 
 function ProfileChange(){
+	//alert("1");
 	// Check if a file was chosen
 	if($('#imageToUpload').val()==''){
 		//pictureDefaultView();
@@ -215,8 +220,8 @@ function ProfileChange(){
 		// Get the form information and create a FormData object
 		var form = $('#pf-form')[0];
 		var formData = new FormData(form);
-		alert("hahaha");
-		alert(formData);
+		//alert("2");
+		//alert(formData);
 		// Append information to tell php what function to run
 		//formData.append("queryType", 'updatePicture');
 
@@ -231,7 +236,7 @@ function ProfileChange(){
 			success: function(result){
 				//alert(result);
 				if(result.indexOf("Success: ") !=-1){
-					alert(result.substring(result.indexOf(" ")+1));
+					//alert(result.substring(result.indexOf(" ")+1));
 					_profileimage="../profile_images/" + result.substring(result.indexOf(" ")+1);
 					//$('#edit-picture-button').prop('disabled',false);
 					//$('#cancel-edit-picture-button').prop('disabled',false);
@@ -239,6 +244,7 @@ function ProfileChange(){
 					//pictureDefaultView();
 				}
 				else{
+					alert(result);
 					alert('File could not be uploaded.  Please try again.');
 					//$('#edit-picture-button').prop('disabled',false);
 					//$('#cancel-edit-picture-button').prop('disabled',false);
