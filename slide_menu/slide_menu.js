@@ -3,7 +3,7 @@ var counter = 0;
 
 $(document).ready(function() {
 	getRole();
-	getNotifications();
+	
   	$("[data-toggle]").click(function() {  		
   	   	var toggle_el = $(this).data("toggle");
     	$(toggle_el).toggleClass("open");
@@ -26,13 +26,51 @@ $(document).ready(function() {
   			confirmButtonText: "Send",
 			closeOnConfirm: false,
 			allowOutsideClick: false
-  		}, function(){
-  			sendMessage();   
-	  		swal("Send This Message", "Your students will be notified", "success");
+  		}, function(isConfirm){
+  			if(isConfirm == true){
+  				real_time_notification();
+	  			sendMessage();
+	  			swal("Send This Message", "Your students will be notified", "success");
+	  		}else{
+	  			
+	  		}
+
 	  	});
 
   	});
+  	
+  	getNotifications();
 });
+
+function real_time_notification() {
+  if (!("Notification" in window)) {
+    alert("This browser does not support desktop notification");
+  }
+  else if (Notification.permission === "granted") {
+        var options = {
+                body: "This is the notification",
+                icon: "icon.jpg",
+                dir : "ltr"
+             };
+          var notification = new Notification("Hi there",options);
+  }
+  else if (Notification.permission !== 'denied') {
+    Notification.requestPermission(function (permission) {
+      if (!('permission' in Notification)) {
+        Notification.permission = permission;
+      }
+    
+      if (permission === "granted") {
+        var options = {
+              body: "This is the body of the notification",
+              icon: "icon.jpg",
+              dir : "ltr"
+          };
+        var notification = new Notification("Hi there",options);
+      }
+    });
+  }
+}
 
 function sendMessage(){
 	$.ajax({
@@ -163,7 +201,7 @@ function studentGrade(result){
 	var notification = '';
 	for (var i = 0; i < result.length; i++){
 		counter += 1;
-		notification += '<li><a href="../grades/">The Score of '
+		notification += '<li><a href="../grades/grades.html">The Score of '
 						+result[i]['title']+' in '
 						+result[i]['classnumber']+' has been posted at '
 						+result[i]['date_entered']+'</a></li>';
@@ -175,7 +213,7 @@ function studentProfMessage(result){
 var notification = '';
 	for (var i = 0; i < result.length; i++){
 		counter += 1;
-		notification += '<li><a href="../grades/">'
+		notification += '<li><a href="#">'
 						+result[i]['author_name']+' in '
 						+result[i]['class_number']+' send \''
 						+result[i]['message']+'\' at '

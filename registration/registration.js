@@ -5,10 +5,18 @@ var animating; //flag to prevent quick multi-click glitches
 
 var fieldsetn = 1;
 
+$("#msform").bind("keypress", function(e){
+
+  if(e.keyCode == 13){
+    e.preventDefault();
+  }
+
+});
+
 $(".next").click(function(){
   var error = 0;
 
-  //step 1
+  //step 100
   if(fieldsetn == 1){
     var emailVal = $('#email').val();
     var emailReg = /[^\s@]+@[^\s@]+\.[^\s@]+/;
@@ -105,6 +113,7 @@ $(".next").click(function(){
      }
      else{
         $('#usertype').removeClass('warning');
+        $('#usertype-error').html('');
      }
   }
   
@@ -182,4 +191,4 @@ $(".previous").click(function(){
 
 $(".submit").click(function(){
   return false;
-})
+});

@@ -10,16 +10,22 @@ var _profileimage;
 $( document ).ready(function() 
 {
 	getProfileData();
-	
+
 	// Prevent default action of forms submitting
-	$('form').submit(function(e){
+	$('#pf-form').submit(function(e){
+		//alert("0");
     	e.preventDefault();
+    	ProfileChange();
+    	window.location = "../student/student_main.html";
     });
 
-	emailDefaultView();
-	userIdDefaultView();
-	nameDefaultView();
-	pictureDefaultView();
+	
+	//emailDefaultView();
+	//userIdDefaultView();
+	//nameDefaultView();
+	//pictureDefaultView();
+
+	
 });
 
 // Queries the database and stores profile information in javascript variables
@@ -63,33 +69,6 @@ function getProfileData(){
 }
 
 // Logic for individual profile forms
-function emailDefaultView(){
-	// Set up 'CHANGE' button
-
-	$('#edit-email-button').off().on('click', emailEditView);
-	$('#edit-email-button').attr('class', 'btn btn-primary btn-sm');
-	$('#edit-email-button').text('CHANGE');
-	// Set up 'CANCEL' button
-	$('#cancel-edit-email-button').attr('class', 'btn btn-danger btn-sm');
-	$('#cancel-edit-email-button').hide();
-	$('#cancel-edit-email-button').off().on('click', emailDefaultView);
-	$('#email').val(_email);
-	// Disable email input field
-	$('#email').prop('disabled',true);
-}
-
-function emailEditView(){
-	// Update "CHANGE' button
-	$('#edit-email-button').off().on('click', submitEmailChange);
-	$('#edit-email-button').attr('class', 'btn btn-success btn-sm');
-	$('#edit-email-button').text('SUBMIT');
-	// Display 'CANCEL' button
-	$('#cancel-edit-email-button').show();
-	// Enable email input field
-	$('#email').prop('disabled',false);
-	
-	turnOffOtherEditFields($('#edit-email-button'));
-}
 
 function submitEmailChange(){
 	// Use html5 validation
@@ -139,33 +118,6 @@ function submitEmailChange(){
 }
 
 
-function userIdDefaultView(){
-	// Set up 'CHANGE' button
-	$('#edit-userid-button').off().on('click', userIdEditView);
-	$('#edit-userid-button').attr('class', 'btn btn-primary btn-sm');
-	$('#edit-userid-button').text('CHANGE');
-	// Set up 'CANCEL' button
-	$('#cancel-edit-userid-button').attr('class', 'btn btn-danger btn-sm');
-	$('#cancel-edit-userid-button').hide();
-	$('#cancel-edit-userid-button').off().on('click', userIdDefaultView);
-	$('#userid').val(_userid);
-	// Disable userid input field
-	$('#userid').prop('disabled',true);
-}
-
-function userIdEditView(){
-	// Update "CHANGE' button
-	$('#edit-userid-button').off().on('click', submitUserIdChange);
-	$('#edit-userid-button').attr('class', 'btn btn-success btn-sm');
-	$('#edit-userid-button').text('SUBMIT');
-	// Display 'CANCEL' button
-	$('#cancel-edit-userid-button').show();
-	// Enable userid input field
-	$('#userid').prop('disabled',false);
-	
-	turnOffOtherEditFields($('#edit-userid-button'));
-}
-
 function submitUserIdChange(){
 	// Use html5 validation
 	if($('#userid')[0].checkValidity())
@@ -173,10 +125,6 @@ function submitUserIdChange(){
 		// Get the form information and create a FormData object
 		var form = $('#userid-form')[0];
 		var formData = new FormData(form);
-		
-		// Disable buttons while the update is taking place
-		$('#edit-userid-button').prop('disabled',true);
-		$('#cancel-edit-userid-button').prop('disabled',true);
 
 		// Get the form information and create a FormData object
 		var form = document.getElementById("userid-form");
@@ -216,35 +164,6 @@ function submitUserIdChange(){
 	}
 }
 
-function nameDefaultView(){
-	// Set up 'CHANGE' button
-	$('#edit-name-button').off().on('click', nameEditView);
-	$('#edit-name-button').attr('class', 'btn btn-primary btn-sm');
-	$('#edit-name-button').text('CHANGE');
-	// Set up 'CANCEL' button
-	$('#cancel-edit-name-button').attr('class', 'btn btn-danger btn-sm');
-	$('#cancel-edit-name-button').hide();
-	$('#cancel-edit-name-button').off().on('click', nameDefaultView);
-	$('#firstname').val(_firstName);
-	$('#lastname').val(_lastName);
-	// Disable userid input field
-	$('#firstname').prop('disabled',true);
-	$('#lastname').prop('disabled',true);
-}
-
-function nameEditView(){
-	// Update "CHANGE' button
-	$('#edit-name-button').off().on('click', submitNameChange);
-	$('#edit-name-button').attr('class', 'btn btn-success btn-sm');
-	$('#edit-name-button').text('SUBMIT');
-	// Display 'CANCEL' button
-	$('#cancel-edit-name-button').show();
-	// Enable userid input field
-	$('#firstname').prop('disabled',false);
-	$('#lastname').prop('disabled',false);
-	
-	turnOffOtherEditFields($('#edit-name-button'));
-}
 
 function submitNameChange(){
 	// Use html5 validation
@@ -290,49 +209,21 @@ function submitNameChange(){
 	}
 }
 
-function pictureDefaultView(){
-	// Set up 'CHANGE' button
-	$('#edit-picture-button').show();
-	$('#edit-picture-button').off().on('click', pictureEditView);
-	$('#edit-picture-button').attr('class', 'btn btn-primary btn-sm');
-	$('#edit-picture-button').text('CHANGE');
-	// Set up 'CANCEL' button
-	$('#cancel-edit-picture-button').attr('class', 'btn btn-danger btn-sm');
-	$('#cancel-edit-picture-button').hide();
-	$('#cancel-edit-picture-button').off().on('click', pictureDefaultView);
-	$('#profileimage').attr('src', _profileimage);
-	// Hide browse button
-	$('#browse-picture').hide();
-}
-
-function pictureEditView(){
-	// Update "CHANGE' button
-	$('#edit-picture-button').off().on('click', submitPictureChange);
-	$('#edit-picture-button').attr('class', 'btn btn-success btn-sm');
-	$('#edit-picture-button').text('SUBMIT');
-	// Display 'CANCEL' button
-	$('#cancel-edit-picture-button').show();
-	// Display browse button
-	$('#browse-picture').show();
-	
-	turnOffOtherEditFields($('#edit-picture-button'));
-}
-
-function submitPictureChange(){
+function ProfileChange(){
+	//alert("1");
 	// Check if a file was chosen
 	if($('#imageToUpload').val()==''){
-		pictureDefaultView();
+		//pictureDefaultView();
+		alert("NO Profile Img");
 	}
 	else{
 		// Get the form information and create a FormData object
-		var form = $('#picture-form')[0];
+		var form = $('#pf-form')[0];
 		var formData = new FormData(form);
+		//alert("2");
+		//alert(formData);
 		// Append information to tell php what function to run
-		formData.append("queryType", 'updatePicture');
-
-		// Disable buttons while the update is taking place
-		$('#edit-picture-button').prop('disabled',true);
-		$('#cancel-edit-picture-button').prop('disabled',true);
+		//formData.append("queryType", 'updatePicture');
 
 		//insert into database, handle any submission errors.
 		$.ajax({
@@ -347,26 +238,20 @@ function submitPictureChange(){
 				if(result.indexOf("Success: ") !=-1){
 					//alert(result.substring(result.indexOf(" ")+1));
 					_profileimage="../profile_images/" + result.substring(result.indexOf(" ")+1);
-					$('#edit-picture-button').prop('disabled',false);
-					$('#cancel-edit-picture-button').prop('disabled',false);
+					//$('#edit-picture-button').prop('disabled',false);
+					//$('#cancel-edit-picture-button').prop('disabled',false);
 					
-					pictureDefaultView();
+					//pictureDefaultView();
 				}
 				else{
+					alert(result);
 					alert('File could not be uploaded.  Please try again.');
-					$('#edit-picture-button').prop('disabled',false);
-					$('#cancel-edit-picture-button').prop('disabled',false);
-					$('#profileimage').attr('src', _profileimage);
-					pictureEditView();
+					//$('#edit-picture-button').prop('disabled',false);
+					//$('#cancel-edit-picture-button').prop('disabled',false);
+					//$('#profileimage').attr('src', _profileimage);
+					//pictureEditView();
 				}
 			}
 		});
 	}
-}
-
-function turnOffOtherEditFields(editButton){
-	// var buttonArray = $('.edit-button');
-	// for(var i = 0; i < buttonArray.length; i++){
-	// 	alert(buttonArray[i].attr('id'));
-	// }
 }
