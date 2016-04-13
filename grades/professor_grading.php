@@ -88,6 +88,8 @@
 					$userid = $_POST['userid'];
 					$grader_comments = $_POST['grader-comments'];
 					$grade = $_POST['grade'];
+					//echo($grader_comments.' '.$grade);
+					//die();
 				}
 				else{
 					//print_r($_POST);
@@ -98,25 +100,57 @@
 
 					// Create a PDO object	
 					$DB=openDB();
+					
+					// See if there is an assignment record, and create one if none exists
+					$query = "SELECT COUNT(*) as count
+							  FROM assignments
+							  WHERE cid = ? AND nid = ? AND nid2 = ? and idusers = ?";
+					$statement = $DB->prepare($query);
+					$statement->bindValue(1, $cid);
+					$statement->bindValue(2, $nid);
+					$statement->bindValue(3, $nid2);
+					$statement->bindValue(4, $userid);
 
-					$query="UPDATE assignments
+					$result = $statement->execute();
+					if($result['count'] == 0){
+
+						$query="INSERT INTO assignments
+								(cid, nid, nid2, idusers, tdate, grader_comments, grade)
+								VALUES
+								(?,?,?,?,?,?,?)";
+						$statement = $DB->prepare($query);
+						$statement->bindValue(1, $cid);
+						$statement->bindValue(2, $nid);
+						$statement->bindValue(3, $nid2);
+						$statement->bindValue(4, $userid);
+						$statement->bindValue(5, null, PDO::PARAM_INT); // Submits null value to DB
+						$statement->bindValue(6, $grader_comments);					
+						$statement->bindValue(7, $grade);
+
+						// Execute the database query
+						$result = $statement->execute();
+						echo("Success");
+					}
+					else{
+						$query="UPDATE assignments
 							SET grader_comments=?, grade=?
 							WHERE cid=? AND nid=? AND nid2=? AND idusers=?";
 										
-					$statement = $DB->prepare($query);
-					$statement->bindValue(1, $grader_comments);					
-					$statement->bindValue(2, $grade);
-					$statement->bindValue(3, $cid);
-					$statement->bindValue(4, $nid);
-					$statement->bindValue(5, $nid2);
-					$statement->bindValue(6, $userid);
-						
-					// Execute the database query
-					$result = $statement->execute();
-					echo("Success");
+						$statement = $DB->prepare($query);
+						$statement->bindValue(1, $grader_comments);					
+						$statement->bindValue(2, $grade);
+						$statement->bindValue(3, $cid);
+						$statement->bindValue(4, $nid);
+						$statement->bindValue(5, $nid2);
+						$statement->bindValue(6, $userid);
+							
+						// Execute the database query
+						$result = $statement->execute();
+						echo("Success");
+					}
 				}
 				catch(PDOException $e){
-					die($e->getMessage);
+					echo($e->getMessage());
 				}	
 				
 				break;

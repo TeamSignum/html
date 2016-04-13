@@ -154,8 +154,14 @@ function buildAssignmentGradingPage(parsedResult){
 			studentComments = 'N/A';
 		}
 
-		var graderComments = parsedResult[i].grader_comments;
-
+		var graderComments;
+		if(parsedResult[i].grader_comments != null){
+			graderComments = parsedResult[i].grader_comments;
+		}
+		else{
+			graderComments = "";
+		}
+		
 		var tempGradeData = new gradeData(userid, firstName, lastName, cid, nid, nid2, tdate, file, grade, studentComments, graderComments);
 		gradeDataArray[userid] = tempGradeData;
 
@@ -207,6 +213,15 @@ function createGradeForm(userid){
 	// Build the popup
 	var innerHtml;
 
+	var fileUrl;
+	if(currentStudent.file == "No Submission"){
+		fileUrl = "";
+	}
+	else{
+		fileUrl = `http://ec2-52-33-118-140.us-west-2.compute.amazonaws.com/assignmentsub/`+currentStudent.file+`#page=1&zoom=75`;
+	}
+
+
 	// Popup details
 	innerHtml = `
 	<div>
@@ -217,8 +232,8 @@ function createGradeForm(userid){
 				
 			<label for="assignment-submission" style="margin-left: 13%;">
 				<span>Assignment Submission</span>
-				<object id="assignment-submission" data="http://ec2-52-33-118-140.us-west-2.compute.amazonaws.com/assignmentsub/`+currentStudent.file+`#page=1&zoom=75" type="application/pdf" width="70%" height="500px">
-			 	 	<embed src="http://ec2-52-33-118-140.us-west-2.compute.amazonaws.com/assignmentsub/1_Ganesh Notes.pdf" type="application/pdf" />
+				<object id="assignment-submission" data="`+fileUrl+`" type="application/pdf" width="70%" height="500px">
+			 	 	
 				</object>
 			</label>
 			<label for="student-comments" style="margin-left: 13%;">
@@ -229,11 +244,11 @@ function createGradeForm(userid){
 			<form style="margin-left: 13%;" id="grade-form">
 				<label for="grader-comments">
 					<span>Grader Comments</span>
-					<textarea name="grader-comments" id="grader-comments" name="grader-comments" class="textarea-field" type="text"></textarea>
+					<textarea name="grader-comments" id="grader-comments" class="textarea-field" type="text">`+currentStudent.graderComments+`</textarea>
 				</label>
 				<label for="grade">
 					<span>Grade</span>
-					<input class="input-field" id="grade" name="grade" type="number" required>
+					<input class="input-field" id="grade" name="grade" type="number" value="`+currentStudent.grade+`" required>
 				</label>
 			</form>
 		</div>
