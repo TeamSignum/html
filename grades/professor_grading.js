@@ -213,12 +213,14 @@ function createGradeForm(userid){
 	// Build the popup
 	var innerHtml;
 
-	var fileUrl;
+	var assignmentSubmission;
 	if(currentStudent.file == "No Submission"){
-		fileUrl = "";
+		assignmentSubmission = `<input class="input-field" value="No Assignment Submitted" disabled>`;
 	}
 	else{
-		fileUrl = `http://ec2-52-33-118-140.us-west-2.compute.amazonaws.com/assignmentsub/`+currentStudent.file+`#page=1&zoom=75`;
+		assignmentSubmission = `<object id="assignment-submission" data="`+currentStudent.file+`" type="application/pdf" width="70%" height="500px">
+								 http://ec2-52-33-118-140.us-west-2.compute.amazonaws.com/assignmentsub/`+currentStudent.file+`#page=1&zoom=75
+								 </object>`;
 	}
 
 
@@ -228,16 +230,12 @@ function createGradeForm(userid){
 		<div class="form-style-2" style="width: 90%;">
 			<div class="form-style-2-heading" style="width: 110%;">Assignment: Assignment 1 &nbsp&nbsp&nbsp&nbsp 
 			Student: `+currentStudent.firstName+` `+currentStudent.lastName+`</div>
-			
-				
 			<label for="assignment-submission" style="margin-left: 13%;">
 				<span>Assignment Submission</span>
-				<object id="assignment-submission" data="`+fileUrl+`" type="application/pdf" width="70%" height="500px">
-			 	 	
-				</object>
+				`+assignmentSubmission+`
 			</label>
 			<label for="student-comments" style="margin-left: 13%;">
-				<span>Student Comments</span></span>
+				<span>Student Comments</span>
 				<textarea name="student-comments" id="student-comments" class="textarea-field" readonly>`+currentStudent.studentComments+`</textarea>
 			</label>
 

@@ -104,16 +104,19 @@
 					// See if there is an assignment record, and create one if none exists
 					$query = "SELECT COUNT(*) as count
 							  FROM assignments
-							  WHERE cid = ? AND nid = ? AND nid2 = ? and idusers = ?";
+							  WHERE cid = ? AND nid = ? AND nid2 = ? AND idusers = ?";
 					$statement = $DB->prepare($query);
 					$statement->bindValue(1, $cid);
 					$statement->bindValue(2, $nid);
 					$statement->bindValue(3, $nid2);
 					$statement->bindValue(4, $userid);
 
-					$result = $statement->execute();
-					if($result['count'] == 0){
+					$statement->execute();
+					$result = $statement->fetchAll(PDO::FETCH_ASSOC);
+					
+					$count = (int)($result[0]['count']);
 
+					if($count == 0){
 						$query="INSERT INTO assignments
 								(cid, nid, nid2, idusers, tdate, grader_comments, grade)
 								VALUES
@@ -128,7 +131,7 @@
 						$statement->bindValue(7, $grade);
 
 						// Execute the database query
-						$result = $statement->execute();
+						$statement->execute();
 						echo("Success");
 					}
 					else{
@@ -145,7 +148,7 @@
 						$statement->bindValue(6, $userid);
 							
 						// Execute the database query
-						$result = $statement->execute();
+						$statement->execute();
 						echo("Success");
 					}
 				}
