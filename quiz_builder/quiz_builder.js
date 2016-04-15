@@ -202,12 +202,12 @@ function saveQuiz()
 	var c1 = inputCheck();
 	if(c1 == true)
 	{
-		alert("Fill in all the inputs.");
+		swal("Fill in all the inputs.");
 	}
 	var c2 = answerCheck();
 	if(c2 == true)
 	{
-		alert("Select an answer for each question.");
+		swal("Select an answer for each question.");
 	}
 	
 	if(c1 == false && c2 == false)

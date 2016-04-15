@@ -1229,6 +1229,16 @@ MManager.prototype.UploadAssignment = function(){
        processData: false,  // tell jQuery not to process the data
        contentType: false,  // tell jQuery not to set contentType
        success : function(data) {
+			mngr.CompleteNode(mngr.crrnt.nid);
+			mngr.crrnt.node.compl = 1;
+			
+			var imgEle;
+			if(mngr.crrnt.node.type === "assignment")
+			{
+				imgEle = document.getElementById('my-image5');
+					
+				mngr.crrnt.node.setElement(imgEle);
+			}
 			swal("Submitted"); 
        }
 	});
