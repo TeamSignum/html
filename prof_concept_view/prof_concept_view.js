@@ -573,6 +573,7 @@ function drawPercents(nid, count)
 	t.hasBorders = false;
 	t.lockMovementX = true;
 	t.lockMovementY = true;
+	t.evented = false;
 	
 	canvas.add(t);
 }

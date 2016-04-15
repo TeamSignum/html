@@ -106,7 +106,7 @@ MManager.prototype.GetCurrentId = function(result){
 }
 
 //Draw a node onto the canvas
-MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, fill, complete, mode){
+MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, fill, complete, availabledate, mode){
 
 	var imgElement;
 	if(type == "concept"){
@@ -139,6 +139,30 @@ MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, f
 	  top: top,
 	  id: "mapNode"
 	});
+
+	// Used to determine if node should be active
+	c.available = true;
+
+	var today = new Date();
+
+	if(availabledate!=null && mode == 0)
+	{
+		// Split timestamp into [ Y, M, D]
+		var t = availabledate.split(/[- :]/);
+		// Apply each element to the Date function
+		var jsavailabledate = new Date(t[0], t[1]-1, t[2]);
+		
+		if(today < jsavailabledate){
+			var filter = new fabric.Image.filters.Tint({
+			  	color: '#3513B0',
+			  	opacity: 0.5
+			});
+			c.filters.push(filter);
+      		c.applyFilters();
+      		c.available = false;
+      		c.evented = false;
+     	}
+  	}
 
 	c.width = 463;
 	c.height = 455;
@@ -190,6 +214,7 @@ MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, f
 		pc.hasBorders = false;
 		pc.lockMovementX = true;
 		pc.lockMovementY = true;
+		pc.selectable = false;
 		
 		canvas.add(pc);
 		
@@ -209,6 +234,7 @@ MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, f
 		pt.hasBorders = false;
 		pt.lockMovementX = true;
 		pt.lockMovementY = true;
+		pt.selectable = false;
 		
 		pc.ptext = pt;
 		
@@ -633,7 +659,7 @@ MManager.prototype.LoadNodePopup = function(node, id, type){
 		success: function(result){
 			mngr.CreatePopupNode(node, 
 				mngr.CreatePopupWithData(type, result["title"], 
-					result["description"], result["duedate"], result["notes"]), true);
+					result["description"], result["duedate"], result["availabledate"], result["notes"]), true);
 		}
 	}); 
 
@@ -648,7 +674,7 @@ MManager.prototype.updateCon = function(result)
 		{
 			if(this.nodes[j].nid == result[i].nid)
 			{
-				for(var k = 0; k < this.edges.length; k++)
+				for(var k = 0; k < this.edges.length; k++)  
 				{
 					if(this.edges[k].id == result[i].eid)
 					{
@@ -719,7 +745,7 @@ MManager.prototype.LoadMap = function(mngr, level, mode){
 		success: function(result){
 			for(var i = 0; i < result.length; i++)
 			{
-				mngr.DrawNode(parseFloat(result[i]["top"]), parseFloat(result[i]["left"]), parseFloat(result[i]["radius"]), result[i]["type"], result[i]["title"], result[i]["id"], result[i]["fill"], result[i]["complete"], mode);
+				mngr.DrawNode(parseFloat(result[i]["top"]), parseFloat(result[i]["left"]), parseFloat(result[i]["radius"]), result[i]["type"], result[i]["title"], result[i]["id"], result[i]["fill"], result[i]["complete"], result[i]["availabledate"], mode);
 			}
 		}
 	});
@@ -774,7 +800,8 @@ MManager.prototype.SaveMap = function(level){
 			//strokeWidth: this.nodes[i].strokeWidth,
 			id: this.nodes[i].nid,
 			type: this.nodes[i].type,
-			title: t
+			title: t,
+			availabledate: this.nodes[i].availabledate
 		};
 		map.push(temp);
 	}
@@ -969,6 +996,9 @@ MManager.prototype.CreatePopupNode = function(node, popup, docreate){
 
 		popupnode.hasControls = false; 
 		popupnode.hasBorders  = false; 
+		if(!node.available && this.mode == 0){
+			popupnode.evented = false;
+		}
 		popupnode.nid = nid;
 		popupnode.type = type;
 		popupnode.popup = popup; 
@@ -1153,20 +1183,20 @@ MManager.prototype.ShowPopup = function(node, popup){
 
 MManager.prototype.CreatePopup = function(type){
 	if (type === "concept")
-		return this.CreateConceptPopup("", "", "", "");
+		return this.CreateConceptPopup("", "", "", "", "");
 	else if (type === "assignment")
-		return this.CreateAssignmentPopup("", "", "", "");
+		return this.CreateAssignmentPopup("", "", "", "", "");
 	else if (type === "quiz")
-		return this.CreateQuizPopup("", "", "", "");
+		return this.CreateQuizPopup("", "", "", "", "");
 }
 
-MManager.prototype.CreatePopupWithData = function(type, title, description, due_date, notes){
+MManager.prototype.CreatePopupWithData = function(type, title, description, due_date, available_date, notes){
 	if (type === "concept")
-		return this.CreateConceptPopup(title, description, due_date, notes);
+		return this.CreateConceptPopup(title, description, due_date, available_date, notes);
 	else if (type === "assignment")
-		return this.CreateAssignmentPopup(title, description, due_date, notes);
+		return this.CreateAssignmentPopup(title, description, due_date, available_date, notes);
 	else if (type === "quiz")
-		return this.CreateQuizPopup(title, description, due_date, notes);
+		return this.CreateQuizPopup(title, description, due_date, available_date, notes);
 }
 
 MManager.prototype.UploadFile = function(){
@@ -1236,7 +1266,7 @@ MManager.prototype.downloadfile = function(filepath) {
 	window.location="../API/Map/download.php?filename=" + filepath;
 }
 
-MManager.prototype.CreateConceptPopup = function(title, description, due_date, notes){ 
+MManager.prototype.CreateConceptPopup = function(title, description, due_date, available_date, notes){ 
 	var ids = [];
 	var innerHtml; 
 
@@ -1244,8 +1274,22 @@ MManager.prototype.CreateConceptPopup = function(title, description, due_date, n
 		title = "";
 	if(description == null)
 		description = "";
-	if(due_date == null)
+	if(due_date == null){
 		due_date = "";
+	}
+	else{
+		// Split timestamp from DB and format for datepicker (yyyy-mm-dd)
+		var ddsplit = due_date.split(/[- :]/);
+		due_date = ''+ddsplit[0]+'-'+ddsplit[1]+'-'+ddsplit[2];
+	}
+	if(available_date == null){
+		available_date = "";
+	}
+	else{
+		// Split timestamp from DB and format for datepicker (yyyy-mm-dd)
+		var adsplit = available_date.split(/[- :]/);
+		available_date = ''+adsplit[0]+'-'+adsplit[1]+'-'+adsplit[2];
+	}
 	if(notes == null)
 		notes = "";
 
@@ -1291,7 +1335,8 @@ MManager.prototype.CreateConceptPopup = function(title, description, due_date, n
 		<label for="field1"><span>Title <span class="required">*</span></span><input class="input-field" id="title" name="title" type="text" value="`+ title +`"placeholder="Title"/></label>
 		<label for="field2"><span>Description <span class="required">*</span></span><input class="input-field" id="description" name="description" type="text" value="`+ description +`" placeholder="Description"/></label>
 		<label for="field5"><span>Notes <span class=""></span></span><textarea name="notes" id="notes" class="textarea-field">`+ notes +`</textarea></label>
-		<label for="field2"><span>Due Date<span class=""></span></span><input class="input-field" id="due_date" name="due_date" type="text" value="`+ due_date +`" placeholder="Due date"/></label>
+		<label for="field2"><span>Due Date<span class=""></span></span><input class="input-field" id="due_date" name="due_date" type="date" value="`+ due_date +`" placeholder="Due date"/></label>
+		<label for="field2"><span>Available Date<span class=""></span></span><input class="input-field" id="available_date" name="available_date" type="date" value="`+ available_date +`" placeholder="Available date"/></label>
 		</br>
 		<input type="file" id="filechooser" onchange="mngr.UploadFile();">
 		<div id="lecturenotes" style="text-align:left;font-size:16px;"></div>
@@ -1318,6 +1363,7 @@ MManager.prototype.CreateConceptPopup = function(title, description, due_date, n
   	ids.push("title");
   	ids.push("description");
   	ids.push("due_date");
+  	ids.push("available_date");
   	ids.push("lecture_notes");
 
   	var popup = {
@@ -1328,7 +1374,7 @@ MManager.prototype.CreateConceptPopup = function(title, description, due_date, n
   	return popup;
 }
 
-MManager.prototype.CreateAssignmentPopup = function(title, description, due_date, notes){ 
+MManager.prototype.CreateAssignmentPopup = function(title, description, due_date, available_date, notes){ 
 
 	var ids = [];
 	var innerHtml; 
@@ -1337,8 +1383,22 @@ MManager.prototype.CreateAssignmentPopup = function(title, description, due_date
 		title = "";
 	if(description == null)
 		description = "";
-	if(due_date == null)
+	if(due_date == null){
 		due_date = "";
+	}
+	else{
+		// Split timestamp from DB and format for datepicker (yyyy-mm-dd)
+		var ddsplit = due_date.split(/[- :]/);
+		due_date = ''+ddsplit[0]+'-'+ddsplit[1]+'-'+ddsplit[2];
+	}
+	if(available_date == null){
+		available_date = "";
+	}
+	else{
+		// Split timestamp from DB and format for datepicker (yyyy-mm-dd)
+		var adsplit = available_date.split(/[- :]/);
+		available_date = ''+adsplit[0]+'-'+adsplit[1]+'-'+adsplit[2];
+	}
 	if(notes == null)
 		notes = "";
 
@@ -1390,7 +1450,8 @@ MManager.prototype.CreateAssignmentPopup = function(title, description, due_date
 		<label for="field1"><span>Title <span class="required">*</span></span><input class="input-field" id="title" name="title" type="text" value="`+ title +`"placeholder="Title"/></label>
 		<label for="field2"><span>Description <span class="required">*</span></span><input class="input-field" id="description" name="description" type="text" value="`+ description +`" placeholder="Description"/></label>
 		<label for="field5"><span>Notes <span class=""></span></span><textarea name="notes" id="notes" class="textarea-field">`+ notes +`</textarea></label>
-		<label for="field2"><span>Due Date<span class=""></span></span><input class="input-field" id="due_date" name="due_date" type="text" value="`+ due_date +`" placeholder="Due date"/></label>
+		<label for="field2"><span>Due Date<span class=""></span></span><input class="input-field" id="due_date" name="due_date" type="date" value="`+ due_date +`" placeholder="Due date"/></label>
+		<label for="field2"><span>Available Date<span class=""></span></span><input class="input-field" id="available_date" name="available_date" type="date" value="`+ available_date +`" placeholder="Available date"/></label>
 		</br>
 		<input type="file" id="filechooser" onchange="mngr.UploadFile();">
 		<div id="lecturenotes" style="text-align:left;font-size:16px;"></div>
@@ -1417,6 +1478,7 @@ MManager.prototype.CreateAssignmentPopup = function(title, description, due_date
   	ids.push("title");
   	ids.push("description");
   	ids.push("due_date");
+  	ids.push("available_date");
   	ids.push("lecture_notes");
 
   	var popup = {
@@ -1427,7 +1489,7 @@ MManager.prototype.CreateAssignmentPopup = function(title, description, due_date
   	return popup;
 }
 
-MManager.prototype.CreateQuizPopup = function(title, description, due_date, notes){ 
+MManager.prototype.CreateQuizPopup = function(title, description, due_date, available_date, notes){ 
 	var ids = [];
 	var innerHtml; 
 
@@ -1435,8 +1497,22 @@ MManager.prototype.CreateQuizPopup = function(title, description, due_date, note
 		title = "";
 	if(description == null)
 		description = "";
-	if(due_date == null)
+	if(due_date == null){
 		due_date = "";
+	}
+	else{
+		// Split timestamp from DB and format for datepicker (yyyy-mm-dd)
+		var ddsplit = due_date.split(/[- :]/);
+		due_date = ''+ddsplit[0]+'-'+ddsplit[1]+'-'+ddsplit[2];
+	}
+	if(available_date == null){
+		available_date = "";
+	}
+	else{
+		// Split timestamp from DB and format for datepicker (yyyy-mm-dd)
+		var adsplit = available_date.split(/[- :]/);
+		available_date = ''+adsplit[0]+'-'+adsplit[1]+'-'+adsplit[2];
+	}
 	if(notes == null)
 		notes = "";
 
@@ -1487,7 +1563,8 @@ MManager.prototype.CreateQuizPopup = function(title, description, due_date, note
 		<label for="field1"><span>Title <span class="required">*</span></span><input class="input-field" id="title" name="title" type="text" value="`+ title +`"placeholder="Title"/></label>
 		<label for="field2"><span>Description <span class="required">*</span></span><input class="input-field" id="description" name="description" type="text" value="`+ description +`" placeholder="Description"/></label>
 		<label for="field5"><span>Notes <span class=""></span></span><textarea name="notes" id="notes" class="textarea-field">`+ notes +`</textarea></label>
-		<label for="field2"><span>Due Date<span class=""></span></span><input class="input-field" id="due_date" name="due_date" type="text" value="`+ due_date +`" placeholder="Due date"/></label>
+		<label for="field2"><span>Due Date<span class=""></span></span><input class="input-field" id="due_date" name="due_date" type="date" value="`+ due_date +`" placeholder="Due date"/></label>
+		<label for="field2"><span>Available Date<span class=""></span></span><input class="input-field" id="available_date" name="available_date" type="date" value="`+ available_date +`" placeholder="Available date"/></label>
 		</br>
 		<button id="quiz_navigate" onclick="mngr.NavigateToQuiz();" style="float:left; font-size:12pt;" type="button" class="btn btn-default btn-md">
 		Build Quiz
@@ -1518,6 +1595,7 @@ MManager.prototype.CreateQuizPopup = function(title, description, due_date, note
   	ids.push("title");
   	ids.push("description");
   	ids.push("due_date");
+  	ids.push("available_date");
   	ids.push("lecture_notes");
 
   	var popup = {
@@ -1650,10 +1728,11 @@ MManager.prototype.SavePopup = function(){
 			var desc = $("#description").val(); 
 			var notes = $("#notes").val(); 
 			var duedate = $("#due_date").val(); 
-
-			this.crrnt.popup = this.CreatePopupWithData(type, title, desc, duedate, notes); // Updates the current popup with current data.
+			var availabledate = $("#available_date").val();
 			
-			var _data = {action: 'concept', classOrConcept: this.classOrConcept, nid: nid, title: title, description: desc, notes: notes, duedate: duedate};
+			this.crrnt.popup = this.CreatePopupWithData(type, title, desc, duedate, availabledate, notes); // Updates the current popup with current data.
+			
+			var _data = {action: 'concept', classOrConcept: this.classOrConcept, nid: nid, title: title, description: desc, notes: notes, duedate: duedate, availabledate: availabledate};
 
 			break;
 
@@ -1662,10 +1741,11 @@ MManager.prototype.SavePopup = function(){
 			var desc = $("#description").val(); 
 			var notes = $("#notes").val(); 
 			var duedate = $("#due_date").val();
+			var available = $("#available_date").val();
 
-			this.crrnt.popup = this.CreatePopupWithData(type, title, desc, duedate, notes); // Updates the current popup with current data.
+			this.crrnt.popup = this.CreatePopupWithData(type, title, desc, duedate, availabledate, notes); // Updates the current popup with current data.
 
-			var _data = {action: 'assignment', classOrConcept: this.classOrConcept, nid: nid, title: title, description: desc, notes: notes, duedate: duedate};
+			var _data = {action: 'assignment', classOrConcept: this.classOrConcept, nid: nid, title: title, description: desc, notes: notes, duedate: duedate, availabledate: availabledate};
 
 			break;
 
@@ -1674,10 +1754,11 @@ MManager.prototype.SavePopup = function(){
 			var desc = $("#description").val(); 
 			var notes = $("#notes").val(); 
 			var duedate = $("#due_date").val();
+			var available = $("#available_date").val();
 			
-			this.crrnt.popup = this.CreatePopupWithData(type, title, desc, duedate, notes); // Updates the current popup with current data.
+			this.crrnt.popup = this.CreatePopupWithData(type, title, desc, duedate, availabledate, notes); // Updates the current popup with current data.
 
-			var _data = {action: 'quiz', classOrConcept: this.classOrConcept, nid: nid, title: title, description: desc, notes: notes, duedate: duedate};
+			var _data = {action: 'quiz', classOrConcept: this.classOrConcept, nid: nid, title: title, description: desc, notes: notes, duedate: duedate, availabledate: availabledate};
 
 			break;
 	}

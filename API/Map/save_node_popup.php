@@ -28,6 +28,7 @@ function SaveConceptPopup(){
 	$description= $_POST["description"];
 	$notes = $_POST["notes"];
 	$duedate= $_POST["duedate"];
+	$availabledate= $_POST["availabledate"];
 	$cid = $_SESSION['classid'];
 
 	try
@@ -52,6 +53,19 @@ function SaveConceptPopup(){
 
 			// Execute query
 			$statement->execute();
+
+			// Put the available date in the nid table
+			$query = "UPDATE nodes 
+					  SET availableDate = ?
+					  WHERE cid = ? AND nid = ?";
+
+			$statement = $DB->prepare($query);
+			$statement->bindValue (1, $availabledate);
+			$statement->bindValue (2, $cid);
+			$statement->bindValue (3, $nid);
+			
+			$statement->execute();
+
 			$DB->commit();
 		}
 		else{
@@ -72,6 +86,20 @@ function SaveConceptPopup(){
 
 			// Execute query
 			$statement->execute();
+
+			// Put the available date in the nid2 table
+			$query = "UPDATE nodes2 
+					  SET availableDate = ?
+					  WHERE cid = ? AND nid = ? AND nid2 = ?";
+
+			$statement = $DB->prepare($query);
+			$statement->bindValue (1, $availabledate);
+			$statement->bindValue (2, $cid);
+			$statement->bindValue (3, $nidd);
+			$statement->bindValue (4, $nid2);
+			
+			$statement->execute();
+
 			$DB->commit();
 		}
 		
@@ -117,6 +145,18 @@ function SaveAssignmentPopup(){
 
 		// Execute query
 		$statement->execute();
+
+		$query = "UPDATE nodes2 
+					  SET availableDate = ?
+					  WHERE cid = ? AND nid = ? AND nid2 = ?";
+
+		$statement = $DB->prepare($query);
+		$statement->bindValue (1, $availabledate);
+		$statement->bindValue (2, $cid);
+		$statement->bindValue (3, $nidd);
+		$statement->bindValue (4, $nid2);
+		
+		$statement->execute();
 		$DB->commit();
 	}
 
@@ -160,6 +200,18 @@ function SaveQuizPopup(){
 		$statement->bindValue (7, $notes);
 
 		// Execute query
+		$statement->execute();
+
+		$query = "UPDATE nodes2 
+					  SET availableDate = ?
+					  WHERE cid = ? AND nid = ? AND nid2 = ?";
+
+		$statement = $DB->prepare($query);
+		$statement->bindValue (1, $availabledate);
+		$statement->bindValue (2, $cid);
+		$statement->bindValue (3, $nidd);
+		$statement->bindValue (4, $nid2);
+		
 		$statement->execute();
 		$DB->commit();
 	}

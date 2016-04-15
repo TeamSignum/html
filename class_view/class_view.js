@@ -192,11 +192,11 @@ function animateNode(n, ind){
 				n.pnode.ptext.top = y + 2;
 				n.pnode.ptext.left = x;
 				
-				
 				if(ind == mngr.nodes.length-1)
 				{
 					canvas.renderAll();
 				}
+				
 			},
 			onComplete: animate
 		});
@@ -269,6 +269,7 @@ function drawPercents(nid, count, total)
 	var len2 = t.getHeight()/2;
 	var cenY = temp.getCenterPoint().y;
 	t.top = cenY - len2;
+	t.evented = false;
 	
 	canvas.add(t);
 }

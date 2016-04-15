@@ -24,6 +24,7 @@
 			$id = $node["id"];
 			$type = $node["type"];
 			$title = $node["title"];
+			$availabledate = $node["availabledate"];
 
 			//$r .= $top . " " . $left . " " . $radius . " " . $fill . " " . $stroke . " " . $strokeWidth . " " . $id;
 			
@@ -36,7 +37,7 @@
 				if($level == 2)
 				{
 					//$query = "REPLACE into `nodes2` (`cid`, `nid`, `nid2`, `top`, `left`, `radius`, `fill`, `stroke`, `strokeWidth`, `type`, `title`) values (?,?,?,?,?,?,?,?,?,?,?)";
-					$query = "REPLACE into `nodes2` (`cid`, `nid`, `nid2`, `top`, `left`, `type`, `title`) values (?,?,?,?,?,?,?)";
+					$query = "REPLACE into `nodes2` (`cid`, `nid`, `nid2`, `top`, `left`, `type`, `title`, 'availableDate') values (?,?,?,?,?,?,?,?)";
 					
 					$statement = $DB->prepare($query);
 				
@@ -54,6 +55,7 @@
 					//$statement->bindValue (9, $strokeWidth);
 					$statement->bindValue (6, $type);
 					$statement->bindValue (7, $title);
+					$statement->bindValue (8, $availableDate);
 				
 					$statement->execute();
 					$DB->commit();
@@ -61,7 +63,7 @@
 				else
 				{
 					//$query = "REPLACE into `nodes` (`cid`, `nid`, `top`, `left`, `radius`, `fill`, `stroke`, `strokeWidth`, `type`, `title`) values (?,?,?,?,?,?,?,?,?,?)";
-					$query = "REPLACE into `nodes` (`cid`, `nid`, `top`, `left`, `type`, `title`) values (?,?,?,?,?,?)";
+					$query = "REPLACE into `nodes` (`cid`, `nid`, `top`, `left`, `type`, `title`, `availableDate) values (?,?,?,?,?,?,?)";
 					
 					$statement = $DB->prepare($query);
 				
@@ -75,6 +77,7 @@
 					//$statement->bindValue (8, $strokeWidth);
 					$statement->bindValue (5, $type);
 					$statement->bindValue (6, $title);
+					$statement->bindValue (7, $availableDate);
 				
 					$statement->execute();
 					$DB->commit();

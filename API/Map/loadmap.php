@@ -28,14 +28,7 @@ if(isset($_POST["map"]))
 			{
 				$query = "SELECT * FROM nodes WHERE nodes.cid = '$cid'";
 			}
-			// hardcoded for now
-			//if ($parent){
-			//	$query = "SELECT * FROM nodes WHERE nodes.parent = 1";
-			//}
-			//else{
-				//$query = "SELECT * FROM nodes WHERE nodes.cid = '$cid'";
-			//}
-
+			
 			$statement = $DB->prepare($query);
 			$statement->execute();
 			$result = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -87,7 +80,8 @@ if(isset($_POST["map"]))
 				$type = $row['type'];
 				$title = $row['title'];
 				$fill = $row['fill'];
-				$nodes[] = array('id' => $id, 'top' => $top, 'left' => $left, 'radius' => $radius, 'type' => $type, 'title' => $title, 'fill' => $fill, 'complete' => $complete);
+				$availabledate = $row['availableDate'];
+				$nodes[] = array('id' => $id, 'top' => $top, 'left' => $left, 'radius' => $radius, 'type' => $type, 'title' => $title, 'fill' => $fill, 'complete' => $complete, 'availabledate' => $availabledate);
 			}
 			
 			echo json_encode($nodes);
