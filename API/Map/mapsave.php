@@ -73,7 +73,7 @@
 					$statement->bindParam (':cid', $cid);
 					$statement->bindParam (':nid', $id);
 					$statement->bindParam (':top', $top);
-					$statement->bindValue (':left', $left);
+					$statement->bindParam (':left', $left);
 					//$statement->bindValue (5, $radius);
 					//$statement->bindValue (6, $fill);
 					//$statement->bindValue (7, $stroke);
