@@ -6,6 +6,7 @@ session_start();
 
 $nid         = $_POST['nid'];
 $cid         = $_SESSION['classid'];
+$pnid        = $_SESSION['nid'];
 $level       = $_POST['level'];
 $fileName    = $_FILES['file']['name'];
 $fileType    = $_FILES['file']['type'];
@@ -47,7 +48,7 @@ try {
     $DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $DB->beginTransaction();
 
-    $query = "INSERT `lecturenotes` (`nid`, `cid`, `level`, `name`, `type`, `size`, `path`) values (?,?,?,?,?,?,?)";
+    $query = "INSERT `lecturenotes` (`nid`, `cid`, `level`, `name`, `type`, `size`, `path`, `pnid`) values (?,?,?,?,?,?,?,?)";
     $statement = $DB->prepare($query);
 
     $statement->bindValue (1, $nid);
@@ -57,6 +58,7 @@ try {
     $statement->bindValue (5, $fileType);
     $statement->bindValue (6, $fileSize);
     $statement->bindValue (7, $target_file);
+    $statement->bindValue (8, $pnid);
 
     // Execute query
     $statement->execute();

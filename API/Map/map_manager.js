@@ -1349,9 +1349,11 @@ MManager.prototype.CreateConceptPopup = function(title, description, due_date, a
 		<label for="field5"><span>Notes <span class=""></span></span><textarea name="notes" id="notes" class="textarea-field">`+ notes +`</textarea></label>
 		<label for="field2"><span>Due Date<span class=""></span></span><input class="input-field" id="due_date" name="due_date" type="date" value="`+ due_date +`" placeholder="Due date"/></label>
 		<label for="field2"><span>Available Date<span class=""></span></span><input class="input-field" id="available_date" name="available_date" type="date" value="`+ available_date +`" placeholder="Available date"/></label>
-		</br>
-		<input type="file" id="filechooser" onchange="mngr.UploadFile();">
-		<div id="lecturenotes" style="text-align:left;font-size:16px;"></div>
+		</br>`;
+		if (this.classOrConcept == 1){
+			innerHtml += `<input type="file" id="filechooser" onchange="mngr.UploadFile();">`;
+		}
+		innerHtml += `<div id="lecturenotes" style="text-align:left;font-size:16px;"></div>
 		<hr>
 		</br>
 		`;

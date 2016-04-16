@@ -14,12 +14,23 @@ try{
 	$DB = new PDO("mysql:host=ec2-52-33-118-140.us-west-2.compute.amazonaws.com;dbname=LU", 'Signum', 'signumDB4');
 	$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-	$query = "SELECT lecturenotes.name, lecturenotes.path FROM `lecturenotes` WHERE lecturenotes.cid = ? AND lecturenotes.nid = ? AND lecturenotes.level = ?";
+	$statement;
 
-	$statement = $DB->prepare($query);
-	$statement->bindParam(1, $cid);
-	$statement->bindParam(2, $nid);
-	$statement->bindParam(3, $level);
+	if($level == 1){
+		$query = "SELECT lecturenotes.name, lecturenotes.path FROM `lecturenotes` WHERE lecturenotes.cid = ? AND lecturenotes.nid = ? AND lecturenotes.level = ?";
+		$statement = $DB->prepare($query);
+		$statement->bindParam(1, $cid);
+		$statement->bindParam(2, $nid);
+		$statement->bindParam(3, $level);
+
+	}
+	else{
+		$query = "SELECT lecturenotes.name, lecturenotes.path FROM `lecturenotes` WHERE lecturenotes.cid = ? AND lecturenotes.pnid = ?";
+		$statement = $DB->prepare($query);
+		$statement->bindParam(1, $cid);
+		$statement->bindParam(2, $nid);
+	}
+
 	$statement->execute();
 	$result = $statement->fetchAll(PDO::FETCH_ASSOC);
 
