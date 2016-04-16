@@ -10,8 +10,6 @@
 		$level = $_POST["level"];
 		//$parent = $_POST["parent"];
 		
-		//$c = count($edges);
-		//echo $c;
 		$r = "";
 		foreach($map as $node)
 		{
@@ -24,9 +22,7 @@
 			$id = $node["id"];
 			$type = $node["type"];
 			$title = $node["title"];
-			$availabledate = $node["availabledate"];
-
-			//$r .= $top . " " . $left . " " . $radius . " " . $fill . " " . $stroke . " " . $strokeWidth . " " . $id;
+			//$availabledate = $node["availabledate"];
 			
 			try
 			{
@@ -37,25 +33,30 @@
 				if($level == 2)
 				{
 					//$query = "REPLACE into `nodes2` (`cid`, `nid`, `nid2`, `top`, `left`, `radius`, `fill`, `stroke`, `strokeWidth`, `type`, `title`) values (?,?,?,?,?,?,?,?,?,?,?)";
-					$query = "REPLACE into `nodes2` (`cid`, `nid`, `nid2`, `top`, `left`, `type`, `title`, 'availableDate') values (?,?,?,?,?,?,?,?)";
+					//$query = "REPLACE into `nodes2` (`cid`, `nid`, `nid2`, `top`, `left`, `type`, `title`) values (?,?,?,?,?,?,?)";
+					$query = "INSERT into `nodes2` (`cid`, `nid`, `nid2`, `top`, `left`, `type`, `title`) values (:cid,:nid,:nid2,:top,:left,:type,:title)
+								ON DUPLICATE KEY UPDATE `top`=:top2, `left`=:left2, `title`=:title2";
 					
 					$statement = $DB->prepare($query);
 				
 					//test hardcode
 					$nid = $_SESSION['nid'];
 				
-					$statement->bindValue (1, $cid);
-					$statement->bindValue (2, $nid);
-					$statement->bindValue (3, $id);
-					$statement->bindValue (4, $top);
-					$statement->bindValue (5, $left);
+					$statement->bindParam (':cid', $cid);
+					$statement->bindParam (':nid', $nid);
+					$statement->bindParam (':nid2', $id);
+					$statement->bindParam (':top', $top);
+					$statement->bindParam (':left', $left);
 					//$statement->bindValue (6, $radius);
 					//$statement->bindValue (7, $fill);
 					//$statement->bindValue (8, $stroke);
 					//$statement->bindValue (9, $strokeWidth);
-					$statement->bindValue (6, $type);
-					$statement->bindValue (7, $title);
-					$statement->bindValue (8, $availableDate);
+					$statement->bindParam (':type', $type);
+					$statement->bindParam (':title', $title);
+					$statement->bindParam (':top2', $top);
+					$statement->bindParam (':left2', $left);
+					$statement->bindParam (':title2', $title);
+					//$statement->bindValue (8, $availableDate);
 				
 					$statement->execute();
 					$DB->commit();
@@ -63,51 +64,35 @@
 				else
 				{
 					//$query = "REPLACE into `nodes` (`cid`, `nid`, `top`, `left`, `radius`, `fill`, `stroke`, `strokeWidth`, `type`, `title`) values (?,?,?,?,?,?,?,?,?,?)";
-					$query = "REPLACE into `nodes` (`cid`, `nid`, `top`, `left`, `type`, `title`, `availableDate) values (?,?,?,?,?,?,?)";
+					//$query = "REPLACE into `nodes` (`cid`, `nid`, `top`, `left`, `type`, `title`) values (?,?,?,?,?,?)";
+					$query = "INSERT into `nodes` (`cid`, `nid`, `top`, `left`, `type`, `title`) values (:cid,:nid,:top,:left,:type,:title) 
+							ON DUPLICATE KEY UPDATE `top`=:top2, `left`=:left2, `title`=:title2";
 					
 					$statement = $DB->prepare($query);
 				
-					$statement->bindValue (1, $cid);
-					$statement->bindValue (2, $id);
-					$statement->bindValue (3, $top);
-					$statement->bindValue (4, $left);
+					$statement->bindParam (':cid', $cid);
+					$statement->bindParam (':nid', $id);
+					$statement->bindParam (':top', $top);
+					$statement->bindValue (':left', $left);
 					//$statement->bindValue (5, $radius);
 					//$statement->bindValue (6, $fill);
 					//$statement->bindValue (7, $stroke);
 					//$statement->bindValue (8, $strokeWidth);
-					$statement->bindValue (5, $type);
-					$statement->bindValue (6, $title);
-					$statement->bindValue (7, $availableDate);
+					$statement->bindParam (':type', $type);
+					$statement->bindParam (':title', $title);
+					$statement->bindParam (':top2', $top);
+					$statement->bindParam (':left2', $left);
+					$statement->bindParam (':title2', $title);
+					//$statement->bindValue (7, $availableDate);
 				
 					$statement->execute();
 					$DB->commit();
 				}
-			
-				//$query = "REPLACE into `nodes` (`cid`, `nid`, `top`, `left`, `radius`, `fill`, `stroke`, `strokeWidth`, `type`, `title`) values (?,?,?,?,?,?,?,?,?,?)";
-
-				//ChromePhp::log($query);
-			
-				//$statement = $DB->prepare($query);
-				
-				//$statement->bindValue (1, $cid);
-				//$statement->bindValue (2, $id);
-				//$statement->bindValue (3, $top);
-				//$statement->bindValue (4, $left);
-				//$statement->bindValue (5, $radius);
-				//$statement->bindValue (6, $fill);
-				//$statement->bindValue (7, $stroke);
-				//$statement->bindValue (8, $strokeWidth);
-				//$statement->bindValue (9, $type);
-				//$statement->bindValue (10, $title);
-				
-				//$statement->execute();
-				//$DB->commit();
 			}
 			catch(PDOException $e)
 			{
 				echo $e->getMessage();
 			}
-			//echo $r;
 		}
 	}
 	
@@ -170,22 +155,6 @@
 					$statement->execute();
 					$DB->commit();
 				}
-			
-				//$query = "REPLACE into `edges` (`cid`, `eid`, `x1`, `y1`, `x2`, `y2`, `type`) values (?,?,?,?,?,?,?)";
-			
-				//$statement = $DB->prepare($query);
-				
-				//$statement->bindValue (1, $cid);
-				//$statement->bindValue (2, $id);
-				//$statement->bindValue (3, $x1);
-				//$statement->bindValue (4, $y1);
-				//$statement->bindValue (5, $x2);
-				//$statement->bindValue (6, $y2);
-				//$statement->bindValue (7, $type);
-				//$statement->bindValue (7, $type);
-				
-				//$statement->execute();
-				//$DB->commit();
 			}
 			catch(Exception $e)
 			{
@@ -245,17 +214,6 @@
 						$statement->execute();
 						$DB->commit();
 					}
-			
-					//$query = "REPLACE into `connected` (`cid`, `nid`, `eid`) values (?,?,?)";
-					
-					//$statement = $DB->prepare($query);
-				
-					//$statement->bindValue (1, $cid);
-					//$statement->bindValue (2, $nid);
-					//$statement->bindValue (3, $eid);
-					
-					//$statement->execute();
-					//$DB->commit();
 				}
 				catch(Exception $e)
 				{

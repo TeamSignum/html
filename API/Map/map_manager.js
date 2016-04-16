@@ -550,7 +550,7 @@ MManager.prototype.GenText = function(node){
 		title.hasControls = false;
 		title.lockMovementX = true;
 		title.lockMovementY = true;
-		title.selectable = false;
+		//title.selectable = false;
 		
 		node.title = title;
 		
@@ -858,6 +858,7 @@ MManager.prototype.SaveMap = function(level){
 		data: {map: map, edges: edges, connections: connections, level: level},
 		
 		success: function(result){
+			alert(result);
 			swal("Saved"); 
 		}
 	});
@@ -910,6 +911,7 @@ MManager.prototype.DeleteN = function(node, level){
 		
 		dedges.push(node.lines[i].eid);
 		canvas.remove(node.lines[i]);
+		canvas.remove(node.lines[i].trian);
 	}
 	
 	var index2 = this.nodes.indexOf(node);

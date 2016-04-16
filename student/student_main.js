@@ -224,9 +224,9 @@ function drawStudentNode(){
 		studentNodeGroup.lockMovementX = true;
 		studentNodeGroup.lockMovementY = true;
 
-		studentNodeGroup.on('selected', function() {
-	  		alert("Clicked");
-		});
+		//studentNodeGroup.on('selected', function() {
+	  	//	alert("Clicked");
+		//});
 
 		canvas.add(classOrbital, studentNodeGroup);
 		canvas.sendToBack(classOrbital);
