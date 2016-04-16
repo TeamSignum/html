@@ -11,23 +11,41 @@ tr{
 	background-color: white;
 }
 
-#assignments_length{
-	color: white;
+tr td:first-child{
+	border-radius: 5px 0 0 5px;
+}
+
+tr td:last-child{
+	border-radius: 0 5px 5px 0;
+}
+
+#assignments{
+	color: black;
+	
+}
+
+#grade-table-wrapper{
+	width: 1000px;
+	margin: 0 auto;
+	text-align: center;
+	background-color: white;
+	border-radius: 10px;
+	padding: 25px;
 }
 
 #assignments_filter{
-	color: white;
+	color: black;
 }
 
 .graded{
 	background-color: #4CC417;
+	border-radius: 5px;
 }
 
 .ungraded{
 	background-color: #F62817;
+	border-radius: 5px;
 }
-
-
 
 /* Pop up stuff */
 

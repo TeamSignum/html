@@ -59,8 +59,9 @@ function submitGrade(){
 	// Add the gradeQuery
 	formData.push({name:'gradeQuery', value:'submitGrade'});
 	formData.push({name:'userid', value: currentStudent.userid});
-	//alert(formData);
-
+	// Save the form info to update the display via jquery
+	var tempGrade = $('#grade').val();
+	
 	$.ajax({
 		async: true,
 		type: 'POST',
@@ -71,9 +72,10 @@ function submitGrade(){
 
 			if(result=='Success'){
 				// Update the row
-				$('#'+currentStudent.userid).removeClass('ungraded');
-				$('#'+currentStudent.userid).addClass('graded');
+				$('#'+currentStudent.userid+' td').eq(3).children("button").removeClass('ungraded');
+				$('#'+currentStudent.userid+' td').eq(3).children("button").addClass('graded');
 				$('#'+currentStudent.userid+' td').eq(3).children("button").html("EDIT GRADE");
+				$('#'+currentStudent.userid+' td').eq(2).html(tempGrade);
 
 				// Close the popup
 				$("#custom_container").hide();
@@ -166,23 +168,18 @@ function buildAssignmentGradingPage(parsedResult){
 		gradeDataArray[userid] = tempGradeData;
 
 		// Check to set row color to show graded vs ungraded
-		if(grade==0){
-			html+=`<tr id="`+userid+`" class="ungraded">`;
-		}
-		else{
-			html+=`<tr id="`+userid+`" class="graded">`;
-		}
+		html+=`<tr id="`+userid+`">`;
 		
 		html+=`<td>`+firstName+`</td>`;
 		html+=`<td>`+lastName+`</td>`;
 		
 		if(grade==0){
 			html+=`<td>`+grade+`</td>`;
-			html+=`<td><button type="button" onclick="createGradeForm(`+userid+`)">GRADE</td>`;
+			html+=`<td><button type="button" class='ungraded'onclick="createGradeForm(`+userid+`)">GRADE</td>`;
 		}
 		else{
 			html+=`<td>`+grade+`</td>`;
-			html+=`<td><button type="button" onclick="createGradeForm(`+userid+`)">EDIT GRADE</td>`;
+			html+=`<td><button type="button" class='graded'onclick="createGradeForm(`+userid+`)">EDIT GRADE</td>`;
 		}
 		
 		html+=`</tr>`;
