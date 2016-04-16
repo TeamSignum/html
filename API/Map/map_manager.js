@@ -858,7 +858,7 @@ MManager.prototype.SaveMap = function(level){
 		data: {map: map, edges: edges, connections: connections, level: level},
 		
 		success: function(result){
-			alert(result);
+			//alert(result);
 			swal("Saved"); 
 		}
 	});
