@@ -5,6 +5,7 @@ var ntitle;
 var drag = false;
 var xpos;
 var ypos;
+var timeOut;
 
 $( document ).ready(function() {
 	google.charts.load('current', {packages: ['bar']});
@@ -320,6 +321,10 @@ function getParticipants()
 					drawParticipants(result[i].nid, result[i].count);
 				}
 			}
+			canvas.renderAll();
+			timeOut = setTimeout(function(){
+				getParticipants();
+			}, 15000);
 		}
 	});
 	

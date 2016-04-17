@@ -9,6 +9,7 @@ var showgrades = false;
 var drag = false;
 var xpos;
 var ypos;
+var timeOut;
 
 $( document ).ready(function() {
 	google.charts.load('current', {packages: ['bar']});
@@ -444,7 +445,7 @@ function buildChart(result, title)
 		//chartArea:{left:0,top:0,width:"70%",height:"70%"},
 		height: 450,
 		width: 600,
-		bar: {groupWidth: "30%"},
+		bar: {groupWidth: '30%'},
 		vAxis: {viewWindow: {max: etotal, min: 0}}
 	};
 		
@@ -473,8 +474,15 @@ function getParticipants()
 			//alert(result[0].nid + " " + result[0].count);
 			for(var i = 0; i < result.length; i++)
 			{
-				drawParticipants(result[i].nid, result[i].count);
+				if(result[i].count != null)
+				{
+					drawParticipants(result[i].nid, result[i].count);
+				}
 			}
+			canvas.renderAll();
+			timeOut = setTimeout(function(){
+				getParticipants();
+			}, 15000);
 		}
 	});
 	
