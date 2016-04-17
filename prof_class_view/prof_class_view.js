@@ -287,7 +287,7 @@ function buildChart(result, title)
 			height: 450,
 			width: 600,
 			bar: {groupWidth: "30%"},
-			vAxis: {viewWindow: {max: etotal}}
+			vAxis: {viewWindow: {max: etotal, min: 0}}
 		};
 		
 		var chart = new google.charts.Bar(document.getElementById('stat_chart'));

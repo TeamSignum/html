@@ -800,8 +800,8 @@ MManager.prototype.SaveMap = function(level){
 			//strokeWidth: this.nodes[i].strokeWidth,
 			id: this.nodes[i].nid,
 			type: this.nodes[i].type,
-			title: t,
-			availabledate: this.nodes[i].availabledate
+			title: t
+			//availabledate: this.nodes[i].availabledate
 		};
 		map.push(temp);
 	}
