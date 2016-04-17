@@ -18,8 +18,8 @@ $( document ).ready(function() {
 	var mapNodeId = "mapNode"; // Id for all nodes that end up on the map
 
 	canvas = new fabric.Canvas('map');
-	canvas.setBackgroundImage('../imports/images/maxresdefault.jpg' , canvas.renderAll.bind(canvas), {
-    });
+	// canvas.setBackgroundImage('../imports/images/maxresdefault.jpg' , canvas.renderAll.bind(canvas), {
+ //    });
 
 	canvas.selection = false;
 	

@@ -1,7 +1,7 @@
 var classNumberArray = [];
 var classIdArray = [];
 var studentNodeRadius = 100;
-var classOrbitalRadius = 200;
+var classOrbitalRadius = 220;
 var classNodeRadius = 60;
 var account_name = "";
 var acc_role;
@@ -18,8 +18,8 @@ $( document ).ready(function() {
 					 // This flag should help render faster
 					 renderOnAddRemove: false});
 
-	canvas.setBackgroundImage('../imports/images/maxresdefault.jpg' , canvas.renderAll.bind(canvas), {
-    });
+	// canvas.setBackgroundImage('../imports/images/maxresdefault.jpg' , canvas.renderAll.bind(canvas), {
+ //    });
 	window.addEventListener('resize', resizeCanvas, false);
 
 	function resizeCanvas(){
@@ -336,24 +336,25 @@ function drawClassNode(){
 		canvas.add(node_group);
 		canvas.bringToFront(node_group);
 
-		var imgElement = document.getElementById('my-image-page');
-		var popupnode = new fabric.Image(imgElement, {
-			left: canvas.width/2 + Math.cos(currentAngle)*classOrbitalRadius + classNodeRadius - 30,
-			top: canvas.height/2 + Math.sin(currentAngle)*classOrbitalRadius - classNodeRadius - 5,			
-			id: "popupnode"
-		});
+		if(idname != "addNode"){
+			var imgElement = document.getElementById('my-image-page');
+			var popupnode = new fabric.Image(imgElement, {
+				left: canvas.width/2 + Math.cos(currentAngle)*classOrbitalRadius + classNodeRadius - 30,
+				top: canvas.height/2 + Math.sin(currentAngle)*classOrbitalRadius - classNodeRadius - 5,			
+				id: "popupnode"
+			});
 
-		popupnode.height = 96;
-		popupnode.width = 96;
-		popupnode.scale(.30);
-		popupnode.lockMovementX = popupnode.lockMovementY = true;
-		popupnode.hasControls = false; 
-		popupnode.hasBorders  = false; 
-		popupnode.cid = classIdArray[i];
-		popupnode.popup = "";
-		canvas.bringToFront(popupnode);
-		canvas.add(popupnode);
-
+			popupnode.height = 96;
+			popupnode.width = 96;
+			popupnode.scale(.30);
+			popupnode.lockMovementX = popupnode.lockMovementY = true;
+			popupnode.hasControls = false; 
+			popupnode.hasBorders  = false; 
+			popupnode.cid = classIdArray[i];
+			popupnode.popup = "";
+			canvas.bringToFront(popupnode);
+			canvas.add(popupnode);
+		}
 	};
 }
 

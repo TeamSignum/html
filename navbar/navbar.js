@@ -204,10 +204,14 @@ function evaluateSessionInfo(parsedResult){
 	html+='</li>';	
 	html+='</ul>';	
 
-	html+='<li>';
-	html+='<i class="material-icons" id="help-icon" onclick="HelpMessageHelper()" style="cursor: pointer; margin: 25px 25px 0px 15px;">help</i>';
-	html+='</li>';	
-	html+='</ul>';	
+	if(document.title == "Class Builder" || document.title == "Class View" 
+		|| document.title == "Concept Builder" || document.title == "Concept View"){
+
+		html+='<li>';
+		html+='<i class="material-icons" id="help-icon" onclick="HelpMessageHelper()" style="cursor: pointer; margin: 27px 25px 0px 13px; color: #777777;">help</i>';
+		html+='</li>';	
+		html+='</ul>';	
+	}
 
 	insertNavBarHtml(html);
 }

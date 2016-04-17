@@ -15,8 +15,12 @@ body {
     text-align: center; 
 }
 
+#student_main{
+  margin-top: 30px;
+}
+
 #canvas {
-    width: 101%; 
+    width: 100%; 
     height: 800px;
     text-align: center; 
     background-color: #99ffff; 

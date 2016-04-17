@@ -10,8 +10,8 @@ var ypos;
 $( document ).ready(function() {
 
 	canvas = new fabric.Canvas('map');
-    canvas.setBackgroundImage('../imports/images/maxresdefault.jpg' , canvas.renderAll.bind(canvas), {
-    });
+    // canvas.setBackgroundImage('../imports/images/maxresdefault.jpg' , canvas.renderAll.bind(canvas), {
+    // });
 	
 	canvas.selection = false;
 
