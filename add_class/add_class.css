@@ -93,3 +93,12 @@
 {
     background: #109177;
 }
+
+
+#addclass input.warning {
+    border: 1px solid #FF0000;
+}
+
+.error{
+    color: red;
+}

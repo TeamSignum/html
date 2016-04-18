@@ -46,7 +46,7 @@ if(isset($_POST['function'])){
 				$statement->execute();
 
 			}else{
-				echo "cannot find it";
+				echo "error1";
 			}
 			
 			break;

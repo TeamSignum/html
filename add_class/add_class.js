@@ -75,8 +75,15 @@ function enroll(ekeyVal, addclassVal){
 		url: "add_class.php",
 		datatype: 'json',
 		data: {'function': 'enroll', 'ekey': ekeyVal, 'cid': addclassVal},
-		success: function(results){
-			 window.location='../student/student.php';
+		success: function(results){	
+			if(results == "error1"){
+				$('#ekey').addClass('warning');
+				$('#ekey-error').html("Enorllment key do not match");
+			}else{
+				window.location='../student/student.php';
+			}
+				
+			
 		},
 		error:function(request,status,error){
         	alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
