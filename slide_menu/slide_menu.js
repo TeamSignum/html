@@ -3,43 +3,58 @@ var counter = 0;
 
 $(document).ready(function() {
 	getRole();
-	
+	getNotifications();
   	$("[data-toggle]").click(function() {  		
   	   	var toggle_el = $(this).data("toggle");
     	$(toggle_el).toggleClass("open");
-    	//$("#dim_div").show();
     	counter = 0;
-    	//namgi
-	  	// $("#sendMessage").click(function(){ 
-	  	// 	sendMessage();
-	  		
-	  	// });
   	});
 
   	$('#messageImg').click( function(){
-  		var test = getProfClass();
-  		swal({
-  			title: "Send A Message",
-  			html: true,
-  			text: test,
-  			showCancelButton: true,
-  			confirmButtonText: "Send",
-			closeOnConfirm: false,
-			allowOutsideClick: false
-  		}, function(isConfirm){
-  			if(isConfirm == true){
-  				real_time_notification();
-	  			sendMessage();
-	  			swal("Send This Message", "Your students will be notified", "success");
-	  		}else{
-	  			
-	  		}
+  		if(role == "professor"){
+	  		var classList = getProfClass();
+	  		swal({
+	  			title: "Send A Message",
+	  			html: true,
+	  			text: classList,
+	  			showCancelButton: true,
+	  			confirmButtonText: "Send",
+				closeOnConfirm: false,
+				allowOutsideClick: false
+	  		}, function(isConfirm){
+	  			if(isConfirm == true){
+	  				//real_time_notification();
+		  			sendMessage();
+		  			swal("Send This Message", "Your students will be notified", "success");
+		  		}else{
+		  			//classList = '';
+		  		}
+		  	});
+  		}else if(role == "student"){
+  			var classList = getStuClass();
+	  		swal({
+	  			title: "Send A Message",
+	  			html: true,
+	  			text: classList,
+	  			showCancelButton: true,
+	  			confirmButtonText: "Send",
+				closeOnConfirm: false,
+				allowOutsideClick: false
+	  		}, function(isConfirm){
+	  			if(isConfirm == true){
+	  				//real_time_notification();
+		  			sendMessage();
+		  			swal("Send This Message", "Professor will be notified", "success");
+		  		}else{
+		  			//classList = '';
+		  		}
 
-	  	});
+		  	});
+  		}
 
   	});
   	
-  	getNotifications();
+  
 });
 
 function real_time_notification() {
@@ -77,7 +92,7 @@ function sendMessage(){
         type: "POST",
         url: "../slide_menu/send_message.php",
         dataType: "html",
-        data: {'classid': $('#selectedClass').val(), 'message': $('#message').val()},
+        data: {'classid': $('#selectedClass').val(), 'message': $('#mid').val()},
         success: function(result) {
           
         },
@@ -85,6 +100,25 @@ function sendMessage(){
         	alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
        	}
     });
+}
+
+function getStuClass(){
+	var stuClass;
+	$.ajax({
+		async: false,
+		type: 'POST',
+		url: "../slide_menu/slide_menu.php",
+		dataType: 'json',
+		data:{'function': 'getStuClass'},
+		success: function (result){
+			stuClass = setClasses(result);
+		},
+		error:function(request,status,error){
+        	alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+       	}
+	});
+
+	return stuClass;
 }
 
 function getProfClass(){
@@ -96,9 +130,7 @@ function getProfClass(){
 		dataType: 'json',
 		data:{'function': 'getProfClass'},
 		success: function (result){
-			//setProfClass(result);	
-			//callback(result);
-			profClass = setProfClass(result);
+			profClass = setClasses(result);
 		},
 		error:function(request,status,error){
         	alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
@@ -108,14 +140,14 @@ function getProfClass(){
 	return profClass;
 }
 
-function setProfClass(classes){
+function setClasses(classes){
 	var html = '<select id="selectedClass">';
 	for(var i = 0 ; i <classes.length; i++){
 		html += '<option value="'+classes[i].cid+'">'
 								+classes[i].classnumber+'</option>'; 
 	}
 
-	html+='</select><br><br><textarea id="message" name="message" cols="30" rows="5" style="width:630; height:200px;" value="write a message" ></textarea>';
+	html+='</select><br><br><textarea id="mid" name="message" cols="30" rows="5" style="width:630; height:200px;" placeholder="write a message"></textarea>';
 
 	return html;
 }
@@ -146,16 +178,18 @@ function getNotifications()
 		data: {'function': 'getNotifications'},
 		success: function(result){
 			if(role == "student"){
-				hideMessageButton();
+				getStuClass();
+				//hideMessageButton();
 				studentGrade(result[0]);				     
 		        studentDiscussion(result[1]);				       
 		        studentAssignmentNQuiz(result[2]);
 		        studentProfMessage(result[3]);
 		        $('#notification').html(counter);
 			}else if(role == 'professor'){
-				//getProfClass();
-				showMessageButton();
-				professorNotification(result);
+				getProfClass();
+				//showMessageButton();
+				professorNotification(result[0]);
+				$('#notification').html(counter);
 			}
 		},
 		error:function(request,status,error){
@@ -165,12 +199,12 @@ function getNotifications()
 
 	return false;
 }
-function hideMessageButton(){
-	$('#messageImg').hide();
-}
-function showMessageButton(){
-	$('#messageImg').show();	
-}
+// function hideMessageButton(){
+// 	$('#messageImg').hide();
+// }
+// function showMessageButton(){
+// 	$('#messageImg').show();	
+// }
 
 function studentDiscussion(result){
 	var notification = '';
@@ -210,7 +244,7 @@ function studentGrade(result){
 }
 
 function studentProfMessage(result){
-var notification = '';
+    var notification = '';
 	for (var i = 0; i < result.length; i++){
 		counter += 1;
 		notification += '<li><a href="#">'
@@ -232,9 +266,19 @@ function studentNotification(result){
 
 function professorNotification(result){
 	//todo something
+	// var notification = '';
+	// for (var i = 0; i < result.length; i++){
+	// 	notification += '<li><a href="#">your students number is '+result[i]['students']+'</a></li>';
+	// }
+	// $('#sidebar').html('<ul>'+notification+'</ul>');
 	var notification = '';
 	for (var i = 0; i < result.length; i++){
-		notification += '<li><a href="#">your students number is '+result[i]['students']+'</a></li>';
+		counter += 1;
+		notification += '<li><a href="#">'
+						+result[i]['author_name']+' in '
+						+result[i]['class_number']+' send \''
+						+result[i]['message']+'\' at '
+						+result[i]['send_date']+'</a></li>';
 	}
 	$('#sidebar').html('<ul>'+notification+'</ul>');
 }

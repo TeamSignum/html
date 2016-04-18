@@ -21,6 +21,13 @@ if(isset($_SESSION['userid'])){
 
 		switch($fun)
 		{
+			case 'getStuClass':
+				$query = "SELECT enrolled.cid, classes.classnumber FROM LU.enrolled INNER JOIN LU.classes ON enrolled.cid = classes.cid WHERE idusers = '$userid';";
+				$statement = $DB->prepare($query);
+				$statement->execute();
+				$result = $statement->fetchAll(PDO::FETCH_ASSOC);
+				echo json_encode($result);
+				break;
 			case 'getProfClass':
 				$query = "SELECT teaching.cid, classes.classnumber FROM LU.teaching INNER JOIN LU.classes ON teaching.cid = classes.cid WHERE idusers = '$userid';";
 				$statement = $DB->prepare($query);
@@ -52,20 +59,24 @@ if(isset($_SESSION['userid'])){
 						);
 					echo(json_encode($notifications));
 				}else if($role=='professor'){
-					$notifications = array();
-					$query = "SELECT cid FROM LU.teaching WHERE `idusers` = '$userid' ";
-					$statement = $DB->prepare($query);
-					$statement->execute();
-					$result = $statement->fetchAll(PDO::FETCH_ASSOC);
+					$notifications = array
+						(
+							getStuMessage($userid, $DB)
+						);
+					// How many students took the class
+					// $query = "SELECT cid FROM LU.teaching WHERE `idusers` = '$userid' ";
+					// $statement = $DB->prepare($query);
+					// $statement->execute();
+					// $result = $statement->fetchAll(PDO::FETCH_ASSOC);
 					
-					foreach ($result as $row => $cid) {
-						$query = "SELECT count(*) FROM LU.enrolled WHERE cid = ?;";
-						$statement = $DB->prepare($query);
-						$statement->bindValue(1, $cid['cid']);
-						$statement->execute();
-						$students = $statement->fetch();
-						$notifications[] = array('students' => $students['count(*)']);
-					}
+					// foreach ($result as $row => $cid) {
+					// 	$query = "SELECT count(*) FROM LU.enrolled WHERE cid = ?;";
+					// 	$statement = $DB->prepare($query);
+					// 	$statement->bindValue(1, $cid['cid']);
+					// 	$statement->execute();
+					// 	$students = $statement->fetch();
+					// 	$notifications[] = array('students' => $students['count(*)']);
+					// }
 					echo(json_encode($notifications));	
 				}
 				break;
@@ -83,7 +94,7 @@ function getGrade($userid, $DB){
 	$notifications = array();
 	$query = "SELECT cid, title, score, date_entered FROM LU.grades 
 				left join LU.popupassignment on grades.idassignment = popupassignment.idassignment 
-				where idusers = ? and date_entered >= DATE_SUB(CURDATE(), INTERVAL 20 DAY)
+				where idusers = ? and date_entered >= DATE_SUB(CURDATE(), INTERVAL 10 DAY)
 				order by date_entered;";
 	$statement = $DB->prepare($query);
 	$statement->bindValue(1, $userid);	
@@ -142,9 +153,7 @@ function getAssignmentNQuiz($userid, $DB){
 				LEFT JOIN LU.classes on  LU.classes.cid = LU.popupassignment.cid
 				WHERE LU.enrolled.idusers = ? 
 				AND
-					LU.popupassignment.duedate >= DATE(now())
-				AND
-				    LU.popupassignment.duedate <= DATE_ADD(DATE(now()), INTERVAL 2 WEEK);";
+					LU.popupassignment.duedate >= DATE_SUB(curdate(), INTERVAL 10 day);";
 	$statement = $DB->prepare($query);
 	$statement->bindValue(1, $userid);	
 	$statement->execute();
@@ -162,15 +171,16 @@ function getAssignmentNQuiz($userid, $DB){
 
 function getProfMessage($userid, $DB){
 	$notifications = array();
-	$query = "select users.firstname, classes.classnumber, professor_notification.message, professor_notification.date_entered from LU.enrolled 
+	$query = "select users.firstname, classes.classnumber, professor_notification.message, professor_notification.date_entered 
+				from LU.enrolled 
 				inner join LU.professor_notification on LU.enrolled.cid = LU.professor_notification.cid
 				inner join LU.users on professor_notification.idusers = users.idusers
 				inner join LU.classes on classes.cid = professor_notification.cid
-				where LU.enrolled.idusers = ? ;
-				AND
-					LU.popupassignment.duedate >= DATE(now())
-				AND
-				    LU.popupassignment.duedate <= DATE_ADD(DATE(now()), INTERVAL 2 WEEK);";
+				where LU.enrolled.idusers = ? 
+				AND 
+					LU.users.role = 'professor'
+				AND 
+					LU.professor_notification.date_entered >= DATE_SUB(curdate(), INTERVAL 10 day);";
 	$statement = $DB->prepare($query);
 	$statement->bindValue(1, $userid);	
 	$statement->execute();
@@ -183,6 +193,32 @@ function getProfMessage($userid, $DB){
 									'send_date' => $row['date_entered']);
 	}
 
+
+	return $notifications;
+}
+
+function getStuMessage($userid, $DB){
+	$notifications = array();
+	$query = "select users.firstname, classes.classnumber, professor_notification.message, professor_notification.date_entered 
+				from LU.enrolled 
+				inner join LU.professor_notification on LU.enrolled.cid = LU.professor_notification.cid
+				inner join LU.users on professor_notification.idusers = users.idusers
+				inner join LU.classes on classes.cid = professor_notification.cid
+				where 
+					LU.users.role = 'student'
+				AND 
+					LU.professor_notification.date_entered >= DATE_SUB(curdate(), INTERVAL 10 day)
+				group by LU.professor_notification.pnid;";
+	$statement = $DB->prepare($query);
+	$statement->execute();
+	$result = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+	foreach ($result as $row) {
+		$notifications[] = array(	'author_name' => $row['firstname'],
+									'class_number' => $row['classnumber'],
+									'message' => $row['message'],
+									'send_date' => $row['date_entered']);
+	}
 
 	return $notifications;
 }
