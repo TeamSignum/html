@@ -48,7 +48,7 @@ body {
   position: relative;
   top: -5%;
   left: 50%;
-  margin-left: -20px;
+  margin-left: -25px;
   width: 40px;
   height: 40px;
   background: #FA5D16;
@@ -69,9 +69,9 @@ body {
 }
 
 #notification {
- color: #fff;
+    color: #fff;
     position: relative;
-    left: 155px;
+    left: 150px;
     top: -57px;
     border-radius: 50%;
     border: 2px solid #FFF;
