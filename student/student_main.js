@@ -300,12 +300,9 @@ function drawClassNode(){
 			x2: classCircle.width,
 			y2: classCircle.heigh,
 			colorStops: {
-				0: '#8c8c8c',
-				0.2: '#b3b3b3',
-				0.4: 'white',
-				0.6: 'white',
-				0.8: '#b3b3b3',
-				1: '#8c8c8c'
+				0: 'white',
+				0.5: '#e3e3e3',
+				1: '#b3b3b3'
 			}
 		});
 
