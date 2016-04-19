@@ -32,6 +32,23 @@ function getPHPSessionInfo(){
 function evaluateSessionInfo(parsedResult){
 	var html='';
 
+	if(document.title=='Concept Builder'){
+		html+='<li>';
+		html+='<a href="../class_builder/class_builder.html" style="margin-top: 12px; font-size:14pt;"><i class="material-icons">arrow_back</i></a>';
+		html+='</li>';	
+	}
+	else if(document.title=='Concept View'){
+		html+='<li>';
+		html+='<a href="../class_view/class_view.html" style="margin-top: 12px; font-size:14pt;"><i class="material-icons">arrow_back</i></a>';
+		html+='</li>';	
+	}
+
+	else if(document.title=='Professor Concept View'){
+		html+='<li>';
+		html+='<a href="../prof_class_view/prof_class_view.html" style="margin-top: 12px; font-size:14pt;"><i class="material-icons">arrow_back</i></a>';
+		html+='</li>';	
+	}
+
 	// Navbar if user is not logged in
 	if(parsedResult=="Login"){
 		html+='<ul class="nav navbar-nav">';
@@ -175,23 +192,6 @@ function evaluateSessionInfo(parsedResult){
 		html+='</li>';	
 
 		//html+='</ul>';	
-	}
-
-	if(document.title=='Concept Builder'){
-		html+='<li>';
-		html+='<a href="../class_builder/class_builder.html" style="margin-top: 12px; font-size:14pt;"><i class="material-icons">arrow_back</i></a>';
-		html+='</li>';	
-	}
-	else if(document.title=='Concept View'){
-		html+='<li>';
-		html+='<a href="../class_view/class_view.html" style="margin-top: 12px; font-size:14pt;"><i class="material-icons">arrow_back</i></a>';
-		html+='</li>';	
-	}
-
-	else if(document.title=='Professor Concept View'){
-		html+='<li>';
-		html+='<a href="../prof_class_view/prof_class_view.html" style="margin-top: 12px; font-size:14pt;"><i class="material-icons">arrow_back</i></a>';
-		html+='</li>';	
 	}
 
 	html+='<li>';
