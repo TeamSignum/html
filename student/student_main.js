@@ -123,7 +123,8 @@ function getPic(){
 				profileimage = "../profile_images/default.jpg";
 			}
 			else{
-				profileimage = "../profile_images/" + result[0].profilepic;
+				//alert(result[0].profilepic);
+				profileimage = result[0].profilepic;
 			}
 		},
 		error:function(request,status,error){

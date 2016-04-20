@@ -9,8 +9,6 @@
  *
  */
 
-include '../../imports/ChromePhp.php';
-
 session_start();
 
 // Check that uid is set in the Session
@@ -60,23 +58,27 @@ if($check === false) {
 $uploadedFileName=pathinfo(($_FILES['imageToUpload']['name']), PATHINFO_FILENAME);
 // Set target directory - this line only works on the server
 // Will not work for local testing on windows.
-$targetDirectory=dirname(__DIR__)."/profile_images";	
+$targetDirectory="../profile_images";	
 // Create a unique file name with tempnam function
 $destinationFileName = tempnam($targetDirectory, $uploadedFileName);
 // Get the extension from uploaded file
 $fileExtension = '.' . pathinfo($_FILES['imageToUpload']['name'], PATHINFO_EXTENSION);
 // Add the extension to the unique file name
 $destinationFileName.=$fileExtension;
-//echo($destinationFileName);
+// remove ".tmp" extension if it's in the string (mainly for prettiness
+// in local testing)
+if (strpos($destinationFileName, '.tmp') !== false) {
+    $destinationFileName = str_replace(".tmp","", $destinationFileName);
+}
+//die($destinationFileName);
 
 // Assuming $_FILES['file']['error'] == 0 (no errors)
 if (move_uploaded_file($_FILES['imageToUpload']['tmp_name'], $destinationFileName)) {
     // Strip the file path to store the image name in the database
     $databaseFileName=basename($destinationFileName);
+    $databaseFileName="../profile_images/".$databaseFileName;
     //echo($databaseFileName);
     // File uploaded successfully, add reference to the database 
-
-    ChromePhp::log($databaseFileName);
 
 	try{
 		// Login to the database	
@@ -102,7 +104,11 @@ if (move_uploaded_file($_FILES['imageToUpload']['tmp_name'], $destinationFileNam
 		$_SESSION['firstname']=$firstname;
 		$_SESSION['lastname']=$lastname;
 
-		echo("Success: " . $databaseFileName);
+		// Delay/hack to allow time for image file to upload before
+		// returning to the JS file.  If the file isn't uploaded, it won't
+		// display when the site goes to the student_main page.
+		sleep(2);
+		echo($databaseFileName);
 	}
 	catch(PDOException $ex){
 		if($ex->getCode()=="23000"){

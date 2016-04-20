@@ -16,7 +16,7 @@ $( document ).ready(function()
 		//alert("0");
     	e.preventDefault();
     	ProfileChange();
-    	window.location = "../student/student_main.html";
+    	//window.location = "../student/student_main.html";
     });
 
 	
@@ -48,7 +48,7 @@ function getProfileData(){
 				_profileimage = "../profile_images/default.jpg";
 			}
 			else{
-				_profileimage="../profile_images/" + parsedResult[0].profilepic;
+				_profileimage=parsedResult[0].profilepic;
 				//alert(_profileimage);
 			}
 
@@ -210,7 +210,6 @@ function submitNameChange(){
 }
 
 function ProfileChange(){
-	//alert("1");
 	// Check if a file was chosen
 	if($('#imageToUpload').val()==''){
 		//pictureDefaultView();
@@ -220,11 +219,7 @@ function ProfileChange(){
 		// Get the form information and create a FormData object
 		var form = $('#pf-form')[0];
 		var formData = new FormData(form);
-		//alert("2");
-		//alert(formData);
-		// Append information to tell php what function to run
-		//formData.append("queryType", 'updatePicture');
-
+		
 		//insert into database, handle any submission errors.
 		$.ajax({
 			async: true,
@@ -235,21 +230,13 @@ function ProfileChange(){
 			data: formData,
 			success: function(result){
 				//alert(result);
-				if(result.indexOf("Success: ") !=-1){
+				if(result.indexOf("../profile_images/") !=-1){
 					//alert(result.substring(result.indexOf(" ")+1));
-					_profileimage="../profile_images/" + result.substring(result.indexOf(" ")+1);
-					//$('#edit-picture-button').prop('disabled',false);
-					//$('#cancel-edit-picture-button').prop('disabled',false);
-					
-					//pictureDefaultView();
+					_profileimage=result;
+					window.location = "../student/student_main.html";
 				}
 				else{
-					alert(result);
 					alert('File could not be uploaded.  Please try again.');
-					//$('#edit-picture-button').prop('disabled',false);
-					//$('#cancel-edit-picture-button').prop('disabled',false);
-					//$('#profileimage').attr('src', _profileimage);
-					//pictureEditView();
 				}
 			}
 		});
