@@ -1,5 +1,5 @@
 /*           
- * Author: LearningUniverse                         
+ * Author: LearningUniverse - Joseph Cottongim                        
  * Created: February 1, 2016  
  *            
  * Javascript file for handling the interaction between                                                        
@@ -216,7 +216,7 @@ function createGradeForm(userid){
 	}
 	else{
 		assignmentSubmission = `<object id="assignment-submission" data="`+currentStudent.file+`" type="application/pdf" width="70%" height="500px">
-								 http://ec2-52-33-118-140.us-west-2.compute.amazonaws.com/assignmentsub/`+currentStudent.file+`#page=1&zoom=75
+								 `+currentStudent.file+`
 								 </object>`;
 	}
 
