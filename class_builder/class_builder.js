@@ -519,7 +519,7 @@ function showTooltip(type, top, left)
 {
 	var ttid = type + "tt";
 	$("#" + ttid).show();
-    $("#" + ttid).css({"position": "absolute", "top": top, "left": left, "background-color": "white", "width": "250px"});
+    $("#" + ttid).css({"position": "absolute", "top": top, "left": left, "background-color": "white", "width": "250px", "padding": "8px", "border-radius": "5px"});
 }
 
 function hideTootltip(type)

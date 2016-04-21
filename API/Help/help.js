@@ -15,8 +15,8 @@ function DisplayHelpMessage(page){
 			break;
 		case "class_view": 
 			help_message_title = "Class View";
-			help_message = "These are high level concepts. Click on nodes to navigate the the concept view. Each node has an associated popup (page icon)." +
-			" This popup contains all information about the node.";
+			help_message = "These are high level concepts. Click on nodes to navigate to the concept view. Each node has an associated pop up (page icon)." +
+			" This pop up contains all information about the node.";
 			break;
 		case "concept_view": 
 			help_message_title = "Concept View";
