@@ -15,8 +15,8 @@ $( document ).ready(function() {
 	google.charts.load('current', {packages: ['bar']});
 
 	canvas = new fabric.Canvas('map');
-	canvas.setBackgroundImage('../imports/images/maxresdefault.jpg' , canvas.renderAll.bind(canvas), {
-    });
+	// canvas.setBackgroundImage('../imports/images/maxresdefault.jpg' , canvas.renderAll.bind(canvas), {
+ //    });
 	
 	canvas.selection = false;
 

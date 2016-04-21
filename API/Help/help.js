@@ -4,7 +4,7 @@ function DisplayHelpMessage(page){
 		case "class_builder": 
 			help_message_title = "Class Builder";
 			help_message = "This is the place for high level concepts like \"Algorithms\" or \"Algebra\"." +
-			" Drag nodes from the toolbar onto the canvas to build a class. The three sizes of nodes can be used" +
+			" \n\nDrag nodes from the toolbar onto the canvas to build a class. The three sizes of nodes can be used" +
 			" to show the importance of topics. \n\n Click on the page icon to customize the node details.";
 			break;
 		case "concept_builder": 
