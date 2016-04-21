@@ -1256,7 +1256,12 @@ MManager.prototype.ShowFiles = function(){
 		success: function(result){
 
 			if(result.length > 0){
-				$("#lecturenotes").html('<hr><h4 style="margin-top:20px;margin-bottom:15px;text-align:left;">Notes</h4>');
+				if(mngr.crrnt.node.type === "assignment"){
+					$("#lecturenotes").html('<hr><h4 style="margin-top:20px;margin-bottom:15px;text-align:left;">Assignment Files</h4>');
+				}
+				else{
+					$("#lecturenotes").html('<hr><h4 style="margin-top:20px;margin-bottom:15px;text-align:left;">Lecture Notes</h4>');
+				}
 			}
 
 			for(var i = 0; i < result.length; i++)
