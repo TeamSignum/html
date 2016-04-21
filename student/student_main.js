@@ -36,7 +36,7 @@ $( document ).ready(function() {
 	// functions to draw the page.  Is it possible to have one
 	// DB query to speed up the response?
 	getPic(); // made by namgi
-	getName();	
+	//getName();	
 	getClassNumbers();
 	
 	canvas.hoverCursor = 'pointer';
@@ -126,6 +126,7 @@ function getPic(){
 				//alert(result[0].profilepic);
 				profileimage = result[0].profilepic;
 			}
+			getName();
 		},
 		error:function(request,status,error){
         	alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
