@@ -9,6 +9,7 @@ try{
 	$cid = $_SESSION['classid'];
 	$nid = $_POST['nid'];
 	$level = $_POST['level'];
+	$pnid = $_SESSION['nid'];
 
 	// Setup connection 
 	$DB = new PDO("mysql:host=ec2-52-33-118-140.us-west-2.compute.amazonaws.com;dbname=LU", 'Signum', 'signumDB4');
@@ -17,11 +18,12 @@ try{
 	$statement;
 
 	if($level == 1){
-		$query = "SELECT lecturenotes.name, lecturenotes.path FROM `lecturenotes` WHERE lecturenotes.cid = ? AND lecturenotes.nid = ? AND lecturenotes.level = ?";
+		$query = "SELECT lecturenotes.name, lecturenotes.path FROM `lecturenotes` WHERE lecturenotes.cid = ? AND lecturenotes.nid = ? AND lecturenotes.level = ? AND lecturenotes.pnid = ?";
 		$statement = $DB->prepare($query);
 		$statement->bindParam(1, $cid);
 		$statement->bindParam(2, $nid);
 		$statement->bindParam(3, $level);
+		$statement->bindParam(4, $pnid);
 
 	}
 	else{
