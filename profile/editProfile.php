@@ -9,6 +9,8 @@
  *
  */
 
+include '../imports/ChromePhp.php';
+
 session_start();
 
 // Check that uid is set in the Session
@@ -79,6 +81,7 @@ if (move_uploaded_file($_FILES['imageToUpload']['tmp_name'], $destinationFileNam
     $databaseFileName="../profile_images/".$databaseFileName;
     //echo($databaseFileName);
     // File uploaded successfully, add reference to the database 
+    ChromePhp::log($databaseFileName);
 
 	try{
 		// Login to the database	
