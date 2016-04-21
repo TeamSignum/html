@@ -6,6 +6,8 @@
  *
  */
 
+ var dropdownIsShown = false;
+
 $(document).ready(function() 
 {
 	//alert(document.title);
@@ -104,18 +106,6 @@ function evaluateSessionInfo(parsedResult){
 			html+='</li>';
 		}
 
-		// Profile link (only included on account home page, or the profile page itself)
-		if(document.title=='Account Home' || document.title=='Profile'){
-			if(document.title=='Profile'){
-				html+='<li class="active">';
-			}
-			else{
-				html+='<li>';
-			}
-			html+='<a href="../profile/profile.html" style="margin-top: 12px; font-size:14pt;"><i class="material-icons">face</i></a>';
-			html+='</li>';
-		}	
-
 		// Account home link
 		if(document.title=='Account Home'){ 
 			html+='<li class="active">';
@@ -123,13 +113,8 @@ function evaluateSessionInfo(parsedResult){
 		else{
 			html+='<li>';
 		}
-		html+='<a href="../student/student_main.html" style="margin-top: 12px; font-size:14pt;"><i class="material-icons">account_circle</i></a>';
+		html+='<a style="margin-top: 12px; font-size:14pt; cursor: pointer;" onclick="showDropDown()"><i class="material-icons">account_circle</i></a>';
 		html+='</li>';
-
-		// Logout link
-		html+='<li>';
-		html+='<a href="../logout.php" style="margin-top: 12px; font-size:14pt;"><i class="material-icons">exit_to_app</i></a>';
-		html+='</li>';	
 
 		//html+='</ul>';
 	}
@@ -163,18 +148,6 @@ function evaluateSessionInfo(parsedResult){
 			parsedResult.className+' Class View</a>';
 			html+='</li>';
 		}
-		
-		// Profile link (only included on account home page, or the profile page itself)
-		if(document.title=='Account Home' || document.title=='Profile'){
-			if(document.title=='Profile'){
-				html+='<li class="active">';
-			}
-			else{
-				html+='<li>';
-			}
-			html+='<a href="../profile/profile.html" style="margin-top: 12px; font-size:14pt;"><i class="material-icons">face</i></a>';
-			html+='</li>';
-		}	
 
 		// Account home link
 		if(document.title=='Account Home'){ 
@@ -183,13 +156,8 @@ function evaluateSessionInfo(parsedResult){
 		else{
 			html+='<li>';
 		}
-		html+='<a href="../student/student_main.html" style="margin-top: 12px; font-size:14pt;"><i class="material-icons">account_circle</i></a>';
+		html+='<a style="margin-top: 12px; font-size:14pt; cursor: pointer;" onclick="showDropDown()"><i class="material-icons">account_circle</i></a>';
 		html+='</li>';
-
-		// Logout link
-		html+='<li>';
-		html+='<a href="../logout.php" style="margin-top: 12px; font-size:14pt;"><i class="material-icons">exit_to_app</i></a>';
-		html+='</li>';	
 
 		//html+='</ul>';	
 	}
@@ -214,6 +182,17 @@ function evaluateSessionInfo(parsedResult){
 	}
 
 	insertNavBarHtml(html);
+}
+
+function showDropDown(){
+	if(!dropdownIsShown){
+		dropdownIsShown = true;
+		$("#custom_dropdown").show();
+	}
+	else{
+		dropdownIsShown = false;
+		$("#custom_dropdown").hide();
+	}
 }
 
 function insertNavBarHtml(html){

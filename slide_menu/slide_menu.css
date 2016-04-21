@@ -15,6 +15,7 @@ body {
   margin-top: -150px;
   text-align: center;
   z-index: 1005;
+  font-size: 12pt;
 }
 
 
@@ -24,7 +25,6 @@ body {
   background: #fff;
   position: relative;
   width: 100%;
-  height: 360px;
   -webkit-transition:  right 0.4s ease-in-out;
   -moz-transition:  right 0.4s ease-in-out;
   -ms-transition:  right 0.4s ease-in-out;
@@ -33,7 +33,7 @@ body {
 }
 
 .bottom.open{
-  right: 10px;
+  right: 20px;
 }
 
 .center .top {
@@ -85,8 +85,9 @@ body {
   line-height: 35px;
   width: 100%;
   height: 35px;
-  background: #FF4C0C;
+  background: #FA5D16; 
   border-bottom: 1px solid rgba(89, 81, 68, 1);
+  margin-bottom: 10px;
 }
 
 #info {
@@ -105,14 +106,15 @@ body {
 }
 
 #sidebar label{
-  color: #ffffff;
-  background-color: #FA5D16;
+  color: black;
+  background-color: #FFE4E1;
   display: block;
   width: auto;
+  padding: 5px 0px;
 }
 
 #sidebar ul {
- list-style: none;
+    list-style: none;
     padding:0;
     margin:0;
 }

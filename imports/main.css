@@ -16,3 +16,32 @@
 #content {
 	background: #BFC7D8 url(drag.png) center 75% no-repeat;
 }
+
+#custom_dropdown{
+	position: fixed;
+	background-color: white;
+	top: 70px;
+	right: 108px;
+	padding: 20px 0px;
+
+}
+
+#custom_dropdown:hover {
+	display: block;
+}
+
+#custom_dropdown a{
+	display: block;
+	padding: 5px 20px;
+	margin: 5px 0px;
+	text-decoration: none;
+}
+
+#custom_dropdown a:hover{
+	background-color: #e3e3e3;
+}
+
+
+
+
+

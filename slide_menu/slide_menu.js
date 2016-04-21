@@ -211,10 +211,9 @@ function studentDiscussion(result){
 	for (var i = 0; i < result.length; i++){
 		counter += 1;
 		notification += '<li><a href="#">New discussion: "'
-						+result[i]['content']+'" is written by '
+						+result[i]['content']+'" by '
 						+result[i]['firstname']+' in '
-						+result[i]['classnumber']+ ' at '
-						+result[i]['date_entered'] + '</a></li>';
+						+result[i]['classnumber']+ '</a></li>';
 	}
 	$('#discussion').html('<ul>'+notification+'</ul>');
 }
@@ -225,7 +224,7 @@ function studentAssignmentNQuiz(result){
 		counter += 1;
 		notification += '<li><a href="#">New Assignment: "'
 						+result[i]['title']+'" in '
-						+result[i]['classnumber']+' Due to '
+						+result[i]['classnumber']+' Due on '
 						+result[i]['duedate']+ '</a></li>';
 	}
 	$('#assignment').html('<ul>'+notification+'</ul>');
@@ -249,9 +248,8 @@ function studentProfMessage(result){
 		counter += 1;
 		notification += '<li><a href="#">'
 						+result[i]['author_name']+' in '
-						+result[i]['class_number']+' send \''
-						+result[i]['message']+'\' at '
-						+result[i]['send_date']+'</a></li>';
+						+result[i]['class_number']+' sent \''
+						+result[i]['message']+'\'</a></li>';
 	}
 	$('#message').html('<ul>'+notification+'</ul>');
 }
@@ -276,9 +274,8 @@ function professorNotification(result){
 		counter += 1;
 		notification += '<li><a href="#">'
 						+result[i]['author_name']+' in '
-						+result[i]['class_number']+' send \''
-						+result[i]['message']+'\' at '
-						+result[i]['send_date']+'</a></li>';
+						+result[i]['class_number']+' sent \''
+						+result[i]['message']+'\'</a></li>';
 	}
 	$('#sidebar').html('<ul>'+notification+'</ul>');
 }
