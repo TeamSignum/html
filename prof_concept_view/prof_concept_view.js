@@ -201,6 +201,7 @@ function mngButton()
 	else
 	{
 		$("#quizstat_chart").hide();
+		$("#quizstat_chart_title").hide();
 		showgrades = false;
 		$("#quizgrades").text("Show Quiz Grades");
 	}
@@ -255,6 +256,7 @@ function showPopup()
 function closePopup()
 {
 	$("#quizstat_chart").hide();
+	$("#quizstat_chart_title").hide();
 	if(showgrades == true)
 	{
 		showgrades = false;
@@ -418,6 +420,7 @@ function buildQuizChart(result)
 	chart.draw(data, google.charts.Bar.convertOptions(options));
 	
 	$("#quizstat_chart").show();
+	$("#quizstat_chart_title").show();
 }
 
 function buildChart(result, title)
