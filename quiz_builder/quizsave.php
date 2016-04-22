@@ -1,4 +1,6 @@
 <?php
+//Learning Universe
+//PHP for quiz_builder.js
 
 session_start();
 
@@ -6,11 +8,12 @@ $cid = $_SESSION['classid'];
 $nid = $_SESSION['nid'];
 $nid2 = $_SESSION['nid2q'];
 
-
+//Saves quiz questions to the database
 if(isset($_POST["questions"]))
 {
 	$questions = $_POST["questions"];
 	
+	//If we have duplicate questions for a quiz delete them first
 	try
 	{
 		$DB = new PDO("mysql:host=ec2-52-33-118-140.us-west-2.compute.amazonaws.com;dbname=LU", 'Signum', 'signumDB4');
@@ -28,6 +31,7 @@ if(isset($_POST["questions"]))
 		echo $e->getMessage();
 	}
 	
+	//Loop through all the questions and insert them into the database
 	foreach($questions as $q)
 	{
 		$qnum = $q["qnum"];
@@ -69,6 +73,7 @@ if(isset($_POST["questions"]))
 	}
 }
 
+//Load quiz questions from the database
 if(isset($_POST['load']))
 {
 	try
@@ -85,6 +90,7 @@ if(isset($_POST['load']))
 		
 		$questions = array();
 		
+		//Convert questions to JSON format
 		foreach($result as $row)
 		{
 			$type = $row["type"];

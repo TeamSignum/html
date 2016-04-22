@@ -1,10 +1,13 @@
 <?php
+//Learning Universe
+//PHP for quiz_viewer.js
 
 session_start();
 $cid = $_SESSION['classid'];
 $nid = $_SESSION['nid'];
 $nid2 = $_SESSION['nid2q'];
 
+//Loads the quiz questions from the database
 if(isset($_POST["load"]))
 {
 	try
@@ -21,6 +24,7 @@ if(isset($_POST["load"]))
 		
 		$questions = array();
 		
+		//Convert questions to JSON format
 		foreach($result as $row)
 		{
 			$type = $row["type"];
@@ -46,6 +50,8 @@ if(isset($_POST["load"]))
 	}
 }
 
+//Sends students answers to the database
+//Auto grades the quiz
 if(isset($_POST["answers"]))
 {
 	$iduser = $_SESSION['userid'];
@@ -54,6 +60,7 @@ if(isset($_POST["answers"]))
 	{
 		$answers = $_POST["answers"];
 		
+		//Query the database for the quiz answers in order to auto grade
 		$DB = new PDO("mysql:host=ec2-52-33-118-140.us-west-2.compute.amazonaws.com;dbname=LU", 'Signum', 'signumDB4');
 		$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		
@@ -63,13 +70,12 @@ if(isset($_POST["answers"]))
 		$statement->execute();
 		$resultques = $statement->fetchAll(PDO::FETCH_ASSOC);
 		$quesvals = array_values($resultques);
-		
-		//echo $resultques;
-		//print_r(array_values($resultques));
-		
+
+		//Grading variables
 		$correct = 0;
 		$ind = 0;
 		
+		//Loop through the student's answers and grade them with the quiz's answers
 		foreach($answers as $a)
 		{
 			$qnum = $a['qnum'];
@@ -79,12 +85,14 @@ if(isset($_POST["answers"]))
 			
 			$quest = $quesvals[$ind]["answer"];
 
+			//If answers match give the student a point for the question
 			if(strcmp($ans, $quest) == 0)
 			{
 				$correct++;
 			}
 			$ind++;
 			
+			//Insert the students answer into the database
 			$DB->beginTransaction();
 			
 			$query = "REPLACE into `answers` (`cid`, `nid`, `nid2`, `idusers`, `qnum`, `answer`) values (?,?,?,?,?,?)";
@@ -101,10 +109,12 @@ if(isset($_POST["answers"]))
 			$DB->commit();
 		}
 		
+		//Calculate the students score
 		$score = $correct/count($resultques);
 		$perc = round($score * 100);
 		//echo $perc;
 		
+		//Insert the quiz as completed for the student into the database
 		$DB->beginTransaction();
 		
 		$date = date("Y-m-d H:i:s", time());
@@ -123,6 +133,7 @@ if(isset($_POST["answers"]))
 		$statement->execute();
 		$DB->commit();
 		
+		//Insert the students grade for the quiz into the database
 		$DB->beginTransaction();
 		
 		$query = "REPLACE into quizzes (cid,nid,nid2,idusers,tdate,grade) values (?,?,?,?,?,?)";

@@ -1,3 +1,11 @@
+/*
+ * Learning Universe
+ * Quiz Viewer
+ *
+ * Outlines question templates used to outline a quiz for a student to take.
+ */
+
+//Template variables 
 var qmc;
 var qtf;
 var qsa;
@@ -5,6 +13,7 @@ var num = 1;
 var qtype = [];
 
 $( document ).ready(function () {
+	//Multiple choice, TF, and short answer templates
     qmc = $("#MCQXX").clone(true);
 	qtf = $("#TFQXX").clone(true);
 	qsa = $("#SAQXX").clone(true);
@@ -13,6 +22,7 @@ $( document ).ready(function () {
        function() { submitQuiz(); 
     });			
     
+	//Remove templates from initial page load
     $("#MCQXX").remove();
     $("#TFQXX").remove();
 	$("#SAQXX").remove();
@@ -20,6 +30,7 @@ $( document ).ready(function () {
 	loadQuiz();
 });
 
+//Load the quiz from the database.
 function loadQuiz()
 {
 	$.ajax({
@@ -36,8 +47,13 @@ function loadQuiz()
 	});
 }
 
+//Populate the question templates from the loaded JSON question data received from the database.
 function createQuiz(q)
 {
+	//Loop through the questions
+	//Determine question type
+	//Fill in the template info
+	//Append question to the page.
 	for(var i = 0; i < q.length; i++)
 	{
 		var type = q[i].type;
@@ -100,6 +116,8 @@ function createQuiz(q)
 	}
 }
 
+//Validation
+//Checks if an answer has been selected for a question.
 function answerCheck()
 {
 	var empty = false
@@ -114,8 +132,10 @@ function answerCheck()
 	return empty;
 }
 
+//Submits the students answers for the quiz to the database.
 function submitQuiz()
 {
+	//Validation checks
 	var c1 = answerCheck();
 	if(c1 == true)
 	{
@@ -124,6 +144,7 @@ function submitQuiz()
 	
 	if(c1 == false)
 	{
+		//Loop through student's answers and set up JSON format for each question/answer
 		var answers = [];
 		for(var i = 0; i < qtype.length; i++)
 		{
@@ -154,6 +175,7 @@ function submitQuiz()
 			
 		}
 		
+		//Send the answers to be saved into the database
 		$.ajax({
 			//async: true, 
 			type: 'POST',
@@ -163,6 +185,7 @@ function submitQuiz()
 		
 			success: function(result){
 				//alert(result);
+				//Sends answers if student accepts the submission
 				swal({
 					title: "Quiz",
 					text: "You have successfully completed the quiz.",
@@ -171,11 +194,11 @@ function submitQuiz()
 					function(isConfirm){
 						if(isConfirm)
 						{
+							//Navigates student back to concept view
 							window.location = '../concept_view/concept_view.html';
 						}
 					}
 				);
-				//swal("Saved"); 
 			}
 		});
 	}

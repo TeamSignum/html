@@ -1,3 +1,11 @@
+/*
+ * Learning Universe
+ * Quiz Builder
+ *
+ * Outlines question templates used to create a quiz.
+ */
+ 
+//Template variables
 var qmc;
 var qtf;
 var qsa;
@@ -6,10 +14,12 @@ var qtype = [];
 var questions = [];
 
 $(function () {
+	//Multiple choice, TF, and short answer templates
     qmc = $("#MCQXX").clone(true);
 	qtf = $("#TFQXX").clone(true);
 	qsa = $("#SAQXX").clone(true);
 	
+	//Add question to the quiz
 	$("#addqmc").click(
         function() {addmc(qmc); });
 		
@@ -22,6 +32,7 @@ $(function () {
 	$("#savequiz").click(
         function() {saveQuiz(); });			
     
+	//Remove templates from initial page load
     $("#MCQXX").remove();
     $("#TFQXX").remove();
 	$("#SAQXX").remove();
@@ -29,6 +40,8 @@ $(function () {
 	loadQuiz();
 });
 
+//Adds a multiple choice question to the quiz.
+//Changes the template IDs to its real IDs
 function addmc(q)
 {
 	var temp = q.clone(true);
@@ -55,6 +68,8 @@ function addmc(q)
 	return false;
 }
 
+//Adds a TF choice question to the quiz.
+//Changes the template IDs to its real IDs
 function addtf(q)
 {
 	var temp = q.clone(true);
@@ -79,6 +94,9 @@ function addtf(q)
 	return false;
 }
 
+//Adds a short answer choice question to the quiz.
+//Changes the template IDs to its real IDs
+//Short answers are currently not being used to allow auto grading.
 function addsa(q)
 {
 	var temp = q.clone(true);
@@ -99,12 +117,15 @@ function addsa(q)
 	return false;
 }
 
+//Deletes a question from the quiz.
 function deleteQ(did)
 {
+	//Grab the question IDs
 	var qid = did.substring(0, 3);
 	var nid = did.substring(3, did.length);
 	var divid;
 	
+	//Find the question type
 	if(qid === "MCD")
 	{
 		divid = "MCQ" + nid;
@@ -120,6 +141,8 @@ function deleteQ(did)
 	
 	$("#"+divid).remove();
 	
+	//Remove question
+	//Re-number and re-ID the questions that followed the deleted question
 	var index = parseInt(nid);
 	for(var i = index; i < qtype.length; i++)
 	{
@@ -171,6 +194,8 @@ function deleteQ(did)
 	return false;
 }
 
+//Validation
+//Checks if all input fields for a question are filled out.
 function inputCheck()
 {
 	var empty = false
@@ -183,6 +208,8 @@ function inputCheck()
 	return empty;
 }
 
+//Validation
+//Checks if an answer has been selected for a question.
 function answerCheck()
 {
 	var empty = false
@@ -197,8 +224,10 @@ function answerCheck()
 	return empty;
 }
 
+//Save the quiz to the database.
 function saveQuiz()
 {
+	//Validation checks
 	var c1 = inputCheck();
 	if(c1 == true)
 	{
@@ -212,6 +241,7 @@ function saveQuiz()
 	
 	if(c1 == false && c2 == false)
 	{
+		//Loop through questions and set up JSON format for each question
 		questions = [];
 		for(var i = 0; i < qtype.length; i++)
 		{
@@ -260,6 +290,7 @@ function saveQuiz()
 			}
 		}
 		
+		//Send the questions to be saved into the database
 		$.ajax({
 			//async: true, 
 			type: 'POST',
@@ -275,6 +306,7 @@ function saveQuiz()
 	return false;
 }
 
+//Load the quiz from the database.
 function loadQuiz()
 {
 	$.ajax({
@@ -286,7 +318,6 @@ function loadQuiz()
 		
 		success: function(result){
 			//alert(result);
-			//alert(result[0].type);
 			populateQuiz(result);
 		}
 	});
@@ -294,8 +325,13 @@ function loadQuiz()
 	return false;
 }
 
+//Populate the question templates from the loaded JSON question data received from the database.
 function populateQuiz(q)
 {
+	//Loop through the questions
+	//Determine question type
+	//Fill in the template info
+	//Append question to the page.
 	for(var i = 0; i < q.length; i++)
 	{
 		var type = q[i].type;
