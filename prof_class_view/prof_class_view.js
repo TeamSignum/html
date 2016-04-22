@@ -1,3 +1,11 @@
+/*
+ * Learning Universe
+ * Professor class view
+ *
+ * Professor's view of the learning map for the class home page.
+ */
+ 
+
 var canvas;
 var mngr;
 var etotal = 0;
@@ -8,6 +16,7 @@ var ypos;
 var timeOut;
 
 $( document ).ready(function() {
+	//Load google charts
 	google.charts.load('current', {packages: ['bar']});
 
 	canvas = new fabric.Canvas('map');
@@ -24,17 +33,22 @@ $( document ).ready(function() {
 	mngr.LoadEdges(mngr, 1, 0);
 	mngr.LoadConnections(1);
 	
+	//Load participant nodes
+	//Get enroll data
+	//Get node completion percentages
 	getParticipants();
 	getEnrolled();
 	getPercents();
 	
 	canvas.hoverCursor = 'pointer';
 	
+	//Animate the participant nodes
 	for(var i = 0; i < mngr.nodes.length; i++)
 	{
 		animateNode(mngr.nodes[i], i);
 	}
 	
+	//Zoom mousewheel event
 	$(window).on('mousewheel', function(e){
 		e.preventDefault();
 		e.stopPropagation();
@@ -55,12 +69,14 @@ $( document ).ready(function() {
 		'mouse:down': function(e) {
 			if(e.target)
 			{
+				//Navigate event for nodes
 				if (e.target.id === "mapNode" || e.target.id === "percNode") 
 				{
 					//mngr.HandleMapNodeSelect(e.target);
 					navigate(e.target.nid);
 					//showPopup();
 				}
+				//Display popup event
 				if(e.target.id === "popupnode")
 				{
 					getStats(e.target.nid, e.target.title.text);
@@ -68,6 +84,7 @@ $( document ).ready(function() {
 			}
 			else
 			{
+				//Panning starting coords
 				var mpointer = canvas.getPointer(e.e);
 				xpos = mpointer.x;
 				ypos = mpointer.y;
@@ -78,6 +95,7 @@ $( document ).ready(function() {
 		'mouse:move': function(e){
 			if(drag == true)
 			{
+				//Panning, change window location to new mouse coords
 				var mpointer = canvas.getPointer(e.e);
 				var newxpos = mpointer.x;
 				var newypos = mpointer.y;
@@ -89,10 +107,12 @@ $( document ).ready(function() {
 		},
 		
 		'mouse:up': function(e){
+			//Set panning off
 			drag = false;
 		},
 	
 		'mouse:over': function(e){
+			//Old highlighting events
 			if(e.target.id === "mapNode" || e.target.id === "cmapNode")
 			{
 				//e.target.setStroke('yellow');				
@@ -101,6 +121,7 @@ $( document ).ready(function() {
 		},
 	
 		'mouse:out': function(e){
+			//Old highlighting events
 			if(e.target.id === "mapNode")
 			{
 				//e.target.setStroke('white');
@@ -113,15 +134,19 @@ $( document ).ready(function() {
 		}
 	});
 
+	//Close popup
 	$( "#xmark" ).click(function() {
 		closePopup();
 	});
 
 });
 
+//Sets up the animation loop for a participant node
 function animateNode(n, ind){
+	//Speed of animation
 	var duration = 10000;
 	
+	//Orbital rotation angles
 	var startAngle = fabric.util.getRandomInt(-180, 0);
 	var endAngle = startAngle + 359;
 	
@@ -136,15 +161,19 @@ function animateNode(n, ind){
 			onChange: function(angle) {
 				angle = fabric.util.degreesToRadians(angle);
 				
+				//Radius of the orbit
 				var radius = 100;
 				radius = radius * mngr.canvasScale;
 				
+				//Get center points to orbit around
 				var cx = n.getCenterPoint().x;
 				var cy = n.getCenterPoint().y;
 				
+				//Calculate the position of the orbit
 				var x = cx + radius * Math.cos(angle);
 				var y = cy + radius * Math.sin(angle);
 				
+				//Update the positions of the participant node
 				n.pnode.originX = 'center';
 				n.pnode.originY = 'center';
 				
@@ -156,7 +185,7 @@ function animateNode(n, ind){
 				n.pnode.ptext.top = y + 2;
 				n.pnode.ptext.left = x;
 				
-				
+				//After updating each participant node render their new positions
 				if(ind == mngr.nodes.length-1)
 				{
 					canvas.renderAll();
@@ -167,6 +196,7 @@ function animateNode(n, ind){
 	})();
 }
 
+//Esc key bind
 $(document).keyup(function(e) {
 
   	// Esc
@@ -175,6 +205,8 @@ $(document).keyup(function(e) {
   	}
 });
 
+//Navigates to specified node's concept page
+//AJAX used to insert into session node's nid to load correct concept page
 function navigate(nid)
 {
 	$.ajax({
@@ -196,18 +228,22 @@ function navigate(nid)
 	return false;
 }
 
+//Display popup
 function showPopup()
 {
+	//Unbind zoom functionality while in popup
 	$(window).unbind('mousewheel');
 	$("#custom_container").show();
 	$("#dim_div").show();
 }
 
+//Close popup
 function closePopup()
 {
 	$("#custom_container").hide();
 	$("#dim_div").hide();
 	
+	//Rebind zoom functionality after exiting popup
 	$(window).on('mousewheel', function(e){
 		e.preventDefault();
 		e.stopPropagation();
@@ -223,6 +259,7 @@ function closePopup()
 	});
 }
 
+//Get number of students enrolled in class
 function getEnrolled()
 {
 	$.ajax({
@@ -241,6 +278,7 @@ function getEnrolled()
 	return false;
 }
 
+//Get class completion stats for a specific node
 function getStats(nid, title)
 {
 	ntitle = title;
@@ -262,18 +300,22 @@ function getStats(nid, title)
 	return false;
 }
 
+//Build google chart for completion stats
 function buildChart(result, title)
 {
+		//Set up graph columns
 		var data = new google.visualization.DataTable();
 		data.addColumn('string', 'Node');
         //data.addColumn('number', 'Total students');
 		data.addColumn('number', 'Completed');
 		
+		//Insert row data
 		for(var i = 0; i < result.length-1; i++)
 		{
 			data.addRow([result[i].title, parseInt(result[i].ctotal)]);
 		}
 		
+		//Update graph info and title
 		if(result.length > 0)
 		{
 			$("#stat_total").text("Students fully completed " + ntitle + ": "+ result[result.length-1].ctotal + " Total students: " + etotal);
@@ -281,6 +323,7 @@ function buildChart(result, title)
 		
 		$("#chart_title").text(ntitle + " statistics");
 		
+		//Set graph options
 		var options = {
 			//chart:{title: 'fdg'},
 			//vAxis: { textPosition: 'none' },
@@ -291,17 +334,19 @@ function buildChart(result, title)
 			vAxis: {viewWindow: {max: etotal, min: 0}}
 		};
 		
+		//Append graph to the page
 		var chart = new google.charts.Bar(document.getElementById('stat_chart'));
 
         chart.draw(data, google.charts.Bar.convertOptions(options));
 }
 
+//Get the number of participants for each node from the database(current number of students working on a node)
 function getParticipants()
 {
+	//Get the ids for each node
 	var temp = [];
 	for(var i = 0; i < mngr.nodes.length; i++)
 	{
-		//alert(mngr.nodes[i].id);
 		temp.push(mngr.nodes[i].nid);
 	}
 	$.ajax({
@@ -313,7 +358,7 @@ function getParticipants()
 		
 		success: function(result){
 			//alert(result);
-			//alert(result[0].nid + " " + result[0].count);
+			//Foreach node update the participant number
 			for(var i = 0; i < result.length; i++)
 			{
 				if(result[i].count != null)
@@ -322,6 +367,7 @@ function getParticipants()
 				}
 			}
 			canvas.renderAll();
+			//Set timeout to update participants every 15 secs
 			timeOut = setTimeout(function(){
 				getParticipants();
 			}, 15000);
@@ -331,8 +377,10 @@ function getParticipants()
 	return false;
 }
 
+//Update the number in the participant node
 function drawParticipants(nid, count)
 {
+	//Find the correct node from the nid
 	var temp;
 	for(var i = 0; i < mngr.nodes.length; i++)
 	{
@@ -342,15 +390,17 @@ function drawParticipants(nid, count)
 		}
 	}
 	
+	//Update the new number
 	temp.pnode.ptext.setText(count);
 }
 
+//Get the completion percentages for each node
 function getPercents()
 {
+	//Get the ids for each node
 	var temp = [];
 	for(var i = 0; i < mngr.nodes.length; i++)
 	{
-		//alert(mngr.nodes[i].id);
 		temp.push(mngr.nodes[i].nid);
 	}
 	$.ajax({
@@ -362,7 +412,6 @@ function getPercents()
 		
 		success: function(result){
 			//alert(result);
-			//alert(result[0].nid + " " + result[0].count);
 			for(var i = 0; i < result.length; i++)
 			{
 				drawPercents(result[i].nid, result[i].count);
@@ -373,8 +422,10 @@ function getPercents()
 	return false;
 }
 
+//Draw the completion percentages in the center of the node
 function drawPercents(nid, count)
 {
+	//Find the correct node from the nid
 	var temp;
 	for(var i = 0; i < mngr.nodes.length; i++)
 	{
@@ -386,6 +437,7 @@ function drawPercents(nid, count)
 	
 	var perc = "0%";
 	
+	//Calculate the percentage
 	if(count != 0)
 	{
 		var p = Math.floor((parseFloat(count) / parseFloat(etotal)) * 100);
@@ -393,6 +445,7 @@ function drawPercents(nid, count)
 		perc = p + "%";
 	}
 	
+	//Add text for the percentage
 	var t = new fabric.Text(perc, {
 			fontFamily: 'arial black',
 			fontSize: 20,
@@ -401,6 +454,7 @@ function drawPercents(nid, count)
 			id: "percNode"
 	});
 	
+	//Place the percent in the center of the node
 	t.originX = 'center';
 	t.originY = 'center';
 	
@@ -410,14 +464,7 @@ function drawPercents(nid, count)
 	
 	t.nid = temp.nid;
 	
-	//var len = t.getWidth()/2;
-	//var cenX = temp.getCenterPoint().x;
-	//t.left = cenX - len;
-	
-	//var len2 = t.getHeight()/2;
-	//var cenY = temp.getCenterPoint().y;
-	//t.top = cenY - len2;
-	
+	//Set the text's controls
 	t.hasControls = false;
 	t.hasBorders = false;
 	t.lockMovementX = true;
