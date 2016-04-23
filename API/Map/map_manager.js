@@ -1,6 +1,6 @@
 /**
  * Learning Universe Node Manager
- * Authors: Daniel Cushing 
+ * Authors: Daniel Cushing and Dustin Reitstetter
  * Date: 11/21/15 
  */ 
 
@@ -322,8 +322,10 @@ MManager.prototype.MoveEdges = function (node){
 	if(node){
 		if(node.lines.length != 0)
 		{
+			//Foreach line connected to the node update its edge coords
 			for(var j = 0; j < node.lines.length; j++)
 			{
+				//Old line movement code
 				if(node.left+2*radius > node.lines[j].x1 && node.left < node.lines[j].x1 && node.top+2*radius > node.lines[j].y1 && node.top < node.lines[j].y1)
 				{
 					//node.lines[j].set({'x1': node.getCenterPoint().x, 'y1': node.getCenterPoint().y});
@@ -332,16 +334,19 @@ MManager.prototype.MoveEdges = function (node){
 				{
 					//node.lines[j].set({'x2': node.getCenterPoint().x, 'y2': node.getCenterPoint().y});	
 				}
+				//If x1,y1 side of line set the lines new x1,y1
 				if(node.lines2[j] == 1)
 				{
 					node.lines[j].set({'x1': node.getCenterPoint().x, 'y1': node.getCenterPoint().y});
 					node.lines[j].setCoords();
 				}
+				//If x2,y2 side of line set lines new x2,y2
 				if(node.lines2[j] == 2)
 				{
 					node.lines[j].set({'x2': node.getCenterPoint().x, 'y2': node.title.top-5});
 					node.lines[j].setCoords();
 				}
+				//Recalculate the angle for the triangle for directed arrows
 				var x1 = node.lines[j].x1;
 				var y1 = node.lines[j].y1;
 				var x2 = node.lines[j].x2;
@@ -372,6 +377,7 @@ MManager.prototype.DrawEdgeBetweenNodes = function(node){
 		this.to = node;
 
 		var line;
+		//Draw line
 		if(this.solid === true)
 		{
 			line = new fabric.Line([this.from.getCenterPoint().x, this.from.getCenterPoint().y, this.to.getCenterPoint().x, this.to.getCenterPoint().y], {
@@ -394,6 +400,7 @@ MManager.prototype.DrawEdgeBetweenNodes = function(node){
 			});
 		}
 
+		//Draw the triangle
 		var triangle = new fabric.Triangle({
   			width: 20,
   			height: 30, 
@@ -402,17 +409,20 @@ MManager.prototype.DrawEdgeBetweenNodes = function(node){
   			top: this.to.top
 		});
 		
+		//Set line controls
 		line.eid = this.eid;
 		line.hasControls = line.hasBorders = false;
 		line.lockMovementX = line.lockMovementY = true;
 		line.perPixelTargetFind = true;
 		line.arrow = triangle;
 
+		//Add line to each node connected to the line
 		this.from.lines.push(line);
 		this.from.lines2.push(1);
 		this.to.lines.push(line);
 		this.to.lines2.push(2);
 		
+		//Add line to map manager
 		var temp = {
 			line: line,
 			id: this.eid
@@ -431,6 +441,7 @@ MManager.prototype.DrawEdgeBetweenNodes = function(node){
  */ 
 MManager.prototype.DrawEdge = function(eid, x1, y1, x2, y2, type, mode){
 	var l;
+	//Draw line
 	if(type === "solid")
 	{
 		l = new fabric.Line([x1, y1, x2, y2], {
@@ -451,23 +462,21 @@ MManager.prototype.DrawEdge = function(eid, x1, y1, x2, y2, type, mode){
 		});
 	}
 	
+	//Set line controls
 	l.eid = eid;
 	l.hasControls = l.hasBorders = false;
 	l.lockMovementX = l.lockMovementY = true;
 	l.perPixelTargetFind = true;
 	l.selectable = false;
 	
+	//Add line to map manager
 	var temp = {
 		line: l,
 		id: eid
 	};
 	
+	//Calculate angle for triangle
 	var headLength = 15;
-	
-	//var x1 = l.x1;
-	//var y1 = l.y1;
-	//var x2 = l.x2;
-	//var y2 = l.y2;
 					
 	var dx = x2 - x1;
 	var dy = y2 - y1;
@@ -477,6 +486,7 @@ MManager.prototype.DrawEdge = function(eid, x1, y1, x2, y2, type, mode){
 	angle *= 180 / Math.PI;
 	angle += 90;
 	
+	//Draw triangle
 	var triangle = new fabric.Triangle({
 		angle: angle,
 		fill: 'white',
@@ -490,6 +500,7 @@ MManager.prototype.DrawEdge = function(eid, x1, y1, x2, y2, type, mode){
 		selectable: false
 	});
 	
+	//Set triangle controls
 	triangle.hasBorders = false;
 	triangle.hasControls = false;
 	triangle.lockMovementX = true;
@@ -526,6 +537,7 @@ MManager.prototype.AddNodeToCanvas = function(node){
  * Adds the text to the node.
  */
 MManager.prototype.GenText = function(node){
+	//Generate title for node
 	if(!node.title){
 		var title = new fabric.IText('Name', {
 			fontFamily: 'arial black',
@@ -536,12 +548,14 @@ MManager.prototype.GenText = function(node){
 			id: "nodeText"
 		});
 		
+		//Set scale
 		title.scaleX = title.scaleX * this.canvasScale;
 		title.scaleY = title.scaleY * this.canvasScale;
 		title.top = node.top - (20 * this.canvasScale);
 	
 		title.node = node;
 
+		//Center title over node
 		var len = title.getWidth()/2;
 		var cenX = node.getCenterPoint().x;
 		title.left = cenX - len;
@@ -556,6 +570,7 @@ MManager.prototype.GenText = function(node){
 		
 		this.canvas.add(title);
 		
+		//Add delete button for node
 		var dt = new fabric.Text("X", {
 			fontFamily: 'arial black',
 			fill: 'white',
@@ -565,6 +580,7 @@ MManager.prototype.GenText = function(node){
 			id: "deleteNode"
 		});
 		
+		//Scale delete button
 		dt.scaleX = dt.scaleX * this.canvasScale;
 		dt.scaleY = dt.scaleY * this.canvasScale;
 		dt.top = node.top + (10 * this.canvasScale);
@@ -573,6 +589,7 @@ MManager.prototype.GenText = function(node){
 		node.deletenode = dt;
 		dt.node = node;
 		
+		//Set controls
 		dt.hasControls = false;
 		dt.hasBorders = false;
 		dt.lockMovementX = true;
@@ -666,12 +683,16 @@ MManager.prototype.LoadNodePopup = function(node, id, type){
 	return false; 
 }
 
+//Set node's line connections
 MManager.prototype.updateCon = function(result)
 {
+	//Loop through the lines
 	for(var i = 0; i < result.length; i++)
 	{
+		//Loop through the nodes
 		for(var j = 0; j < this.nodes.length; j++)
 		{
+			//If the line is connected to the node, add line to the node
 			if(this.nodes[j].nid == result[i].nid)
 			{
 				for(var k = 0; k < this.edges.length; k++)  
@@ -687,6 +708,7 @@ MManager.prototype.updateCon = function(result)
 	}
 }
 
+//Gets the line/node connections from the database
 MManager.prototype.LoadConnections = function(level){
 	//alert("h");
 	$.ajax({
@@ -823,6 +845,7 @@ MManager.prototype.SaveMap = function(level){
 		edges.push(temp);
 	}
 	
+	//Grab all the node/line connection info
 	var connections = [];
 	for(var i = 0; i < this.nodes.length; i++)
 	{
@@ -866,6 +889,7 @@ MManager.prototype.SaveMap = function(level){
 	return false;
 }
 
+//Delete a node from the learning map
 MManager.prototype.DeleteN = function(node, level){
 	var nid = node.nid;
 	
@@ -875,6 +899,7 @@ MManager.prototype.DeleteN = function(node, level){
 	{
 		if(this.nodes[i].nid != node.nid)
 		{
+			//Loop through all of the node's lines
 			for(var j = 0; j < this.nodes[i].lines.length; j++)
 			{
 				for(var k = 0; k < node.lines.length; k++)
