@@ -1,8 +1,12 @@
 <?php
+//Learning Universe
+//PHP for map_manager.js
+
 session_start();
 
 include '../../imports/ChromePhp.php';
 
+//Loads the learning map
 if(isset($_POST["map"]))
 {
 	$map = $_POST["map"];
@@ -11,6 +15,7 @@ if(isset($_POST["map"]))
 	$level = $_POST["level"];
 	$iduser = $_SESSION["userid"];
 	
+	//Load the nodes
 	if($map == 1)
 	{
 		try{
@@ -33,6 +38,7 @@ if(isset($_POST["map"]))
 			$statement->execute();
 			$result = $statement->fetchAll(PDO::FETCH_ASSOC);
 
+			//Load completion data for each node
 			foreach($result as $row)
 			{
 				if($level == 2)
@@ -74,6 +80,7 @@ if(isset($_POST["map"]))
 						$complete = 0;
 				}
 				
+				//Convert node data into JSON format
 				$top = $row['top'];
 				$left = $row['left'];
 				$radius = $row['radius'];
@@ -90,6 +97,7 @@ if(isset($_POST["map"]))
 			echo $e->getMessage();
 		}
 	}
+	//Load the lines
 	if($map == 2)
 	{
 		try{
@@ -105,13 +113,6 @@ if(isset($_POST["map"]))
 			{
 				$query = "SELECT * FROM edges WHERE edges.cid = '$cid'";
 			}
-			
-			//if ($parent){
-				//$query = "SELECT * FROM edges WHERE edges.parent = 1";
-			//}
-			//else{
-				//$query = "SELECT * FROM edges WHERE edges.cid = '$cid'";
-			//}
 			
 			$statement = $DB->prepare($query);
 			$statement->execute();
@@ -130,6 +131,7 @@ if(isset($_POST["map"]))
 					$eid = $row['eid'];
 				}
 				
+				//Convert node data into JSON format
 				$x1 = $row['x1'];
 				$y1 = $row['y1'];
 				$x2 = $row['x2'];
@@ -144,7 +146,7 @@ if(isset($_POST["map"]))
 			echo $e->getMessage();
 		}
 	}
-	
+	//Load the node/line connections
 	if($map == 3)
 	{
 		try{
@@ -167,6 +169,7 @@ if(isset($_POST["map"]))
 			
 			$connections = array();
 			
+			//Convert node data into JSON format
 			foreach($result as $row)
 			{
 				if($level == 2)

@@ -34,6 +34,7 @@
 				$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 				$DB->beginTransaction();
 			
+				//Level 2 of the learning map
 				if($level == 2)
 				{
 					//Insert the node into the database
@@ -66,8 +67,10 @@
 					$statement->execute();
 					$DB->commit();
 				}
+				//Level 1 of the learning map
 				else
 				{
+					//Insert the node into the database
 					//$query = "REPLACE into `nodes` (`cid`, `nid`, `top`, `left`, `radius`, `fill`, `stroke`, `strokeWidth`, `type`, `title`) values (?,?,?,?,?,?,?,?,?,?)";
 					//$query = "REPLACE into `nodes` (`cid`, `nid`, `top`, `left`, `type`, `title`) values (?,?,?,?,?,?)";
 					$query = "INSERT into `nodes` (`cid`, `nid`, `top`, `left`, `type`, `title`) values (:cid,:nid,:top,:left,:type,:title) 
@@ -101,10 +104,10 @@
 		}
 	}
 	
+	//Save the edges
 	if(isset($_POST["edges"]))
 	{
 		$edges = $_POST["edges"];
-		//$parent = $_POST["parent"];
 		$level = $_POST["level"];
 		
 		foreach($edges as $line)
@@ -122,8 +125,10 @@
 				$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 				$DB->beginTransaction();
 				
+				//Level 2 of the learning map
 				if($level == 2)
 				{
+					//Insert line into the DB
 					$query = "REPLACE into `edges2` (`cid`, `nid`, `eid2`, `x1`, `y1`, `x2`, `y2`, `type`) values (?,?,?,?,?,?,?,?)";
 			
 					$statement = $DB->prepare($query);
@@ -142,8 +147,10 @@
 					$statement->execute();
 					$DB->commit();
 				}
+				//Level 1 of the learning map
 				else
 				{
+					//Insert line into the DB
 					$query = "REPLACE into `edges` (`cid`, `eid`, `x1`, `y1`, `x2`, `y2`, `type`) values (?,?,?,?,?,?,?)";
 			
 					$statement = $DB->prepare($query);
@@ -168,6 +175,7 @@
 		}
 	}
 	
+	//Save node/line connections
 	if(isset($_POST["connections"]))
 	{
 		$connections = $_POST['connections'];
@@ -188,8 +196,10 @@
 					$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 					$DB->beginTransaction();
 					
+					//Level 2 of the learning map
 					if($level == 2)
 					{
+						//Insert connection into the DB
 						$query = "REPLACE into `connected2` (`cid`, `nid`, `nid2`, `eid2`, `side`) values (?,?,?,?,?)";
 					
 						$statement = $DB->prepare($query);
@@ -205,8 +215,10 @@
 						$statement->execute();
 						$DB->commit();
 					}
+					//Level 1 of the learning map
 					else
 					{
+						//Insert connection into the DB
 						$query = "REPLACE into `connected` (`cid`, `nid`, `eid`, `side`) values (?,?,?,?)";
 					
 						$statement = $DB->prepare($query);
@@ -228,6 +240,7 @@
 		}
 	}
 	
+	//Get the last id for nodes and lines
 	if(isset($_POST["id"]))
 	{
 		$id = $_POST["id"];
@@ -240,10 +253,12 @@
 				$DB = new PDO("mysql:host=ec2-52-33-118-140.us-west-2.compute.amazonaws.com;dbname=LU", 'Signum', 'signumDB4');
 				$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 				
+				//Level 2 of the learning map
 				if($level == 2)
 				{
 					$nid = $_SESSION['nid'];
 				
+					//Select the last node id
 					$query = "SELECT MAX(nid2) as mnid FROM nodes2 WHERE cid = '$cid' AND nid = '$nid'";
 				
 					$statement = $DB->prepare($query);
@@ -252,6 +267,7 @@
 				
 					$mnid = $result['mnid'];
 				
+					//Select the last line id
 					$query = "SELECT MAX(eid2) as meid FROM edges2 WHERE cid = '$cid' AND nid = '$nid'";
 				
 					$statement = $DB->prepare($query);
@@ -264,8 +280,10 @@
 				
 					echo json_encode($mids);
 				}
+				//Level 1 of the learning map
 				else
 				{
+					//Select the last node id
 					$query = "SELECT MAX(nid) as mnid FROM nodes WHERE cid = '$cid'";
 				
 					$statement = $DB->prepare($query);
@@ -274,6 +292,7 @@
 				
 					$mnid = $result['mnid'];
 				
+					//Select the last line id
 					$query = "SELECT MAX(eid) as meid FROM edges WHERE cid = '$cid'";
 				
 					$statement = $DB->prepare($query);
@@ -295,6 +314,7 @@
 		}
 	}
 	
+	//Set node id for navigation
 	if(isset($_POST["direct"]))
 	{
 		$_SESSION["nid"] = $_POST["direct"];
@@ -309,6 +329,7 @@
 		}
 	}
 	
+	//Set node as completed for the student
 	if(isset($_POST["complete"]))
 	{
 		if($_POST["complete"] == 1)
@@ -327,6 +348,7 @@
 				$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 				$DB->beginTransaction();
 				
+				//Insert the completed node
 				$query = "INSERT into completed (idusers,cid,nid,nid2,complete,cdate) values (?,?,?,?,?,?)";
 				
 				$statement = $DB->prepare($query);
@@ -348,6 +370,7 @@
 		}
 	}
 	
+	//Deletes the node from the database
 	if(isset($_POST["deleten"]))
 	{
 		$level = $_POST["level"];
@@ -357,17 +380,20 @@
 			$DB = new PDO("mysql:host=ec2-52-33-118-140.us-west-2.compute.amazonaws.com;dbname=LU", 'Signum', 'signumDB4');
 			$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			
+			//Level 2 of the learning map
 			if($level == 2)
 			{
 				$nid = $_SESSION["nid"];
 				if(isset($_POST["cons"]))
 				{
 					$cons = $_POST["cons"];
+					//Loop the the node's line connections
 					foreach($cons as $c)
 					{
 						$nid2 = $c['nid'];
 						$eid2 = $c['eid'];
 						
+						//Delete the connection
 						$DB->beginTransaction();
 						$query = "DELETE FROM connected2 WHERE cid='$cid' AND nid='$nid' AND nid2='$nid2' AND eid2='$eid2'";
 					
@@ -376,11 +402,14 @@
 						$DB->commit();
 					}
 				}
+				
 				if(isset($_POST["dedges"]))
 				{
 					$dedges = $_POST["dedges"];
+					//Loop the the node's lines
 					foreach($dedges as $e)
 					{
+						//Delete the line
 						$DB->beginTransaction();
 						$query = "DELETE FROM edges2 WHERE cid='$cid' AND nid='$nid' AND eid2='$e'";
 					
@@ -393,6 +422,7 @@
 				{
 					$nid2 = $_POST["dnid"];
 					
+					//Delete the node
 					$DB->beginTransaction();
 					$query = "DELETE FROM nodes2 WHERE cid='$cid' AND nid='$nid' AND nid2='$nid2'";
 					
@@ -401,16 +431,19 @@
 					$DB->commit();
 				}
 			}
+			//Level 1 of the learning map
 			if($level == 1)
 			{
 				if(isset($_POST["cons"]))
 				{
+					//Loop the the node's line connections
 					$cons = $_POST["cons"];
 					foreach($cons as $c)
 					{
 						$nid = $c['nid'];
 						$eid = $c['eid'];
 						
+						//Delete the connection
 						$DB->beginTransaction();
 						$query = "DELETE FROM connected WHERE cid='$cid' AND nid='$nid' AND eid='$eid'";
 					
@@ -422,8 +455,10 @@
 				if(isset($_POST["dedges"]))
 				{
 					$dedges = $_POST["dedges"];
+					//Loop the the node's lines
 					foreach($dedges as $e)
 					{
+						//Delete the line
 						$DB->beginTransaction();
 						$query = "DELETE FROM edges WHERE cid='$cid' AND eid='$e'";
 					
@@ -476,6 +511,7 @@
 		}
 	}
 	
+	//Set node id to naviagte to quiz
 	if(isset($_POST["directq"]))
 	{
 		$_SESSION["nid2q"] = $_POST["directq"];
