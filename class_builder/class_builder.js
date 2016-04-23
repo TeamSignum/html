@@ -36,6 +36,7 @@ $( document ).ready(function() {
 	// We manually add Nodes and Edges to toolbar because it will be different for each view. But the dividing line and the lock and upload icon 
 	// should stay the same (added on when we create map manager).
 	
+	//Set up the titles and icons for the toolbar
 	var ctext = new fabric.Text("Concept Nodes", {
 		fontFamily: 'arial black',
 		fontSize: 17,
@@ -50,6 +51,7 @@ $( document ).ready(function() {
 	ctext.selectable = false;
 	canvas.add(ctext);
 
+	//Large concept tool
 	var imgElement = document.getElementById('my-image1');
 	var c = new fabric.Image(imgElement, {
 	  left: 45,
@@ -62,6 +64,7 @@ $( document ).ready(function() {
 	c.hasControls = c.hasBorders = false;
 	canvas.add(c);
 
+	//Medium concept tool
 	c = new fabric.Image(imgElement, {
 	  left: 55,
 	  top: 265,
@@ -73,6 +76,7 @@ $( document ).ready(function() {
 	c.hasControls = c.hasBorders = false;
 	canvas.add(c);
 
+	//Small concept tool
 	c = new fabric.Image(imgElement, {
 	  left: 65,
 	  top: 380,
@@ -84,6 +88,7 @@ $( document ).ready(function() {
 	c.hasControls = c.hasBorders = false;
 	canvas.add(c);
 	
+	//Line editors
 	var ltext = new fabric.Text("Line Editors", {
 		fontFamily: 'arial black',
 		fontSize: 17,
@@ -103,6 +108,7 @@ $( document ).ready(function() {
 
 	canvas.hoverCursor = 'pointer';
 	
+	//Zoom mousewheel event
 	$(window).on('mousewheel', function(e){
 		e.preventDefault();
 		e.stopPropagation();
@@ -124,6 +130,7 @@ $( document ).ready(function() {
 
 	    	mngr.LockOrUpload(e.target, 1); 
 
+			//Event to copy a node onto the map
 	    	if(mngr.lineEdit == false && (e.target.id === "tb_largeCircle" || e.target.id === "tb_mediumCircle" || e.target.id === "tb_smallCircle" ))
 	    	{
 				if(e.target.id === "tb_largeCircle")
@@ -137,11 +144,13 @@ $( document ).ready(function() {
 					
 		    	mngr.CopyNode(e.target, mapNodeId, "concept");
 		    }
+			//Line editor event
 			else if(e.target.id === "tb_lineSolid")
 			{
 				mngr.LineEditor(e.target, true);
 				if(mngr.lineEdit == true)
 				{
+					//Lock all the nodes on the canvas to allows lines to be dragged from one node to the next
 					e.target.opacity = .5;
 					var cobjs = canvas.getObjects();
 					for(var i = 0; i < cobjs.length; i++)
@@ -158,6 +167,7 @@ $( document ).ready(function() {
 				}
 				else
 				{
+					//Unlock all the nodes
 					e.target.opacity = 1;
 					var cobjs = canvas.getObjects();
 					for(var i = 0; i < cobjs.length; i++)
@@ -178,6 +188,7 @@ $( document ).ready(function() {
 				mngr.LineEditor(e.target, false);
 				if(mngr.lineEdit == true)
 				{
+					//Lock all the nodes on the canvas to allows lines to be dragged from one node to the next
 					e.target.opacity = .5;
 					var cobjs = canvas.getObjects();
 					for(var i = 0; i < cobjs.length; i++)
@@ -194,6 +205,7 @@ $( document ).ready(function() {
 				}
 				else
 				{
+					//Unlock all the nodes
 					e.target.opacity = 1;
 					var cobjs = canvas.getObjects();
 					for(var i = 0; i < cobjs.length; i++)
@@ -211,16 +223,20 @@ $( document ).ready(function() {
 			}
 			else if(mngr.lineEdit == false && (e.target.id === mapNodeId || e.target.id === "popupnode"))
 			{
+				//Handle node and popup selections
 				mngr.HandleMapNodeSelect(e.target);
 			}
 			else if(e.target.id === "deleteNode")
 			{
+				//Delete a node
 				mngr.DeleteNode(e.target.node, 1);
 			}
 			else if(mngr.lineEdit == true)
 			{
+				//If we are on a node create a new line
 				if(e.target.id === "mapNode")
 				{
+					//Set initial line coords x1,y1 = x2,y2
 					fromn = e.target;
 					isDown = true;
 					var x = e.target.getCenterPoint().x;
@@ -248,6 +264,7 @@ $( document ).ready(function() {
 						});
 					}
 					
+					//Calculate the correct angle for the triangle for direct arrow
 					var headLength = 15;
 					
 					var x1 = x;
@@ -263,6 +280,7 @@ $( document ).ready(function() {
 					angle *= 180 / Math.PI;
 					angle += 90;
 					
+					//Create the triangle
 					var triangle = new fabric.Triangle({
 						angle: angle,
 						fill: 'white',
@@ -287,6 +305,7 @@ $( document ).ready(function() {
 	    }
 		else
 		{
+			//Panning starting coords
 			var mpointer = canvas.getPointer(e.e);
 			xpos = mpointer.x;
 			ypos = mpointer.y;
@@ -297,6 +316,7 @@ $( document ).ready(function() {
 	  'mouse:move': function(e) {
 		if(drag == true)
 		{
+			//Panning, change window location to new mouse coords
 			var mpointer = canvas.getPointer(e.e);
 			var newxpos = mpointer.x;
 			var newypos = mpointer.y;
@@ -314,6 +334,7 @@ $( document ).ready(function() {
 		{
 			if(e.target)
 			{
+				//As the line is being dragged if we hit a node snap the end of the line to the top of the node
 				var temp;
 				if(e.target.id === "mapNode")
 				{
@@ -336,6 +357,7 @@ $( document ).ready(function() {
 				var y = temp.title.top - 5;
 				cline.set({ x2: x, y2: y });
 				
+				//Recalculate the angle for the triangle for the directed arrow
 				var x1 = cline.x1;
 				var y1 = cline.y1;
 				var x2 = x;
@@ -355,9 +377,11 @@ $( document ).ready(function() {
 			}
 			else
 			{
+				//As the line is being dragged update the end of the line to the current mouse coords
 				var pointer = canvas.getPointer(e.target);
 				cline.set({ x2: pointer.x, y2: pointer.y });
 				
+				//Recalculate the angle for the triangle for the directed arrow
 				var x1 = cline.x1;
 				var y1 = cline.y1;
 				var x2 = pointer.x;
@@ -386,6 +410,7 @@ $( document ).ready(function() {
 		{
 			if(e.target)
 			{
+				//On mouse up if we are on a node set the final coords of the line
 				var temp;
 				if(e.target.id === "mapNode")
 				{
@@ -406,6 +431,7 @@ $( document ).ready(function() {
 				
 				if(temp.nid != fromn.nid)
 				{
+					//Set the lines controls
 					cline.eid = mngr.eid;
 					cline.hasControls = cline.hasBorders = false;
 					cline.lockMovementX = cline.lockMovementY = true;
@@ -416,11 +442,13 @@ $( document ).ready(function() {
 					cline.trian.lockMovementX = true;
 					cline.trian.lockMovementY = true;
 				
+					//Push the line to the to and from nodes
 					fromn.lines.push(cline);
 					fromn.lines2.push(1);
 					temp.lines.push(cline);
 					temp.lines2.push(2);
 				
+					//Add the line to the map manager
 					var linetemp = {
 						line: cline,
 						id: mngr.eid
@@ -433,6 +461,7 @@ $( document ).ready(function() {
 			}
 			else
 			{
+				//On mouse up if we are not on a node delete the line
 				canvas.remove(cline);
 				canvas.remove(cline.trian);
 			}
@@ -466,11 +495,13 @@ $( document ).ready(function() {
 	  'mouse:over': function(e){
 		if(e.target.id === "deleteNode")
 		{
+			//Highlight delete X on mouseover
 			e.target.fill = 'red';
 			canvas.renderAll();
 		}
 		if(e.target.id === "tb_largeCircle" || e.target.id === "tb_mediumCircle" || e.target.id === "tb_smallCircle" || e.target.id === "tb_lineSolid" || e.target.id === "tb_lineDotted")
 		{
+			//Set timeout for tooltips to appear
 			timeOut = setTimeout(function(){
 				showTooltip(e.target.id, e.target.top, e.target.left);
 			}, 1000);
@@ -481,11 +512,13 @@ $( document ).ready(function() {
 	  'mouse:out': function(e){
 		if(e.target.id === "deleteNode")
 		{
+			//Dehighlight delete X on mouseout
 			e.target.fill = 'white';
 			canvas.renderAll();
 		}
 		if(e.target.id === "tb_largeCircle" || e.target.id === "tb_mediumCircle" || e.target.id === "tb_smallCircle" || e.target.id === "tb_lineSolid" || e.target.id === "tb_lineDotted")
 		{
+			//Hide tooltip on mouseout
 			clearTimeout(timeOut);
 			hideTootltip(e.target.id);
 		}
@@ -501,20 +534,24 @@ $( document ).ready(function() {
 	  }
 	});
 
+	//Save map button
 	$( "#p_Save" ).click(function() {
 		mngr.SavePopup();
 	});
 
+	//Close popup button
 	$( "#p_Cancel" ).click(function() {
 		mngr.HidePopup();
 	});
 
 });
 
+//Display helper message for the page
 function HelpMessageHelper(){
 	DisplayHelpMessage("class_builder");
 }
 
+//Display tooltip for current tool
 function showTooltip(type, top, left)
 {
 	var ttid = type + "tt";
@@ -522,6 +559,7 @@ function showTooltip(type, top, left)
     $("#" + ttid).css({"position": "absolute", "top": top, "left": left, "background-color": "white", "width": "250px", "padding": "8px", "border-radius": "5px"});
 }
 
+//Hide tooltip
 function hideTootltip(type)
 {
 	var ttid = type + "tt";
