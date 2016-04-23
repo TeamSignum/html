@@ -6,6 +6,7 @@ session_start();
 
 try{
 
+	// Loads a node pop up. A node pop up has an nid, a classid, and a type. 
 	$nid = $_POST["nid"];
 	$cid = $_SESSION["classid"];
 	$type = $_POST["type"];
@@ -15,7 +16,9 @@ try{
 	$DB = new PDO("mysql:host=ec2-52-33-118-140.us-west-2.compute.amazonaws.com;dbname=LU", 'Signum', 'signumDB4');
 	$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+	// If the node type is concept load the pop up from the concept table.
 	if($type == "concept"){
+		// if in the class view.
 		if($classOrConcept == 0){
 			$query1 = "SELECT * FROM `popupconcept` WHERE `nid` = ? AND `cid` = ?";
 			
@@ -49,6 +52,7 @@ try{
 			$statement2->bindParam(3, $cid);
 		}
 	}
+	// If the node type is assignment load pop up from assignmen popup table.
 	else if($type == "assignment"){
 		$nidd = $_SESSION['nid'];
 		$nid2 = $nid;
@@ -67,6 +71,7 @@ try{
 		$statement2->bindParam(2, $nid2);
 		$statement2->bindParam(3, $cid);
 	}
+	// Otherwise type is quiz and load pop up from quiz table.
 	else{
 		$nidd = $_SESSION['nid'];
 		$nid2 = $nid;
@@ -86,12 +91,15 @@ try{
 		$statement2->bindParam(3, $cid);
 	}
 
+	// Exectue queries
 	$statement1->execute();
 	$statement2->execute();
 
+	// Gather result
 	$result1 = $statement1->fetch(PDO::FETCH_ASSOC);
 	$result2 = $statement2->fetch(PDO::FETCH_ASSOC);
 
+	// Configure result for concept pop up;
 	if($type == "concept"){
 		$title = $result1['title'];
 		$description = $result1['description'];
@@ -103,6 +111,7 @@ try{
 
 		echo json_encode($popup);
 	}
+	// Configure result for assignment popup
 	else if($type == "assignment"){
 		$title = $result1['title'];
 		$description = $result1['description'];
@@ -114,6 +123,7 @@ try{
 
 		echo json_encode($popup);
 	}
+	// Configure result for quiz popup.
 	else{
 		$title = $result1['title'];
 		$description = $result1['description'];

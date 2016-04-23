@@ -4,6 +4,7 @@ include '../../imports/ChromePhp.php';
 
 try{
 
+	// Loads a class popup from that database. A class pop  up has a cid.
 	$cid = $_POST["cid"];
 
 	// Setup connection 

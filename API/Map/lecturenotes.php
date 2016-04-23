@@ -1,5 +1,7 @@
 <?php
 
+// Uploads lecture notes and saves the path to the database.
+
 session_start();
 
 include '../../imports/ChromePhp.php';

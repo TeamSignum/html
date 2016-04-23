@@ -1,3 +1,5 @@
+
+// help messages for class/concept builder and class/concept view.
 function DisplayHelpMessage(page){
 	var help_message = "";
 	switch (page){

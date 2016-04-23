@@ -16,6 +16,7 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
     }
 }
 
+// Loads the discussion forum associated with the node with id $nid.
 function LoadDiscussion(){
 	$nid     = $_POST["nid"];
 	$classOrConcept = $_POST["classOrConcept"];
@@ -64,6 +65,7 @@ function LoadDiscussion(){
 	}
 }
 
+// Saves a discussion forum.
 function SaveDiscussion(){
 	$nid     = $_POST["nid"];
 	$level   = $_POST["level"];

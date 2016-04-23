@@ -1,5 +1,6 @@
 <?php
 
+	// Downloads lecture notes.
    	$file = basename($_GET['filename']);
 	$file = '../../lecturenotes/'.$file;
 

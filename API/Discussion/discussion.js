@@ -7,6 +7,7 @@
  var classOrConcept;
  var myname = "";
 
+// Loads a discussion for node with id @nid
 function LoadDiscussion(nid, _classOrConcept){
 
 	classOrConcept = _classOrConcept;
@@ -14,6 +15,7 @@ function LoadDiscussion(nid, _classOrConcept){
 	dnid = nid;
 	$("#lvl0").html("");
 
+	// Fetch the name of the current user.
 	$.ajax({
 		async: true, 
 		type: 'POST', 
@@ -24,6 +26,7 @@ function LoadDiscussion(nid, _classOrConcept){
 		}
 	}); 
 
+	// Load the discussion messages
 	$.ajax({
 		async: true, 
 		type: 'POST', 
@@ -38,6 +41,7 @@ function LoadDiscussion(nid, _classOrConcept){
 	return false;
 }
 
+// Constructs the discussion forum by adding text containers for each message in result
 function UseLoadData(result){
 	if(result.length > 0){
 		did = result[result.length - 1]["id"]; 
@@ -55,6 +59,7 @@ function UseLoadData(result){
 	}
 }
 
+// Saves a reply to the database. A reply has a parentid (message that was replied to)
 function SubmitReply(textarea, containerid, parentid){
 
 	var content = textarea.value;
@@ -62,6 +67,7 @@ function SubmitReply(textarea, containerid, parentid){
 	var level = 1;
 	did++;
 
+	// Ajax async save reply to database and add text container
 	$.ajax({
 		async: true, 
 		type: 'POST', 
@@ -77,9 +83,8 @@ function SubmitReply(textarea, containerid, parentid){
 	return false;
 }
 
-/*
- * @param id - id of the text field
- */
+// Event called when a new question (level 0) is submitted. Saves the question to the database and 
+// writes it out in a text container.
 function SubmitNewQuestion(textarea, nid, level, container){
 
 	var content = textarea.value;
@@ -99,6 +104,7 @@ function SubmitNewQuestion(textarea, nid, level, container){
 	return false;
 }
 
+// Add a reply text box.
 function AddReplyContainer(container, id){
 	$('*[id^="reply"]').html("");
 	
@@ -117,10 +123,13 @@ function AddReplyContainer(container, id){
 	container.innerHTML = html;
 }
 
+// Deletes all reply text boxes.
 function ClearReplyContainer(containerid){
 	$('*[id^="reply"]').html("");
 }
 
+// Constructs a text container with id and contents of [name]: content
+// E.g [Dan]: What is a loop?
 function AddTextContainer(content, container, id, name){
 	var html = `
 	  <div class="textcontainer" id="d` + id + `">
@@ -135,6 +144,8 @@ function AddTextContainer(content, container, id, name){
 	container.innerHTML = container.innerHTML + html;
 }
 
+// See AddTextContainer
+// Does not add a assoicated reply container.
 function AddTextContainer2(content, container, id, name){
 	var html = `
 	  <div class="textcontainer" id="d` + id + `" style="font-weight: bold; margin-bottom: 20px; font-size: 14px;">

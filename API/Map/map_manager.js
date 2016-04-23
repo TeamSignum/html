@@ -70,6 +70,7 @@ MManager.prototype.CopyNode = function(node, new_id, type){
 	c.title;
 	this.canvas.add(c);
 
+	// set the id, nid, type, lines, lines2
 	node.id = new_id;
 	node.nid = this.nid;
 	node.type = type;
@@ -101,6 +102,7 @@ MManager.prototype.HandleMapNodeSelect = function (node){
 	}
 }
 
+// Gets the nid of the currnt node.
 MManager.prototype.GetCurrentId = function(result){
 	return this.crrnt.nid;
 }
@@ -108,6 +110,7 @@ MManager.prototype.GetCurrentId = function(result){
 //Draw a node onto the canvas
 MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, fill, complete, availabledate, mode){
 
+	// Different ndoes will use different images.
 	var imgElement;
 	if(type == "concept"){
 		if(complete && mode == 0){
@@ -164,8 +167,10 @@ MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, f
      	}
   	}
 
+  	// Set a fixed width and height to force these images to always load.
 	c.width = 463;
 	c.height = 455;
+	// Scale the image down because its to big.
 	c.scale(.25);
 	c.hasBorders = c.hasControls = false;
 	canvas.add(c);
@@ -243,6 +248,7 @@ MManager.prototype.DrawNode = function(top, left, radius, type, title, nodeID, f
 		canvas.add(pt);
 	}
 	
+	// If int he builder add an X for deleting ndoes.
 	if(mode == 1)
 	{
 		var dt = new fabric.Text("X", {
@@ -451,6 +457,7 @@ MManager.prototype.DrawEdge = function(eid, x1, y1, x2, y2, type, mode){
 			id: "solid"
 		});
 	}
+	// Draw dotted line.
 	if(type === "dotted")
 	{
 		l = new fabric.Line([x1, y1, x2, y2], {
@@ -522,10 +529,12 @@ MManager.prototype.DrawEdge = function(eid, x1, y1, x2, y2, type, mode){
  */
 MManager.prototype.AddNodeToCanvas = function(node){
 	if(!this.lineEdit){
+		// Check bounds on node and remove it if it goes out of bounds.
 		if(node.left < (180*this.canvasScale) && node.id === "mapNode"){
 				this.canvas.remove(node.title);
 				this.canvas.remove(node); 
 		}
+		// If in bounds add it and add the text and pop up node.
 		else if(node.left > (180*this.canvasScale) && node.id === "mapNode"){
 			this.CreatePopupNode(node, this.CreatePopup(node.type), !node.title); 
 			this.GenText(node);
@@ -607,15 +616,18 @@ MManager.prototype.MoveNode = function (node){
 	{
 		node.setCoords();
 	}
+	// Move the node title
 	if (node.title){
 		node.title.set({'top': node.top - (20*this.canvasScale), 'left': (node.getCenterPoint().x - node.title.getWidth()/2)});
 		node.title.setCoords();
 	}
+	// Move the pop up ndoe.
 	if (node.popupnode){
 		var radius = node.width * node.scaleX * .5;
 		node.popupnode.set({'top': node.top + 10, 'left': node.left + (2 * radius) - 10});
 		node.popupnode.setCoords();
 	}
+
 	if(node.deletenode){
 		node.deletenode.top = node.top + 10;
 		node.deletenode.left = node.left;
@@ -648,9 +660,11 @@ MManager.prototype.LockCanvas = function(){
  * Handles the lock or upload button press
  */ 
 MManager.prototype.LockOrUpload = function(button, level){
+	// If the save button is clicked than save the map.
 	if(button.id === "toolbarUpload"){
 		this.SaveMap(level);
 	}
+	// No longer in use
 	else if (button.id === "toolbarLock"){
 		if (button.opacity == 1){
 			button.opacity = .5;
@@ -998,7 +1012,7 @@ MManager.prototype.DeleteNode = function(node, level){
 }
 /* ---------------------------------------- Popup Functions ---------------------------------------- */
 
-
+// Create a pop up node and position it next to node.
 MManager.prototype.CreatePopupNode = function(node, popup, docreate){
 	if (docreate){
 		var nid = node.nid;
@@ -1016,15 +1030,19 @@ MManager.prototype.CreatePopupNode = function(node, popup, docreate){
 			id: "popupnode"
 		});
 
+		// Set fixed height and width to force image to display. Fabric.js bug if this is not set.
 		popupnode.height = 96;
 		popupnode.width = 96;
 		popupnode.scale(.30);
 		
+		// Scale include canvas scale for zooming
 		popupnode.scaleX = popupnode.scaleX * this.canvasScale;
 		popupnode.scaleY = popupnode.scaleY * this.canvasScale;
 
+		// Set the title
 		popupnode.title = node.title;
 		
+		// Lock movement of pop up node always
 		popupnode.lockMovementX = popupnode.lockMovementY = true;
 
 		popupnode.hasControls = false; 
@@ -1032,6 +1050,7 @@ MManager.prototype.CreatePopupNode = function(node, popup, docreate){
 		if(!node.available && this.mode == 0){
 			popupnode.evented = false;
 		}
+		// Set pop up node variables
 		popupnode.nid = nid;
 		popupnode.type = type;
 		popupnode.popup = popup; 
@@ -1099,7 +1118,7 @@ MManager.prototype.NavigateToQuiz = function(){
 	return false;
 }
 
-
+// Navigates to the jupyter notebook homepage.
 MManager.prototype.NavigateToJupyterNotebook = function(){
 	window.location.href = "http://jupyter.org/";
 }
@@ -1132,7 +1151,6 @@ MManager.prototype.CheckOffNode = function(){
 					mngr.crrnt.node.setElement(imgEle);
 				}
 				
-
 				$("#dim_div").hide();
 				$("#custom_container").hide();
 			} 
@@ -1167,6 +1185,7 @@ MManager.prototype.CompleteNode = function(nid2){
 MManager.prototype.ShowPopup = function(node, popup){
 	$(window).unbind('mousewheel');
 
+	// Set the popup html.
 	popup.html(node.popup.innerHtml);
 
 	if (this.mode == 0){
@@ -1211,9 +1230,11 @@ MManager.prototype.ShowPopup = function(node, popup){
 			$("#checkoff").hide();
 		}
 	}
+	// Dim the background
 	$("#dim_div").show();
 }
 
+// Creates a popup with no data.
 MManager.prototype.CreatePopup = function(type){
 	if (type === "concept")
 		return this.CreateConceptPopup("", "", "", "", "");
@@ -1223,6 +1244,7 @@ MManager.prototype.CreatePopup = function(type){
 		return this.CreateQuizPopup("", "", "", "", "");
 }
 
+// Creates a popup with data.
 MManager.prototype.CreatePopupWithData = function(type, title, description, due_date, available_date, notes){
 	if (type === "concept")
 		return this.CreateConceptPopup(title, description, due_date, available_date, notes);
@@ -1232,6 +1254,7 @@ MManager.prototype.CreatePopupWithData = function(type, title, description, due_
 		return this.CreateQuizPopup(title, description, due_date, available_date, notes);
 }
 
+// Upload a file to the database. From file picker event.
 MManager.prototype.UploadFile = function(){
 	var formData = new FormData();
 	formData.append('nid', this.crrnt.nid);
@@ -1245,11 +1268,13 @@ MManager.prototype.UploadFile = function(){
        processData: false,  // tell jQuery not to process the data
        contentType: false,  // tell jQuery not to set contentType
        success : function(data) {
+       		// Show the files if the upload was a success.
        		mngr.ShowFiles();
        }
 	});
 }
 
+// Uploads and assignment to the database. 
 MManager.prototype.UploadAssignment = function(){
 	var formData = new FormData();
 	formData.append('nid2', this.crrnt.nid);
@@ -1277,6 +1302,7 @@ MManager.prototype.UploadAssignment = function(){
 	});
 }
 
+// Get the lecture note filenames from that database and show them in the lecture notes list.
 MManager.prototype.ShowFiles = function(){
 	$.ajax({
 		async: true,
@@ -1310,10 +1336,12 @@ MManager.prototype.ShowFiles = function(){
 	return false;
 }
 
+// Downloads a file @ filepath
 MManager.prototype.downloadfile = function(filepath) {
 	window.location="../API/Map/download.php?filename=" + filepath;
 }
 
+// Concept node popup
 MManager.prototype.CreateConceptPopup = function(title, description, due_date, available_date, notes){ 
 	var ids = [];
 	var innerHtml; 
@@ -1342,10 +1370,12 @@ MManager.prototype.CreateConceptPopup = function(title, description, due_date, a
 		notes = "";
 
 
+	// Configure the innerHTMl of the popup div.
 	innerHtml = `
  	<div> 
 		<div class="form-style-2" style="width: 90%;">`;
 
+	// If Class/Concept view.
 	if (this.mode == 0){
 		innerHtml += `<div class="form-style-2-heading" style="width: 110%;">` + title + `</div>
 		<div class="popup-div">
@@ -1377,6 +1407,7 @@ MManager.prototype.CreateConceptPopup = function(title, description, due_date, a
   		</div>
   		`;
 	}
+	// Otherwise Class/Concept builder.
 	else{
 		innerHtml += `<div class="form-style-2-heading" style="width: 110%;">Concept Node Details</div>
 		<form style="margin-left: 13%;">
@@ -1421,9 +1452,11 @@ MManager.prototype.CreateConceptPopup = function(title, description, due_date, a
   		innerHtml: innerHtml
   	};
 
+  	// Return the popup object.
   	return popup;
 }
 
+// Sets the popup innerHTML for an assignment pop up.
 MManager.prototype.CreateAssignmentPopup = function(title, description, due_date, available_date, notes){ 
 
 	var ids = [];
@@ -1453,10 +1486,12 @@ MManager.prototype.CreateAssignmentPopup = function(title, description, due_date
 		notes = "";
 
 
+	// Configure html
 	innerHtml = `
  	<div> 
 		<div class="form-style-2" style="width: 90%;">`;
 
+	// If concept view.
 	if (this.mode == 0){
 		innerHtml += `<div class="form-style-2-heading" style="width: 110%;">` + title + `</div>
 		<div class="popup-div">
@@ -1478,6 +1513,7 @@ MManager.prototype.CreateAssignmentPopup = function(title, description, due_date
 		</br>
 		`;
 
+		// Add concept page button if on concept view.
 		if (this.classOrConcept == 0){
 			innerHtml += `
 			<button id="concept_navigate" onclick="mngr.NavigateToConcept();" style="float:left; font-size:12pt; margin-top:10px;" type="button" class="btn btn-default btn-md">
@@ -1493,6 +1529,7 @@ MManager.prototype.CreateAssignmentPopup = function(title, description, due_date
   		</div>
   		`;
 	}
+	// else concept builder.
 	else{
 		innerHtml += `
 		<div class="form-style-2-heading" style="width: 110%;">Assignment Node Details</div>
@@ -1539,6 +1576,7 @@ MManager.prototype.CreateAssignmentPopup = function(title, description, due_date
   	return popup;
 }
 
+// Returns a quiz pop up object. 
 MManager.prototype.CreateQuizPopup = function(title, description, due_date, available_date, notes){ 
 	var ids = [];
 	var innerHtml; 
@@ -1566,6 +1604,7 @@ MManager.prototype.CreateQuizPopup = function(title, description, due_date, avai
 	if(notes == null)
 		notes = "";
 
+	// Configure the quiz html.
 	innerHtml = `
  	<div> 
 		<div class="form-style-2" style="width: 90%;">`;
