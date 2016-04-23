@@ -904,6 +904,8 @@ MManager.prototype.DeleteN = function(node, level){
 			{
 				for(var k = 0; k < node.lines.length; k++)
 				{
+					//Loop through all other node's lines
+					//If they match add a connection that needs to be deleted
 					if(this.nodes[i].lines[j].eid == node.lines[k].eid)
 					{
 						var temp = {
@@ -925,6 +927,7 @@ MManager.prototype.DeleteN = function(node, level){
 		}
 	}
 	
+	//Remove the lines from the map manager
 	var dedges = [];
 	for(var i = 0; i < node.lines.length; i++)
 	{
@@ -939,6 +942,7 @@ MManager.prototype.DeleteN = function(node, level){
 		canvas.remove(node.lines[i].trian);
 	}
 	
+	//Remove the node
 	var index2 = this.nodes.indexOf(node);
 	if(index2 > -1)
 	{
@@ -951,6 +955,7 @@ MManager.prototype.DeleteN = function(node, level){
 	canvas.remove(node.deletenode);
 	canvas.remove(node);
 	
+	//Remove the deleted node/line data from the database
 	$.ajax({
 		async: true, 
 		type: 'POST',
@@ -966,6 +971,7 @@ MManager.prototype.DeleteN = function(node, level){
 	return false;
 }
 
+//Delete node prompt
 MManager.prototype.DeleteNode = function(node, level){
 	swal({
 		title: "Are you sure you want to delete this node?",
@@ -1036,6 +1042,7 @@ MManager.prototype.CreatePopupNode = function(node, popup, docreate){
 	}
 }
 
+//Navigates to the node's concept page
 MManager.prototype.NavigateToConcept = function(){
 	var nid = this.crrnt.nid;
 	
@@ -1047,10 +1054,12 @@ MManager.prototype.NavigateToConcept = function(){
 		data: {direct: nid},
 		
 		success: function(result){
+			//Navigate the professor to the builder
 			if(result === "1")
 			{
 				window.location = '../concept_builder/concept_builder.html';
 			}
+			//Navigate the student to the view
 			if(result === "2")
 			{
 				window.location = '../concept_view/concept_view.html';
@@ -1061,6 +1070,7 @@ MManager.prototype.NavigateToConcept = function(){
 	return false;
 }
 
+//Navigate to the quiz
 MManager.prototype.NavigateToQuiz = function(){
 	var nid = this.crrnt.nid;
 	var mode = this.mode;
@@ -1073,10 +1083,12 @@ MManager.prototype.NavigateToQuiz = function(){
 		data: {directq: nid},
 		
 		success: function(result){
+			//Navigate the professor to the builder
 			if(result === "1")
 			{
 				window.location = '../quiz_builder/quiz_builder.html'
 			}
+			//Navigate the student to the view
 			if(result === "2")
 			{
 				window.location = '../quiz_view/quiz_view.html'
@@ -1085,15 +1097,6 @@ MManager.prototype.NavigateToQuiz = function(){
 	});
 	
 	return false;
-
-	//if(mode == 0){
-	//	window.location = '../quiz_view/quiz_view.html'
-	//}
-	//else{
-	//	window.location = '../quiz_builder/quiz_builder.html'
-	//}
-	
-	//return false;
 }
 
 
@@ -1116,9 +1119,11 @@ MManager.prototype.CheckOffNode = function(){
 		function(isConfirm){   
 			if (isConfirm) {
 				swal("Completed", "The node has been completed.", "success");
+				//Set the node as completed
 				mngr.CompleteNode(mngr.crrnt.nid);
 				mngr.crrnt.node.compl = 1;
 				
+				//Change the node img to the completed img
 				var imgEle;
 				if(mngr.crrnt.node.type === "concept")
 				{
@@ -1137,6 +1142,7 @@ MManager.prototype.CheckOffNode = function(){
 	});
 }
 
+//Set the node as completed in the database
 MManager.prototype.CompleteNode = function(nid2){
 	$.ajax({
 		async: true, 
@@ -1650,11 +1656,14 @@ MManager.prototype.CreateQuizPopup = function(title, description, due_date, avai
   	return popup;
 }
 
+//Zooms the map in
 MManager.prototype.zoomIn = function(){
+	//Zoom strength
 	sf = 1.04;
 
 	if(this.canvasScale < 1.41)
 	{
+		//Scale the canvas
 		this.canvasScale = this.canvasScale * sf;
 	
 		var objs = this.canvas.getObjects();
@@ -1662,6 +1671,7 @@ MManager.prototype.zoomIn = function(){
 		this.canvas.setHeight(this.canvas.getHeight() * sf);
 		this.canvas.setWidth(this.canvas.getWidth() * sf);
 	
+		//Scale all of the objects
 		for(var i = 0; i < objs.length; i++)
 		{
 			if(objs[i].id != "solid" && objs[i].id != "dotted" && objs[i].id != "arrowhead")
@@ -1684,6 +1694,7 @@ MManager.prototype.zoomIn = function(){
 				objs[i].setCoords();
 			}
 		}
+		//Update the positions of the edges
 		for(var i = 0; i < this.nodes.length; i++)
 		{
 			this.MoveEdges(this.nodes[i]);
@@ -1692,12 +1703,15 @@ MManager.prototype.zoomIn = function(){
 	}
 }
 
+//Zooms the map out
 MManager.prototype.zoomOut = function()
 {
+	//Zoom strength
 	sf = 1.04;
 	
 	if(this.canvasScale > 0.66)
 	{
+		//Scale the canvas
 		this.canvasScale = this.canvasScale / sf;
 		
 		var objs = this.canvas.getObjects();
@@ -1705,6 +1719,7 @@ MManager.prototype.zoomOut = function()
 		this.canvas.setHeight(this.canvas.getHeight() * (1/sf));
 		this.canvas.setWidth(this.canvas.getWidth() * (1/sf));
 	
+		//Scale all of the objects
 		for(var i = 0; i < objs.length; i++)
 		{
 			if(objs[i].id != "solid" && objs[i].id != "dotted" && objs[i].id != "arrowhead")
@@ -1727,6 +1742,7 @@ MManager.prototype.zoomOut = function()
 				objs[i].setCoords();
 			}
 		}
+		//Update the positions of the edges
 		for(var i = 0; i < this.nodes.length; i++)
 		{
 			this.MoveEdges(this.nodes[i]);

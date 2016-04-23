@@ -1,14 +1,18 @@
 <?php
+//Learning Universe
+//PHP for map_manager.js
+
 	session_start();
 	$cid = $_SESSION['classid'];
 
 	include '../../imports/ChromePhp.php';
 
+	//Save the learning map
+	//Save the nodes
 	if(isset($_POST["map"]))
 	{
 		$map = $_POST["map"];
 		$level = $_POST["level"];
-		//$parent = $_POST["parent"];
 		
 		$r = "";
 		foreach($map as $node)
@@ -32,6 +36,7 @@
 			
 				if($level == 2)
 				{
+					//Insert the node into the database
 					//$query = "REPLACE into `nodes2` (`cid`, `nid`, `nid2`, `top`, `left`, `radius`, `fill`, `stroke`, `strokeWidth`, `type`, `title`) values (?,?,?,?,?,?,?,?,?,?,?)";
 					//$query = "REPLACE into `nodes2` (`cid`, `nid`, `nid2`, `top`, `left`, `type`, `title`) values (?,?,?,?,?,?,?)";
 					$query = "INSERT into `nodes2` (`cid`, `nid`, `nid2`, `top`, `left`, `type`, `title`) values (:cid,:nid,:nid2,:top,:left,:type,:title)
