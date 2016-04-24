@@ -48,7 +48,7 @@ try {
     $DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $DB->beginTransaction();
 
-    $query = "REPLACE INTO `assignments` (`cid`, `nid`, `nid2`, `idusers`, `file`) values (?,?,?,?,?)";
+    $query = "REPLACE INTO `assignments` (`cid`, `nid`, `nid2`, `idusers`, `file`, `filename`) values (?,?,?,?,?,?)";
     $statement = $DB->prepare($query);
 
     $statement->bindValue (1, $cid);
@@ -56,6 +56,7 @@ try {
     $statement->bindValue (3, $nid2);
     $statement->bindValue (4, $idusers);
     $statement->bindValue (5, $target_file);
+    $statement->bindValue (6, $fileName);
 
     // Execute query
     $statement->execute();

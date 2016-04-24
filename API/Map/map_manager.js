@@ -93,6 +93,9 @@ MManager.prototype.HandleMapNodeSelect = function (node){
 		this.ShowPopup(node, $("#popup")); 
 		this.popuped = true;
 		this.ShowFiles();
+		if(node.type === "assignment"){
+			this.ShowAssignment();
+		}
 	}
 	if(node.id === "mapNode" && node.type === "concept" && this.classOrConcept == 0 && this.mode == 0){
 		this.NavigateToConcept();
@@ -1298,6 +1301,7 @@ MManager.prototype.UploadAssignment = function(){
 				mngr.crrnt.node.setElement(imgEle);
 			}
 			swal("Submitted"); 
+			mngr.ShowAssignment();
        }
 	});
 }
@@ -1314,7 +1318,7 @@ MManager.prototype.ShowFiles = function(){
 
 			if(result.length > 0){
 				if(mngr.crrnt.node.type === "assignment"){
-					$("#lecturenotes").html('<hr><h4 style="margin-top:20px;margin-bottom:15px;text-align:left;">Assignment Files</h4>');
+					$("#lecturenotes").html('<h4 style="margin-top:20px;margin-bottom:15px;text-align:left;"><b>Assignment Files</b></h4>');
 				}
 				else{
 					$("#lecturenotes").html('<hr><h4 style="margin-top:20px;margin-bottom:15px;text-align:left;">Lecture Notes</h4>');
@@ -1325,8 +1329,8 @@ MManager.prototype.ShowFiles = function(){
 			{
 				var path = result[i]["path"];
 				var innerHtml = $("#lecturenotes").html();
-				innerHtml += `<div style="margin-bottom:10px;"><i class="material-icons" style="cursor:pointer;" onclick="mngr.downloadfile('`+path+`')">get_app</i>&nbsp;&nbsp;`
-				innerHtml += result[i]["name"] + "</div>";
+				innerHtml += `<div style="margin-bottom:10px;"><i class="material-icons" style="cursor:pointer;" onclick="mngr.downloadfile('`+path+`')">file_download</i>&nbsp;&nbsp;`
+				innerHtml += result[i]["name"] + "</div><br>";
 
 				$("#lecturenotes").html(innerHtml);
 			}
@@ -1336,9 +1340,39 @@ MManager.prototype.ShowFiles = function(){
 	return false;
 }
 
+MManager.prototype.ShowAssignment = function(){
+	$.ajax({
+		async: true,
+		type: 'POST',
+		url: "../API/Map/getassignment.php",
+		dataType: 'json',
+		data: {nid2: this.crrnt.nid},
+		success: function(result){
+			var filename = result["name"];
+			var filepath = result["path"];
+
+			var html = `
+				<hr><h4 style="margin-top:20px;margin-bottom:15px;text-align:left;">Assignment Submission</h4>
+				<div style="margin-bottom:10px;"><i class="material-icons" style="cursor:pointer;" onclick="mngr.downloadAssignment('`+filepath+`')">file_download</i>&nbsp;&nbsp;
+				`+ filename +`
+				</div>
+			`;
+			$("#assignmentsubmission").html(html);
+			$("#assignmentsubmission").show();
+		}
+	});
+	
+	return false;
+}
+
 // Downloads a file @ filepath
 MManager.prototype.downloadfile = function(filepath) {
 	window.location="../API/Map/download.php?filename=" + filepath;
+}
+
+// Downloads a file @ filepath
+MManager.prototype.downloadAssignment = function(filepath) {
+	window.location="../API/Map/downloadassignment.php?filename=" + filepath;
 }
 
 // Concept node popup
@@ -1505,10 +1539,10 @@ MManager.prototype.CreateAssignmentPopup = function(title, description, due_date
 		</br>
 		<div id="lecturenotes" style="text-align:left;font-size:16px;"></div>
 		<hr>
-		</br>
-		<label for="field1">Submit Assignment<label>
+		<label for="field1">Submit Assignment</label>
+		<br>
 		<input type="file" id="filechooser2" onchange="mngr.UploadAssignment();">
-		<div id="assgnmentsubmission" style="text-align:left;font-size:16px;"></div>
+		<div id="assignmentsubmission" style="text-align:left;font-size:16px;"></div>
 		<hr>
 		</br>
 		`;
