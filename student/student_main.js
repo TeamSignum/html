@@ -206,6 +206,8 @@ function drawStudentNode(){
 			originY: 'center',
 			width:500,
 			height:500,
+			stroke : 'white',
+        	strokeWidth : 20,
 			selectable: false,
 			clipTo: function (ctx) {
 				ctx.arc(0, 0, 200, 0, Math.PI * 2, true);
