@@ -39,12 +39,22 @@ tr td:last-child{
 
 .graded{
 	background-color: #4CC417;
-	border-radius: 5px;
+	border: 1px solid black;
+	width: 70px;
 }
 
 .ungraded{
-	background-color: #F62817;
-	border-radius: 5px;
+	background-color: white;
+	border: 1px solid black;
+	width: 70px;
+}
+
+.ungraded:hover {
+	background-color: #e3e3e3;
+}
+
+.graded:hover {
+	background-color: #4CB317;
 }
 
 /* Pop up stuff */

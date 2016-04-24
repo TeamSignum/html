@@ -179,7 +179,7 @@ function buildAssignmentGradingPage(parsedResult){
 		}
 		else{
 			html+=`<td>`+grade+`</td>`;
-			html+=`<td><button type="button" class='graded'onclick="createGradeForm(`+userid+`)">EDIT GRADE</td>`;
+			html+=`<td><button type="button" class='graded'onclick="createGradeForm(`+userid+`)">EDIT</td>`;
 		}
 		
 		html+=`</tr>`;
