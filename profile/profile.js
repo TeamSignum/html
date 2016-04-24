@@ -45,7 +45,7 @@ function getProfileData(){
 			_lastName = parsedResult[0].lastname;
 
 			if(parsedResult[0].profilepic === null){
-				_profileimage = "../profile_images/default.jpg";
+				_profileimage = "../profile_images/default.png";
 			}
 			else{
 				_profileimage=parsedResult[0].profilepic;
