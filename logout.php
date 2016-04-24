@@ -5,6 +5,18 @@ if(isset($_SESSION['email']))
 {
 	unset($_SESSION['email']);
 }
+if(isset($_SESSION['userid']))
+{
+	unset($_SESSION['userid']);
+}
+if(isset($_SESSION['uid']))
+{
+	unset($_SESSION['uid']);
+}
+if(isset($_SESSION['role']))
+{
+	unset($_SESSION['role']);
+}
 
 // Update the participants node
 if(isset($_SESSION['currentnode']));
