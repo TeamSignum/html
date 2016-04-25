@@ -1871,7 +1871,7 @@ MManager.prototype.SavePopup = function(){
 			var desc = $("#description").val(); 
 			var notes = $("#notes").val(); 
 			var duedate = $("#due_date").val();
-			var available = $("#available_date").val();
+			var availabledate = $("#available_date").val();
 
 			this.crrnt.popup = this.CreatePopupWithData(type, title, desc, duedate, availabledate, notes); // Updates the current popup with current data.
 
@@ -1884,12 +1884,12 @@ MManager.prototype.SavePopup = function(){
 			var desc = $("#description").val(); 
 			var notes = $("#notes").val(); 
 			var duedate = $("#due_date").val();
-			var available = $("#available_date").val();
+			var availabledate = $("#available_date").val();
 			
 			this.crrnt.popup = this.CreatePopupWithData(type, title, desc, duedate, availabledate, notes); // Updates the current popup with current data.
 
 			var _data = {action: 'quiz', classOrConcept: this.classOrConcept, nid: nid, title: title, description: desc, notes: notes, duedate: duedate, availabledate: availabledate};
-
+			
 			break;
 	}
 

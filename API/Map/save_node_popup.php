@@ -117,6 +117,7 @@ function SaveAssignmentPopup(){
 	$description= $_POST["description"];
 	$notes = $_POST["notes"];
 	$duedate= $_POST["duedate"];
+	$availabledate= $_POST["availabledate"];
 	$cid = $_SESSION['classid'];
 
 	try
@@ -172,6 +173,7 @@ function SaveQuizPopup(){
 	$description= $_POST["description"];
 	$duedate= $_POST["duedate"];
 	$notes= $_POST["notes"];
+	$availabledate= $_POST["availabledate"];
 	$cid = $_SESSION['classid'];
 
 	try

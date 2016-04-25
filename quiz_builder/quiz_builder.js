@@ -199,7 +199,7 @@ function deleteQ(did)
 function inputCheck()
 {
 	var empty = false
-	$('input[type=text]').each(function(){
+	$('#Quiz input[type=text]').each(function(){
        if (this.value == "") {
            empty = true;
        } 
@@ -213,7 +213,7 @@ function inputCheck()
 function answerCheck()
 {
 	var empty = false
-	$('input[type=radio]').each(function(){
+	$('#Quiz input[type=radio]').each(function(){
 		var name = $(this).attr("name");
 		
         if($("input:radio[name="+ name +"]:checked").length == 0) {

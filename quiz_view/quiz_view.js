@@ -121,7 +121,7 @@ function createQuiz(q)
 function answerCheck()
 {
 	var empty = false
-	$('input[type=radio]').each(function(){
+	$('#Quiz input[type=radio]').each(function(){
 		var name = $(this).attr("name");
 		
         if($("input:radio[name="+ name +"]:checked").length == 0) {
