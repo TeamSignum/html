@@ -1,3 +1,12 @@
+/*           
+ * Author: LearningUniverse - Joseph Cottongim, Edited by Namgi Yoon                      
+ * Created: February 1, 2016  
+ *            
+ * Javascript file for handling the interaction between                                                        
+ * grades.html, grades.php to build the grade view.
+ *          
+ */ 
+
 // Variables and properties
 var _email;
 var _firstName;
@@ -70,6 +79,7 @@ function getProfileData(){
 
 // Logic for individual profile forms
 
+// Updates Email
 function submitEmailChange(){
 	// Use html5 validation
 	if($('#email')[0].checkValidity())
@@ -117,7 +127,7 @@ function submitEmailChange(){
 	}
 }
 
-
+// Updates User ID
 function submitUserIdChange(){
 	// Use html5 validation
 	if($('#userid')[0].checkValidity())
@@ -164,7 +174,7 @@ function submitUserIdChange(){
 	}
 }
 
-
+// Updates Name
 function submitNameChange(){
 	// Use html5 validation
 	if($('#firstname')[0].checkValidity() && $('#lastname')[0].checkValidity())
@@ -209,6 +219,7 @@ function submitNameChange(){
 	}
 }
 
+// Updates profile
 function ProfileChange(){
 	// Check if a file was chosen
 	if($('#imageToUpload').val()==''){

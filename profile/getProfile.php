@@ -1,7 +1,7 @@
 <?php
 
 	/* 
-	 * Author: Joseph Cottongim
+	 * Author: Learning Universe - Joseph Cottongim
 	 * Date: February 3, 2016
 	 *
 	 * Description: php file to pull user profile information
@@ -10,8 +10,6 @@
 	 */
 
 	session_start();
-	
-	//print_r($_SESSION);
 	
 	// Check that uid is set in the Session
 	if(isset($_SESSION['uid']))

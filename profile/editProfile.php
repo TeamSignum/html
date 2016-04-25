@@ -1,7 +1,7 @@
 <?php
 
 /* 
- * Author: Joseph Cottongim
+ * Author: Learning Universe - Joseph Cottongim, Edited by Namgi Yoon
  * Date: February 3, 2016
  * 
  * Description: php file to save user profile changes on the Learning
@@ -35,7 +35,7 @@ if(isset($_POST['userid'])){
 	$userid=$_POST['userid'];
 }
 else{
-	die("New Us er ID was not found.");
+	die("New User ID was not found.");
 }
 
 if(isset($_POST['firstname']) && isset($_POST['lastname'])){
@@ -58,8 +58,7 @@ if($check === false) {
 
 // Get image file name
 $uploadedFileName=pathinfo(($_FILES['imageToUpload']['name']), PATHINFO_FILENAME);
-// Set target directory - this line only works on the server
-// Will not work for local testing on windows.
+// Set target directory
 $targetDirectory="../profile_images";	
 // Create a unique file name with tempnam function
 $destinationFileName = tempnam($targetDirectory, $uploadedFileName);
@@ -72,14 +71,13 @@ $destinationFileName.=$fileExtension;
 if (strpos($destinationFileName, '.tmp') !== false) {
     $destinationFileName = str_replace(".tmp","", $destinationFileName);
 }
-//die($destinationFileName);
 
 // Assuming $_FILES['file']['error'] == 0 (no errors)
 if (move_uploaded_file($_FILES['imageToUpload']['tmp_name'], $destinationFileName)) {
     // Strip the file path to store the image name in the database
     $databaseFileName=basename($destinationFileName);
     $databaseFileName="../profile_images/".$databaseFileName;
-    //echo($databaseFileName);
+    
     // File uploaded successfully, add reference to the database 
     ChromePhp::log($databaseFileName);
 
