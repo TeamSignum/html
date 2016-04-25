@@ -1,10 +1,11 @@
-/*
- *  Javascript file for navbar.  Builds navbar based on the user.
- *
- *
- *
- *
- */
+/*           
+ * Author: LearningUniverse - Joseph Cottongim, Edited by Daniel Cushing                      
+ * Created: February 1, 2016  
+ *            
+ * Javascript file for handling the interaction between                                                        
+ * grades.html, grades.php to build the grade view.
+ *          
+ */ 
 
  var dropdownIsShown = false;
 
@@ -31,6 +32,7 @@ function getPHPSessionInfo(){
 	});
 }
 
+// Build navbar based on user and page that they are on
 function evaluateSessionInfo(parsedResult){
 	var html='';
 
@@ -119,7 +121,6 @@ function evaluateSessionInfo(parsedResult){
 		//html+='</ul>';
 	}
 	// Navbar if professor is logged in and on account home page
-	// **Currently contains all existing links for ease of testing other site features**
 	else if(parsedResult.role=='professor'){
 		html+='<ul class="nav navbar-nav">';
 
