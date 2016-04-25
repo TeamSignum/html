@@ -199,27 +199,38 @@ function getProfMessage($userid, $DB){
 
 function getStuMessage($userid, $DB){
 	$notifications = array();
-	$query = "select users.firstname, classes.classnumber, professor_notification.message, professor_notification.date_entered 
-				from LU.enrolled 
-				inner join LU.professor_notification on LU.enrolled.cid = LU.professor_notification.cid
-				inner join LU.users on professor_notification.idusers = users.idusers
-				inner join LU.classes on classes.cid = professor_notification.cid
-				where 
-					LU.users.role = 'student'
-				AND 
-					LU.professor_notification.date_entered >= DATE_SUB(curdate(), INTERVAL 10 day)
-				group by LU.professor_notification.pnid;";
+	$query = "select count(*) from LU.teaching inner join LU.professor_notification on LU.teaching.idusers = LU.professor_notification.idusers and LU.teaching.cid = LU.professor_notification.cid where LU.teaching.idusers = ?;";
 	$statement = $DB->prepare($query);
+	$statement->bindValue(1, $userid);	
 	$statement->execute();
-	$result = $statement->fetchAll(PDO::FETCH_ASSOC);
+	$result = $statement->fetch(PDO::FETCH_ASSOC);
+	foreach($result as $row){
+		if($row != 0){
+			$query = "select users.firstname, classes.classnumber, professor_notification.message, professor_notification.date_entered 
+						from LU.enrolled 
+						inner join LU.professor_notification on LU.enrolled.cid = LU.professor_notification.cid
+						inner join LU.users on professor_notification.idusers = users.idusers
+						inner join LU.classes on classes.cid = professor_notification.cid
+						where 
+							LU.users.role = 'student'
+						AND 
+							LU.professor_notification.date_entered >= DATE_SUB(curdate(), INTERVAL 10 day)
+						group by LU.professor_notification.pnid;";
+			$statement = $DB->prepare($query);
+			$statement->execute();
+			$result = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-	foreach ($result as $row) {
-		$notifications[] = array(	'author_name' => $row['firstname'],
-									'class_number' => $row['classnumber'],
-									'message' => $row['message'],
-									'send_date' => $row['date_entered']);
+			foreach ($result as $row) {
+				$notifications[] = array(	'author_name' => $row['firstname'],
+											'class_number' => $row['classnumber'],
+											'message' => $row['message'],
+											'send_date' => $row['date_entered']);
+			}
+
+			return $notifications;
+		}else if($row == 0){
+			return $notifications;
+		}
 	}
-
-	return $notifications;
 }
 ?>
