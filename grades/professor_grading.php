@@ -1,26 +1,21 @@
 <?php
 
 	/* 
-	 * Author: LearningUniverse
+	 * Author: LearningUniverse - Joseph Cottongim
 	 * Date: Spring 2016
 	 *
-	 * PHP file for getting assignment submissions for grading
+	 * PHP file for getting grading information and submitting grades
 	 *
 	 */
 
 	session_start();
-	
-	//print_r($_SESSION);
-	//print_r($_POST);
-	
+	// Require the database login file
 	require_once ('../db.php');
 
 	if(isset($_POST['gradeQuery']))
 	{
 		$query=$_POST['gradeQuery'];
-		// Create a PDO object	
-		$DB=openDB();
-
+		
 		switch($query)
 		{
 			case 'getAssignments':
@@ -35,7 +30,6 @@
 				}
 
 				try{
-
 					// Create a PDO object	
 					$DB=openDB();
 
@@ -88,11 +82,8 @@
 					$userid = $_POST['userid'];
 					$grader_comments = $_POST['grader-comments'];
 					$grade = $_POST['grade'];
-					//echo($grader_comments.' '.$grade);
-					//die();
 				}
 				else{
-					//print_r($_POST);
 					die("Form data was not set.");
 				}
 
@@ -165,7 +156,6 @@
 		$DB = null;
 	}
 	else{
-		//print_r($_POST);
 		die("Query type was not set.");
 	}
 

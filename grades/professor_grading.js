@@ -15,6 +15,7 @@ var currentStudent;
 $( document ).ready(function() 
 {
 
+	// Attach click functions once html has rendered.
 	$( "#p_Save" ).click(function() {
 		submitGrade()
 	});
@@ -27,9 +28,9 @@ $( document ).ready(function()
 	});
 
 	getAssignments();
-	
 });
 
+// ESC key closes the grading popup
 $(document).keyup(function(e) {
   	// Esc
   	if (e.keyCode == 27){
@@ -38,6 +39,7 @@ $(document).keyup(function(e) {
   	}
 });
 
+// Retrieves grade information from the database
 function getAssignments(){
 	$.ajax({
 		async: true,
@@ -53,6 +55,7 @@ function getAssignments(){
 	});
 }
 
+// Submit grade to the database and update UI components
 function submitGrade(){
 	// Get form data
 	var formData = $('#grade-form').serializeArray();
@@ -111,6 +114,7 @@ function gradeData(userid, firstName, lastName, cid, nid, nid2, tdate, file, gra
 	this.graderComments = graderComments;
 }
 
+// Builds the grading table and gradeData POJOs
 function buildAssignmentGradingPage(parsedResult){
 	var html;
 
@@ -137,7 +141,6 @@ function buildAssignmentGradingPage(parsedResult){
 		var tdate = parsedResult[i].tdate;
 
 		var file;
-
 		if(parsedResult[i].file==null){
 			file = "No Submission";
 		}
@@ -171,7 +174,6 @@ function buildAssignmentGradingPage(parsedResult){
 		var tempGradeData = new gradeData(userid, firstName, lastName, cid, nid, nid2, tdate, file, grade, studentComments, graderComments);
 		gradeDataArray[userid] = tempGradeData;
 
-		// Check to set row color to show graded vs ungraded
 		html+=`<tr id="`+userid+`">`;
 		
 		html+=`<td>`+firstName+`</td>`;
@@ -194,11 +196,13 @@ function buildAssignmentGradingPage(parsedResult){
 	insertTable(html);
 }	
 
+// Puts the gradeTable html into the appropriate div
 function insertTable(html){
 	$('#assignments').html(html);
 	initDataTable();
 }
 
+// DataTables initialization
 function initDataTable(){
 	$('#assignments').DataTable( 
 		{
@@ -207,6 +211,7 @@ function initDataTable(){
 	);
 }
 
+// Generates and shows the popup for grading
 function createGradeForm(userid){
 	// Get the gradeData object for the userid selected
 	currentStudent = gradeDataArray[userid];
@@ -223,7 +228,6 @@ function createGradeForm(userid){
 								 `+currentStudent.file+`
 								 </object>`;
 	}
-
 
 	// Popup details
 	innerHtml = `
@@ -254,18 +258,9 @@ function createGradeForm(userid){
 	</div>
 	`;
 
+	// Show the popup
 	$('#popup').html(innerHtml);
 	$('#dim_div').show();
 	$('#custom_container').show();
-
-	// setTimeout(function(){
- //  		$('#dim_div').hide();
- //  		$('#custom_container').hide();
-	// }, 5000); 
-	// if($('#'+userid+'').attr('class').includes('ungraded'))
-	// {
-	// 	$('#'+userid+'').removeClass('ungraded');
-	// 	$('#'+userid+'').addClass('graded');
-	// }
 }
 	

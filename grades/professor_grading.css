@@ -1,5 +1,6 @@
 /*
  * CSS for professor_grading page 
+ * Author: LearningUniverse - Joseph Cottongim;
  */ 
 
 th{
@@ -21,7 +22,6 @@ tr td:last-child{
 
 #assignments{
 	color: black;
-	
 }
 
 #grade-table-wrapper{
@@ -58,7 +58,6 @@ tr td:last-child{
 }
 
 /* Pop up stuff */
-
 #dim_div{
     background-color: rgba(100, 100, 100, .6);
     display: none;
