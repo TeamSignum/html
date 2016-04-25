@@ -1,5 +1,5 @@
 /*           
- * Author: LearningUniverse                         
+ * Author: LearningUniverse - Joseph Cottongim                        
  * Created: February 1, 2016  
  *            
  * Javascript file for handling the interaction between                                                        
@@ -14,6 +14,7 @@ $( document ).ready(function()
 	getSessionInfo();	
 });
 
+// Gets session variables from php
 function getSessionInfo(){
 	$.ajax({
 		async: true,
@@ -30,6 +31,7 @@ function getSessionInfo(){
 	});
 }
 
+// Gets grades from the database
 function getGrades(parsedResult){
 	$.ajax({
 		async: true,
@@ -54,6 +56,7 @@ function gradeChartData (divId, assignmentId, gradeInfo){
 	this.gradeInfo = gradeInfo;
 }
 
+// Builds html display from the grade information
 function buildDisplayPage(parsedResult){
 	var currentAssignment = '';
 	var html = '';
@@ -148,11 +151,13 @@ function buildDisplayPage(parsedResult){
 
 }	
 
+// Inserts the html grade info (no charts yet)
 function insertGrades(html){
 		$('#grades').html(html);
 		bindHtmlElements();
 }
 
+// Build Google charts for the assignments
 function buildGoogleChart(gradeChartDataArray){
 	// Load the Visualization API and the chart package.
       //google.load('visualization', '1.0', {'packages':['bar']});
@@ -197,6 +202,7 @@ function buildGoogleChart(gradeChartDataArray){
     }
 }
 
+// Bind functions for toggling the assignment headers
 function bindHtmlElements(){
 	// Hide all the grade chart panels
 	$('.toggle').hide();

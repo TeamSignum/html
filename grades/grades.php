@@ -1,11 +1,12 @@
 <?php
 
 	/* 
-	 * Author: LearningUniverse
+	 * Author: LearningUniverse - Joseph Cottongim
 	 * Date: January 31, 2016
 	 *
 	 * PHP file for queries relating to grades on the Learning Universe website
-	 *
+	 * Queries were built for varyious type of grade queries, but we only
+	 * ended up using a couple of them.
 	 */
 
 	session_start();
