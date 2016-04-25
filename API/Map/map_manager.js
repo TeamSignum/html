@@ -1693,9 +1693,6 @@ MManager.prototype.CreateQuizPopup = function(title, description, due_date, avai
 		Build Quiz
 		</button>
 		</br></br></br></br>
-		<input type="file" id="filechooser" onchange="mngr.UploadFile();">
-		<div id="lecturenotes" style="text-align:left;font-size:16px;"></div>
-		<hr>
 		</br>
 		`;
 
