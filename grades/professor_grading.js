@@ -60,6 +60,7 @@ function submitGrade(){
 	formData.push({name:'gradeQuery', value:'submitGrade'});
 	formData.push({name:'userid', value: currentStudent.userid});
 	// Save the form info to update the display via jquery
+	var tempGraderComments = $('#grader-comments').val();
 	var tempGrade = $('#grade').val();
 	
 	$.ajax({
@@ -74,8 +75,11 @@ function submitGrade(){
 				// Update the row
 				$('#'+currentStudent.userid+' td').eq(3).children("button").removeClass('ungraded');
 				$('#'+currentStudent.userid+' td').eq(3).children("button").addClass('graded');
-				$('#'+currentStudent.userid+' td').eq(3).children("button").html("EDIT GRADE");
+				$('#'+currentStudent.userid+' td').eq(3).children("button").html("EDIT");
 				$('#'+currentStudent.userid+' td').eq(2).html(tempGrade);
+				// Update the student gradeData object
+				currentStudent.graderComments = tempGraderComments;
+				currentStudent.grade = tempGrade;
 
 				// Close the popup
 				$("#custom_container").hide();
