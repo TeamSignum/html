@@ -1,0 +1,29 @@
+.container{
+	margin: 120px auto 20px auto;
+	width: 80%;
+	background-color: white;
+	color: black;
+	border-radius: 20px;
+	font-family: 'PT Sans', sans-serif;
+	font-size: 13pt
+}
+
+.container h3,h4{
+	padding: 45px 0px 10px 0px;
+}
+
+.container h3{
+	font-size: 16pt;
+}
+
+.container h4{
+	font-size: 15pt;
+}
+
+.container h5{
+	font-size: 13pt;
+}
+
+.container p{
+	padding: 0px 10px;
+}
