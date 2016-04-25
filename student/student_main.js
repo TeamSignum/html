@@ -1,3 +1,13 @@
+/*           
+ * Author: LearningUniverse - Joseph Cottongim and Namgi Yoon                      
+ * Created: Spring 2016  
+ *            
+ * Javascript file for handling the interaction between                                                        
+ * grades.html, grades.php to build the grade view.
+ *          
+ */ 
+
+// Global variables for the file
 var classNumberArray = [];
 var classIdArray = [];
 var studentNodeRadius = 100;
@@ -6,7 +16,6 @@ var classNodeRadius = 60;
 var account_name = "";
 var acc_role;
 var canvas;
-
 
 var profileimage;
 
@@ -18,10 +27,9 @@ $( document ).ready(function() {
 					 // This flag should help render faster
 					 renderOnAddRemove: false});
 
-	// canvas.setBackgroundImage('../imports/images/maxresdefault.jpg' , canvas.renderAll.bind(canvas), {
- //    });
 	window.addEventListener('resize', resizeCanvas, false);
 
+	// Resizes canvas based on window size
 	function resizeCanvas(){
 		canvas.width = window.innerWidth;
 		canvas.height = window.innerHeight-120;
@@ -33,12 +41,13 @@ $( document ).ready(function() {
 	}
 
 	// Function calls to the database, which in turn call
-	// functions to draw the page.  Is it possible to have one
-	// DB query to speed up the response?
+	// functions to draw the page.  
 	getPic(); // made by namgi
 	//getName();	
 	getClassNumbers();
 	
+
+	// Add navigation functions to the nodes
 	canvas.hoverCursor = 'pointer';
 	
 	canvas.on({
@@ -74,35 +83,7 @@ $( document ).ready(function() {
 					LoadPopup(e.target);
 				}
 			}
-	    },
-		
-		 'mouse:over': function(e){
-		// 	if(e.target.id === "classNode" || e.target.id === "addNode" || e.target.id === "accountNode")
-		// 	{
-		// 		//e.target.studentNode.setStroke('yellow');
-		// 		e.target.forEachObject(function(object,i){
-		// 			if(object.id === "mapNode")
-		// 			{
-		// 				object.setStroke('yellow');
-		// 			}
-		// 		});
-		// 		canvas.renderAll();
-		// 	}
-		 },
-	
-		'mouse:out': function(e){
-			//if(e.target.id === "classNode" || e.target.id === "addNode" || e.target.id === "accountNode")
-			//{
-				//e.target.setStroke('white');
-			//	e.target.forEachObject(function(object,i){
-			//		if(object.id === "mapNode")
-			//		{
-			//			object.setStroke('white');
-			//		}
-			//	});
-			//	canvas.renderAll();
-			//}
-		}
+	    }
 		
 	});
 
@@ -134,6 +115,7 @@ function getPic(){
 	});
 }
 
+// Gets user name from the database
 function getName()
 {
 	$.ajax({
@@ -144,7 +126,6 @@ function getName()
 		async: true,
 		
 		success: function(result){
-			//alert(result.name);
 			account_name = result.name;
 			acc_role = result.role;
 			drawStudentNode();
@@ -154,28 +135,9 @@ function getName()
 	return false;
 }
 
+// Draws the student node on the canvas
 function drawStudentNode(){
-	// var studentNode= new fabric.Circle({
-	// 	radius: studentNodeRadius,
-	// 	fill: 'white',
-	// 	originX: 'center',
-	// 	originY: 'center',
-	// 	stroke: 'white',
-	// 	strokeWidth: 5,
-	// 	id: "mapNode"
-	// });
 	
-	// var studentName = new fabric.Text('Name', {
-	// 	fontSize: '36',
-	// 	fontFamily: 'Arial',
-	// 	fontStyle: 'bold',
-	// 	fill: 'black',
-	// 	originX: 'center',
-	// 	originY: 'center',
-	// 	selectable: false
-	// });
-	// studentName.setText(account_name);
-
 	var classOrbital = new fabric.Circle({
 		radius: classOrbitalRadius,
 		fill: 'transparent',
@@ -239,6 +201,7 @@ function drawStudentNode(){
 	//canvas.sendToBack(studentNodeGroup);
 }
 
+// Get class numbers from the database
 function getClassNumbers(){
 	$.ajax({
 		async: true,
@@ -257,19 +220,13 @@ function getClassNumbers(){
 			}
 			classIdArray.push("-1");
 			classNumberArray.push("+");
-			//classNumberArray.push({cid: "-1", classnumber: "+"});
-			//alert(classNumberArray);
-			//var classNumbersJson = JSON.parse(result); 	
-			//for(var x in classNumbersJson){
-				//classNumberArray.push(classNumbersJson[x].classnumber);
-			//}
-			//classNumberArray.push("+");
-
+			
 			drawClassNode();
 		}
 	});
 }
 
+// Draws the class nodes on the canvas
 function drawClassNode(){
 
 	var classNodeSpacing = (Math.PI * 2) / classNumberArray.length;

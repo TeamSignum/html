@@ -1,12 +1,20 @@
 <?php
+
+/* 
+ * Author: Learning Universe - Joseph Cottongim and Namgi Yoon
+ * Date: Spring 2016
+ * 
+ * Description: php file to save user profile changes on the Learning
+ * Universe website.
+ *
+ */
+
 session_start();
 
 if(isset($_POST["class"]))
 {
 	$role = $_SESSION["role"];
 	
-	// Get the node id from the session.  Currently hard coding it.
-	//$uid = $_SESSION['id'];
 	$userid = $_SESSION['userid'];
 		
 	// Set up the database connection
