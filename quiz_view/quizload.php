@@ -110,7 +110,10 @@ if(isset($_POST["answers"]))
 		}
 		
 		//Calculate the students score
-		$score = $correct/count($resultques);
+		if($score != 0)
+		{
+			$score = $correct/count($resultques);
+		}
 		$perc = round($score * 100);
 		//echo $perc;
 		
