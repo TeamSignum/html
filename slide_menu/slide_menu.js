@@ -89,7 +89,7 @@ function real_time_notification() {
 
 function sendMessage(){
 	$.ajax({
-        type: "GET",
+        type: "POST",
         url: "../slide_menu/send_message.php",
         dataType: "html",
         data: {'classid': $('#selectedClass').val(), 'message': $('#mid').val()},
@@ -97,7 +97,7 @@ function sendMessage(){
           
         },
         error:function(request,status,error){
-        	//alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+        	alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
        	}
     });
 }
