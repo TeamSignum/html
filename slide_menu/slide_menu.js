@@ -94,7 +94,7 @@ function sendMessage(){
         dataType: "html",
         data: {'classid': $('#selectedClass').val(), 'message': $('#mid').val()},
         success: function(result) {
-          
+			alert(result);
         },
         error:function(request,status,error){
         	//alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
