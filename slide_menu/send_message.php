@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 $uid = $_SESSION['userid'];
 $cid = $_POST['classid'];
@@ -18,10 +19,11 @@ try
 
 	// insert the data
 	$query = "INSERT INTO `LU`.`professor_notification` (`idusers`, `cid`, `message`) VALUES (?, ?, ?);";
+	$statement = $DB->prepare($query);
 	$statement->bindValue (1, $uid);
 	$statement->bindValue (2, $cid);
 	$statement->bindValue (3, $mid);
-	$statement = $DB->prepare($query);
+	
 	$statement->execute();
 	$DB->commit();
 }

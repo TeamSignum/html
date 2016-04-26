@@ -88,18 +88,17 @@ function real_time_notification() {
 }
 
 function sendMessage(){
-	//alert($('#selectedClass').val() + " " + $('#mid').val());
 	$.ajax({
         type: "POST",
-        url: "send_message.php",
+        url: "../slide_menu/send_message.php",
         dataType: "html",
         data: {'classid': $('#selectedClass').val(), 'message': $('#mid').val()},
         success: function(result) {
 			//alert(result);
-        }
-        //error:function(request,status,error){
-        	//alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-       	//}
+        },
+        error:function(request,status,error){
+        	alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+       	}
 
     });
 }
