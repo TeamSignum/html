@@ -48,11 +48,12 @@ if(isset($_GET['pnodes']))
 if(isset($_POST['setp']))
 {
 	$cid = $_SESSION['classid'];
-	$nid = $_SESSION['nid'];
+	//$nid = $_SESSION['nid'];
 
 	//If student is currently working on a node switch it to the new node
-	if(isset($_SESSION['currentnode']))
+	if(isset($_SESSION['currentnode']) && isset($_SESSION['currentparent']))
 	{
+		$nid = $_SESSION['currentparent'];
 		$nid2 = $_SESSION['currentnode'];
 		
 		try
@@ -69,7 +70,9 @@ if(isset($_POST['setp']))
 			$DB->commit();
 			
 			//Set new node
+			$nid = $_SESSION['nid'];
 			$nid2 = $_POST['setp'];
+			$_SESSION['currentparent'] = $nid;
 			$_SESSION['currentnode'] = $nid2;
 			
 			$DB->beginTransaction();
@@ -91,7 +94,9 @@ if(isset($_POST['setp']))
 	{
 		try
 		{
+			$nid = $_SESSION['nid'];
 			$nid2 = $_POST['setp'];
+			$_SESSION['currentparent'] = $nid;
 			$_SESSION['currentnode'] = $nid2;
 			
 			$DB = new PDO("mysql:host=ec2-52-33-118-140.us-west-2.compute.amazonaws.com;dbname=LU", 'Signum', 'signumDB4');
