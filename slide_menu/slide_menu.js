@@ -88,9 +88,10 @@ function real_time_notification() {
 }
 
 function sendMessage(){
+	alert($('#selectedClass').val() + " " + 'message': $('#mid').val());
 	$.ajax({
         type: "GET",
-        url: "../slide_menu/send_message.php",
+        url: "send_message.php",
         dataType: "html",
         data: {'classid': $('#selectedClass').val(), 'message': $('#mid').val()},
         success: function(result) {
