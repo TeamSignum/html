@@ -12,7 +12,10 @@ require_once ('db.php');
 $DB=openDB();
 
 // insert the data
-$query = "INSERT INTO `LU`.`professor_notification` (`idusers`, `cid`, `message`) VALUES ('$uid', '$cid', '$mid');";
+$query = "INSERT INTO `LU`.`professor_notification` (`idusers`, `cid`, `message`) VALUES (?, ?, ?);";
+$statement->bindValue (1, $uid);
+$statement->bindValue (2, $cid);
+$statement->bindValue (3, $mid);
 $statement = $DB->prepare($query);
 $statement->execute();
 
