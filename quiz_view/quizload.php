@@ -109,8 +109,9 @@ if(isset($_POST["answers"]))
 			$DB->commit();
 		}
 		
+		$score = 0;
 		//Calculate the students score
-		if($score != 0)
+		if($correct != 0)
 		{
 			$score = $correct/count($resultques);
 		}

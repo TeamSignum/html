@@ -1348,17 +1348,19 @@ MManager.prototype.ShowAssignment = function(){
 		dataType: 'json',
 		data: {nid2: this.crrnt.nid},
 		success: function(result){
-			var filename = result["name"];
-			var filepath = result["path"];
+			if(result["name"] != null){
+				var filename = result["name"];
+				var filepath = result["path"];
 
-			var html = `
-				<hr><h4 style="margin-top:20px;margin-bottom:15px;text-align:left;">Assignment Submission</h4>
-				<div style="margin-bottom:10px;"><i class="material-icons" style="cursor:pointer;" onclick="mngr.downloadAssignment('`+filepath+`')">file_download</i>&nbsp;&nbsp;
-				`+ filename +`
-				</div>
-			`;
-			$("#assignmentsubmission").html(html);
-			$("#assignmentsubmission").show();
+				var html = `
+					<hr><h4 style="margin-top:20px;margin-bottom:15px;text-align:left;">Assignment Submission</h4>
+					<div style="margin-bottom:10px;"><i class="material-icons" style="cursor:pointer;" onclick="mngr.downloadAssignment('`+filepath+`')">file_download</i>&nbsp;&nbsp;
+					`+ filename +`
+					</div>
+				`;
+				$("#assignmentsubmission").html(html);
+				$("#assignmentsubmission").show();
+			}
 		}
 	});
 	

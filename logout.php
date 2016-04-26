@@ -22,7 +22,7 @@ if(isset($_SESSION['role']))
 if(isset($_SESSION['currentnode']));
 {
 	$cid = $_SESSION['classid'];
-	$nid = $_SESSION['nid'];
+	$nid = $_SESSION['currentparent'];
 	$nid2 = $_SESSION['currentnode'];
 	
 	try
