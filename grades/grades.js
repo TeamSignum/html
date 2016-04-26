@@ -95,8 +95,10 @@ function buildDisplayPage(parsedResult){
 		if(tempGrade < gradeLow)
 			gradeLow = tempGrade;
 		//alert(parsedResult[i].idusers + ' ' + userid);
-		if(parsedResult[i].idusers == userid)
+		if(parsedResult[i].idusers == userid){
 			studentGrade = tempGrade;
+		}
+			
 		
 		// Check to see if there are anymore grades
 		if(i < parsedResult.length-1){
