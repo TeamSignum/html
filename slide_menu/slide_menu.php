@@ -92,33 +92,47 @@ else{
 
 function getGrade($userid, $DB){
 	$notifications = array();
-	$query = "SELECT cid, title, score, date_entered FROM LU.grades 
-				left join LU.popupassignment on grades.idassignment = popupassignment.idassignment 
-				where idusers = ? and date_entered >= DATE_SUB(CURDATE(), INTERVAL 10 DAY)
-				order by date_entered;";
+	$query = "SELECT p.title, a.grade, c.classnumber, a.date_entered
+				FROM users u
+				INNER JOIN assignments a
+					ON u.idusers = a.idusers 
+				INNER JOIN popupassignment p
+					ON a.cid = p.cid AND a.nid = p.nid AND a.nid2 = p.nid2
+				INNER JOIN classes c
+					ON a.cid = c.cid
+				WHERE a.idusers = ?
+				AND
+				p.duedate >= DATE_SUB(curdate(), INTERVAL 7 day)
+				UNION
+				SELECT p.title, q.grade, c.classnumber, q.tdate 
+				FROM users u
+				JOIN quizzes q
+					ON u.idusers = q.idusers 
+				JOIN popupquiz p
+					ON q.cid = p.cid AND q.nid = p.nid AND q.nid2 = q.nid2
+				INNER JOIN classes c
+					ON q.cid = c.cid
+				WHERE q.idusers = ?
+				AND
+				p.duedate >= DATE_SUB(curdate(), INTERVAL 7 day);";
 	$statement = $DB->prepare($query);
-	$statement->bindValue(1, $userid);	
+	$statement->bindValue(1, $userid);
+	$statement->bindValue(2, $userid);	
 	$statement->execute();
 	$result = $statement->fetchAll(PDO::FETCH_ASSOC);
 
 	foreach($result as $row)
 	{
 		$title = $row['title'];
-		$score = $row['score'];
+		$grade = $row['grade'];
+		$classnumber = $row['classnumber'];
 		$date_entered = $row['date_entered'];
-		$tmp_cid = $row['cid'];
-
-		$query = "SELECT classnumber from LU.classes where cid ='$tmp_cid'";
-		$statement = $DB->prepare($query);
-		$statement->execute();
-		$result2 = $statement->fetch(PDO::FETCH_ASSOC);
-
-		$classnumber = $result2['classnumber'];
-
-		$notifications[] = array('title' => $title, 'score' => $score, 'date_entered' => $date_entered ,'classnumber' => $classnumber);
+		
+		$notifications[] = array('title' => $title, 'grade' => $grade, 'classnumber' => $classnumber, 'date_entered' => $date_entered );
 
 	}
-	return $notifications;
+	
+	return $notifications; 
 }
 
 function getDiscussion($userid, $DB){
@@ -148,12 +162,33 @@ function getDiscussion($userid, $DB){
 
 function getAssignmentNQuiz($userid, $DB){
 	$notifications = array();
-	$query = "SELECT classes.classnumber, popupassignment.title, popupassignment.duedate FROM LU.popupassignment 
-				LEFT JOIN LU.enrolled on LU.enrolled.cid = LU.popupassignment.cid 
-				LEFT JOIN LU.classes on  LU.classes.cid = LU.popupassignment.cid
-				WHERE LU.enrolled.idusers = ? 
-				AND
-					LU.popupassignment.duedate >= DATE_SUB(curdate(), INTERVAL 10 day);";
+	$query = "SELECT p.title, c.classnumber, p.duedate
+			FROM users u
+			INNER JOIN assignments a
+				ON u.idusers = a.idusers 
+			INNER JOIN popupassignment p
+				ON a.cid = p.cid AND a.nid = p.nid AND a.nid2 = p.nid2
+			INNER JOIN enrolled e
+				on e.cid = p.cid
+			INNER JOIN classes c
+				ON a.cid = c.cid
+			WHERE a.idusers = 134
+			AND
+			p.duedate >= DATE_SUB(curdate(), INTERVAL 7 day)
+			UNION
+			SELECT p.title, c.classnumber, p.duedate
+			FROM users u
+			JOIN quizzes q
+				ON u.idusers = q.idusers 
+			JOIN popupquiz p
+				ON q.cid = p.cid AND q.nid = p.nid AND q.nid2 = q.nid2
+			INNER JOIN enrolled e
+				on e.cid = p.cid
+			INNER JOIN classes c
+				ON q.cid = c.cid
+			WHERE q.idusers = 134
+			AND
+			p.duedate >= DATE_SUB(curdate(), INTERVAL 7 day);";
 	$statement = $DB->prepare($query);
 	$statement->bindValue(1, $userid);	
 	$statement->execute();
@@ -201,7 +236,8 @@ function getStuMessage($userid, $DB){
 	$notifications = array();
 	$query = "select count(*) from LU.teaching inner join LU.professor_notification on LU.teaching.idusers = LU.professor_notification.idusers and LU.teaching.cid = LU.professor_notification.cid where LU.teaching.idusers = ?;";
 	$statement = $DB->prepare($query);
-	$statement->bindValue(1, $userid);	
+	$statement->bindValue(1, $userid);
+
 	$statement->execute();
 	$result = $statement->fetch(PDO::FETCH_ASSOC);
 	foreach($result as $row){

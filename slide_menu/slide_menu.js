@@ -223,9 +223,9 @@ function studentAssignmentNQuiz(result){
 	var notification = '';
 	for (var i = 0; i < result.length; i++){
 		counter += 1;
-		notification += '<li><a href="#">New Assignment: "'
+		notification += '<li><a href="#">New Assign&Quiz: "'
 						+result[i]['title']+'" in '
-						+result[i]['classnumber']+' Due on '
+						+result[i]['classnumber']+'<br> Due on '
 						+result[i]['duedate']+ '</a></li>';
 	}
 	$('#assignment').html('<ul>'+notification+'</ul>');
@@ -235,9 +235,10 @@ function studentGrade(result){
 	var notification = '';
 	for (var i = 0; i < result.length; i++){
 		counter += 1;
-		notification += '<li><a href="../grades/grades.html">The Score of '
-						+result[i]['title']+' in '
-						+result[i]['classnumber']+' has been posted at '
+		notification += '<li><a href="#">You received '
+						+result[i]['grade']+ ' for '
+						+result[i]['title']+ ' in '
+						+result[i]['classnumber']+'. <br> Posted on '
 						+result[i]['date_entered']+'</a></li>';
 	}
 	$('#grade').html('<ul>'+notification+'</ul>');

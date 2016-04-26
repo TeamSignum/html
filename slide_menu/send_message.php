@@ -23,7 +23,6 @@ try
 	$statement->bindValue (1, $uid);
 	$statement->bindValue (2, $cid);
 	$statement->bindValue (3, $mid);
-	
 	$statement->execute();
 	$DB->commit();
 }
