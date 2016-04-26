@@ -89,7 +89,7 @@ function real_time_notification() {
 
 function sendMessage(){
 	$.ajax({
-        type: "POST",
+        type: "GET",
         url: "../slide_menu/send_message.php",
         dataType: "html",
         data: {'classid': $('#selectedClass').val(), 'message': $('#mid').val()},
