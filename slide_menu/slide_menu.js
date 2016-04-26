@@ -94,19 +94,11 @@ function sendMessage(){
         dataType: "html",
         data: {'classid': $('#selectedClass').val(), 'message': $('#mid').val()},
         success: function(result) {
-<<<<<<< HEAD
           
         },
         error:function(request,status,error){
         	alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
        	}
-=======
-			alert(result);
-        }
-        //error:function(request,status,error){
-        	//alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-       	//}
->>>>>>> 60f9b9c7075ac4deff98262719cf3bfbd2ac670c
     });
 }
 
