@@ -1348,7 +1348,7 @@ MManager.prototype.ShowAssignment = function(){
 		dataType: 'json',
 		data: {nid2: this.crrnt.nid},
 		success: function(result){
-			if(result.length > 0){
+			if(result["name"] != null){
 				var filename = result["name"];
 				var filepath = result["path"];
 
