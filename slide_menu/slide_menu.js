@@ -91,7 +91,7 @@ function sendMessage(){
 	//alert($('#selectedClass').val() + " " + $('#mid').val());
 	$.ajax({
         type: "GET",
-        url: "send_message.php",
+        url: "../slide_menu/send_message.php",
         dataType: "html",
         data: {'classid': $('#selectedClass').val(), 'message': $('#mid').val()},
         success: function(result) {
