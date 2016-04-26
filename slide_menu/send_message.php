@@ -8,15 +8,23 @@ $mid = $_POST['message'];
 set_include_path( "../");
 require_once ('db.php');
 
-// Login to the database	
-$DB=openDB();
+try
+{
+	// Login to the database	
+	$DB=openDB();
+	$DB->beginTransaction();
 
-// insert the data
-$query = "INSERT INTO `LU`.`professor_notification` (`idusers`, `cid`, `message`) VALUES (?, ?, ?);";
-$statement->bindValue (1, $uid);
-$statement->bindValue (2, $cid);
-$statement->bindValue (3, $mid);
-$statement = $DB->prepare($query);
-$statement->execute();
-
+	// insert the data
+	$query = "INSERT INTO `LU`.`professor_notification` (`idusers`, `cid`, `message`) VALUES (?, ?, ?);";
+	$statement->bindValue (1, $uid);
+	$statement->bindValue (2, $cid);
+	$statement->bindValue (3, $mid);
+	$statement = $DB->prepare($query);
+	$statement->execute();
+	$DB->commit();
+}
+catch(PDOException $e)
+{
+	echo $e->getMessage();
+}
 ?>
