@@ -1450,8 +1450,8 @@ MManager.prototype.CreateConceptPopup = function(title, description, due_date, a
 		<label for="field1"><span>Title <span class="required">*</span></span><input class="input-field" id="title" name="title" type="text" value="`+ title +`"placeholder="Title"/></label>
 		<label for="field2"><span>Description <span class="required">*</span></span><input class="input-field" id="description" name="description" type="text" value="`+ description +`" placeholder="Description"/></label>
 		<label for="field5"><span>Notes <span class=""></span></span><textarea name="notes" id="notes" class="textarea-field">`+ notes +`</textarea></label>
-		<label for="field2"><span>Due Date<span class=""></span></span><input class="input-field" id="due_date" name="due_date" type="date" value="`+ due_date +`" placeholder="Due date"/></label>
 		<label for="field2"><span>Available Date<span class=""></span></span><input class="input-field" id="available_date" name="available_date" type="date" value="`+ available_date +`" placeholder="Available date"/></label>
+		<label for="field2"><span>Due Date<span class=""></span></span><input class="input-field" id="due_date" name="due_date" type="date" value="`+ due_date +`" placeholder="Due date"/></label>
 		</br>`;
 		if (this.classOrConcept == 1){
 			innerHtml += `<input type="file" id="filechooser" onchange="mngr.UploadFile();">`;
@@ -1573,8 +1573,8 @@ MManager.prototype.CreateAssignmentPopup = function(title, description, due_date
 		<label for="field1"><span>Title <span class="required">*</span></span><input class="input-field" id="title" name="title" type="text" value="`+ title +`"placeholder="Title"/></label>
 		<label for="field2"><span>Description <span class="required">*</span></span><input class="input-field" id="description" name="description" type="text" value="`+ description +`" placeholder="Description"/></label>
 		<label for="field5"><span>Notes <span class=""></span></span><textarea name="notes" id="notes" class="textarea-field">`+ notes +`</textarea></label>
-		<label for="field2"><span>Due Date<span class=""></span></span><input class="input-field" id="due_date" name="due_date" type="date" value="`+ due_date +`" placeholder="Due date"/></label>
 		<label for="field2"><span>Available Date<span class=""></span></span><input class="input-field" id="available_date" name="available_date" type="date" value="`+ available_date +`" placeholder="Available date"/></label>
+		<label for="field2"><span>Due Date<span class=""></span></span><input class="input-field" id="due_date" name="due_date" type="date" value="`+ due_date +`" placeholder="Due date"/></label>
 		</br>
 		<input type="file" id="filechooser" onchange="mngr.UploadFile();">
 		<div id="lecturenotes" style="text-align:left;font-size:16px;"></div>
@@ -1688,8 +1688,8 @@ MManager.prototype.CreateQuizPopup = function(title, description, due_date, avai
 		<label for="field1"><span>Title <span class="required">*</span></span><input class="input-field" id="title" name="title" type="text" value="`+ title +`"placeholder="Title"/></label>
 		<label for="field2"><span>Description <span class="required">*</span></span><input class="input-field" id="description" name="description" type="text" value="`+ description +`" placeholder="Description"/></label>
 		<label for="field5"><span>Notes <span class=""></span></span><textarea name="notes" id="notes" class="textarea-field">`+ notes +`</textarea></label>
-		<label for="field2"><span>Due Date<span class=""></span></span><input class="input-field" id="due_date" name="due_date" type="date" value="`+ due_date +`" placeholder="Due date"/></label>
 		<label for="field2"><span>Available Date<span class=""></span></span><input class="input-field" id="available_date" name="available_date" type="date" value="`+ available_date +`" placeholder="Available date"/></label>
+		<label for="field2"><span>Due Date<span class=""></span></span><input class="input-field" id="due_date" name="due_date" type="date" value="`+ due_date +`" placeholder="Due date"/></label>
 		</br>
 		<button id="quiz_navigate" onclick="mngr.NavigateToQuiz();" style="float:left; font-size:12pt;" type="button" class="btn btn-default btn-md">
 		Build Quiz
