@@ -92,6 +92,9 @@ MManager.prototype.HandleMapNodeSelect = function (node){
 	if(node.id === "popupnode"){
 		this.ShowPopup(node, $("#popup")); 
 		this.popuped = true;
+		if(this.mode == 1){
+			this.SaveMap(this.classOrConcept + 1);
+		}
 		this.ShowFiles();
 		if(node.type === "assignment"){
 			this.ShowAssignment();
@@ -899,7 +902,9 @@ MManager.prototype.SaveMap = function(level){
 		
 		success: function(result){
 			//alert(result);
-			swal("Saved"); 
+			if(!mngr.popuped){
+				swal("Saved"); 
+			}
 		}
 	});
 	
