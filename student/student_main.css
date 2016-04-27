@@ -5,8 +5,8 @@ body {
 #custom_container {
     position: absolute;
     z-index: 998;
-    width: 80%;
-    left: 10%;
+    width: 60%;
+    left: 20%;
     background-color: #fbfbfb; 
     border-radius: 25px;
     margin-top: 20px; 
@@ -42,10 +42,10 @@ body {
 
 
 #checkorx{
-    margin-top: 50px;
     background-color: #fbfbfb; 
-    width: 100%;
-    text-align: center; 
+    float: right;
+    margin-right: 4%;
+    margin-top: -20px;
     z-index: 999;
 }
 
